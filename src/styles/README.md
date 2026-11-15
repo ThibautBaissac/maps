@@ -21,7 +21,7 @@ export async function mount({ container, data, meta, options, shell }) {
 | `options` | les `options` de la carte dans `src/registry.js`, à fusionner avec le `defaults.js` du style |
 | `shell` | le cadre de page commun (plus bas) |
 
-Le style se déclare ensuite dans `src/styles/index.js` avec un libellé, un `load()` paresseux et un `card(options)` qui renvoie `{ bg, fg, accent }` pour la galerie.
+Le style se déclare ensuite dans `src/styles/index.js` avec un libellé, un `load()` paresseux et un `card(options)` qui renvoie `{ bg, fg, accent }` pour la galerie (avec `dark: true` si le style trace en clair sur un fond sombre : la galerie inverse alors son mélange de couleurs).
 
 ### Ce que tout style doit respecter
 

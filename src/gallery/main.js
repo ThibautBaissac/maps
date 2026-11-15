@@ -20,6 +20,7 @@ for (const m of MAPS) {
   a.style.setProperty('--bg', colors.bg);
   a.style.setProperty('--fg', colors.fg);
   a.style.setProperty('--accent', colors.accent);
+  if (colors.dark) a.classList.add('dark'); // light ink on a dark ground
 
   const art = document.createElement('span');
   art.className = 'art';

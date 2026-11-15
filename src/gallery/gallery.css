@@ -65,6 +65,8 @@ header p { margin: 0; max-width: 46ch; }
 }
 .art .shadow { color: var(--accent); transform: translate(4px, 4px); }
 .art .ink { color: var(--fg); }
+.card.dark { color: var(--fg); }
+.card.dark .art span { mix-blend-mode: screen; }
 .title { font-weight: 600; }
 .meta { font-size: 14px; opacity: 0.8; }
 footer { padding-bottom: 32px; font-size: 14px; }

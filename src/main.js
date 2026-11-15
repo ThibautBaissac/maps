@@ -23,6 +23,18 @@ const ctx = canvas.getContext('2d');
 const attribution = document.querySelector('.attribution');
 
 const view = { x: 0, y: 0, s: 1 };
+const target = { x: 0, y: 0, s: 1 }; // where wheel zoom is heading (animated)
+const MAX_S = 10; // px per metre
+// Extent of the drawn city (buildings), with a small margin.
+const EXT = M.buildings.reduce((e, b) => [Math.min(e[0], b.bb[0]), Math.min(e[1], b.bb[1]), Math.max(e[2], b.bb[2]), Math.max(e[3], b.bb[3])], [Infinity, Infinity, -Infinity, -Infinity]);
+EXT[0] -= 40; EXT[1] -= 40; EXT[2] += 40; EXT[3] += 40;
+
+function clampView(v) {
+  v.s = Math.min(MAX_S, Math.max(env.minS, v.s));
+  v.x = Math.min(EXT[2], Math.max(EXT[0], v.x));
+  v.y = Math.min(EXT[3], Math.max(EXT[1], v.y));
+  return v;
+}
 let env = null; // size-dependent buffers
 let snap = null; // view the ink snapshot was rendered with
 let uiKey = '';
@@ -47,9 +59,10 @@ function setup() {
   const grain = pixelCanvas(256, 256, 5, (r) => { const v = 128 + (r() - 0.5) * 100; return [v, v, v, 255]; });
   env.grain = ctx.createPattern(grain, 'repeat');
   const mw = layout.map[2] - layout.map[0], mh = layout.map[3] - layout.map[1];
-  env.minS = Math.min(mw, mh) / (data.meta.half * 2);
-  if (first) Object.assign(view, { x: 0, y: 0, s: env.minS });
-  view.s = Math.max(view.s, env.minS * 0.9);
+  env.minS = Math.min(mw / (EXT[2] - EXT[0]), mh / (EXT[3] - EXT[1]));
+  if (first) Object.assign(view, { x: (EXT[0] + EXT[2]) / 2, y: (EXT[1] + EXT[3]) / 2, s: env.minS });
+  clampView(view);
+  Object.assign(target, view);
   Object.assign(attribution.style, {
     right: `${layout.w - layout.map[2] + 6}px`,
     bottom: `${layout.h - layout.map[3] + 6}px`,
@@ -160,6 +173,88 @@ function full() {
   present();
   return ms;
 }
+
+// ---- Interaction: wheel zoom (animated, anchored on the cursor) and drag to pan.
+// While moving, the last crisp render is re-projected (cheap); a full crisp render follows when idle.
+let raf = 0, idleTimer = 0, anchor = null, drag = null;
+
+function scheduleCrisp() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { if (!raf && !drag) full(); else scheduleCrisp(); }, 140);
+}
+
+function frame() {
+  raf = 0;
+  if (anchor) {
+    // Ease scale in log space, keeping the map point under the cursor fixed.
+    const ls = Math.log(view.s), lt = Math.log(target.s);
+    const next = Math.abs(lt - ls) < 0.002 ? target.s : Math.exp(ls + (lt - ls) * 0.28);
+    const { mx, my, px, py } = anchor;
+    view.s = next;
+    view.x = mx - (px - env.w / 2) / next;
+    view.y = my + (py - env.h / 2) / next;
+    clampView(view);
+    if (next === target.s) anchor = null;
+  }
+  present();
+  if (anchor) raf = requestAnimationFrame(frame);
+  scheduleCrisp();
+}
+const kick = () => { if (!raf) raf = requestAnimationFrame(frame); };
+
+function zoomAt(px, py, factor) {
+  const base = anchor ? target.s : view.s;
+  target.s = Math.min(MAX_S, Math.max(env.minS, base * factor));
+  // Map point currently under the cursor.
+  anchor = { px, py, mx: view.x + (px - env.w / 2) / view.s, my: view.y - (py - env.h / 2) / view.s };
+  kick();
+}
+
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  if (!env) return;
+  const r = canvas.getBoundingClientRect();
+  const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
+  zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(-Math.max(-300, Math.min(300, dy)) * 0.0018));
+}, { passive: false });
+
+canvas.addEventListener('pointerdown', (e) => {
+  if (!env || e.button !== 0) return;
+  canvas.setPointerCapture(e.pointerId);
+  canvas.classList.add('dragging');
+  anchor = null;
+  drag = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y };
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  view.x = drag.vx - (e.clientX - drag.x) / view.s;
+  view.y = drag.vy + (e.clientY - drag.y) / view.s;
+  clampView(view);
+  target.s = view.s;
+  kick();
+});
+const endDrag = () => { if (!drag) return; drag = null; canvas.classList.remove('dragging'); scheduleCrisp(); };
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('dblclick', (e) => {
+  const r = canvas.getBoundingClientRect();
+  zoomAt(e.clientX - r.left, e.clientY - r.top, e.shiftKey ? 0.5 : 2);
+});
+// Keyboard: + / - to zoom, arrows to pan.
+canvas.addEventListener('keydown', (e) => {
+  if (!env) return;
+  const step = 80 / view.s;
+  const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, step], ArrowDown: [0, -step] };
+  if (e.key === '+' || e.key === '=') zoomAt(env.w / 2, env.h / 2, 1.5);
+  else if (e.key === '-' || e.key === '_') zoomAt(env.w / 2, env.h / 2, 1 / 1.5);
+  else if (moves[e.key]) {
+    anchor = null;
+    view.x += moves[e.key][0]; view.y += moves[e.key][1];
+    clampView(view);
+    kick();
+  } else return;
+  e.preventDefault();
+});
 
 let resizeTimer = 0;
 function onResize() {

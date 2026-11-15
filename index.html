@@ -10,14 +10,17 @@
   </head>
   <body>
     <header>
-      <h1>Cartes illustrées</h1>
-      <p>Des plans de quartiers dessinés avec du code, chacun dans son style.</p>
+      <div>
+        <p class="kicker">Cartes illustrées</p>
+        <h1>Choisissez un quartier. <span>Perdez-vous dedans.</span></h1>
+      </div>
+      <p class="intro">Des plans dessinés avec du code à partir d’OpenStreetMap, chacun dans un style graphique différent.</p>
     </header>
     <main>
-      <ul class="maps" aria-label="Cartes"></ul>
+      <ul class="strips" aria-label="Cartes"></ul>
     </main>
     <footer>
-      Données <a href="https://www.openstreetmap.org/copyright">© contributeurs OpenStreetMap</a> (ODbL).
+      Données <a href="https://www.openstreetmap.org/copyright">© contributeurs OpenStreetMap</a> (ODbL)
     </footer>
     <script type="module" src="/src/gallery/main.ts"></script>
   </body>

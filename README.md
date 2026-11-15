@@ -18,13 +18,15 @@ Node 24 ou plus récent : les scripts `.ts` tournent directement avec `node`, qu
 ```
 places/<lieu>.ts          un lieu : nom, quartier, latitude, longitude, taille de la zone
 public/data/<lieu>.json   ses données OpenStreetMap, téléchargées une fois
+public/vignettes/<id>.webp  image de la carte dans la galerie (npm run vignettes)
 src/registry.ts           la liste des cartes : un lieu × un style (+ options)
 src/styles/<style>/       un style : il dessine toute la page ; src/styles/index.ts les déclare
 src/toolkit/              boîte à outils facultative : navigation, projection, noms, mise en page type…
 src/map-page.ts, shell.ts page commune : charge les données et le style, lien retour, attribution
 src/data.ts, place.ts     types des données et des lieux, partagés avec les scripts Node
-src/gallery/              la page d'accueil
+src/gallery/              la page d'accueil : une bande verticale par carte
 scripts/fetch-osm.ts      téléchargement des données d'un lieu
+scripts/vignettes.ts      image de chaque carte pour la galerie (Chrome headless)
 ```
 
 Au build, `vite.config.ts` lit le registre, vérifie chaque entrée et génère une page par carte dans `cartes/<id>/` (dossier généré, ignoré par Git).
@@ -38,6 +40,8 @@ Au build, `vite.config.ts` lit le registre, vérifie chaque entrée et génère 
    ```ts
    { id: 'lisbonne-riso', place: 'lisbonne-alfama', style: 'riso', options: { inkA: '#00A95C' } },
    ```
+
+4. Prendre son image pour la galerie, serveur de développement lancé : `npm run vignettes -- <id>`. Le script ouvre la carte dans Chrome headless (variable `CHROME` si Chrome n'est pas trouvé) et écrit `public/vignettes/<id>.webp`, à commiter. Sans image, la bande de la galerie garde le papier du style ; le build le signale. À refaire quand le style ou les données changent.
 
 Les options possibles d'un style sont dans son fichier `defaults.ts` ; le type-checking refuse une option inconnue ou un style inexistant. Pour créer un style, voir [`src/styles/README.md`](src/styles/README.md) : contrat, format des données, boîte à outils.
 

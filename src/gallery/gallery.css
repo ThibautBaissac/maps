@@ -3,72 +3,152 @@
   src: url('/fonts/bebasneue/BebasNeue-Regular.ttf') format('truetype');
   font-display: swap;
 }
+@font-face {
+  font-family: 'Space Mono';
+  src: url('/fonts/spacemono/SpaceMono-Regular.ttf') format('truetype');
+  font-display: swap;
+}
 :root {
-  --paper: #F6F1E7;
-  --ink: #1E5FD8;
-  --text: #1d2440;
+  --night: #0F1115;
+  --text: #EDE8DD;
+  --muted: #9AA0AD;
+  --soft: #CFCBC2;
+  --display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --mono: 'Space Mono', ui-monospace, monospace;
+  --gutter: 48px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  background: var(--paper);
+  background: var(--night);
   color: var(--text);
   font: 16px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
-header, main, footer { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
-header { padding-top: 48px; padding-bottom: 24px; }
-h1 {
-  font: 400 clamp(48px, 9vw, 104px)/0.9 'Bebas Neue', 'Arial Narrow', sans-serif;
-  letter-spacing: 0.01em;
-  color: var(--ink);
-  margin: 0 0 12px;
-}
-header p { margin: 0; max-width: 46ch; }
-.maps {
-  list-style: none;
-  padding: 0;
-  margin: 24px 0 48px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-  gap: 20px;
-}
-.card {
+a { color: inherit; }
+
+header {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  color: inherit;
-  text-decoration: none;
-  border: 1.5px solid var(--accent);
-  background: var(--bg);
-  padding: 14px;
-  transition: transform 0.15s ease;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px 48px;
+  padding: 40px var(--gutter) 36px;
 }
-.card:hover { transform: translateY(-2px); }
-.card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.art {
+.kicker {
+  margin: 0 0 14px;
+  font: 14px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #B8BCC6;
+}
+h1 {
+  margin: 0;
+  font: 400 clamp(52px, 7.5vw, 108px)/0.9 var(--display);
+  letter-spacing: 0.01em;
+}
+h1 span { display: block; color: var(--muted); }
+.intro { margin: 0; max-width: 36ch; font-size: 17px; color: var(--soft); }
+
+/* The strips share the width; the one pointed at or focused opens wider. */
+.strips {
+  display: flex;
+  gap: 12px;
+  height: clamp(480px, calc(100vh - 300px), 820px);
+  margin: 0;
+  padding: 0 var(--gutter);
+  list-style: none;
+}
+.strip {
   position: relative;
-  display: block;
-  aspect-ratio: 4 / 3;
+  flex: 1 1 0;
+  min-width: 0;
   overflow: hidden;
-  margin-bottom: 10px;
+  container-type: size;
   background:
     radial-gradient(circle, var(--accent) 1.1px, transparent 1.3px) 0 0 / 7px 7px,
     var(--bg);
-  isolation: isolate;
+  transition: flex-grow 0.7s var(--ease);
 }
-.art span {
+.strips:hover .strip { flex-grow: 1; }
+.strips .strip:hover, .strips .strip:focus-within { flex-grow: 1.9; }
+/* The name fills the strip's height: --len is its number of letters (set by main.ts). */
+.strip a {
+  --name: clamp(56px, calc((100cqh - 64px) / (var(--len, 9) * 0.46)), 176px);
   position: absolute;
-  inset: auto 0 6% 6%;
-  font: 400 clamp(44px, 7vw, 72px)/0.85 'Bebas Neue', 'Arial Narrow', sans-serif;
-  mix-blend-mode: multiply;
-  white-space: nowrap;
+  inset: 0;
+  display: block;
+  color: #F6F1E7;
+  text-decoration: none;
 }
-.art .shadow { color: var(--accent); transform: translate(4px, 4px); }
-.art .ink { color: var(--fg); }
-.card.dark { color: var(--fg); }
-.card.dark .art span { mix-blend-mode: screen; }
-.title { font-weight: 600; }
-.meta { font-size: 14px; opacity: 0.8; }
-footer { padding-bottom: 32px; font-size: 14px; }
-footer a { color: var(--ink); }
-@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+.strip a:focus-visible { outline: 3px solid var(--text); outline-offset: -6px; }
+.strip img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease);
+}
+.strip:hover img { transform: scale(1.06); }
+/* Darkens the picture behind the name (left) and the details (bottom). */
+.shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(15 17 21 / 0.55), rgb(15 17 21 / 0) 50%),
+    linear-gradient(180deg, rgb(15 17 21 / 0.1) 40%, rgb(15 17 21 / 0.88));
+}
+.name {
+  position: absolute;
+  left: 20px;
+  bottom: 28px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font: 400 var(--name)/0.8 var(--display);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-shadow: -7px -7px 0 var(--fg), 0 0 32px rgb(15 17 21 / 0.45);
+}
+.dark .name { color: var(--fg); text-shadow: 0 0 32px rgb(8 24 60 / 0.6); }
+.info {
+  position: absolute;
+  right: 28px;
+  bottom: 28px;
+  left: calc(var(--name) * 0.8 + 44px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  text-align: right;
+  transition: opacity 0.4s ease;
+}
+.district { font-size: 24px; font-weight: 600; line-height: 1.2; }
+.meta { font: 13px/1.4 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.go { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 17px; font-weight: 600; transition: gap 0.3s ease; }
+.strip:hover .go { gap: 18px; }
+/* Many maps make narrow strips: their details show once a strip opens. */
+@media (min-width: 721px) {
+  @container (max-width: 420px) { .info { opacity: 0; } }
+}
+
+footer {
+  padding: 28px var(--gutter) 36px;
+  font: 13px/1.5 var(--mono);
+  letter-spacing: 0.04em;
+  color: #B8BCC6;
+}
+
+@media (hover: none) {
+  .strips:hover .strip, .strips .strip:hover { flex-grow: 1; }
+}
+@media (max-width: 720px) {
+  :root { --gutter: 16px; }
+  header { padding-top: 24px; padding-bottom: 24px; }
+  .strips { flex-direction: column; height: auto; }
+  .strip { flex: none; height: 440px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .strip, .strip img, .info, .go { transition: none; }
+  .strip:hover img { transform: none; }
+}

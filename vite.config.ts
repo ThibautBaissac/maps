@@ -77,6 +77,9 @@ async function generatePages(strict: boolean): Promise<Record<string, string>> {
       problem(err instanceof Error ? err.message : String(err));
       continue;
     }
+    if (!existsSync(`${root}public/vignettes/${m.id}.webp`)) {
+      console.warn(`\x1b[33m[registry] ${m.id}: no gallery picture; run npm run vignettes -- ${m.id} with the dev server up\x1b[0m`);
+    }
     const dir = `${root}${PAGES}/${m.id}`;
     mkdirSync(dir, { recursive: true });
     writeFileSync(`${dir}/index.html`, pageHtml(m, place, STYLES[m.style].label));

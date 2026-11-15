@@ -77,6 +77,10 @@ try {
   if (!entry) throw new Error(`Unknown map "${id}" (src/registry.ts)`);
   const handle = await open(entry);
   if (import.meta.env.DEV) window.__map = handle;
+  if (window.location.hash === '#vignette') {
+    const { captureVignette } = await import('./vignette.ts');
+    captureVignette(handle, element('#stage', HTMLElement));
+  }
 } catch (err) {
   console.error('Map loading failed:', err);
   element('#stage', HTMLElement).replaceChildren();

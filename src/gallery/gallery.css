@@ -70,7 +70,6 @@ h1 span { display: block; color: var(--muted); }
     var(--bg);
   transition: flex-grow 0.7s var(--ease);
 }
-.strips:hover .strip { flex-grow: 1; }
 .strips .strip:hover, .strips .strip:focus-within { flex-grow: 1.9; }
 /* The name fills the strip's height: --len is its number of letters (set by main.ts). */
 .strip a {
@@ -140,7 +139,7 @@ footer {
 }
 
 @media (hover: none) {
-  .strips:hover .strip, .strips .strip:hover { flex-grow: 1; }
+  .strips .strip:hover { flex-grow: 1; }
 }
 @media (max-width: 720px) {
   :root { --gutter: 16px; }

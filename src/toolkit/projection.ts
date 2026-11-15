@@ -11,16 +11,20 @@ export interface Projector {
   dpr: number;
   /** Device px per metre. */
   S: number;
-  /** Centre of the canvas, device px. */
-  cx: number;
-  cy: number;
-  /** Visible map box (metres) plus a margin. */
-  vb: Rect;
-  amp: number;
-  inv: number;
+  /** Map metres -> device px, straight (no wobble). */
+  sx(x: number): number;
+  sy(y: number): number;
+  /** Whether a map box (metres) is on screen, with a margin. */
   visible(bb: Rect): boolean;
   /** Writes [sx, sy] for map point (x, y) with the wobble scaled by k. */
   pt(x: number, y: number, k: number, out: Point): void;
+}
+
+/** An item with its bounding box (metres), for P.visible(). */
+export type WithBox<T> = T & { bb: Rect };
+
+export function withBox<T extends object>(o: T, rings: readonly Ring[]): WithBox<T> {
+  return { ...o, bb: bboxOf(rings) };
 }
 
 export function bboxOf(rings: readonly Ring[]): Rect {
@@ -41,13 +45,15 @@ export function makeProjector(view: View, W: number, H: number, dpr: number): Pr
   const amp = Math.min(2.2, 0.7 + 0.4 * Math.log2(1 + view.s)) * dpr;
   const pad = 30 / S;
   const vb: Rect = [view.x - cx / S - pad, view.y - cy / S - pad, view.x + cx / S + pad, view.y + cy / S + pad];
+  const sx = (x: number): number => (x - view.x) * S + cx;
+  const sy = (y: number): number => cy - (y - view.y) * S;
   return {
-    view, dpr, S, cx, cy, vb, amp, inv,
+    view, dpr, S, sx, sy,
     visible: (bb) => bb[2] >= vb[0] && bb[0] <= vb[2] && bb[3] >= vb[1] && bb[1] <= vb[3],
     pt(x, y, k, out) {
       const a = amp * k;
-      out[0] = (x - view.x) * S + cx + (a && vnoise(x * inv, y * inv) * a);
-      out[1] = cy - (y - view.y) * S + (a && vnoise(x * inv + 31.7, y * inv - 17.3) * a);
+      out[0] = sx(x) + (a && vnoise(x * inv, y * inv) * a);
+      out[1] = sy(y) + (a && vnoise(x * inv + 31.7, y * inv - 17.3) * a);
     },
   };
 }
@@ -86,9 +92,9 @@ export function addLine(ctx: CanvasPath, P: Projector, p: Line, maxSeg: number, 
 
 // Erases everything outside the square plate and feathers its edges (destination-out).
 export function fadePlate(ctx: CanvasRenderingContext2D, P: Projector, half: number): void {
-  const { S, cx, cy, view, dpr } = P;
-  const x0 = (-half - view.x) * S + cx, x1 = (half - view.x) * S + cx;
-  const y0 = cy - (half - view.y) * S, y1 = cy - (-half - view.y) * S;
+  const { S, dpr } = P;
+  const x0 = P.sx(-half), x1 = P.sx(half);
+  const y0 = P.sy(half), y1 = P.sy(-half);
   const f = Math.min((x1 - x0) * 0.14, Math.max(50 * dpr, 170 * S));
   const { width: W, height: H } = ctx.canvas;
   ctx.save();

@@ -1,6 +1,7 @@
 // Riso frame furniture: neatline, registration marks, cartouche, compass, legend.
 // A / B are the contexts of the two ink plates; ink = { a, b } are their colours.
 import type { MapMeta } from '../../data.ts';
+import { formatLat, formatLon } from '../../place.ts';
 import type { Point, Rect } from '../../toolkit/geometry.ts';
 import { clamp, scaleBar, type Layout } from '../../toolkit/layout.ts';
 import type { View } from '../../toolkit/viewport.ts';
@@ -74,7 +75,7 @@ function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta & { titl
 
   const title = meta.title.toUpperCase();
   const sub = meta.district.toUpperCase();
-  const coords = `${Math.abs(meta.lat).toFixed(4)}°${meta.lat >= 0 ? 'N' : 'S'}  ·  ${Math.abs(meta.lon).toFixed(4)}°${meta.lon >= 0 ? 'E' : 'W'}`;
+  const coords = `${formatLat(meta.lat, 4)}  ·  ${formatLon(meta.lon, 4)}`;
   A.font = `100px ${FONT}`;
   A.letterSpacing = '0px';
   const tw100 = A.measureText(title).width;

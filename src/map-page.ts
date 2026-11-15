@@ -1,12 +1,13 @@
 // Entry of every generated map page: <body data-map="<id>">. Loads the map's data and
 // style, then hands the stage over to the style's mount().
-import { parseMapData } from './data.ts';
+import { featureCounts, parseMapData } from './data.ts';
 import { bodyData, element } from './dom.ts';
 import { describeMap } from './map-description.ts';
 import { MAPS, type MapEntryOf } from './registry.ts';
 import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
 import { STYLES, type StyleKey, type StyleOptions } from './styles/index.ts';
+import { ZOOM_STEP } from './toolkit/viewport.ts';
 
 declare global {
   interface Window {
@@ -33,7 +34,8 @@ async function open<K extends StyleKey>(entry: MapEntryOf<K>): Promise<MapHandle
     }),
   ]);
 
-  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, entry.title ?? data.meta.name, style.legend);
+  const title = entry.title ?? data.meta.name;
+  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, title, style.legend);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
   description.disabled = false;
@@ -41,25 +43,19 @@ async function open<K extends StyleKey>(entry: MapEntryOf<K>): Promise<MapHandle
 
   if (import.meta.env.DEV) {
     console.log(`${data.meta.name} — ${data.meta.district} : éléments par type`);
-    console.table({
-      bâtiments: data.buildings.length,
-      routes: data.roads.length,
-      'cours d’eau': data.waterways.length,
-      'plans d’eau': data.water.length,
-      parcs: data.parks.length,
-    });
+    console.table(featureCounts(data));
   }
 
   const handle = await styleModule.mount({
     container: element('#stage', HTMLElement),
     data,
-    meta: { ...data.meta, title: entry.title ?? data.meta.name },
+    meta: { ...data.meta, title },
     options,
     shell,
   });
   if (handle.viewport) {
     const viewport = handle.viewport;
-    for (const [selector, factor] of [['.zoom-in', 1.5], ['.zoom-out', 1 / 1.5]] as const) {
+    for (const [selector, factor] of [['.zoom-in', ZOOM_STEP], ['.zoom-out', 1 / ZOOM_STEP]] as const) {
       const button = element(selector, HTMLButtonElement);
       button.disabled = false;
       button.addEventListener('click', () => viewport.zoom(factor));
@@ -79,7 +75,7 @@ try {
   if (import.meta.env.DEV) window.__map = handle;
   if (window.location.hash === '#vignette') {
     const { captureVignette } = await import('./vignette.ts');
-    captureVignette(handle, element('#stage', HTMLElement));
+    captureVignette(element('#stage', HTMLElement));
   }
 } catch (err) {
   console.error('Map loading failed:', err);

@@ -4,13 +4,17 @@ import { pixelCanvas, vnoise } from '../../toolkit/noise.ts';
 export interface InkTexture { speckle: HTMLCanvasElement; blotch: HTMLCanvasElement }
 export interface InkPatterns { dots: CanvasPattern; lines: CanvasPattern }
 
-// Per-ink texture: speckled drop-outs plus large uneven coverage, removed with destination-out.
-export function makeInkTexture(W: number, H: number, seed: number): InkTexture {
-  const speckle = pixelCanvas(384, 384, seed, (r) => {
+// Speckled drop-outs of one ink: a repeating tile, independent of the page size.
+export function makeSpeckle(seed: number): HTMLCanvasElement {
+  return pixelCanvas(384, 384, seed, (r) => {
     const v = r();
     const a = v < 0.035 ? 140 + r() * 115 : r() * r() * 70;
     return [0, 0, 0, Math.round(a)];
   });
+}
+
+// Per-ink texture: speckled drop-outs plus large uneven coverage, removed with destination-out.
+export function makeInkTexture(speckle: HTMLCanvasElement, W: number, H: number, seed: number): InkTexture {
   const sw = Math.ceil(W / 90) + 2, sh = Math.ceil(H / 90) + 2;
   const blotch = pixelCanvas(sw, sh, seed + 9, (r, x, y) => {
     const n = vnoise(x * 0.35 + seed, y * 0.35) * 0.5 + 0.5;

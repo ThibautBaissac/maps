@@ -8,11 +8,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { promisify } from 'node:util';
 import { MAPS } from '../src/registry.ts';
-
-function fail(msg: string): never {
-  console.error(msg);
-  process.exit(1);
-}
+import { fail, message } from './cli.ts';
 
 const args = process.argv.slice(2);
 const baseAt = args.indexOf('--base');
@@ -40,7 +36,7 @@ try {
   const r = await fetch(base);
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
 } catch (err) {
-  fail(`No server at ${base} (${err instanceof Error ? err.message : String(err)}): start one with npm run dev.`);
+  fail(`No server at ${base} (${message(err)}): start one with npm run dev.`);
 }
 
 const chrome = findChrome();

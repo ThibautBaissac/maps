@@ -2,20 +2,16 @@
 // local metres and writes a compact public/data/<place>.json.
 // Usage: npm run fetch-data -- <place-id>     (e.g. amsterdam-centre)
 import { access, mkdir, writeFile } from 'node:fs/promises';
-import { seaPolygons } from './coastline.ts';
-import { isRoadKind, type BBox, type Line, type MapData, type Ring, type Road, type Waterway } from '../src/data.ts';
-import { parsePlace } from '../src/place.ts';
+import { endpointKey as key, r1, seaPolygons } from './coastline.ts';
+import { featureCounts, isRoadKind, type BBox, type Line, type MapData, type Ring, type Road, type Waterway } from '../src/data.ts';
+import { isRecord, isSlug, parsePlace } from '../src/place.ts';
+import { fail, message } from './cli.ts';
 
 // Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)
 // is always defined, hence the `!` in the loops below.
 
-function fail(msg: string): never {
-  console.error(msg);
-  process.exit(1);
-}
-
 const PLACE = process.argv[2] ?? '';
-if (!/^[a-z0-9-]+$/.test(PLACE)) fail('Usage: npm run fetch-data -- <place-id>   (a file name of places/, without .ts)');
+if (!isSlug(PLACE)) fail('Usage: npm run fetch-data -- <place-id>   (a file name of places/, without .ts)');
 const placeUrl = new URL(`../places/${PLACE}.ts`, import.meta.url);
 try { await access(placeUrl); } catch { fail(`No such place: places/${PLACE}.ts`); }
 const CITY = parsePlace((await import(placeUrl.href) as { default?: unknown }).default, `places/${PLACE}.ts`);
@@ -77,10 +73,7 @@ interface OsmMember { type: string; role: string; geometry?: LatLon[] }
 interface OsmElement { type: 'node' | 'way' | 'relation'; tags?: OsmTags; geometry?: LatLon[]; members?: OsmMember[] }
 interface OverpassAnswer { elements: OsmElement[]; remark?: string; osm3s?: { timestamp_osm_base?: string } }
 
-const isOverpassAnswer = (v: unknown): v is OverpassAnswer =>
-  typeof v === 'object' && v !== null && Array.isArray((v as { elements?: unknown }).elements);
-
-const message = (err: unknown): string => (err instanceof Error ? err.message : String(err));
+const isOverpassAnswer = (v: unknown): v is OverpassAnswer => isRecord(v) && Array.isArray(v['elements']);
 
 async function download(): Promise<{ json: OverpassAnswer; url: string }> {
   // Public Overpass servers are often overloaded: try each one, then a second round
@@ -120,14 +113,11 @@ async function download(): Promise<{ json: OverpassAnswer; url: string }> {
 // Local equirectangular projection, metres, x east / y north, 0.1 m precision.
 const kx = R * toRad(1) * Math.cos(toRad(CITY.lat));
 const ky = R * toRad(1);
-const r1 = (v: number): number => Math.round(v * 10) / 10;
 const project = (geom: readonly LatLon[]): Line => {
   const out: Line = [];
   for (const p of geom) out.push(r1((p.lon - CITY.lon) * kx), r1((p.lat - CITY.lat) * ky));
   return out;
 };
-
-const key = (a: Line, i: number): string => `${a[i]},${a[i + 1]}`;
 
 // Joins relation member ways into closed rings by matching endpoints.
 function assembleRings(lines: readonly Line[]): Ring[] {
@@ -233,11 +223,7 @@ await writeFile(out, JSON.stringify(data));
 
 console.log(`\n${CITY.name} — ${CITY.district} (${CITY.sizeKm} km × ${CITY.sizeKm} km)`);
 console.table({
-  bâtiments: data.buildings.length,
-  routes: data.roads.length,
-  'cours d’eau': data.waterways.length,
-  'plans d’eau': data.water.length,
-  'parcs / espaces verts': data.parks.length,
+  ...featureCounts(data),
   'rues nommées': new Set(data.roads.flatMap((r) => (r.n ? [r.n] : []))).size,
 });
 console.log(`Saved ${out.pathname}`);

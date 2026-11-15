@@ -15,7 +15,6 @@ export interface Layout {
   frame: Rect;
   /** Map window. */
   map: Rect;
-  pad: number;
   /** Square plate size at full zoom-out. */
   plate: number;
   /** "Back to gallery" link. */
@@ -27,22 +26,32 @@ export interface Layout {
   legend: Rect | null;
 }
 
+/** Height of the back link and navigation buttons (HTML), top-left of the map window. */
+const NAV_H = 80;
+
+// Frame at margin m, map window inside a band, square plate size at full zoom-out
+// and the box of the navigation overlay, all in CSS px.
+export function mapWindow(w: number, h: number, m: number, band: number): { frame: Rect; map: Rect; plate: number; nav: Rect } {
+  const frame: Rect = [m, m, w - m, h - m];
+  const map: Rect = [m + band, m + band, w - m - band, h - m - band];
+  const mw = map[2] - map[0], mh = map[3] - map[1];
+  // In portrait the plate overflows the width a little (pan sideways) so the page is
+  // not mostly empty.
+  const plate = mh > mw ? Math.min(mh, Math.sqrt(mw * mh)) : Math.min(mw, mh);
+  const nav: Rect = [map[0] + 6, map[1] + 6, map[0] + 6 + 224, map[1] + 6 + NAV_H];
+  return { frame, map, plate, nav };
+}
+
 // Page layout in CSS px: frame, map window, square plate size and the slots styles
 // draw their furniture in (cartouche, compass, legend, back link).
 export function computeLayout(w: number, h: number): Layout {
   const u = Math.min(w, h);
   const m = clamp(u * 0.035, 12, 34);
   const band = clamp(u * 0.012, 5, 9);
-  const frame: Rect = [m, m, w - m, h - m];
-  const map: Rect = [m + band, m + band, w - m - band, h - m - band];
+  const { frame, map, plate, nav } = mapWindow(w, h, m, band);
   const pad = clamp(u * 0.025, 10, 22);
   const mw = map[2] - map[0], mh = map[3] - map[1];
-  // Square plate size at full zoom-out. In portrait it overflows the width a little
-  // (pan sideways) so the page is not mostly empty.
-  const plate = mh > mw ? Math.min(mh, Math.sqrt(mw * mh)) : Math.min(mw, mh);
   const side = (mw - plate) / 2, below = (mh - plate) / 2;
-  const navH = 80; // back link and navigation buttons, top-left of the map window
-  const nav: Rect = [map[0] + 6, map[1] + 6, map[0] + 6 + 224, map[1] + 6 + navH];
   let cw = clamp(Math.min(w * 0.5, u * 0.46), 180, 360);
   const r = clamp(u * 0.055, 24, 50);
   let cart: Rect, comp: Circle, legend: Rect | null = null;
@@ -51,7 +60,7 @@ export function computeLayout(w: number, h: number): Layout {
     // compass and legend right.
     cw = Math.min(cw, side - pad * 2);
     const cx = map[0] + (side - cw) / 2;
-    cart = [cx, map[1] + pad * 2 + navH, cx + cw, map[3] - pad * 2];
+    cart = [cx, map[1] + pad * 2 + NAV_H, cx + cw, map[3] - pad * 2];
     const rx = map[2] - side / 2;
     comp = { x: rx, y: map[1] + pad * 2 + r * 1.4, r };
     const lw = Math.min(side - pad * 2, 220);
@@ -68,7 +77,7 @@ export function computeLayout(w: number, h: number): Layout {
     cart = [map[0] + pad, map[3] - pad - ch, map[0] + pad + cw, map[3] - pad];
     comp = { x: map[2] - pad - r, y: map[1] + pad + r * 1.25, r };
   }
-  return { w, h, u, m, band, frame, map, pad, plate, nav, cart, comp, legend };
+  return { w, h, u, m, band, frame, map, plate, nav, cart, comp, legend };
 }
 
 const SCALE_STEPS = [10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000] as const;

@@ -1,18 +1,19 @@
 // Two-ink risograph style: buildings on plate A, network/water/parks on plate B,
 // plates misregistered and multiplied over a generated paper texture.
 // Reference implementation of a Canvas 2D style built from the toolkit.
-import { buffer, clear, context2d, createStageCanvas, pattern, sizeCanvas, type CanvasBuffer } from '../../toolkit/canvas.ts';
+import { buffer, clear, pattern, type CanvasBuffer } from '../../toolkit/canvas.ts';
 import { loadFont } from '../../toolkit/fonts.ts';
 import { scaleRect } from '../../toolkit/geometry.ts';
-import { drawJob, placeLabels, prepareLabels, type LabelGroup } from '../../toolkit/labels.ts';
+import { fillLabels, knockOutLabels, placeLabels, prepareLabels, type LabelGroup } from '../../toolkit/labels.ts';
 import { avoidBoxes, computeLayout, knockouts, scaleBar, type Layout } from '../../toolkit/layout.ts';
 import { pixelCanvas } from '../../toolkit/noise.ts';
 import { fadePlate, makeProjector } from '../../toolkit/projection.ts';
-import { createViewport, reprojection, type ElementSize, type ResizeResult, type View } from '../../toolkit/viewport.ts';
+import { drawReprojected, mountCanvasMap, type StageSize } from '../../toolkit/stage.ts';
+import type { ResizeResult, View } from '../../toolkit/viewport.ts';
 import type { MapHandle, MountArgs } from '../contract.ts';
 import { DEFAULTS, type RisoOptions } from './defaults.ts';
 import { FONT } from './font.ts';
-import { applyInkTexture, makeInkTexture, makePatterns, type InkPatterns, type InkTexture } from './inks.ts';
+import { applyInkTexture, makeInkTexture, makePatterns, makeSpeckle, type InkPatterns, type InkTexture } from './inks.ts';
 import { renderPaper } from './paper.ts';
 import { preparePlates, renderPlateA, renderPlateB } from './plates.ts';
 import { renderUI, type Inks } from './ui.ts';
@@ -22,8 +23,6 @@ type Plate = keyof Inks;
 
 /** Size-dependent state: layout, buffers, textures. */
 interface Env {
-  w: number;
-  h: number;
   dpr: number;
   W: number;
   H: number;
@@ -44,14 +43,12 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
   const ink: Inks = { a: o.inkA, b: o.inkB };
   await loadFont('Bebas Neue', 'bebasneue/BebasNeue-Regular.ttf');
 
-  const canvas = createStageCanvas(container, shell.label);
-  const ctx = context2d(canvas);
   const plates = preparePlates(data);
   const labels = prepareLabels(data);
   const PLATE = data.meta.half + 40; // printed square, metres from the centre
-
-  let env: Env | null = null;
-  let snap: View | null = null; // view the map buffer was rendered with
+  // Size-independent textures, made once.
+  const speckleA = makeSpeckle(11), speckleB = makeSpeckle(23);
+  const grainTile = pixelCanvas(256, 256, 5, (r) => { const v = 128 + (r() - 0.5) * 100; return [v, v, v, 255]; });
   let uiKey = '';
 
   // White-backed multiply of the two plates, plate B offset (the misregistration).
@@ -81,68 +78,47 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
     return groups;
   }
 
-  function onResize({ w, h, dpr }: ElementSize): ResizeResult {
-    sizeCanvas(canvas, w, h, dpr);
-    const W = canvas.width, H = canvas.height;
+  function onResize({ w, h, dpr, W, H }: StageSize, ctx: CanvasRenderingContext2D): { env: Env } & ResizeResult {
     const layout = computeLayout(w, h);
     const a = buffer(W, H), b = buffer(W, H);
-    const grain = pixelCanvas(256, 256, 5, (r) => { const v = 128 + (r() - 0.5) * 100; return [v, v, v, 255]; });
-    env = {
-      w, h, dpr, W, H, layout, a, b,
+    const env: Env = {
+      dpr, W, H, layout, a, b,
       map: buffer(W, H), ui: buffer(W, H),
       paper: renderPaper(W, H, dpr, o.paper),
-      texA: makeInkTexture(W, H, 11),
-      texB: makeInkTexture(W, H, 23),
+      texA: makeInkTexture(speckleA, W, H, 11),
+      texB: makeInkTexture(speckleB, W, H, 23),
       patterns: makePatterns(b.x, dpr, ink.b),
-      grain: pattern(ctx, grain, 'repeat'),
+      grain: pattern(ctx, grainTile, 'repeat'),
     };
     shell.place({
       back: { left: layout.nav[0], top: layout.nav[1] },
       attribution: { right: w - layout.map[2] + 6, bottom: h - layout.map[3] + 6 },
     });
     uiKey = '';
-    return { window: layout.map, minScale: layout.plate / (2 * PLATE) };
+    return { env, window: layout.map, minScale: layout.plate / (2 * PLATE) };
   }
 
   function renderMap(e: Env, view: View): void {
     const { a, b, dpr, layout } = e;
     clear(a.x); clear(b.x);
     const P = makeProjector(view, e.W, e.H, dpr);
-    renderPlateA(a.x, plates, P, view, ink.a);
-    renderPlateB(b.x, plates, P, view, ink.b, e.patterns);
+    renderPlateA(a.x, plates, P, ink.a);
+    renderPlateB(b.x, plates, P, ink.b, e.patterns);
 
     // Names: paper halo knocked out of both plates, letters in their own ink.
     const jobs = placeLabels({
       groups: labelGroups(view), P, font: FONT, measureCtx: a.x,
       mapRect: scaleRect(layout.map, dpr), avoid: avoidBoxes(layout, dpr),
     });
-    for (const c of [a.x, b.x]) {
-      c.save();
-      c.globalCompositeOperation = 'destination-out';
-      c.textAlign = 'center';
-      c.textBaseline = 'middle';
-      c.lineJoin = 'round';
-      c.lineWidth = 4.2 * dpr;
-      for (const job of jobs) drawJob(c, job, 'stroke');
-      c.restore();
-    }
-    for (const job of jobs) {
-      const c = job.kind === 'a' ? a.x : b.x;
-      c.save();
-      c.fillStyle = ink[job.kind];
-      c.textAlign = 'center';
-      c.textBaseline = 'middle';
-      drawJob(c, job, 'fill');
-      c.restore();
-    }
+    for (const c of [a.x, b.x]) knockOutLabels(c, jobs, 4.2 * dpr);
+    fillLabels(a.x, jobs.filter((j) => j.kind === 'a'), ink.a);
+    fillLabels(b.x, jobs.filter((j) => j.kind === 'b'), ink.b);
 
     fadePlate(a.x, P, PLATE);
     fadePlate(b.x, P, PLATE);
     applyInkTexture(a.x, e.texA);
     applyInkTexture(b.x, e.texB);
-    clear(e.map.x);
     compose(e.map.x, a.c, b.c, dpr);
-    snap = { ...view };
   }
 
   function renderFurniture(e: Env, view: View): void {
@@ -156,21 +132,11 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
 
   // Paper, map (re-projected while a crisp render is pending), bare paper under the
   // furniture, furniture, then grain.
-  function present(e: Env, snapView: View, view: View): void {
+  function present(c: CanvasRenderingContext2D, e: Env, snap: View, view: View): void {
     const { W, H, dpr, layout } = e;
-    const c = ctx;
     clear(c);
     c.drawImage(e.paper, 0, 0);
-
-    const mr = scaleRect(layout.map, dpr);
-    c.save();
-    c.beginPath();
-    c.rect(mr[0], mr[1], mr[2] - mr[0], mr[3] - mr[1]);
-    c.clip();
-    c.globalCompositeOperation = 'multiply';
-    c.setTransform(...reprojection(snapView, view, W, H, dpr));
-    c.drawImage(e.map.c, 0, 0);
-    c.restore();
+    drawReprojected(c, e.map.c, layout.map, snap, view, dpr, 'multiply');
 
     const ko = knockouts(layout);
     c.save();
@@ -196,28 +162,5 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
     c.globalCompositeOperation = 'source-over';
   }
 
-  // The viewport calls onResize before any frame, and a settle renders before presenting.
-  const frame = (view: View): void => { if (env && snap) present(env, snap, view); };
-  const settle = (view: View): void => {
-    if (!env) return;
-    renderMap(env, view);
-    frame(view);
-  };
-
-  const viewport = createViewport({
-    element: canvas,
-    half: PLATE,
-    maxScale: 10,
-    onResize,
-    onFrame: frame,
-    onSettle: settle,
-  });
-  viewport.start();
-
-  return {
-    viewport,
-    destroy() { viewport.destroy(); canvas.remove(); },
-    // Debug helper: crisp render, returns its duration in ms.
-    full() { const t = performance.now(); settle(viewport.view); return performance.now() - t; },
-  };
+  return mountCanvasMap({ container, label: shell.label, half: PLATE, onResize, render: renderMap, present });
 }

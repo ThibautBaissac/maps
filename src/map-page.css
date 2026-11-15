@@ -3,22 +3,23 @@
   src: url('/fonts/bebasneue/BebasNeue-Regular.ttf') format('truetype');
   font-display: block;
 }
-html, body { margin: 0; height: 100%; background: var(--bg, #F6F1E7); overflow: hidden; }
+/* Defaults until the style's colours and font are set (shell.theme). */
+:root { --bg: #F6F1E7; --accent: #1E5FD8; --font: 'Bebas Neue', 'Arial Narrow', sans-serif; }
+html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
 #stage { position: fixed; inset: 0; }
 #stage > canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 #stage > canvas.dragging { cursor: grabbing; }
-#stage > canvas:focus-visible { outline: 3px solid var(--accent, #1E5FD8); outline-offset: -3px; }
+#stage > canvas:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
 .attribution {
   position: fixed;
   right: 12px;
   bottom: 12px;
-  font: 13px/1 var(--font, 'Bebas Neue', 'Arial Narrow', sans-serif);
+  font: 13px/1 var(--font);
   letter-spacing: 0.06em;
-  color: var(--accent, #1E5FD8);
-  background: color-mix(in srgb, var(--bg, #F6F1E7) 92%, transparent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
   padding: 4px 7px 3px;
-  border: 1px solid var(--accent, #1E5FD8);
-  pointer-events: auto;
+  border: 1px solid var(--accent);
 }
 .attribution a { color: inherit; text-decoration: none; }
 .attribution a:hover, .attribution a:focus-visible { text-decoration: underline; }
@@ -33,11 +34,11 @@ html, body { margin: 0; height: 100%; background: var(--bg, #F6F1E7); overflow: 
   max-width: calc(100vw - 24px);
 }
 .back {
-  font: 15px/1 var(--font, 'Bebas Neue', 'Arial Narrow', sans-serif);
+  font: 15px/1 var(--font);
   letter-spacing: 0.08em;
-  color: var(--accent, #1E5FD8);
-  background: color-mix(in srgb, var(--bg, #F6F1E7) 92%, transparent);
-  border: 1px solid var(--accent, #1E5FD8);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  border: 1px solid var(--accent);
   padding: 5px 9px 4px;
   text-decoration: none;
 }
@@ -45,15 +46,15 @@ html, body { margin: 0; height: 100%; background: var(--bg, #F6F1E7); overflow: 
 .map-tools button {
   min-width: 44px;
   min-height: 44px;
-  border: 1px solid var(--accent, #1E5FD8);
-  color: var(--accent, #1E5FD8);
-  background: var(--bg, #F6F1E7);
-  font: 15px/1 var(--font, 'Bebas Neue', 'Arial Narrow', sans-serif);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: var(--bg);
+  font: 15px/1 var(--font);
   padding: 8px;
   cursor: pointer;
 }
 .map-tools button:disabled { opacity: 0.6; cursor: wait; }
-.map-tools button:focus-visible { outline: 3px solid var(--accent, #1E5FD8); outline-offset: 2px; }
+.map-tools button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .map-tools .description-button { font-size: 13px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 #map-description {
@@ -62,9 +63,9 @@ html, body { margin: 0; height: 100%; background: var(--bg, #F6F1E7); overflow: 
   overflow: auto;
   box-sizing: border-box;
   padding: 20px;
-  border: 2px solid var(--accent, #1E5FD8);
-  color: var(--accent, #1E5FD8);
-  background: var(--bg, #F6F1E7);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  background: var(--bg);
   font: 16px/1.5 system-ui, sans-serif;
   overflow-wrap: anywhere;
 }
@@ -72,25 +73,26 @@ html, body { margin: 0; height: 100%; background: var(--bg, #F6F1E7); overflow: 
 #map-description h1 { font-size: 1.5rem; }
 #map-description h2 { font-size: 1.2rem; }
 #map-description form { display: flex; justify-content: end; margin: 0; }
-#map-description button { min-height: 44px; padding: 8px 12px; font: inherit; background: inherit; color: inherit; border: 1px solid; cursor: pointer; }
+#map-description button { min-height: 44px; }
+:is(#map-description, .loading) button { padding: 8px 12px; font: inherit; background: inherit; color: inherit; border: 1px solid; cursor: pointer; }
 #map-description details { margin-block: 16px; }
 #map-description summary { cursor: pointer; text-decoration: underline; }
-#map-description :is(button, summary):focus-visible { outline: 3px solid var(--accent, #1E5FD8); outline-offset: 3px; }
-.back:hover, .back:focus-visible { background: var(--accent, #1E5FD8); color: var(--bg, #F6F1E7); outline: none; }
+#map-description :is(button, summary):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.back:hover, .back:focus-visible { background: var(--accent); color: var(--bg); outline: none; }
 .loading {
   position: fixed;
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
   margin: 0;
-  font: 22px/1 var(--font, 'Bebas Neue', 'Arial Narrow', sans-serif);
+  font: 22px/1 var(--font);
   letter-spacing: 0.1em;
-  color: var(--accent, #1E5FD8);
+  color: var(--accent);
   max-width: min(28rem, calc(100vw - 48px));
   width: max-content;
   text-align: center;
-  background: var(--bg, #F6F1E7);
+  background: var(--bg);
   padding: 16px;
   box-sizing: border-box;
 }
-.loading button { margin-top: 12px; font: inherit; color: inherit; background: inherit; border: 1px solid; padding: 8px 12px; cursor: pointer; }
-.loading button:focus-visible { outline: 3px solid var(--accent, #1E5FD8); outline-offset: 3px; }
+.loading button { margin-top: 12px; }
+.loading button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }

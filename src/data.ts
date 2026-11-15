@@ -1,7 +1,7 @@
 // Format of public/data/<place>.json, written by scripts/fetch-osm.ts and read by the
 // map pages. Coordinates are local metres, x east, y north, origin at the place centre.
 // Runs in the browser and in Node: no DOM, no Node API.
-import type { Place } from './place.ts';
+import { isRecord, type Place } from './place.ts';
 
 /** Flat polyline [x0, y0, x1, y1, …]. */
 export type Line = number[];
@@ -78,7 +78,16 @@ export interface MapData {
   parks: Park[];
 }
 
-const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
+/** Number of features per collection, with French labels (console tables). */
+export function featureCounts(data: MapData): Record<string, number> {
+  return {
+    bâtiments: data.buildings.length,
+    routes: data.roads.length,
+    'cours d’eau': data.waterways.length,
+    'plans d’eau': data.water.length,
+    'parcs / espaces verts': data.parks.length,
+  };
+}
 
 // Checks the shape of a downloaded data file: the meta block field by field, the
 // collections as arrays (their items are trusted: fetch-osm writes them with these types).

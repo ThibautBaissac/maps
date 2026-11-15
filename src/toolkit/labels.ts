@@ -114,8 +114,8 @@ interface ScreenLine { pts: Float32Array; cum: Float32Array; len: number }
 function toScreen(p: Line, P: Projector): ScreenLine {
   const pts = new Float32Array(p.length);
   for (let i = 0; i < p.length; i += 2) {
-    pts[i] = (p[i]! - P.view.x) * P.S + P.cx;
-    pts[i + 1] = P.cy - (p[i + 1]! - P.view.y) * P.S;
+    pts[i] = P.sx(p[i]!);
+    pts[i + 1] = P.sy(p[i + 1]!);
   }
   const cum = new Float32Array(p.length / 2);
   for (let i = 1; i < cum.length; i++) cum[i] = cum[i - 1]! + Math.hypot(pts[2 * i]! - pts[2 * i - 2]!, pts[2 * i + 1]! - pts[2 * i - 1]!);
@@ -215,6 +215,27 @@ export function placeLabels<K extends string>({ groups, P, mapRect, avoid, font,
 
   for (const g of groups) for (const item of g.items) tryItem(item, g);
   return jobs;
+}
+
+// Erases a halo `width` device px wide around the letters (destination-out).
+export function knockOutLabels(ctx: CanvasRenderingContext2D, jobs: readonly LabelJob<string>[], width: number): void {
+  ctx.save();
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = width;
+  for (const job of jobs) drawJob(ctx, job, 'stroke');
+  ctx.restore();
+}
+
+export function fillLabels(ctx: CanvasRenderingContext2D, jobs: readonly LabelJob<string>[], color: string): void {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (const job of jobs) drawJob(ctx, job, 'fill');
+  ctx.restore();
 }
 
 // Draws glyphs of one job with fillText or strokeText; the caller sets styles.

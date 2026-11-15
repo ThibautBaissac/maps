@@ -3,9 +3,8 @@
 // streets as double lines (single at small scale), stairs as ladders.
 import type { Line, MapData, Park, Ring, Road, RoadKind, Water, Waterway } from '../../data.ts';
 import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
-import { isKeyOf, recordOf, typedKeys, type Point, type Rect } from '../../toolkit/geometry.ts';
-import { addLine, addRings, bboxOf, type Projector } from '../../toolkit/projection.ts';
-import type { View } from '../../toolkit/viewport.ts';
+import { isKeyOf, recordOf, typedKeys, type Point } from '../../toolkit/geometry.ts';
+import { addLine, addRings, withBox, type Projector, type WithBox } from '../../toolkit/projection.ts';
 import type { CyanotypeOptions } from './defaults.ts';
 
 // Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)
@@ -31,8 +30,7 @@ const PATHS = {
   path: { min: 1.1, dash: [1.5, 2] }, track: { min: 1.1, dash: [5, 2.5] },
 } satisfies Partial<Record<RoadKind, { min: number; dash: number[] }>>;
 type PathKind = keyof typeof PATHS;
-
-type WithBox<T> = T & { bb: Rect };
+const PATH_ORDER = typedKeys(PATHS);
 
 export interface PreparedMap {
   buildings: WithBox<{ r: Ring[] }>[];
@@ -46,9 +44,8 @@ export interface PreparedMap {
 }
 
 export function prepareMap(data: MapData): PreparedMap {
-  const withBox = <T extends object>(o: T, rings: Ring[]): WithBox<T> => ({ ...o, bb: bboxOf(rings) });
   const streets = recordOf(STREET_ORDER, (): WithBox<Road>[] => []);
-  const paths = recordOf(typedKeys(PATHS), (): WithBox<Road>[] => []);
+  const paths = recordOf(PATH_ORDER, (): WithBox<Road>[] => []);
   const steps: WithBox<Road>[] = [];
   for (const r of data.roads) {
     const it = withBox(r, [r.p]);
@@ -57,7 +54,7 @@ export function prepareMap(data: MapData): PreparedMap {
     else if (r.k === 'steps') steps.push(it);
   }
   return {
-    buildings: data.buildings.map((r) => ({ r, bb: bboxOf(r) })),
+    buildings: data.buildings.map((r) => withBox({ r }, r)),
     water: data.water.map((w) => withBox(w, w.r)),
     parks: data.parks.map((p) => withBox(p, p.r)),
     streams: data.waterways.filter((w) => !w.u).map((w) => withBox(w, [w.p])),
@@ -83,7 +80,7 @@ export function makeHatch(ctx: CanvasRenderingContext2D, dpr: number, pitch: num
 const streetGap = (k: StreetKind, s: number): number => Math.max(STREETS[k].min, STREETS[k].m * s);
 
 // Depth lines along the shore: concentric rings cut from wide strokes, kept inside the water.
-function drawWater(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingContext2D, M: PreparedMap, P: Projector, o: CyanotypeOptions, half: number): void {
+function drawWater(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingContext2D, M: PreparedMap, P: Projector, o: CyanotypeOptions): void {
   const { dpr } = P;
   const water = M.water.filter((w) => P.visible(w.bb));
   if (!water.length) return;
@@ -91,7 +88,7 @@ function drawWater(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingContext2D,
   for (const w of water) addRings(fill, P, w.r, 0);
   // Shore only: skip edges lying on the border of the downloaded square.
   const shore = new Path2D();
-  const e = half - 1;
+  const e = M.half - 1;
   const onEdge = (x: number, y: number): boolean => Math.abs(x) >= e || Math.abs(y) >= e;
   const pt: Point = [0, 0];
   for (const w of water) for (const r of w.r) {
@@ -152,9 +149,9 @@ function ladder(ctx: CanvasRenderingContext2D, P: Projector, p: Line, gap: numbe
   }
 }
 
-export function renderMap(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingContext2D, M: PreparedMap, P: Projector, view: View, o: CyanotypeOptions, hatch: CanvasPattern): void {
+export function renderMap(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingContext2D, M: PreparedMap, P: Projector, o: CyanotypeOptions, hatch: CanvasPattern): void {
   const { dpr } = P;
-  const s = view.s;
+  const s = P.view.s;
   ctx.strokeStyle = o.line;
   ctx.lineJoin = 'round';
   ctx.lineCap = 'butt';
@@ -169,7 +166,7 @@ export function renderMap(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingCon
   ctx.lineWidth = 0.6 * dpr;
   ctx.stroke(parks);
 
-  drawWater(ctx, tmp, M, P, o, M.half);
+  drawWater(ctx, tmp, M, P, o);
 
   // Streams and drains; navigation channels (fairways) as a faint dashed line.
   ctx.lineWidth = 0.8 * dpr;
@@ -200,7 +197,7 @@ export function renderMap(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingCon
 
   // Paths and stairs, single fine lines.
   ctx.lineWidth = 0.6 * dpr;
-  for (const k of typedKeys(PATHS)) {
+  for (const k of PATH_ORDER) {
     const st = PATHS[k];
     if (s < st.min) continue;
     ctx.setLineDash(st.dash.map((d) => d * dpr));

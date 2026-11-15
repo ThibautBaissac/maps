@@ -1,7 +1,7 @@
 // The gallery's picture of a map, taken by scripts/vignettes.ts. Opened with #vignette in
 // its URL, a map page draws a centred portrait crop of its canvas into
 // <output id="vignette" data-src="data:image/webp;base64,…">, which headless Chrome dumps.
-import type { MapHandle } from './styles/contract.ts';
+import { context2d, makeCanvas } from './toolkit/canvas.ts';
 
 /** Portrait crop, width / height. */
 const RATIO = 4 / 5;
@@ -10,19 +10,16 @@ const HEIGHT_SHARE = 0.88;
 const MAX_WIDTH = 1200;
 const QUALITY = 0.82;
 
-export function captureVignette(handle: MapHandle, stage: HTMLElement): void {
+// The style has already drawn a crisp render: mounting ends with a synchronous settle.
+export function captureVignette(stage: HTMLElement): void {
   const source = stage.querySelector('canvas');
   if (!source) throw new Error('No canvas to capture in #stage');
-  handle.full?.(); // a crisp render, not a fast one drawn during navigation
 
   const h = Math.round(Math.min(source.height * HEIGHT_SHARE, source.width / RATIO));
   const w = Math.round(h * RATIO);
   const scale = Math.min(1, MAX_WIDTH / w);
-  const out = document.createElement('canvas');
-  out.width = Math.round(w * scale);
-  out.height = Math.round(h * scale);
-  const ctx = out.getContext('2d');
-  if (!ctx) throw new Error('Canvas 2D context unavailable');
+  const out = makeCanvas(w * scale, h * scale);
+  const ctx = context2d(out);
   // A style may leave its canvas transparent over the page's paper: paint it first.
   ctx.fillStyle = getComputedStyle(document.documentElement).backgroundColor;
   ctx.fillRect(0, 0, out.width, out.height);

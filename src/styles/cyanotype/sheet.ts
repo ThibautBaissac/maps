@@ -1,10 +1,12 @@
 // The drawing sheet around the map: layout, paper, reference grid, dimension chains on
 // the four edges and the title block (bottom right). All in CSS px, drawn each frame.
 import type { MapMeta } from '../../data.ts';
+import { formatLat, formatLon } from '../../place.ts';
 import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
 import type { Point, Rect } from '../../toolkit/geometry.ts';
-import { clamp, scaleBar } from '../../toolkit/layout.ts';
+import { clamp, mapWindow, scaleBar } from '../../toolkit/layout.ts';
 import { pixelCanvas, vnoise } from '../../toolkit/noise.ts';
+import { makeProjector, type Projector } from '../../toolkit/projection.ts';
 import type { View } from '../../toolkit/viewport.ts';
 import type { CyanotypeOptions } from './defaults.ts';
 
@@ -14,7 +16,6 @@ type Ctx = CanvasRenderingContext2D;
 export interface SheetLayout {
   w: number;
   h: number;
-  u: number;
   /** Outer margin to the double border. */
   m: number;
   /** Dimension band between border and map. */
@@ -23,7 +24,6 @@ export interface SheetLayout {
   map: Rect;
   /** Square plate size at full zoom-out. */
   plate: number;
-  pad: number;
   /** Title block. */
   cart: Rect;
   /** "Back to gallery" link. */
@@ -36,18 +36,15 @@ export function sheetLayout(w: number, h: number): SheetLayout {
   const u = Math.min(w, h);
   const m = clamp(u * 0.026, 9, 24);
   const band = clamp(u * 0.042, 22, 34);
-  const frame: Rect = [m, m, w - m, h - m];
-  const map: Rect = [m + band, m + band, w - m - band, h - m - band];
-  const mw = map[2] - map[0], mh = map[3] - map[1];
-  const plate = mh > mw ? Math.min(mh, Math.sqrt(mw * mh)) : Math.min(mw, mh);
+  const { frame, map, plate, nav } = mapWindow(w, h, m, band);
+  const mw = map[2] - map[0];
   const pad = clamp(u * 0.018, 8, 16);
   const cw = clamp(Math.min(mw * 0.62, 360), 196, 360);
   const ch = Math.round(cw * 0.5);
   const cart: Rect = [map[2] - pad - cw, map[3] - pad - ch, map[2] - pad, map[3] - pad];
-  const nav: Rect = [map[0] + 6, map[1] + 6, map[0] + 6 + 224, map[1] + 6 + 80];
   // The OSM attribution sits on top of the title block, right-aligned with it.
   const attr: Rect = [Math.max(map[0], cart[2] - 260), cart[1] - 6 - 24, cart[2], cart[1] - 6];
-  return { w, h, u, m, band, frame, map, plate, pad, cart, nav, attr };
+  return { w, h, m, band, frame, map, plate, cart, nav, attr };
 }
 
 // Blue ground with soft mottling, fine grain and a slightly darker rim.
@@ -79,7 +76,7 @@ export function renderPaper(W: number, H: number, dpr: number, color: string, st
 }
 
 // Grid step (m) so that cells are 70–160 CSS px wide.
-export function gridStep(s: number): number {
+function gridStep(s: number): number {
   for (const g of [10, 20, 25, 50, 100, 200, 250, 500, 1000]) if (g * s >= 70) return g;
   return 1000;
 }
@@ -87,12 +84,12 @@ export function gridStep(s: number): number {
 const fmt = (n: number): string => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
 // Map metres -> CSS px for the current view.
-const sx = (L: SheetLayout, v: View, x: number): number => (x - v.x) * v.s + L.w / 2;
-const sy = (L: SheetLayout, v: View, y: number): number => L.h / 2 - (y - v.y) * v.s;
+const cssProjector = (L: SheetLayout, view: View): Projector => makeProjector(view, L.w, L.h, 1);
 
 export function drawGrid(c: Ctx, L: SheetLayout, view: View, half: number, o: CyanotypeOptions): void {
   const G = gridStep(view.s);
   const M = L.map;
+  const { sx, sy } = cssProjector(L, view);
   c.save();
   c.beginPath();
   c.rect(M[0], M[1], M[2] - M[0], M[3] - M[1]);
@@ -102,14 +99,14 @@ export function drawGrid(c: Ctx, L: SheetLayout, view: View, half: number, o: Cy
   c.lineWidth = 0.6;
   c.beginPath();
   for (let x = -half; x <= half + 0.1; x += G) {
-    const X = Math.round(sx(L, view, x)) + 0.5;
+    const X = Math.round(sx(x)) + 0.5;
     if (X < M[0] || X > M[2]) continue;
-    c.moveTo(X, Math.max(M[1], sy(L, view, half))); c.lineTo(X, Math.min(M[3], sy(L, view, -half)));
+    c.moveTo(X, Math.max(M[1], sy(half))); c.lineTo(X, Math.min(M[3], sy(-half)));
   }
   for (let y = -half; y <= half + 0.1; y += G) {
-    const Y = Math.round(sy(L, view, y)) + 0.5;
+    const Y = Math.round(sy(y)) + 0.5;
     if (Y < M[1] || Y > M[3]) continue;
-    c.moveTo(Math.max(M[0], sx(L, view, -half)), Y); c.lineTo(Math.min(M[2], sx(L, view, half)), Y);
+    c.moveTo(Math.max(M[0], sx(-half)), Y); c.lineTo(Math.min(M[2], sx(half)), Y);
   }
   c.stroke();
   c.restore();
@@ -179,25 +176,11 @@ export function drawBorder(c: Ctx, L: SheetLayout, view: View, half: number, o: 
     }
     c.restore();
   };
-  const X = (x: number): number => sx(L, view, x), Y = (y: number): number => sy(L, view, y);
+  const { sx: X, sy: Y } = cssProjector(L, view);
   edge(0, 2, X, (p, d) => [p, M[1] - d], true, false, false); // top: running totals
   edge(0, 2, X, (p, d) => [p, M[3] + d], false, true, false); // bottom: partials
-  edge(1, 3, (y) => Y(y), (p, d) => [M[0] - d, p], false, false, true); // left
-  edge(1, 3, (y) => Y(y), (p, d) => [M[2] + d, p], false, true, true); // right: partials
-  // Running totals on the left edge go from the south, so label them separately.
-  c.save();
-  c.textAlign = 'center';
-  const tw = c.measureText('0000').width;
-  for (let v = -half; v <= half + 0.1; v += G) {
-    const p = Y(v);
-    if (p - tw / 2 < M[1] + 2 || p + tw / 2 > M[3] - 2) continue;
-    c.save();
-    c.translate(M[0] - lab, p);
-    c.rotate(-Math.PI / 2);
-    c.fillText(fmt(v + half), 0, 0);
-    c.restore();
-  }
-  c.restore();
+  edge(1, 3, Y, (p, d) => [M[0] - d, p], true, false, true); // left: running totals, from the south
+  edge(1, 3, Y, (p, d) => [M[2] + d, p], false, true, true); // right: partials
 
   // Corner crosshairs and the unit.
   c.lineWidth = 0.7;
@@ -309,8 +292,7 @@ export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MapMeta
   text(rText, x1 - p, by, small, { align: 'right' });
 
   // Coordinates and survey source.
-  const lat = `${Math.abs(meta.lat).toFixed(4)}°${meta.lat >= 0 ? 'N' : 'S'}`;
-  const lon = `${Math.abs(meta.lon).toFixed(4)}°${meta.lon >= 0 ? 'E' : 'W'}`;
+  const lat = formatLat(meta.lat, 4), lon = formatLon(meta.lon, 4);
   const date = meta.fetchedAt.slice(0, 10);
   const bs = Math.min(small, fit(c, o.font, `${lat} ${lon}`, mid - x0 - 2 * p, small));
   text(`${lat} ${lon}`, x0 + p, rowMid(r3, y1), bs);

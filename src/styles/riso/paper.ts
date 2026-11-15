@@ -1,6 +1,21 @@
 import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
 import { mulberry32, pixelCanvas } from '../../toolkit/noise.ts';
 
+// Repeating grain tile, independent of the page size: made once per seed.
+const grains = new Map<number, HTMLCanvasElement>();
+function grainTile(seed: number): HTMLCanvasElement {
+  let tile = grains.get(seed);
+  if (!tile) {
+    tile = pixelCanvas(256, 256, seed, (r) => {
+      const v = r();
+      if (v < 0.5) return [70, 55, 35, Math.round(r() * 26)];
+      return [255, 253, 245, Math.round(r() * 40)];
+    });
+    grains.set(seed, tile);
+  }
+  return tile;
+}
+
 // Paper texture at device resolution: fine grain, fibres, mottling, stains, darker edges.
 export function renderPaper(W: number, H: number, dpr: number, color: string, seed = 7): HTMLCanvasElement {
   const c = makeCanvas(W, H);
@@ -19,12 +34,7 @@ export function renderPaper(W: number, H: number, dpr: number, color: string, se
   ctx.drawImage(mott, 0, 0, W, H);
 
   // Fine grain: dark and light specks.
-  const grain = pixelCanvas(256, 256, seed + 2, (r) => {
-    const v = r();
-    if (v < 0.5) return [70, 55, 35, Math.round(r() * 26)];
-    return [255, 253, 245, Math.round(r() * 40)];
-  });
-  ctx.fillStyle = pattern(ctx, grain, 'repeat');
+  ctx.fillStyle = pattern(ctx, grainTile(seed + 2), 'repeat');
   ctx.fillRect(0, 0, W, H);
 
   // Fibres.

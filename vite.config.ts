@@ -1,7 +1,8 @@
 import { defineConfig, type Plugin } from 'vite';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { parsePlace, type Place } from './src/place.ts';
+import { message } from './scripts/cli.ts';
+import { isSlug, parsePlace, type Place } from './src/place.ts';
 import { MAPS, type MapEntry } from './src/registry.ts';
 import { STYLES, isStyleKey } from './src/styles/index.ts';
 
@@ -63,7 +64,7 @@ async function generatePages(strict: boolean): Promise<Record<string, string>> {
     console.warn(`\x1b[33m[registry] skipped: ${msg}\x1b[0m`);
   };
   for (const m of MAPS) {
-    if (!/^[a-z0-9-]+$/.test(m.id) || seen.has(m.id)) { problem(`invalid or duplicate id "${m.id}"`); continue; }
+    if (!isSlug(m.id) || seen.has(m.id)) { problem(`invalid or duplicate id "${m.id}"`); continue; }
     seen.add(m.id);
     if (!isStyleKey(m.style)) { problem(`unknown style "${m.style}" (${m.id}); known: ${Object.keys(STYLES).join(', ')}`); continue; }
     const placeFile = `${root}places/${m.place}.ts`;
@@ -74,7 +75,7 @@ async function generatePages(strict: boolean): Promise<Record<string, string>> {
       const mod = (await import(`${pathToFileURL(placeFile).href}?t=${Date.now()}`)) as { default?: unknown };
       place = parsePlace(mod.default, `places/${m.place}.ts`);
     } catch (err) {
-      problem(err instanceof Error ? err.message : String(err));
+      problem(message(err));
       continue;
     }
     if (!existsSync(`${root}public/vignettes/${m.id}.webp`)) {

@@ -9,12 +9,8 @@
 // Without --lat/--lon, the place is geocoded once with OpenStreetMap Nominatim.
 import { access, writeFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
-import { parsePlace, type Place } from '../../../../src/place.ts';
-
-function fail(msg: string): never {
-  console.error(msg);
-  process.exit(1);
-}
+import { fail, message } from '../../../../scripts/cli.ts';
+import { isRecord, isSlug, parsePlace, type Place } from '../../../../src/place.ts';
 
 function parseCli() {
   try {
@@ -32,7 +28,7 @@ function parseCli() {
       },
     }).values;
   } catch (err) {
-    return fail(err instanceof Error ? err.message : String(err));
+    return fail(message(err));
   }
 }
 const args = parseCli();
@@ -41,7 +37,7 @@ const city = args.city ?? fail('Missing --city. Example: --city "Lisbonne" --dis
 
 const slug = (s: string): string => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const id = args.id ?? slug([city, args.district].filter(Boolean).join(' '));
-if (!/^[a-z0-9-]+$/.test(id)) fail(`Invalid id "${id}"`);
+if (!isSlug(id)) fail(`Invalid id "${id}"`);
 const file = new URL(`../../../../places/${id}.ts`, import.meta.url);
 if (!args['dry-run']) {
   const exists = await access(file).then(() => true, () => false);
@@ -50,7 +46,7 @@ if (!args['dry-run']) {
 
 interface NominatimHit { lat: string; lon: string; display_name: string }
 const isHits = (v: unknown): v is NominatimHit[] =>
-  Array.isArray(v) && v.every((h) => typeof h === 'object' && h !== null && 'lat' in h && 'lon' in h && 'display_name' in h);
+  Array.isArray(v) && v.every((h) => isRecord(h) && 'lat' in h && 'lon' in h && 'display_name' in h);
 
 let lat = args.lat !== undefined ? Number(args.lat) : NaN;
 let lon = args.lon !== undefined ? Number(args.lon) : NaN;
@@ -61,7 +57,7 @@ if (Number.isNaN(lat) || Number.isNaN(lon)) {
   const res = await fetch(url, {
     headers: { 'User-Agent': 'illustrated-city-maps/0.1 (one-off geocoding)', 'Accept-Language': 'fr' },
     signal: AbortSignal.timeout(20000),
-  }).catch((e: unknown) => fail(`Nominatim unreachable: ${e instanceof Error ? e.message : String(e)}. Pass --lat and --lon instead.`));
+  }).catch((e: unknown) => fail(`Nominatim unreachable: ${message(e)}. Pass --lat and --lon instead.`));
   if (!res.ok) fail(`Nominatim HTTP ${res.status}. Pass --lat and --lon instead.`);
   const hits: unknown = await res.json();
   if (!isHits(hits)) fail('Unexpected Nominatim answer. Pass --lat and --lon instead.');

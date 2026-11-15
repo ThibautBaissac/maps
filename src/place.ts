@@ -13,7 +13,15 @@ export interface Place {
   sizeKm: number;
 }
 
-const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
+export const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
+
+/** Map and place ids: file names of places/ and page paths. */
+export const isSlug = (s: string): boolean => /^[a-z0-9-]+$/.test(s);
+
+/** 52.3731°N; `digits` decimals. */
+export const formatLat = (v: number, digits: number): string => `${Math.abs(v).toFixed(digits)}°${v >= 0 ? 'N' : 'S'}`;
+/** 4.8922°E; `west` is the letter for west (O in French text). */
+export const formatLon = (v: number, digits: number, west = 'W'): string => `${Math.abs(v).toFixed(digits)}°${v >= 0 ? 'E' : west}`;
 
 // Checks a place module's default export loaded at run time (dynamic import is untyped).
 export function parsePlace(v: unknown, source: string): Place {

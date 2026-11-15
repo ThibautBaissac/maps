@@ -1,9 +1,8 @@
 // The two printing plates of the riso style:
 // plate A (first ink) = buildings, plate B (second ink) = water, parks, streams, roads.
 import type { Line, MapData, Ring, Road, RoadKind } from '../../data.ts';
-import { recordOf, typedKeys, type Rect } from '../../toolkit/geometry.ts';
-import { addLine, addRings, bboxOf, type Projector } from '../../toolkit/projection.ts';
-import type { View } from '../../toolkit/viewport.ts';
+import { recordOf, typedKeys } from '../../toolkit/geometry.ts';
+import { addLine, addRings, withBox, type Projector, type WithBox } from '../../toolkit/projection.ts';
 import type { InkPatterns } from './inks.ts';
 
 interface RoadStyle {
@@ -40,13 +39,11 @@ const ROADS: Record<RoadKind, RoadStyle> = {
   trunk_link: PRIMARY_LINK,
   motorway_link: PRIMARY_LINK,
 };
-export const ROAD_ORDER = typedKeys(ROADS);
+const ROAD_ORDER = typedKeys(ROADS);
 
-export function roadWidth(k: RoadKind, s: number): number {
+function roadWidth(k: RoadKind, s: number): number {
   return ROADS[k].w * Math.min(5, Math.pow(s / 0.5, 0.6));
 }
-
-type WithBox<T> = T & { bb: Rect };
 
 export interface Plates {
   buildings: WithBox<{ r: Ring[] }>[];
@@ -58,18 +55,18 @@ export interface Plates {
 
 export function preparePlates(data: MapData): Plates {
   const roads = recordOf(ROAD_ORDER, (): WithBox<Road>[] => []);
-  for (const r of data.roads) roads[r.k].push({ ...r, bb: bboxOf([r.p]) });
+  for (const r of data.roads) roads[r.k].push(withBox(r, [r.p]));
   return {
-    buildings: data.buildings.map((r) => ({ r, bb: bboxOf(r) })),
-    water: data.water.map((w) => ({ r: w.r, bb: bboxOf(w.r) })),
-    parks: data.parks.map((p) => ({ r: p.r, bb: bboxOf(p.r) })),
-    streams: data.waterways.filter((w) => !/^(canal|river)$/.test(w.k) && !w.u).map((w) => ({ p: w.p, bb: bboxOf([w.p]) })),
+    buildings: data.buildings.map((r) => withBox({ r }, r)),
+    water: data.water.map((w) => withBox({ r: w.r }, w.r)),
+    parks: data.parks.map((p) => withBox({ r: p.r }, p.r)),
+    streams: data.waterways.filter((w) => !/^(canal|river)$/.test(w.k) && !w.u).map((w) => withBox({ p: w.p }, [w.p])),
     roads,
   };
 }
 
-export function renderPlateA(ctx: CanvasRenderingContext2D, M: Plates, P: Projector, view: View, ink: string): void {
-  const dpr = P.dpr;
+export function renderPlateA(ctx: CanvasRenderingContext2D, M: Plates, P: Projector, ink: string): void {
+  const { dpr, view } = P;
   // One fill per building: far faster in Skia than a single huge self-overlapping path.
   ctx.fillStyle = ink;
   for (const b of M.buildings) {
@@ -94,8 +91,8 @@ export function renderPlateA(ctx: CanvasRenderingContext2D, M: Plates, P: Projec
   }
 }
 
-export function renderPlateB(ctx: CanvasRenderingContext2D, M: Plates, P: Projector, view: View, ink: string, patterns: InkPatterns): void {
-  const dpr = P.dpr;
+export function renderPlateB(ctx: CanvasRenderingContext2D, M: Plates, P: Projector, ink: string, patterns: InkPatterns): void {
+  const { dpr, view } = P;
   // Water: line hatching tint + solid shoreline.
   ctx.fillStyle = patterns.lines;
   for (const w of M.water) {

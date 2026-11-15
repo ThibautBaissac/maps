@@ -62,11 +62,12 @@ Les types font foi : `MapData` et ses éléments dans `src/data.ts`, `Place` dan
 
 | Module | Fournit |
 |---|---|
+| `stage.ts` | `mountCanvasMap()` : canvas de scène, viewport et boucle « rendu net à l'arrêt, image re-projetée en mouvement » ; le style ne fournit que `onResize`, `render` et `present`. `drawReprojected()` pour poser le tampon net dans la fenêtre de carte |
 | `viewport.ts` | `createViewport()` : vue `{ x, y, s }`, navigation molette/glisser/clavier, `onFrame` pendant le mouvement, `onSettle` pour le rendu net ; `reprojection()` pour réutiliser la dernière image nette pendant le mouvement |
 | `canvas.ts` | canvas de scène focalisable, dimensionnement selon la densité de pixels, tampons hors écran ; `context2d()` et `pattern()`, qui lèvent une erreur au lieu de renvoyer `null` |
 | `projection.ts` | mètres → px avec tremblé du trait facultatif, construction de tracés, élimination hors écran, fondu du carré |
-| `labels.ts` | noms candidats tirés des données, placement le long des lignes sans collision, dessin des lettres ; `LabelGroup<K>` porte l'étiquette propre au style (encre, couleur…) jusqu'aux `LabelJob<K>` |
-| `layout.ts` | une mise en page type (cadre, fenêtre de carte, emplacements du cartouche, de la rose des vents, de la légende) et les pas de l'échelle ; à prendre, adapter ou ignorer |
+| `labels.ts` | noms candidats tirés des données, placement le long des lignes sans collision, dessin des lettres (`knockOutLabels()` pour le halo, `fillLabels()`) ; `LabelGroup<K>` porte l'étiquette propre au style (encre, couleur…) jusqu'aux `LabelJob<K>` |
+| `layout.ts` | `mapWindow()` (cadre, fenêtre de carte, taille du carré, zone de navigation) partagé par toutes les mises en page, une mise en page type (`computeLayout()` : emplacements du cartouche, de la rose des vents, de la légende) et les pas de l'échelle ; à prendre, adapter ou ignorer |
 | `geometry.ts` | types `Point`, `Rect`, `Circle`, `scaleRect()`, et des aides typées pour les objets à clés connues (`typedKeys`, `isKeyOf`, `recordOf`) |
 | `noise.ts` | aléatoire reproductible, bruit, canvas de pixels pour les textures |
 | `fonts.ts` | `loadFont(famille, fichier)` depuis `public/fonts/` |

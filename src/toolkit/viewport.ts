@@ -29,7 +29,10 @@ export interface ResizeResult {
   window: Rect;
   minScale: number;
 }
-export type ViewportSize = ElementSize & ResizeResult;
+type ViewportSize = ElementSize & ResizeResult;
+
+/** Zoom factor of one button press or +/- key. */
+export const ZOOM_STEP = 1.5;
 
 export interface ViewportOptions {
   element: HTMLElement;
@@ -44,14 +47,10 @@ export interface ViewportOptions {
 
 export interface Viewport {
   readonly view: View;
-  readonly size: ViewportSize | null;
   /** Starts measuring and drawing; call once the style is ready. */
   start(): void;
   /** Animated zoom around the centre, shared by buttons and keyboard navigation. */
   zoom(factor: number): void;
-  /** Moves the view (clamped) and redraws crisply. */
-  setView(v: Partial<View>): void;
-  redraw(): void;
   destroy(): void;
 }
 
@@ -124,6 +123,7 @@ export function createViewport({ element, half, maxScale = 10, onResize, onFrame
     kick();
   }
 
+  const zoomCentre = (factor: number): void => { if (size) zoomAt(size, size.w / 2, size.h / 2, factor); };
   const local = (e: MouseEvent): Point => { const r = element.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
 
   on('wheel', (e) => {
@@ -156,8 +156,8 @@ export function createViewport({ element, half, maxScale = 10, onResize, onFrame
     const step = 80 / view.s;
     const moves: Partial<Record<string, Point>> = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, step], ArrowDown: [0, -step] };
     const move = moves[e.key];
-    if (e.key === '+' || e.key === '=') zoomAt(size, size.w / 2, size.h / 2, 1.5);
-    else if (e.key === '-' || e.key === '_') zoomAt(size, size.w / 2, size.h / 2, 1 / 1.5);
+    if (e.key === '+' || e.key === '=') zoomCentre(ZOOM_STEP);
+    else if (e.key === '-' || e.key === '_') zoomCentre(1 / ZOOM_STEP);
     else if (move) {
       anchor = null;
       view.x += move[0]; view.y += move[1];
@@ -178,16 +178,8 @@ export function createViewport({ element, half, maxScale = 10, onResize, onFrame
 
   return {
     view,
-    get size() { return size; },
     start() { onElementResize(); ro.observe(element); },
-    zoom(factor) { if (size) zoomAt(size, size.w / 2, size.h / 2, factor); },
-    setView(v) {
-      Object.assign(view, v);
-      if (size) clampView(view, size);
-      target.s = view.s;
-      onSettle(view);
-    },
-    redraw() { onSettle(view); },
+    zoom: zoomCentre,
     destroy() {
       abort.abort();
       ro.disconnect();

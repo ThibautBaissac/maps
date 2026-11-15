@@ -46,7 +46,7 @@ test('cyanotype draws a residential bridge when zoomed out to a single line', (t
   };
   const out = canvas(), tmp = canvas();
   const view = { x: 0, y: 0, s: 0.2 };
-  renderMap(out.ctx, tmp.ctx, prepareMap(map), makeProjector(view, 320, 640, 1), view, DEFAULTS, {} as CanvasPattern);
+  renderMap(out.ctx, tmp.ctx, prepareMap(map), makeProjector(view, 320, 640, 1), DEFAULTS, {} as CanvasPattern);
   assert.ok(out.calls.some((c) => c.method === 'lineTo' && c.args[0] === 162 && c.args[1] === 320),
     'The bridge must reach its projected endpoint at low zoom');
 });

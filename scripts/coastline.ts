@@ -1,8 +1,11 @@
 import type { Line, Ring, Water } from '../src/data.ts';
 
 // Coordinate pairs are complete in the OSM data, hence the bounded index assertions.
-const r1 = (v: number): number => Math.round(v * 10) / 10;
-const key = (a: Line, i: number): string => `${a[i]},${a[i + 1]}`;
+/** Rounds to the 0.1 m precision of the data files. */
+export const r1 = (v: number): number => Math.round(v * 10) / 10;
+/** The point at index i of a line, as a string to match endpoints. */
+export const endpointKey = (a: Line, i: number): string => `${a[i]},${a[i + 1]}`;
+const key = endpointKey;
 
 // Sea and estuaries are not water areas in OSM but coastline ways (land on the left,
 // water on the right). Turns those crossing the square [-H, H]² into water polygons.

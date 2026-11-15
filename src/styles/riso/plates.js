@@ -1,5 +1,6 @@
-import { INK } from './inks.js';
-import { vnoise } from './noise.js';
+// The two printing plates of the riso style:
+// plate A (first ink) = buildings, plate B (second ink) = water, parks, streams, roads.
+import { addLine, addRings, bboxOf } from '../../engine/projection.js';
 
 // Road stroke width in CSS px at s = 0.5 px/m, and minimum zoom (px/m) to show it.
 const ROADS = {
@@ -29,16 +30,7 @@ export function roadWidth(k, s) {
   return ROADS[k].w * Math.min(5, Math.pow(s / 0.5, 0.6));
 }
 
-const bboxOf = (rings) => {
-  let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity;
-  for (const r of rings) for (let i = 0; i < r.length; i += 2) {
-    const x = r[i], y = r[i + 1];
-    if (x < a) a = x; if (x > c) c = x; if (y < b) b = y; if (y > d) d = y;
-  }
-  return [a, b, c, d];
-};
-
-export function prepare(data) {
+export function preparePlates(data) {
   const roads = {};
   for (const k of ROAD_ORDER) roads[k] = [];
   for (const r of data.roads) if (roads[r.k]) roads[r.k].push({ ...r, bb: bboxOf([r.p]) });
@@ -51,60 +43,10 @@ export function prepare(data) {
   };
 }
 
-// Map metres -> device px transform with a coherent "hand-drawn" wobble.
-export function makeProjector(view, W, H, dpr) {
-  const S = view.s * dpr, cx = W / 2, cy = H / 2;
-  const lam = 2 ** Math.round(Math.log2((70 * dpr) / S)); // wobble wavelength (m), stable per octave
-  const inv = 1 / lam;
-  const amp = Math.min(2.2, 0.7 + 0.4 * Math.log2(1 + view.s)) * dpr;
-  const pad = 30 / S;
-  const vb = [view.x - cx / S - pad, view.y - cy / S - pad, view.x + cx / S + pad, view.y + cy / S + pad];
-  return {
-    view, S, cx, cy, vb, amp, inv,
-    visible: (bb) => bb[2] >= vb[0] && bb[0] <= vb[2] && bb[3] >= vb[1] && bb[1] <= vb[3],
-    // writes [sx, sy] for map point (x, y) with wobble scaled by k
-    pt(x, y, k, out) {
-      const a = amp * k;
-      out[0] = (x - view.x) * S + cx + vnoise(x * inv, y * inv) * a;
-      out[1] = cy - (y - view.y) * S + vnoise(x * inv + 31.7, y * inv - 17.3) * a;
-    },
-  };
-}
-
-const tmp = [0, 0];
-
-function addRings(ctx, P, rings, k) {
-  for (const r of rings) {
-    P.pt(r[0], r[1], k, tmp);
-    ctx.moveTo(tmp[0], tmp[1]);
-    for (let i = 2; i < r.length; i += 2) {
-      P.pt(r[i], r[i + 1], k, tmp);
-      ctx.lineTo(tmp[0], tmp[1]);
-    }
-    ctx.closePath();
-  }
-}
-
-// Polyline with long segments subdivided so the wobble bends them a little.
-function addLine(ctx, P, p, maxSeg) {
-  let x0 = p[0], y0 = p[1];
-  P.pt(x0, y0, 1, tmp);
-  ctx.moveTo(tmp[0], tmp[1]);
-  for (let i = 2; i < p.length; i += 2) {
-    const x1 = p[i], y1 = p[i + 1];
-    const n = Math.min(40, Math.ceil((Math.hypot(x1 - x0, y1 - y0) * P.S) / maxSeg));
-    for (let j = 1; j <= n; j++) {
-      const t = j / n;
-      P.pt(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t, 1, tmp);
-      ctx.lineTo(tmp[0], tmp[1]);
-    }
-    x0 = x1; y0 = y1;
-  }
-}
-
-export function renderPink(ctx, M, P, dpr, view) {
+export function renderPlateA(ctx, M, P, view, ink) {
+  const dpr = P.dpr;
   // One fill per building: far faster in Skia than a single huge self-overlapping path.
-  ctx.fillStyle = INK.pink;
+  ctx.fillStyle = ink;
   for (const b of M.buildings) {
     if (!P.visible(b.bb)) continue;
     ctx.beginPath();
@@ -127,7 +69,8 @@ export function renderPink(ctx, M, P, dpr, view) {
   }
 }
 
-export function renderBlue(ctx, M, P, dpr, view, patterns) {
+export function renderPlateB(ctx, M, P, view, ink, patterns) {
+  const dpr = P.dpr;
   // Water: line hatching tint + solid shoreline.
   ctx.fillStyle = patterns.lines;
   for (const w of M.water) {
@@ -136,7 +79,7 @@ export function renderBlue(ctx, M, P, dpr, view, patterns) {
     addRings(ctx, P, w.r, 1);
     ctx.fill('evenodd');
   }
-  ctx.strokeStyle = INK.blue;
+  ctx.strokeStyle = ink;
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
   ctx.lineWidth = Math.min(2.2, 0.9 + view.s * 0.15) * dpr;
@@ -202,34 +145,4 @@ export function renderBlue(ctx, M, P, dpr, view, patterns) {
     addLine(ctx, P, r.p, 14 * dpr);
     ctx.stroke();
   }
-}
-
-// Inks thin out towards the edge of the square plate, like a print running out.
-export function fadePlate(ctx, P, half) {
-  const { S, cx, cy, view } = P;
-  const x0 = (-half - view.x) * S + cx, x1 = (half - view.x) * S + cx;
-  const y0 = cy - (half - view.y) * S, y1 = cy - (-half - view.y) * S;
-  const f = Math.min((x1 - x0) * 0.14, Math.max(50 * (S / view.s), 170 * S));
-  const { width: W, height: H } = ctx.canvas;
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.globalCompositeOperation = 'destination-out';
-  ctx.beginPath();
-  ctx.rect(0, 0, W, H);
-  ctx.rect(x0, y0, x1 - x0, y1 - y0);
-  ctx.fillStyle = '#000';
-  ctx.fill('evenodd');
-  const strip = (gx0, gy0, gx1, gy1, rx, ry, rw, rh) => {
-    const g = ctx.createLinearGradient(gx0, gy0, gx1, gy1);
-    g.addColorStop(0, 'rgba(0,0,0,1)');
-    g.addColorStop(0.35, 'rgba(0,0,0,0.55)');
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g;
-    ctx.fillRect(rx, ry, rw, rh);
-  };
-  strip(x0, 0, x0 + f, 0, x0, y0, f, y1 - y0);
-  strip(x1, 0, x1 - f, 0, x1 - f, y0, f, y1 - y0);
-  strip(0, y0, 0, y0 + f, x0, y0, x1 - x0, f);
-  strip(0, y1, 0, y1 - f, x0, y1 - f, x1 - x0, f);
-  ctx.restore();
 }

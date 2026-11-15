@@ -1,6 +1,4 @@
-import { makeCanvas, pixelCanvas, vnoise } from './noise.js';
-
-export const INK = { pink: '#FF4F9A', blue: '#1E5FD8' };
+import { makeCanvas, pixelCanvas, vnoise } from '../../engine/noise.js';
 
 // Per-ink texture: speckled drop-outs plus large uneven coverage, removed with destination-out.
 export function makeInkTexture(W, H, seed) {
@@ -29,12 +27,12 @@ export function applyInkTexture(ctx, tex) {
   ctx.restore();
 }
 
-// Halftone dots (rotated screen) and water line hatching, in device pixels.
-export function makePatterns(ctx, dpr) {
+// Halftone dots (rotated screen) and water line hatching in one ink, in device pixels.
+export function makePatterns(ctx, dpr, ink) {
   const ds = Math.max(3, Math.round(4.2 * dpr));
   const dot = makeCanvas(ds, ds);
   const dc = dot.getContext('2d');
-  dc.fillStyle = INK.blue;
+  dc.fillStyle = ink;
   dc.beginPath();
   dc.arc(ds / 2, ds / 2, 0.95 * dpr, 0, Math.PI * 2);
   dc.fill();
@@ -44,7 +42,7 @@ export function makePatterns(ctx, dpr) {
   const ls = Math.max(2, Math.round(3.1 * dpr));
   const line = makeCanvas(4, ls);
   const lc = line.getContext('2d');
-  lc.fillStyle = INK.blue;
+  lc.fillStyle = ink;
   lc.fillRect(0, 0, 4, Math.max(1, Math.round(1.25 * dpr)));
   const lines = ctx.createPattern(line, 'repeat');
   return { dots, lines };

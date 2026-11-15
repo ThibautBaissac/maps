@@ -1,6 +1,5 @@
-import { INK } from './inks.js';
-
-export const FONT = '"Bebas Neue", "Arial Narrow", sans-serif';
+// Street and waterway name placement along their lines (style-independent).
+// Styles decide which names, sizes and inks; they also draw the returned glyphs.
 
 const STREET_WEIGHT = {
   motorway: 5, trunk: 5, primary: 5, secondary: 4, tertiary: 3.5,
@@ -110,18 +109,24 @@ function layout(g, start, widths, tw, size, bounds) {
   return glyphs;
 }
 
-export function renderLabels(pinkCtx, blueCtx, L, P, dpr, view, mapRect, avoid) {
-  const zf = Math.min(1.6, Math.max(0.95, Math.pow(view.s / 0.6, 0.24)));
+/**
+ * Places labels along lines, most important first, without collisions.
+ * groups: [{ items, kind, size (CSS px), spacing (CSS px), maxPer, upper }]
+ * Returns jobs: [{ kind, font, size, text: string[], glyphs: [{ x, y, a, cw }] }] in device px.
+ */
+export function placeLabels({ groups, P, mapRect, avoid, font, measureCtx }) {
+  const dpr = P.dpr;
   const pad = 3 * dpr;
   const bounds = [mapRect[0] + 10 * dpr, mapRect[1] + 10 * dpr, mapRect[2] - 10 * dpr, mapRect[3] - 10 * dpr];
   const placed = avoid.map((r) => r.slice());
   const jobs = [];
 
-  const tryItem = (item, ink, size, spacing, maxPer) => {
-    const text = item.name.toUpperCase();
-    const font = `${size * dpr}px ${FONT}`;
-    pinkCtx.font = font;
-    const widths = [...text].map((ch) => pinkCtx.measureText(ch).width + spacing * dpr);
+  const tryItem = (item, g0) => {
+    const { kind, size, spacing, maxPer } = g0;
+    const text = g0.upper === false ? item.name : item.name.toUpperCase();
+    const f = `${size * dpr}px ${font}`;
+    measureCtx.font = f;
+    const widths = [...text].map((ch) => measureCtx.measureText(ch).width + spacing * dpr);
     const tw = widths.reduce((s, w) => s + w, 0);
     const step = Math.max(tw * 2.2, 380 * dpr);
     let count = 0;
@@ -132,7 +137,7 @@ export function renderLabels(pinkCtx, blueCtx, L, P, dpr, view, mapRect, avoid) 
       const centers = [g.len / 2];
       for (let d = step; g.len / 2 + d + tw / 2 < g.len; d += step) centers.push(g.len / 2 + d, g.len / 2 - d);
       // Off-centre fallbacks when the middle is taken or too curvy.
-      for (const f of [0.3, 0.7, 0.15, 0.85]) centers.push(g.len * f);
+      for (const fr of [0.3, 0.7, 0.15, 0.85]) centers.push(g.len * fr);
       for (const c of centers) {
         if (count >= maxPer) break;
         const start = c - tw / 2;
@@ -143,47 +148,24 @@ export function renderLabels(pinkCtx, blueCtx, L, P, dpr, view, mapRect, avoid) 
         const boxes = glyphs.map((q) => [q.x - r, q.y - r, q.x + r, q.y + r]);
         if (boxes.some((b) => placed.some((p) => overlaps(b, p)))) continue;
         placed.push(...boxes);
-        jobs.push({ text: [...text], glyphs, font, ink, size });
+        jobs.push({ kind, font: f, size, text: [...text], glyphs });
         count++;
       }
     }
   };
 
-  const bigCanals = L.canals.slice(0, 10), smallCanals = L.canals.slice(10);
-  for (const c of bigCanals) tryItem(c, 'pink', 13.5 * zf, 1.8, view.s > 1.5 ? 3 : 2);
-  // Fewer, more important streets when zoomed out.
-  const nStreets = view.s < 0.6 ? 28 : view.s < 1.2 ? 60 : L.streets.length;
-  for (const s of L.streets.slice(0, nStreets)) tryItem(s, 'blue', (s.w >= 3 ? 12.5 : 10.5) * zf, 0.6, view.s > 1.5 ? 3 : view.s > 0.8 ? 2 : 1);
-  if (view.s >= 0.6) for (const c of smallCanals) tryItem(c, 'pink', 11 * zf, 1.4, 1);
+  for (const g of groups) for (const item of g.items) tryItem(item, g);
+  return jobs;
+}
 
-  // Paper halo in both inks, then the letters in their own ink.
-  const draw = (ctx, job, mode) => {
-    ctx.font = job.font;
-    job.glyphs.forEach((q, i) => {
-      ctx.setTransform(1, 0, 0, 1, q.x, q.y);
-      ctx.rotate(q.a);
-      if (mode === 'halo') ctx.strokeText(job.text[i], 0, 0);
-      else ctx.fillText(job.text[i], 0, 0);
-    });
-  };
-  for (const ctx of [pinkCtx, blueCtx]) {
-    ctx.save();
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.lineJoin = 'round';
-    ctx.lineWidth = 4.2 * dpr;
-    for (const job of jobs) draw(ctx, job, 'halo');
-    ctx.restore();
-  }
-  for (const job of jobs) {
-    const ctx = job.ink === 'pink' ? pinkCtx : blueCtx;
-    ctx.save();
-    ctx.fillStyle = INK[job.ink];
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    draw(ctx, job, 'fill');
-    ctx.restore();
-  }
-  return jobs.length;
+// Draws glyphs of one job with fillText or strokeText; the caller sets styles.
+export function drawJob(ctx, job, mode = 'fill') {
+  ctx.font = job.font;
+  job.glyphs.forEach((q, i) => {
+    ctx.setTransform(1, 0, 0, 1, q.x, q.y);
+    ctx.rotate(q.a);
+    if (mode === 'stroke') ctx.strokeText(job.text[i], 0, 0);
+    else ctx.fillText(job.text[i], 0, 0);
+  });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
 }

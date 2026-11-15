@@ -1,8 +1,19 @@
-// Downloads OpenStreetMap data for the area set in city.config.js (once),
-// projects it to local metres and writes a compact data/quartier.json.
-// Usage: npm run fetch-data
-import { writeFile, mkdir } from 'node:fs/promises';
-import { CITY } from '../city.config.js';
+// Downloads OpenStreetMap data for one place of places/ (once), projects it to
+// local metres and writes a compact public/data/<place>.json.
+// Usage: npm run fetch-data -- <place-id>     (e.g. amsterdam-centre)
+import { writeFile, mkdir, access } from 'node:fs/promises';
+
+const PLACE = process.argv[2];
+if (!PLACE || !/^[a-z0-9-]+$/.test(PLACE)) {
+  console.error('Usage: npm run fetch-data -- <place-id>   (a file name of places/, without .js)');
+  process.exit(1);
+}
+const placeUrl = new URL(`../places/${PLACE}.js`, import.meta.url);
+try { await access(placeUrl); } catch {
+  console.error(`No such place: places/${PLACE}.js`);
+  process.exit(1);
+}
+const CITY = (await import(placeUrl)).default;
 
 const SERVERS = [
   'https://overpass-api.de/api/interpreter',
@@ -125,6 +136,7 @@ const isPark = (t) =>
 const { json, url } = await download();
 const data = {
   meta: {
+    place: PLACE,
     ...CITY,
     bbox,
     half,
@@ -165,8 +177,8 @@ for (const el of json.elements) {
   }
 }
 
-await mkdir(new URL('../data/', import.meta.url), { recursive: true });
-const out = new URL('../data/quartier.json', import.meta.url);
+await mkdir(new URL('../public/data/', import.meta.url), { recursive: true });
+const out = new URL(`../public/data/${PLACE}.json`, import.meta.url);
 await writeFile(out, JSON.stringify(data));
 
 console.log(`\n${CITY.name} — ${CITY.district} (${CITY.sizeKm} km × ${CITY.sizeKm} km)`);

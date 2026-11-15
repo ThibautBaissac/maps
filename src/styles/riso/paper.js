@@ -1,13 +1,11 @@
-import { makeCanvas, mulberry32, pixelCanvas } from './noise.js';
-
-export const PAPER = '#F6F1E7';
+import { makeCanvas, mulberry32, pixelCanvas } from '../../engine/noise.js';
 
 // Paper texture at device resolution: fine grain, fibres, mottling, stains, darker edges.
-export function renderPaper(W, H, dpr, seed = 7) {
+export function renderPaper(W, H, dpr, color, seed = 7) {
   const c = makeCanvas(W, H);
   const ctx = c.getContext('2d');
   const rand = mulberry32(seed);
-  ctx.fillStyle = PAPER;
+  ctx.fillStyle = color;
   ctx.fillRect(0, 0, W, H);
 
   // Large soft mottling.

@@ -1,6 +1,6 @@
-# Plan risographie
+# Cartes illustrées
 
-Plan illustré d'un quartier, dessiné en Canvas 2D dans le style d'une impression risographie à deux encres (rose fluo et bleu, fusion multiplicative, léger décalage entre les plaques). Zoom à la molette, déplacement à la souris.
+Site statique de plans de quartiers dessinés en Canvas 2D, chacun dans un style graphique choisi en développement. Le visiteur parcourt la galerie, ouvre une carte, zoome (molette) et se déplace (souris).
 
 ## Lancer
 
@@ -9,18 +9,38 @@ npm install
 npm run dev
 ```
 
-Puis ouvrir http://localhost:5173. Version statique : `npm run build` (sortie dans `dist/`).
+Puis ouvrir http://localhost:5173/maps/. Version de production : `npm run build` puis `npm run preview`.
 
-## Changer de ville
+## Organisation
 
-Modifier la variable `CITY` dans [`city.config.js`](city.config.js) (nom, quartier, latitude, longitude, taille de la zone), puis télécharger les nouvelles données :
-
-```bash
-npm run fetch-data
+```
+places/<lieu>.js          un lieu : nom, quartier, latitude, longitude, taille de la zone
+public/data/<lieu>.json   ses données OpenStreetMap, téléchargées une fois
+src/registry.js           la liste des cartes : un lieu × un style (+ options)
+src/styles/<style>/       le rendu d'un style ; src/styles/index.js les déclare
+src/engine/               commun : vue, zoom, déplacement, mise en page, placement des noms
+src/map-page.js           point d'entrée de chaque page de carte
+src/gallery/              la page d'accueil
 ```
 
-## Données
+Au build, `vite.config.js` lit le registre, vérifie chaque entrée et génère une page par carte dans `cartes/<id>/` (dossier généré, ignoré par Git).
 
-Les données viennent d'[OpenStreetMap](https://www.openstreetmap.org/copyright) (© contributeurs OpenStreetMap, licence ODbL). Le script `scripts/fetch-osm.mjs` les télécharge une seule fois avec l'API Overpass (plusieurs serveurs publics essayés à la suite), les projette en mètres et les enregistre dans `data/quartier.json`. La page ne contacte aucun serveur au chargement.
+## Ajouter une carte
 
-La police [Bebas Neue](https://github.com/dharmatype/Bebas-Neue) est servie localement depuis `public/fonts/` (licence SIL OFL, voir `OFL.txt`).
+1. Créer `places/<lieu>.js` (copier `places/amsterdam-centre.js`).
+2. Télécharger ses données : `npm run fetch-data -- <lieu>`.
+3. Ajouter une ligne dans `src/registry.js` :
+
+   ```js
+   { id: 'lisbonne-riso', place: 'lisbonne-alfama', style: 'riso', options: { inkA: '#00A95C' } },
+   ```
+
+Les options possibles d'un style sont dans son fichier `defaults.js`. Un nouveau style se crée dans `src/styles/<nom>/` (interface décrite en tête de `src/engine/app.js`) et se déclare dans `src/styles/index.js`.
+
+## Publier sur GitHub Pages
+
+Le workflow `.github/workflows/deploy.yml` construit et publie le site à chaque push sur `main`. Dans le dépôt GitHub : Settings → Pages → Source : « GitHub Actions ». Le chemin de base (`/<nom-du-dépôt>/`) est fixé automatiquement ; en local il vaut `/maps/` (variable `BASE_PATH`).
+
+## Données et licences
+
+Données [© contributeurs OpenStreetMap](https://www.openstreetmap.org/copyright), licence ODbL, téléchargées avec l'API Overpass (plusieurs serveurs publics essayés à la suite). Les pages ne contactent aucun serveur externe. Police [Bebas Neue](https://github.com/dharmatype/Bebas-Neue) servie localement (SIL OFL, voir `public/fonts/OFL.txt`).

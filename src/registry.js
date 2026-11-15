@@ -9,4 +9,5 @@
 //   options  optional, style settings (see the style's defaults.js)
 export const MAPS = [
   { id: 'amsterdam-riso', place: 'amsterdam-centre', style: 'riso' },
+  { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype' },
 ];

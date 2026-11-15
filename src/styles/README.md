@@ -45,7 +45,7 @@ Le style se déclare ensuite dans `src/styles/index.js` avec un libellé, un `lo
 | `buildings` | `[anneau, anneau…]` (le premier extérieur, les suivants des trous) |
 | `roads` | `{ k: type highway, p: ligne, n?: nom, b?: pont, u?: tunnel }` |
 | `waterways` | `{ k: type waterway, p: ligne, n?, u? }` |
-| `water` | `{ r: anneaux, n? }` |
+| `water` | `{ r: anneaux, n? }` : plans d'eau, plus la mer ou l'estuaire reconstitués à partir du littoral OSM (`natural=coastline`), découpés au carré du lieu |
 | `parks` | `{ k: valeur leisure/landuse/natural, r: anneaux }` |
 
 ## Boîte à outils

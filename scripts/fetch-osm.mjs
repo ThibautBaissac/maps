@@ -38,6 +38,7 @@ const query = `
   way["highway"](${bb});
   way["waterway"](${bb});
   way["natural"="water"](${bb});
+  way["natural"="coastline"](${bb});
   relation["natural"="water"](${bb});
   way["landuse"~"^(basin|reservoir)$"](${bb});
   way["leisure"~"^(park|garden|playground|pitch|nature_reserve)$"](${bb});
@@ -122,6 +123,97 @@ function polygonRings(el) {
   return [...outer, ...inner];
 }
 
+// Sea and estuaries are not water areas in OSM but coastline ways (land on the left,
+// water on the right). Turns those crossing the square [-H, H]² into water polygons.
+function seaPolygons(lines, H) {
+  // Directed chains: a way's end joins the next way's start.
+  const key = (a, i) => `${a[i]},${a[i + 1]}`;
+  const pool = lines.filter((l) => l.length >= 4).map((l) => l.slice());
+  const chains = [];
+  while (pool.length) {
+    let c = pool.shift();
+    for (let grown = true; grown;) {
+      grown = false;
+      const i = pool.findIndex((l) => key(l, 0) === key(c, c.length - 2));
+      if (i >= 0) { c = c.concat(pool.splice(i, 1)[0].slice(2)); grown = true; continue; }
+      const j = pool.findIndex((l) => key(l, l.length - 2) === key(c, 0));
+      if (j >= 0) { c = pool.splice(j, 1)[0].concat(c.slice(2)); grown = true; }
+    }
+    chains.push(c);
+  }
+  const inside = (x, y) => Math.abs(x) <= H && Math.abs(y) <= H;
+  const onEdge = (x, y) => Math.abs(Math.abs(x) - H) < 0.05 || Math.abs(Math.abs(y) - H) < 0.05;
+  // Clockwise position along the square's border, from the north-west corner, in [0, 4).
+  const along = (x, y) => {
+    if (Math.abs(y - H) < 0.05) return (x + H) / (2 * H);
+    if (Math.abs(x - H) < 0.05) return 1 + (H - y) / (2 * H);
+    if (Math.abs(y + H) < 0.05) return 2 + (H - x) / (2 * H);
+    return 3 + (y + H) / (2 * H);
+  };
+  const corners = [[-H, H], [H, H], [H, -H], [-H, -H]]; // at positions 0, 1, 2, 3
+  // Liang–Barsky: part of segment a→b inside the square, as [t0, t1], or null.
+  const clip = (ax, ay, bx, by) => {
+    let t0 = 0, t1 = 1;
+    const dx = bx - ax, dy = by - ay;
+    for (const [p, q] of [[-dx, ax + H], [dx, H - ax], [-dy, ay + H], [dy, H - ay]]) {
+      if (p === 0) { if (q < 0) return null; continue; }
+      const r = q / p;
+      if (p < 0) { if (r > t1) return null; if (r > t0) t0 = r; } else { if (r < t0) return null; if (r < t1) t1 = r; }
+    }
+    return [t0, t1];
+  };
+
+  const pieces = [], islands = [];
+  for (const c of chains) {
+    const closed = key(c, 0) === key(c, c.length - 2);
+    if (closed && c.every((v, i) => i % 2 || inside(v, c[i + 1]))) { islands.push(c); continue; }
+    let cur = null;
+    for (let i = 2; i < c.length; i += 2) {
+      const ax = c[i - 2], ay = c[i - 1], bx = c[i], by = c[i + 1];
+      const t = clip(ax, ay, bx, by);
+      if (!t) continue;
+      const p0 = [r1(ax + (bx - ax) * t[0]), r1(ay + (by - ay) * t[0])];
+      const p1 = [r1(ax + (bx - ax) * t[1]), r1(ay + (by - ay) * t[1])];
+      if (!cur) cur = { p: [...p0] };
+      cur.p.push(...p1);
+      if (t[1] < 1) { pieces.push(cur); cur = null; }
+    }
+    if (cur) pieces.push(cur); // ends inside: incomplete data, dropped below
+  }
+  const ok = pieces.filter((pc) => onEdge(pc.p[0], pc.p[1]) && onEdge(pc.p.at(-2), pc.p.at(-1)) && pc.p.length >= 4);
+  for (const pc of ok) { pc.tin = along(pc.p[0], pc.p[1]); pc.tout = along(pc.p.at(-2), pc.p.at(-1)); }
+
+  // Follow each piece, then the border clockwise to the next piece's entry, until closed.
+  const polys = [];
+  const used = new Set();
+  for (const start of ok) {
+    if (used.has(start)) continue;
+    used.add(start);
+    const ring = [...start.p];
+    let cur = start;
+    for (let guard = 0; guard < ok.length + 1; guard++) {
+      const t = cur.tout;
+      let next = null, best = Infinity;
+      for (const pc of ok) {
+        if (used.has(pc) && pc !== start) continue;
+        const d = (pc.tin - t + 4) % 4;
+        if (d < best) { best = d; next = pc; }
+      }
+      for (let k = 1; k <= 4; k++) {
+        const ck = Math.ceil(t + 1e-9) + k - 1; // corners after t, clockwise
+        if (ck - t >= best) break;
+        ring.push(...corners[ck % 4]);
+      }
+      if (next === start || !next) break;
+      used.add(next);
+      ring.push(...next.p);
+      cur = next;
+    }
+    polys.push({ r: [ring, ...islands] });
+  }
+  return polys;
+}
+
 const ROAD_TYPES = new Set([
   'motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'unclassified', 'residential',
   'motorway_link', 'trunk_link', 'primary_link', 'secondary_link', 'tertiary_link',
@@ -152,9 +244,12 @@ const data = {
   parks: [],
 };
 
+const coast = [];
 for (const el of json.elements) {
   const t = el.tags ?? {};
-  if (t.building && t.building !== 'no' && !t['building:part']) {
+  if (el.type === 'way' && t.natural === 'coastline') {
+    if (el.geometry) coast.push(project(el.geometry));
+  } else if (t.building && t.building !== 'no' && !t['building:part']) {
     const r = polygonRings(el);
     if (r.length) data.buildings.push(r);
   } else if (el.type === 'way' && t.highway && ROAD_TYPES.has(t.highway) && t.area !== 'yes') {
@@ -176,6 +271,8 @@ for (const el of json.elements) {
     if (r.length) data.parks.push({ k: t.leisure ?? t.landuse ?? t.natural, r });
   }
 }
+
+data.water.push(...seaPolygons(coast, half));
 
 await mkdir(new URL('../public/data/', import.meta.url), { recursive: true });
 const out = new URL(`../public/data/${PLACE}.json`, import.meta.url);

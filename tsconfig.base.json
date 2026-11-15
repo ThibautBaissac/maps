@@ -1,0 +1,23 @@
+{
+  // Shared by tsconfig.app.json (browser) and tsconfig.node.json (Node scripts, Vite config).
+  // Type checking only: Vite transpiles the browser code, Node strips the types of scripts.
+  "compilerOptions": {
+    "target": "es2024",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "moduleDetection": "force",
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "skipLibCheck": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  }
+}

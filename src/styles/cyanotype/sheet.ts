@@ -1,34 +1,63 @@
 // The drawing sheet around the map: layout, paper, reference grid, dimension chains on
 // the four edges and the title block (bottom right). All in CSS px, drawn each frame.
-import { clamp, scaleBar } from '../../toolkit/layout.js';
-import { makeCanvas, pixelCanvas, vnoise } from '../../toolkit/noise.js';
+import type { MapMeta } from '../../data.ts';
+import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
+import type { Point, Rect } from '../../toolkit/geometry.ts';
+import { clamp, scaleBar } from '../../toolkit/layout.ts';
+import { pixelCanvas, vnoise } from '../../toolkit/noise.ts';
+import type { View } from '../../toolkit/viewport.ts';
+import type { CyanotypeOptions } from './defaults.ts';
 
-export function sheetLayout(w, h) {
+type Ctx = CanvasRenderingContext2D;
+
+/** Sheet layout, CSS px. */
+export interface SheetLayout {
+  w: number;
+  h: number;
+  u: number;
+  /** Outer margin to the double border. */
+  m: number;
+  /** Dimension band between border and map. */
+  band: number;
+  frame: Rect;
+  map: Rect;
+  /** Square plate size at full zoom-out. */
+  plate: number;
+  pad: number;
+  /** Title block. */
+  cart: Rect;
+  /** "Back to gallery" link. */
+  nav: Rect;
+  /** OSM attribution. */
+  attr: Rect;
+}
+
+export function sheetLayout(w: number, h: number): SheetLayout {
   const u = Math.min(w, h);
-  const m = clamp(u * 0.026, 9, 24); // outer margin to the double border
-  const band = clamp(u * 0.042, 22, 34); // dimension band between border and map
-  const frame = [m, m, w - m, h - m];
-  const map = [m + band, m + band, w - m - band, h - m - band];
+  const m = clamp(u * 0.026, 9, 24);
+  const band = clamp(u * 0.042, 22, 34);
+  const frame: Rect = [m, m, w - m, h - m];
+  const map: Rect = [m + band, m + band, w - m - band, h - m - band];
   const mw = map[2] - map[0], mh = map[3] - map[1];
   const plate = mh > mw ? Math.min(mh, Math.sqrt(mw * mh)) : Math.min(mw, mh);
   const pad = clamp(u * 0.018, 8, 16);
   const cw = clamp(Math.min(mw * 0.62, 360), 196, 360);
   const ch = Math.round(cw * 0.5);
-  const cart = [map[2] - pad - cw, map[3] - pad - ch, map[2] - pad, map[3] - pad];
-  const nav = [map[0] + 6, map[1] + 6, map[0] + 6 + 200, map[1] + 6 + 28];
+  const cart: Rect = [map[2] - pad - cw, map[3] - pad - ch, map[2] - pad, map[3] - pad];
+  const nav: Rect = [map[0] + 6, map[1] + 6, map[0] + 6 + 200, map[1] + 6 + 28];
   // The OSM attribution sits on top of the title block, right-aligned with it.
-  const attr = [Math.max(map[0], cart[2] - 260), cart[1] - 6 - 24, cart[2], cart[1] - 6];
+  const attr: Rect = [Math.max(map[0], cart[2] - 260), cart[1] - 6 - 24, cart[2], cart[1] - 6];
   return { w, h, u, m, band, frame, map, plate, pad, cart, nav, attr };
 }
 
 // Blue ground with soft mottling, fine grain and a slightly darker rim.
-export function renderPaper(W, H, dpr, color, strength) {
+export function renderPaper(W: number, H: number, dpr: number, color: string, strength: number): HTMLCanvasElement {
   const c = makeCanvas(W, H);
-  const x = c.getContext('2d');
+  const x = context2d(c);
   x.fillStyle = color;
   x.fillRect(0, 0, W, H);
   const sw = Math.ceil(W / (70 * dpr)) + 2, sh = Math.ceil(H / (70 * dpr)) + 2;
-  const mottle = pixelCanvas(sw, sh, 7, (r, i, j) => {
+  const mottle = pixelCanvas(sw, sh, 7, (_r, i, j) => {
     const n = vnoise(i * 0.45, j * 0.45) * 0.7 + vnoise(i * 1.3 + 9, j * 1.3) * 0.3;
     const v = n > 0 ? 255 : 0;
     return [v, v, v, Math.round(Math.abs(n) * strength * 255 * 1.6)];
@@ -39,7 +68,7 @@ export function renderPaper(W, H, dpr, color, strength) {
     const v = r() < 0.5 ? 0 : 255;
     return [v, v, v, Math.round(r() * strength * 255 * 0.9)];
   });
-  x.fillStyle = x.createPattern(grain, 'repeat');
+  x.fillStyle = pattern(x, grain, 'repeat');
   x.fillRect(0, 0, W, H);
   const g = x.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.hypot(W, H) * 0.6);
   g.addColorStop(0, 'rgba(0,10,40,0)');
@@ -50,18 +79,18 @@ export function renderPaper(W, H, dpr, color, strength) {
 }
 
 // Grid step (m) so that cells are 70–160 CSS px wide.
-export function gridStep(s) {
+export function gridStep(s: number): number {
   for (const g of [10, 20, 25, 50, 100, 200, 250, 500, 1000]) if (g * s >= 70) return g;
   return 1000;
 }
 
-const fmt = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const fmt = (n: number): string => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
 // Map metres -> CSS px for the current view.
-const sx = (L, v, x) => (x - v.x) * v.s + L.w / 2;
-const sy = (L, v, y) => L.h / 2 - (y - v.y) * v.s;
+const sx = (L: SheetLayout, v: View, x: number): number => (x - v.x) * v.s + L.w / 2;
+const sy = (L: SheetLayout, v: View, y: number): number => L.h / 2 - (y - v.y) * v.s;
 
-export function drawGrid(c, L, view, half, o) {
+export function drawGrid(c: Ctx, L: SheetLayout, view: View, half: number, o: CyanotypeOptions): void {
   const G = gridStep(view.s);
   const M = L.map;
   c.save();
@@ -88,7 +117,7 @@ export function drawGrid(c, L, view, half, o) {
 
 // Border, and a chain of dimensions on each edge: running totals (from the south-west
 // corner of the survey) on top and left, partial lengths on bottom and right.
-export function drawBorder(c, L, view, half, o) {
+export function drawBorder(c: Ctx, L: SheetLayout, view: View, half: number, o: CyanotypeOptions): void {
   const { frame: F, map: M, band, m } = L;
   c.strokeStyle = o.line;
   c.fillStyle = o.line;
@@ -109,14 +138,14 @@ export function drawBorder(c, L, view, half, o) {
 
   // One edge, expressed along a 1-D axis then mapped to the screen by `at(pos, d)`,
   // d = distance outward from the map edge.
-  const edge = (lo, hi, toScreen, at, labels, partial, rotate) => {
-    const [p0, p1] = [M[lo], M[hi]];
-    const line = (a, b, d1, d2) => { const A = at(a, d1), B = at(b, d2); c.moveTo(A[0], A[1]); c.lineTo(B[0], B[1]); };
+  const edge = (lo: 0 | 1, hi: 2 | 3, toScreen: (v: number) => number, at: (p: number, d: number) => Point, labels: boolean, partial: boolean, rotate: boolean): void => {
+    const p0 = M[lo], p1 = M[hi];
+    const line = (a: number, b: number, d1: number, d2: number): void => { const A = at(a, d1), B = at(b, d2); c.moveTo(A[0], A[1]); c.lineTo(B[0], B[1]); };
     c.lineWidth = 0.7;
     c.beginPath();
     line(p0, p1, off, off);
-    let prev = null;
-    const marks = [];
+    let prev: { p: number; v: number } | null = null;
+    const marks: { p: number; v: number }[] = [];
     for (let v = -half; v <= half + 0.1; v += G / 5) {
       const p = toScreen(v);
       if (p < p0 - 0.5 || p > p1 + 0.5) continue;
@@ -131,7 +160,7 @@ export function drawBorder(c, L, view, half, o) {
     c.stroke();
     c.save();
     c.textAlign = 'center';
-    const put = (text, p) => {
+    const put = (text: string, p: number): void => {
       const A = at(p, lab);
       c.save();
       c.translate(A[0], A[1]);
@@ -150,7 +179,7 @@ export function drawBorder(c, L, view, half, o) {
     }
     c.restore();
   };
-  const X = (x) => sx(L, view, x), Y = (y) => sy(L, view, y);
+  const X = (x: number): number => sx(L, view, x), Y = (y: number): number => sy(L, view, y);
   edge(0, 2, X, (p, d) => [p, M[1] - d], true, false, false); // top: running totals
   edge(0, 2, X, (p, d) => [p, M[3] + d], false, true, false); // bottom: partials
   edge(1, 3, (y) => Y(y), (p, d) => [M[0] - d, p], false, false, true); // left
@@ -173,7 +202,8 @@ export function drawBorder(c, L, view, half, o) {
   // Corner crosshairs and the unit.
   c.lineWidth = 0.7;
   const r = Math.min(band, m) * 0.32 + 3;
-  for (const [x, y] of [[M[0], M[1]], [M[2], M[1]], [M[0], M[3]], [M[2], M[3]]]) {
+  const corners: Point[] = [[M[0], M[1]], [M[2], M[1]], [M[0], M[3]], [M[2], M[3]]];
+  for (const [x, y] of corners) {
     const cx = x + (x === M[0] ? -band / 2 : band / 2), cy = y + (y === M[1] ? -band / 2 : band / 2);
     c.beginPath();
     c.arc(cx, cy, r * 0.6, 0, Math.PI * 2);
@@ -186,13 +216,15 @@ export function drawBorder(c, L, view, half, o) {
 }
 
 // Largest font size (px) at which `text` fits in `width`, capped at `max`.
-function fit(c, family, text, width, max, weight = '') {
+function fit(c: Ctx, family: string, text: string, width: number, max: number, weight = ''): number {
   c.font = `${weight}${max}px ${family}`;
   const w = c.measureText(text).width;
   return w <= width ? max : Math.max(6, (max * width) / w);
 }
 
-export function drawTitleBlock(c, L, view, meta, o, paper, dpr) {
+interface TextOptions { bold?: boolean; align?: CanvasTextAlign; base?: CanvasTextBaseline; alpha?: number }
+
+export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MapMeta & { title: string }, o: CyanotypeOptions, paper: HTMLCanvasElement): void {
   const [x0, y0, x1, y1] = L.cart;
   const cw = x1 - x0, ch = y1 - y0;
 
@@ -222,7 +254,7 @@ export function drawTitleBlock(c, L, view, meta, o, paper, dpr) {
 
   const p = Math.max(5, cw * 0.025);
   const small = clamp(cw * 0.026, 6.5, 9);
-  const text = (t, x, y, size, opts = {}) => {
+  const text = (t: string, x: number, y: number, size: number, opts: TextOptions = {}): void => {
     c.font = `${opts.bold ? 'bold ' : ''}${size}px ${o.font}`;
     c.textAlign = opts.align ?? 'left';
     c.textBaseline = opts.base ?? 'alphabetic';
@@ -230,10 +262,10 @@ export function drawTitleBlock(c, L, view, meta, o, paper, dpr) {
     c.fillText(t, x, y);
     c.globalAlpha = 1;
   };
-  const caption = (t, x, y) => text(t, x + p * 0.8, y + small + p * 0.4, small * 0.85, { alpha: 0.7 });
+  const caption = (t: string, x: number, y: number): void => text(t, x + p * 0.8, y + small + p * 0.4, small * 0.85, { alpha: 0.7 });
 
   // Title and district.
-  const title = (meta.title ?? meta.name).toUpperCase();
+  const title = meta.title.toUpperCase();
   const tw = north - x0 - 2 * p;
   const ts = fit(c, o.font, title, tw, ch * 0.2, 'bold ');
   caption('OUVRAGE', x0, y0);
@@ -254,7 +286,7 @@ export function drawTitleBlock(c, L, view, meta, o, paper, dpr) {
   text('N', nx, y0 + p * 0.5 + small, small, { align: 'center', bold: true });
 
   // Drawing kind and sheet number.
-  const rowMid = (a, b) => (a + b) / 2 + small * 0.35;
+  const rowMid = (a: number, b: number): number => (a + b) / 2 + small * 0.35;
   text('PLAN DE QUARTIER', x0 + p, rowMid(r1, r2), small);
   text('FEUILLE 01 / 01', x1 - p, rowMid(r1, r2), small, { align: 'right' });
 
@@ -279,7 +311,7 @@ export function drawTitleBlock(c, L, view, meta, o, paper, dpr) {
   // Coordinates and survey source.
   const lat = `${Math.abs(meta.lat).toFixed(4)}°${meta.lat >= 0 ? 'N' : 'S'}`;
   const lon = `${Math.abs(meta.lon).toFixed(4)}°${meta.lon >= 0 ? 'E' : 'W'}`;
-  const date = (meta.fetchedAt ?? '').slice(0, 10);
+  const date = meta.fetchedAt.slice(0, 10);
   const bs = Math.min(small, fit(c, o.font, `${lat} ${lon}`, mid - x0 - 2 * p, small));
   text(`${lat} ${lon}`, x0 + p, rowMid(r3, y1), bs);
   text(`RELEVÉ OSM ${date}`, x1 - p, rowMid(r3, y1), Math.min(small, fit(c, o.font, `RELEVÉ OSM ${date}`, x1 - mid - 2 * p, small)), { align: 'right' });

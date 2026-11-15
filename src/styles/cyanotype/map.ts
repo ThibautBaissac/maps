@@ -1,7 +1,15 @@
 // The drawing itself: white linework on transparent, rendered once per settled view.
 // Buildings in outline, parks cross-hatched, water as depth lines along the shore,
 // streets as double lines (single at small scale), stairs as ladders.
-import { addLine, addRings, bboxOf } from '../../toolkit/projection.js';
+import type { Line, MapData, Park, Ring, Road, RoadKind, Water, Waterway } from '../../data.ts';
+import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
+import { isKeyOf, recordOf, typedKeys, type Point, type Rect } from '../../toolkit/geometry.ts';
+import { addLine, addRings, bboxOf, type Projector } from '../../toolkit/projection.ts';
+import type { View } from '../../toolkit/viewport.ts';
+import type { CyanotypeOptions } from './defaults.ts';
+
+// Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)
+// is always defined, hence the `!` in the loops below.
 
 // Street width in metres when drawn as a double line, and the smallest gap (CSS px)
 // it keeps when zoomed out. Gaps under CASED px fall back to a single line.
@@ -13,24 +21,39 @@ const STREETS = {
   secondary_link: { m: 7, min: 0 }, tertiary_link: { m: 7, min: 0 },
   unclassified: { m: 7, min: 0 }, residential: { m: 7, min: 0 },
   living_street: { m: 5.5, min: 0 }, pedestrian: { m: 5.5, min: 0 }, service: { m: 4, min: 0 },
-};
-const STREET_ORDER = Object.keys(STREETS).reverse(); // thin first
+} satisfies Partial<Record<RoadKind, { m: number; min: number }>>;
+type StreetKind = keyof typeof STREETS;
+const STREET_ORDER = typedKeys(STREETS).reverse(); // thin first
+
 // Paths: minimum zoom (px/m) and dash pattern in CSS px.
 const PATHS = {
   footway: { min: 0.9, dash: [3, 2] }, cycleway: { min: 0.9, dash: [4, 2] },
   path: { min: 1.1, dash: [1.5, 2] }, track: { min: 1.1, dash: [5, 2.5] },
-};
+} satisfies Partial<Record<RoadKind, { min: number; dash: number[] }>>;
+type PathKind = keyof typeof PATHS;
 
-export function prepareMap(data) {
-  const withBox = (o, rings) => ({ ...o, bb: bboxOf(rings) });
-  const streets = {}, paths = {};
-  for (const k of STREET_ORDER) streets[k] = [];
-  for (const k of Object.keys(PATHS)) paths[k] = [];
-  const steps = [];
+type WithBox<T> = T & { bb: Rect };
+
+export interface PreparedMap {
+  buildings: WithBox<{ r: Ring[] }>[];
+  water: WithBox<Water>[];
+  parks: WithBox<Park>[];
+  streams: WithBox<Waterway>[];
+  streets: Record<StreetKind, WithBox<Road>[]>;
+  paths: Record<PathKind, WithBox<Road>[]>;
+  steps: WithBox<Road>[];
+  half: number;
+}
+
+export function prepareMap(data: MapData): PreparedMap {
+  const withBox = <T extends object>(o: T, rings: Ring[]): WithBox<T> => ({ ...o, bb: bboxOf(rings) });
+  const streets = recordOf(STREET_ORDER, (): WithBox<Road>[] => []);
+  const paths = recordOf(typedKeys(PATHS), (): WithBox<Road>[] => []);
+  const steps: WithBox<Road>[] = [];
   for (const r of data.roads) {
     const it = withBox(r, [r.p]);
-    if (streets[r.k]) streets[r.k].push(it);
-    else if (paths[r.k]) paths[r.k].push(it);
+    if (isKeyOf(streets, r.k)) streets[r.k].push(it);
+    else if (isKeyOf(paths, r.k)) paths[r.k].push(it);
     else if (r.k === 'steps') steps.push(it);
   }
   return {
@@ -44,24 +67,23 @@ export function prepareMap(data) {
 }
 
 // Screen-scale cross-hatching (same pitch at every zoom).
-export function makeHatch(ctx, dpr, pitch, color) {
+export function makeHatch(ctx: CanvasRenderingContext2D, dpr: number, pitch: number, color: string): CanvasPattern {
   const p = Math.max(3, Math.round(pitch * dpr));
-  const tile = document.createElement('canvas');
-  tile.width = tile.height = p;
-  const t = tile.getContext('2d');
+  const tile = makeCanvas(p, p);
+  const t = context2d(tile);
   t.fillStyle = color;
   const lw = Math.max(1, Math.round(0.6 * dpr));
   t.fillRect(0, 0, p, lw);
   t.fillRect(0, 0, lw, p);
-  const pat = ctx.createPattern(tile, 'repeat');
+  const pat = pattern(ctx, tile, 'repeat');
   pat.setTransform(new DOMMatrix().rotateSelf(45));
   return pat;
 }
 
-const streetGap = (k, s) => Math.max(STREETS[k].min, STREETS[k].m * s);
+const streetGap = (k: StreetKind, s: number): number => Math.max(STREETS[k].min, STREETS[k].m * s);
 
 // Depth lines along the shore: concentric rings cut from wide strokes, kept inside the water.
-function drawWater(ctx, tmp, M, P, o, half) {
+function drawWater(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingContext2D, M: PreparedMap, P: Projector, o: CyanotypeOptions, half: number): void {
   const { dpr } = P;
   const water = M.water.filter((w) => P.visible(w.bb));
   if (!water.length) return;
@@ -70,16 +92,16 @@ function drawWater(ctx, tmp, M, P, o, half) {
   // Shore only: skip edges lying on the border of the downloaded square.
   const shore = new Path2D();
   const e = half - 1;
-  const onEdge = (x, y) => Math.abs(x) >= e || Math.abs(y) >= e;
-  const pt = [0, 0];
+  const onEdge = (x: number, y: number): boolean => Math.abs(x) >= e || Math.abs(y) >= e;
+  const pt: Point = [0, 0];
   for (const w of water) for (const r of w.r) {
     let pen = false;
     for (let i = 0; i < r.length; i += 2) {
       const j = (i + 2) % r.length;
-      const a = onEdge(r[i], r[i + 1]) && onEdge(r[j], r[j + 1]);
+      const a = onEdge(r[i]!, r[i + 1]!) && onEdge(r[j]!, r[j + 1]!);
       if (a) { pen = false; continue; }
-      if (!pen) { P.pt(r[i], r[i + 1], 0, pt); shore.moveTo(pt[0], pt[1]); pen = true; }
-      P.pt(r[j], r[j + 1], 0, pt);
+      if (!pen) { P.pt(r[i]!, r[i + 1]!, 0, pt); shore.moveTo(pt[0], pt[1]); pen = true; }
+      P.pt(r[j]!, r[j + 1]!, 0, pt);
       shore.lineTo(pt[0], pt[1]);
     }
   }
@@ -110,12 +132,12 @@ function drawWater(ctx, tmp, M, P, o, half) {
 }
 
 // Ladder ticks across a polyline (stairs), every `gap` device px.
-function ladder(ctx, P, p, gap, half) {
-  const a = [0, 0], b = [0, 0];
+function ladder(ctx: CanvasRenderingContext2D, P: Projector, p: Line, gap: number, half: number): void {
+  const a: Point = [0, 0], b: Point = [0, 0];
   let carry = gap / 2;
   for (let i = 2; i < p.length; i += 2) {
-    P.pt(p[i - 2], p[i - 1], 0, a);
-    P.pt(p[i], p[i + 1], 0, b);
+    P.pt(p[i - 2]!, p[i - 1]!, 0, a);
+    P.pt(p[i]!, p[i + 1]!, 0, b);
     const dx = b[0] - a[0], dy = b[1] - a[1];
     const len = Math.hypot(dx, dy);
     if (!len) continue;
@@ -130,7 +152,7 @@ function ladder(ctx, P, p, gap, half) {
   }
 }
 
-export function renderMap(ctx, tmp, M, P, view, o, hatch) {
+export function renderMap(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingContext2D, M: PreparedMap, P: Projector, view: View, o: CyanotypeOptions, hatch: CanvasPattern): void {
   const { dpr } = P;
   const s = view.s;
   ctx.strokeStyle = o.line;
@@ -178,7 +200,8 @@ export function renderMap(ctx, tmp, M, P, view, o, hatch) {
 
   // Paths and stairs, single fine lines.
   ctx.lineWidth = 0.6 * dpr;
-  for (const [k, st] of Object.entries(PATHS)) {
+  for (const k of typedKeys(PATHS)) {
+    const st = PATHS[k];
     if (s < st.min) continue;
     ctx.setLineDash(st.dash.map((d) => d * dpr));
     ctx.beginPath();
@@ -201,7 +224,7 @@ export function renderMap(ctx, tmp, M, P, view, o, hatch) {
 
   // Streets too narrow on screen for a double line.
   const lw = o.road * dpr;
-  const cased = [];
+  const cased: { k: StreetKind; gap: number; list: WithBox<Road>[] }[] = [];
   for (const k of STREET_ORDER) {
     const gap = streetGap(k, s);
     if (k === 'service' && s < 0.8) continue;
@@ -216,7 +239,7 @@ export function renderMap(ctx, tmp, M, P, view, o, hatch) {
   ctx.setLineDash([]);
 
   // Double lines: white corridor, then its inside erased, so crossings merge cleanly.
-  const strokeAll = (pick, extra) => {
+  const strokeAll = (pick: (r: Road) => boolean, extra: number): void => {
     for (const c of cased) {
       ctx.lineWidth = c.gap + extra;
       ctx.beginPath();
@@ -224,18 +247,19 @@ export function renderMap(ctx, tmp, M, P, view, o, hatch) {
       ctx.stroke();
     }
   };
-  const ground = (r) => !r.b && !r.u;
+  const ground = (r: Road): boolean => !r.b && !r.u;
+  const bridge = (r: Road): boolean => !!r.b;
   ctx.lineCap = 'round';
   strokeAll(ground, 2 * lw);
   ctx.globalCompositeOperation = 'destination-out';
   strokeAll(ground, 0);
   // Bridges cut through whatever they cross, then get their own double line.
   ctx.lineCap = 'butt';
-  strokeAll((r) => r.b, 2 * lw + 3 * dpr);
+  strokeAll(bridge, 2 * lw + 3 * dpr);
   ctx.globalCompositeOperation = 'source-over';
-  strokeAll((r) => r.b, 2 * lw);
+  strokeAll(bridge, 2 * lw);
   ctx.globalCompositeOperation = 'destination-out';
-  strokeAll((r) => r.b, 0);
+  strokeAll(bridge, 0);
   ctx.globalCompositeOperation = 'source-over';
   // Tunnels: dashed centre line.
   ctx.lineWidth = 0.7 * dpr;

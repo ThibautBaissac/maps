@@ -1,9 +1,10 @@
-import { makeCanvas, mulberry32, pixelCanvas } from '../../toolkit/noise.js';
+import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
+import { mulberry32, pixelCanvas } from '../../toolkit/noise.ts';
 
 // Paper texture at device resolution: fine grain, fibres, mottling, stains, darker edges.
-export function renderPaper(W, H, dpr, color, seed = 7) {
+export function renderPaper(W: number, H: number, dpr: number, color: string, seed = 7): HTMLCanvasElement {
   const c = makeCanvas(W, H);
-  const ctx = c.getContext('2d');
+  const ctx = context2d(c);
   const rand = mulberry32(seed);
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, W, H);
@@ -23,7 +24,7 @@ export function renderPaper(W, H, dpr, color, seed = 7) {
     if (v < 0.5) return [70, 55, 35, Math.round(r() * 26)];
     return [255, 253, 245, Math.round(r() * 40)];
   });
-  ctx.fillStyle = ctx.createPattern(grain, 'repeat');
+  ctx.fillStyle = pattern(ctx, grain, 'repeat');
   ctx.fillRect(0, 0, W, H);
 
   // Fibres.

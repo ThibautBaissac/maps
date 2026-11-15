@@ -1,16 +1,18 @@
-import { MAPS } from '../registry.js';
-import { STYLES } from '../styles/index.js';
+import { element } from '../dom.ts';
+import type { Place } from '../place.ts';
+import { MAPS, type MapEntryOf } from '../registry.ts';
+import { STYLES, type StyleKey } from '../styles/index.ts';
 
-const places = Object.fromEntries(
-  Object.entries(import.meta.glob('../../places/*.js', { eager: true, import: 'default' }))
-    .map(([path, place]) => [path.match(/([^/]+)\.js$/)[1], place]),
+const places = new Map(
+  Object.entries(import.meta.glob<Place>('../../places/*.ts', { eager: true, import: 'default' }))
+    .map(([path, place]) => [path.replace(/^.*\/|\.ts$/g, ''), place]),
 );
 
-const fmt = (v, pos, neg) => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? pos : neg}`;
+const fmt = (v: number, pos: string, neg: string): string => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? pos : neg}`;
 
-const list = document.querySelector('.maps');
-for (const m of MAPS) {
-  const place = places[m.place];
+function card<K extends StyleKey>(m: MapEntryOf<K>): HTMLLIElement {
+  const place = places.get(m.place);
+  if (!place) throw new Error(`No file places/${m.place}.ts (${m.id})`);
   const style = STYLES[m.style];
   const colors = style.card(m.options);
   const li = document.createElement('li');
@@ -38,5 +40,8 @@ for (const m of MAPS) {
 
   a.append(art, title, meta);
   li.append(a);
-  list.append(li);
+  return li;
 }
+
+const list = element('.maps', HTMLUListElement);
+for (const m of MAPS) list.append(card(m));

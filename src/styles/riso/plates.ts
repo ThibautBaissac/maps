@@ -1,9 +1,24 @@
 // The two printing plates of the riso style:
 // plate A (first ink) = buildings, plate B (second ink) = water, parks, streams, roads.
-import { addLine, addRings, bboxOf } from '../../toolkit/projection.js';
+import type { Line, MapData, Ring, Road, RoadKind } from '../../data.ts';
+import { recordOf, typedKeys, type Rect } from '../../toolkit/geometry.ts';
+import { addLine, addRings, bboxOf, type Projector } from '../../toolkit/projection.ts';
+import type { View } from '../../toolkit/viewport.ts';
+import type { InkPatterns } from './inks.ts';
 
-// Road stroke width in CSS px at s = 0.5 px/m, and minimum zoom (px/m) to show it.
-const ROADS = {
+interface RoadStyle {
+  /** Stroke width in CSS px at s = 0.5 px/m. */
+  w: number;
+  /** Minimum zoom (px/m) to show it. */
+  min: number;
+  /** Dash pattern, in stroke widths / 1.6. */
+  dash?: number[];
+}
+
+const PRIMARY_LINK: RoadStyle = { w: 2.4, min: 0 };
+
+// Thin to thick: the drawing order.
+const ROADS: Record<RoadKind, RoadStyle> = {
   path: { w: 0.5, min: 1.1, dash: [2, 2.5] },
   track: { w: 0.6, min: 1.1, dash: [3, 2] },
   footway: { w: 0.5, min: 1.1 },
@@ -16,24 +31,34 @@ const ROADS = {
   unclassified: { w: 1.7, min: 0 },
   tertiary_link: { w: 2, min: 0 },
   secondary_link: { w: 2.2, min: 0 },
-  primary_link: { w: 2.4, min: 0 },
+  primary_link: PRIMARY_LINK,
   tertiary: { w: 2.4, min: 0 },
   secondary: { w: 2.8, min: 0 },
   primary: { w: 3.2, min: 0 },
   trunk: { w: 3.4, min: 0 },
   motorway: { w: 3.6, min: 0 },
+  trunk_link: PRIMARY_LINK,
+  motorway_link: PRIMARY_LINK,
 };
-for (const k of ['trunk_link', 'motorway_link']) ROADS[k] = ROADS.primary_link;
-export const ROAD_ORDER = Object.keys(ROADS);
+export const ROAD_ORDER = typedKeys(ROADS);
 
-export function roadWidth(k, s) {
+export function roadWidth(k: RoadKind, s: number): number {
   return ROADS[k].w * Math.min(5, Math.pow(s / 0.5, 0.6));
 }
 
-export function preparePlates(data) {
-  const roads = {};
-  for (const k of ROAD_ORDER) roads[k] = [];
-  for (const r of data.roads) if (roads[r.k]) roads[r.k].push({ ...r, bb: bboxOf([r.p]) });
+type WithBox<T> = T & { bb: Rect };
+
+export interface Plates {
+  buildings: WithBox<{ r: Ring[] }>[];
+  water: WithBox<{ r: Ring[] }>[];
+  parks: WithBox<{ r: Ring[] }>[];
+  streams: WithBox<{ p: Line }>[];
+  roads: Record<RoadKind, WithBox<Road>[]>;
+}
+
+export function preparePlates(data: MapData): Plates {
+  const roads = recordOf(ROAD_ORDER, (): WithBox<Road>[] => []);
+  for (const r of data.roads) roads[r.k].push({ ...r, bb: bboxOf([r.p]) });
   return {
     buildings: data.buildings.map((r) => ({ r, bb: bboxOf(r) })),
     water: data.water.map((w) => ({ r: w.r, bb: bboxOf(w.r) })),
@@ -43,7 +68,7 @@ export function preparePlates(data) {
   };
 }
 
-export function renderPlateA(ctx, M, P, view, ink) {
+export function renderPlateA(ctx: CanvasRenderingContext2D, M: Plates, P: Projector, view: View, ink: string): void {
   const dpr = P.dpr;
   // One fill per building: far faster in Skia than a single huge self-overlapping path.
   ctx.fillStyle = ink;
@@ -69,7 +94,7 @@ export function renderPlateA(ctx, M, P, view, ink) {
   }
 }
 
-export function renderPlateB(ctx, M, P, view, ink, patterns) {
+export function renderPlateB(ctx: CanvasRenderingContext2D, M: Plates, P: Projector, view: View, ink: string, patterns: InkPatterns): void {
   const dpr = P.dpr;
   // Water: line hatching tint + solid shoreline.
   ctx.fillStyle = patterns.lines;
@@ -104,7 +129,7 @@ export function renderPlateB(ctx, M, P, view, ink, patterns) {
   ctx.stroke();
 
   // Roads, thin to thick.
-  const bridges = [];
+  const bridges: { r: WithBox<Road>; w: number }[] = [];
   for (const k of ROAD_ORDER) {
     const st = ROADS[k];
     if (view.s < st.min) continue;

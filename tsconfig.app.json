@@ -1,0 +1,12 @@
+{
+  // Browser code: the gallery, the map pages, the styles and the toolkit.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "lib": ["es2024", "dom"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "types": ["vite/client"]
+  },
+  "include": ["src", "places"]
+}

@@ -1,0 +1,46 @@
+// What a style is (see src/styles/README.md).
+import type { MapData, MapMeta } from '../data.ts';
+import type { Shell } from '../shell.ts';
+import type { Viewport } from '../toolkit/viewport.ts';
+
+export interface MountArgs<O> {
+  /** Empty <div id="stage"> filling the window. */
+  container: HTMLElement;
+  data: MapData;
+  /** data.meta plus the title (from the registry, or the place name). */
+  meta: MapMeta & { title: string };
+  /** The map's options in src/registry.ts, to merge over the style's defaults. */
+  options: Partial<O>;
+  shell: Shell;
+}
+
+/** What mount() resolves to. In development it is exposed as window.__map. */
+export interface MapHandle {
+  destroy(): void;
+  /** Debug: the navigation, when the style uses the toolkit viewport. */
+  viewport?: Viewport;
+  /** Debug: a crisp render, returns its duration in ms. */
+  full?(): number;
+}
+
+/** The module a style's index.ts is. */
+export interface StyleModule<O> {
+  mount(args: MountArgs<O>): Promise<MapHandle>;
+}
+
+/** Colours of the gallery card and the page overlays. */
+export interface CardColors {
+  bg: string;
+  fg: string;
+  accent: string;
+  /** Light ink on a dark ground: the gallery inverts its colour blend. */
+  dark?: true;
+}
+
+/** A style as declared in src/styles/index.ts. */
+export interface StyleDef<O> {
+  label: string;
+  /** Imports the style code, only on the pages that use it. */
+  load(): Promise<StyleModule<O>>;
+  card(options?: Partial<O>): CardColors;
+}

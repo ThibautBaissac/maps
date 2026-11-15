@@ -1,14 +1,22 @@
 // Riso frame furniture: neatline, registration marks, cartouche, compass, legend.
 // A / B are the contexts of the two ink plates; ink = { a, b } are their colours.
-import { clamp, scaleBar } from '../../toolkit/layout.js';
-import { FONT } from './font.js';
+import type { MapMeta } from '../../data.ts';
+import type { Point, Rect } from '../../toolkit/geometry.ts';
+import { clamp, scaleBar, type Layout } from '../../toolkit/layout.ts';
+import type { View } from '../../toolkit/viewport.ts';
+import { FONT } from './font.ts';
+import type { InkPatterns } from './inks.ts';
 
-function strokeRect(ctx, r, lw) {
+export interface Inks { a: string; b: string }
+
+type Ctx = CanvasRenderingContext2D;
+
+function strokeRect(ctx: Ctx, r: Rect, lw: number): void {
   ctx.lineWidth = lw;
   ctx.strokeRect(r[0], r[1], r[2] - r[0], r[3] - r[1]);
 }
 
-function regMark(ctx, x, y, r) {
+function regMark(ctx: Ctx, x: number, y: number, r: number): void {
   ctx.lineWidth = 0.8;
   ctx.beginPath();
   ctx.arc(x, y, r * 0.55, 0, Math.PI * 2);
@@ -17,7 +25,7 @@ function regMark(ctx, x, y, r) {
   ctx.stroke();
 }
 
-function frame(A, B, L, ink) {
+function frame(A: Ctx, B: Ctx, L: Layout, ink: Inks): void {
   const { frame: F, map: M, band } = L;
   B.strokeStyle = ink.b;
   B.fillStyle = ink.b;
@@ -40,7 +48,8 @@ function frame(A, B, L, ink) {
   }
   // Corner squares in the first ink.
   A.fillStyle = ink.a;
-  for (const [x, y] of [[F[0], F[1]], [M[2], F[1]], [F[0], M[3]], [M[2], M[3]]]) A.fillRect(x, y, band, band);
+  const corners: Point[] = [[F[0], F[1]], [M[2], F[1]], [F[0], M[3]], [M[2], M[3]]];
+  for (const [x, y] of corners) A.fillRect(x, y, band, band);
   // Registration marks in both inks.
   if (L.m >= 16) {
     const r = L.m * 0.32;
@@ -54,7 +63,7 @@ function frame(A, B, L, ink) {
   }
 }
 
-function cartouche(A, B, L, view, meta, ink) {
+function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta, ink: Inks): void {
   const [x0, y0, x1, y1] = L.cart;
   const cw = x1 - x0, ch = y1 - y0;
   const pad = cw * 0.06;
@@ -70,7 +79,7 @@ function cartouche(A, B, L, view, meta, ink) {
   A.letterSpacing = '0px';
   const tw100 = A.measureText(title).width;
   const vertical = ch > cw * 1.4;
-  let fs, cs;
+  let fs: number, cs: number;
   if (vertical) {
     cs = clamp(cw * 0.075, 11, 16);
     const along = ch - pad * 2 - cs * 4.5;
@@ -126,7 +135,7 @@ function cartouche(A, B, L, view, meta, ink) {
   B.textBaseline = 'alphabetic';
 }
 
-function compass(A, B, L, ink) {
+function compass(A: Ctx, B: Ctx, L: Layout, ink: Inks): void {
   const { x, y, r } = L.comp;
   B.strokeStyle = ink.b;
   B.fillStyle = ink.b;
@@ -141,9 +150,9 @@ function compass(A, B, L, ink) {
     B.lineTo(x + Math.cos(a) * r * (0.84 + l), y + Math.sin(a) * r * (0.84 + l));
     B.stroke();
   }
-  const point = (ctx, a, len, wdt, side, fill) => {
-    const tip = [x + Math.cos(a) * len, y + Math.sin(a) * len];
-    const b = [x + Math.cos(a + side * Math.PI / 2) * wdt, y + Math.sin(a + side * Math.PI / 2) * wdt];
+  const point = (ctx: Ctx, a: number, len: number, wdt: number, side: 1 | -1, fill: boolean): void => {
+    const tip: Point = [x + Math.cos(a) * len, y + Math.sin(a) * len];
+    const b: Point = [x + Math.cos(a + side * Math.PI / 2) * wdt, y + Math.sin(a + side * Math.PI / 2) * wdt];
     ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(...tip); ctx.lineTo(...b); ctx.closePath();
     if (fill) ctx.fill(); else ctx.stroke();
   };
@@ -174,8 +183,8 @@ function compass(A, B, L, ink) {
   }
 }
 
-function legend(A, B, L, patterns, dpr, ink) {
-  const [x0, y0, x1, y1] = L.legend;
+function legend(A: Ctx, B: Ctx, box: Rect, patterns: InkPatterns, dpr: number, ink: Inks): void {
+  const [x0, y0, x1, y1] = box;
   const lw = x1 - x0;
   const row = (y1 - y0) / 5;
   const fs = clamp(row * 0.42, 11, 18);
@@ -219,10 +228,10 @@ function legend(A, B, L, patterns, dpr, ink) {
   B.textBaseline = 'alphabetic';
 }
 
-export function renderUI(A, B, L, view, meta, dpr, patterns, ink) {
+export function renderUI(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta, dpr: number, patterns: InkPatterns, ink: Inks): void {
   for (const ctx of [A, B]) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   frame(A, B, L, ink);
   cartouche(A, B, L, view, meta, ink);
   compass(A, B, L, ink);
-  if (L.legend) legend(A, B, L, patterns, dpr, ink);
+  if (L.legend) legend(A, B, L.legend, patterns, dpr, ink);
 }

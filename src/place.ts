@@ -1,0 +1,27 @@
+// A place to map (places/<place>.ts): what fetch-osm downloads and the pages display.
+// Runs in the browser and in Node (vite.config.ts, scripts/): no DOM, no Node API.
+
+export interface Place {
+  /** Displayed name, usually the city. */
+  name: string;
+  /** Displayed district. */
+  district: string;
+  /** Centre of the square, WGS84 degrees. */
+  lat: number;
+  lon: number;
+  /** Side of the downloaded square, km. */
+  sizeKm: number;
+}
+
+const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
+
+// Checks a place module's default export loaded at run time (dynamic import is untyped).
+export function parsePlace(v: unknown, source: string): Place {
+  if (!isRecord(v)) throw new Error(`${source}: default export is not an object`);
+  const { name, district, lat, lon, sizeKm } = v;
+  if (typeof name !== 'string' || typeof district !== 'string') throw new Error(`${source}: name and district must be strings`);
+  if (typeof lat !== 'number' || Math.abs(lat) > 90) throw new Error(`${source}: lat must be a number in [-90, 90]`);
+  if (typeof lon !== 'number' || Math.abs(lon) > 180) throw new Error(`${source}: lon must be a number in [-180, 180]`);
+  if (typeof sizeKm !== 'number' || !(sizeKm > 0)) throw new Error(`${source}: sizeKm must be a positive number`);
+  return { name, district, lat, lon, sizeKm };
+}

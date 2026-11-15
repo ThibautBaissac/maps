@@ -1,6 +1,11 @@
 // Small deterministic noise helpers (no dependency).
+import { context2d, makeCanvas } from './canvas.ts';
 
-export function mulberry32(seed) {
+export type Rand = () => number;
+/** [r, g, b, a], 0–255 */
+export type RGBA = [r: number, g: number, b: number, a: number];
+
+export function mulberry32(seed: number): Rand {
   let a = seed >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) | 0;
@@ -10,14 +15,14 @@ export function mulberry32(seed) {
   };
 }
 
-function hash(ix, iy) {
+function hash(ix: number, iy: number): number {
   let h = Math.imul(ix, 374761393) + Math.imul(iy, 668265263);
   h = Math.imul(h ^ (h >>> 13), 1274126177);
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 }
 
 // Smooth value noise in [-1, 1].
-export function vnoise(x, y) {
+export function vnoise(x: number, y: number): number {
   const ix = Math.floor(x), iy = Math.floor(y);
   const fx = x - ix, fy = y - iy;
   const ux = fx * fx * (3 - 2 * fx), uy = fy * fy * (3 - 2 * fy);
@@ -26,17 +31,10 @@ export function vnoise(x, y) {
   return (top + (bot - top) * uy) * 2 - 1;
 }
 
-export function makeCanvas(w, h) {
-  const c = document.createElement('canvas');
-  c.width = Math.max(1, Math.round(w));
-  c.height = Math.max(1, Math.round(h));
-  return c;
-}
-
 // Canvas whose pixels come from fn(rand, x, y) -> [r, g, b, a] (0–255).
-export function pixelCanvas(w, h, seed, fn) {
+export function pixelCanvas(w: number, h: number, seed: number, fn: (rand: Rand, x: number, y: number) => RGBA): HTMLCanvasElement {
   const c = makeCanvas(w, h);
-  const ctx = c.getContext('2d');
+  const ctx = context2d(c);
   const img = ctx.createImageData(c.width, c.height);
   const rand = mulberry32(seed);
   const d = img.data;

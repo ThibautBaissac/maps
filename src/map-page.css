@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Bebas Neue';
-  src: url('/fonts/BebasNeue-Regular.ttf') format('truetype');
+  src: url('/fonts/bebasneue/BebasNeue-Regular.ttf') format('truetype');
   font-display: block;
 }
 html, body { margin: 0; height: 100%; background: var(--bg, #F6F1E7); overflow: hidden; }

@@ -39,17 +39,21 @@ Puis télécharge les données :
 npm run fetch-data -- <id>
 ```
 
-Le script essaie plusieurs serveurs Overpass. S'ils échouent tous, arrête-toi et explique le problème à l'utilisateur plutôt que d'inventer des données. Au-delà d'environ 8 Mo de JSON, propose une zone plus petite : le chargement de la page en souffrirait.
+Les serveurs Overpass publics sont souvent surchargés. Le script les essaie tous, deux tours de suite, avec une pause entre les deux (jusqu'à une dizaine de minutes en cas d'échec) : lance-le en arrière-plan. S'il échoue quand même, relance-le une fois quelques minutes plus tard. Si ce second essai échoue aussi, arrête-toi et explique le problème à l'utilisateur plutôt que d'inventer des données. Au-delà d'environ 8 Mo de JSON, propose une zone plus petite : le chargement de la page en souffrirait.
+
+Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.org autour du lieu, surtout l'eau : mer, estuaire, fleuve, lac. Le script reconstitue la mer à partir du littoral (`natural=coastline`). Si une étendue d'eau visible sur OSM manque dans `water`, c'est un manque du script à corriger dans `scripts/fetch-osm.mjs`, et à documenter dans `src/styles/README.md`, avant de dessiner.
 
 ## 3. Le registre
 
 Ajoute l'entrée dans `src/registry.js` :
 
 ```js
-{ id: '<lieu>-<style>', place: '<lieu>', style: '<style>', options: { /* si variante */ } },
+{ id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', options: { /* si variante */ } },
 ```
 
-`npm run build` vérifie le registre : clé de style connue, lieu et données présents.
+L'`id` donne l'URL de la page (`/cartes/<id>/`) : court et lisible. Par défaut `<ville>-<style>`. Si la ville a déjà une carte dans ce style, prends `<ville>-<quartier>-<style>`, et pour une variante ajoute un mot qui la distingue (`amsterdam-riso-vert`). Une demande explicite de l'utilisateur l'emporte.
+
+`npm run build` vérifie strictement le registre : clé de style connue, lieu et données présents. En développement, une entrée incomplète est seulement ignorée avec un avertissement dans la console du serveur, et sa page apparaît d'elle-même dès que le lieu et les données existent.
 
 ## 4. Coder un nouveau style
 
@@ -64,7 +68,7 @@ Le preset décrit l'intention. Traite chacune de ses lignes comme un point à v�
 
 Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n'est pas finie.
 
-1. Lance le serveur de développement avec `preview_start` (configuration `vite` de `.claude/launch.json`), puis ouvre `http://localhost:5173/maps/cartes/<id>/`.
+1. Lance le serveur de développement avec `preview_start` (configuration `vite` de `.claude/launch.json`), puis ouvre `http://localhost:5173/maps/cartes/<id>/`. Si le port 5173 est déjà pris, un serveur tourne déjà pour ce dossier (une autre session, par exemple) : ouvre simplement l'URL dans le navigateur intégré. Si l'URL renvoie la galerie ou une erreur 404, lis la console du serveur : l'avertissement `[registry] skipped` en donne la raison.
 2. Si le panneau Browser est caché, la page mesure 0 × 0 et ne dessine rien. Fixe une taille avec `resize_window` (par exemple 1280 × 800) et recharge.
 3. Prends des captures à **trois niveaux de zoom** : vue d'ensemble, environ 1 px/m, environ 4 px/m. En développement, `window.__map` expose la poignée renvoyée par `mount` : pour un style construit sur le viewport, utilise `window.__map.viewport.setView({ x, y, s })`.
 4. Teste aussi la largeur téléphone (`resize_window` avec le preset `mobile`), une vraie molette et un vrai glisser.
@@ -74,7 +78,7 @@ Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n
    - lien retour et attribution OSM visibles et lisibles ;
    - noms de rues sans chevauchement ;
    - chaque ligne du preset respectée, ou l'écart justifié ;
-   - rendu net assez rapide (voir les budgets dans `references/new-style.md`).
+   - rendu net assez rapide : voir les budgets et la façon de mesurer dans `references/new-style.md`. Un chronomètre autour du seul appel de rendu ne mesure pas le dessin réel.
 6. Corrige, puis reprends des captures. Recommence jusqu'à un résultat dont tu serais fier en affiche.
 7. `npm run build` doit passer. Vérifie aussi la carte de la galerie (`/maps/`).
 

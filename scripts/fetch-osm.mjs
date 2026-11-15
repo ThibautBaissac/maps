@@ -22,6 +22,10 @@ const SERVERS = [
   'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
 ];
 
+const QUERY_TIMEOUT_S = 120; // per server
+const ROUNDS = 2;
+const PAUSE_S = 30;
+
 const R = 6371008.8;
 const toRad = (d) => (d * Math.PI) / 180;
 const half = (CITY.sizeKm * 1000) / 2;
@@ -31,7 +35,7 @@ const bbox = [CITY.lat - dLat, CITY.lon - dLon, CITY.lat + dLat, CITY.lon + dLon
 const bb = bbox.map((v) => v.toFixed(6)).join(',');
 
 const query = `
-[out:json][timeout:180];
+[out:json][timeout:${QUERY_TIMEOUT_S}];
 (
   way["building"](${bb});
   relation["building"]["type"="multipolygon"](${bb});
@@ -50,26 +54,34 @@ const query = `
 out geom;`;
 
 async function download() {
+  // Public Overpass servers are often overloaded: try each one, then a second round
+  // after a pause, rather than waiting minutes on a single server.
   const errors = [];
-  for (const url of SERVERS) {
-    try {
-      console.log(`→ ${url}`);
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': 'riso-city-map/0.1 (one-off data download)',
-        },
-        body: 'data=' + encodeURIComponent(query),
-        signal: AbortSignal.timeout(240_000),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-      const json = await res.json();
-      if (!json.elements?.length) throw new Error(`no elements (${json.remark ?? 'empty answer'})`);
-      return { json, url };
-    } catch (err) {
-      console.warn(`  failed: ${err.message}`);
-      errors.push(`${url}: ${err.message}`);
+  for (let round = 1; round <= ROUNDS; round++) {
+    if (round > 1) {
+      console.log(`Round ${round}/${ROUNDS} in ${PAUSE_S} s…`);
+      await new Promise((r) => setTimeout(r, PAUSE_S * 1000));
+    }
+    for (const url of SERVERS) {
+      try {
+        console.log(`→ ${url}`);
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'illustrated-city-maps/0.1 (one-off data download)',
+          },
+          body: 'data=' + encodeURIComponent(query),
+          signal: AbortSignal.timeout((QUERY_TIMEOUT_S + 15) * 1000),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        const json = await res.json();
+        if (!json.elements?.length) throw new Error(`no elements (${json.remark ?? 'empty answer'})`);
+        return { json, url };
+      } catch (err) {
+        console.warn(`  failed: ${err.message}`);
+        errors.push(`round ${round}, ${url}: ${err.message}`);
+      }
     }
   }
   throw new Error('All Overpass servers failed:\n  ' + errors.join('\n  '));
@@ -209,8 +221,18 @@ function seaPolygons(lines, H) {
       ring.push(...next.p);
       cur = next;
     }
-    polys.push({ r: [ring, ...islands] });
+    polys.push({ r: [ring] });
   }
+  // Each island becomes a hole of the one sea polygon that contains it.
+  const contains = (ring, x, y) => {
+    let inPoly = false;
+    for (let i = 0, j = ring.length - 2; i < ring.length; j = i, i += 2) {
+      const xi = ring[i], yi = ring[i + 1], xj = ring[j], yj = ring[j + 1];
+      if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inPoly = !inPoly;
+    }
+    return inPoly;
+  };
+  for (const isl of islands) polys.find((p) => contains(p.r[0], isl[0], isl[1]))?.r.push(isl);
   return polys;
 }
 

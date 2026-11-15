@@ -34,19 +34,25 @@ function pageHtml(map, place, style) {
 }
 
 // Checks the registry and writes one HTML page per map; returns the build inputs.
-async function generatePages() {
+// A broken entry stops the build; in development it is skipped with a warning so the
+// other maps keep working while a place's data is still downloading.
+async function generatePages(strict) {
   rmSync(new URL(PAGES, pathToFileURL(root)), { recursive: true, force: true });
   const input = { index: `${root}index.html` };
   const seen = new Set();
+  const problem = (msg) => {
+    if (strict) throw new Error(`registry: ${msg}`);
+    console.warn(`\x1b[33m[registry] skipped: ${msg}\x1b[0m`);
+  };
   for (const m of MAPS) {
-    if (!/^[a-z0-9-]+$/.test(m.id ?? '') || seen.has(m.id)) throw new Error(`registry: invalid or duplicate id "${m.id}"`);
+    if (!/^[a-z0-9-]+$/.test(m.id ?? '') || seen.has(m.id)) { problem(`invalid or duplicate id "${m.id}"`); continue; }
     seen.add(m.id);
     const style = STYLES[m.style];
-    if (!style) throw new Error(`registry: unknown style "${m.style}" (${m.id}); known: ${Object.keys(STYLES).join(', ')}`);
+    if (!style) { problem(`unknown style "${m.style}" (${m.id}); known: ${Object.keys(STYLES).join(', ')}`); continue; }
     const placeFile = `${root}places/${m.place}.js`;
-    if (!existsSync(placeFile)) throw new Error(`registry: no file places/${m.place}.js (${m.id})`);
-    if (!existsSync(`${root}public/data/${m.place}.json`)) throw new Error(`registry: no data for ${m.place}; run npm run fetch-data -- ${m.place}`);
-    const place = (await import(pathToFileURL(placeFile).href)).default;
+    if (!existsSync(placeFile)) { problem(`no file places/${m.place}.js (${m.id})`); continue; }
+    if (!existsSync(`${root}public/data/${m.place}.json`)) { problem(`no data for ${m.place} (${m.id}); run npm run fetch-data -- ${m.place}`); continue; }
+    const place = (await import(`${pathToFileURL(placeFile).href}?t=${Date.now()}`)).default;
     const dir = `${root}${PAGES}/${m.id}`;
     mkdirSync(dir, { recursive: true });
     writeFileSync(`${dir}/index.html`, pageHtml(m, place, style));
@@ -55,8 +61,21 @@ async function generatePages() {
   return input;
 }
 
-export default defineConfig(async () => ({
+// In development, regenerate the pages when a place file or a data file appears,
+// changes or disappears (the registry and styles index already restart the server).
+const watchPlaces = () => ({
+  name: 'watch-places',
+  configureServer(server) {
+    const dirs = [`${root}places/`, `${root}public/data/`];
+    server.watcher.add(dirs);
+    const restart = (file) => { if (dirs.some((d) => file.startsWith(d))) server.restart(); };
+    for (const ev of ['add', 'change', 'unlink']) server.watcher.on(ev, restart);
+  },
+});
+
+export default defineConfig(async ({ command }) => ({
   // GitHub Pages serves the site under /<repository>/.
   base: process.env.BASE_PATH ?? '/maps/',
-  build: { rolldownOptions: { input: await generatePages() } },
+  plugins: [watchPlaces()],
+  build: { rolldownOptions: { input: await generatePages(command === 'build') } },
 }));

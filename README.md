@@ -43,4 +43,4 @@ Le workflow `.github/workflows/deploy.yml` construit et publie le site à chaque
 
 ## Données et licences
 
-Données [© contributeurs OpenStreetMap](https://www.openstreetmap.org/copyright), licence ODbL, téléchargées avec l'API Overpass (plusieurs serveurs publics essayés à la suite). Les pages ne contactent aucun serveur externe. Police [Bebas Neue](https://github.com/dharmatype/Bebas-Neue) servie localement (SIL OFL, voir `public/fonts/OFL.txt`).
+Données [© contributeurs OpenStreetMap](https://www.openstreetmap.org/copyright), licence ODbL, téléchargées avec l'API Overpass (plusieurs serveurs publics essayés à la suite). Les pages ne contactent aucun serveur externe. Polices servies localement depuis `public/fonts/<famille>/`, chacune avec sa licence (SIL OFL).

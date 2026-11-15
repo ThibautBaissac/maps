@@ -1,7 +1,7 @@
 ---
 key: riso
 label: Risographie deux encres
-fonts: Bebas Neue (Google Fonts, OFL), déjà dans public/fonts/
+fonts: Bebas Neue (Google Fonts, OFL), dans public/fonts/bebasneue/
 implemented: src/styles/riso/
 ---
 

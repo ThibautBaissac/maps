@@ -11,9 +11,9 @@
    - `onResize()` : tampons, textures et mise en page qui dépendent de la taille ; renvoie `{ window, minScale }` ;
    - `onSettle()` : rendu net complet dans un tampon ;
    - `onFrame()` : présentation bon marché (tampon re-projeté avec `reprojection()`, puis habillage).
-4. **Mise en page** : `computeLayout()` donne une base (cadre, fenêtre de carte, emplacements du cartouche, de la rose des vents, de la légende). Le style peut l'utiliser telle quelle, la modifier (cartouche en bas à droite, bandeau en haut, aucun cadre) ou écrire la sienne. Il doit seulement renvoyer la fenêtre de carte au viewport et placer le lien retour et l'attribution avec `shell.place()`.
+4. **Mise en page** : `computeLayout()` donne une seule disposition, celle de riso (cadre, fenêtre de carte, cartouche à gauche ou en bas, rose des vents et légende à droite). Elle n'a pas de variantes. Pour une autre disposition (cartouche en bas à droite, bandeau en haut, aucun cadre), écris la mise en page du style : partir du résultat de `computeLayout()` et déplacer les emplacements, ou tout calculer soi-même. Le style doit seulement renvoyer la fenêtre de carte au viewport et placer le lien retour et l'attribution avec `shell.place()`. Si plusieurs styles finissent par écrire la même disposition, c'est le signe qu'il faut l'ajouter à `layout.js`.
 5. **`defaults.js`** : chaque couleur, épaisseur et taille de police réglable y figure, pour qu'une variante ne demande qu'une ligne d'`options` dans le registre.
-6. **`card(options)`** dans `src/styles/index.js` : `{ bg, fg, accent }` pour la galerie et pour habiller le lien retour, l'attribution et le message de chargement. `shell.theme({ font })` règle leur police.
+6. **`card(options)`** dans `src/styles/index.js` : `{ bg, fg, accent }` pour la galerie et pour habiller le lien retour, l'attribution et le message de chargement. `shell.theme({ font })` règle leur police. Pour un style **clair sur fond sombre** (cyanotype, néon), ajoute `dark: true` : la galerie mélange par défaut ses couleurs comme de l'encre sur du papier clair, et rendrait la carte illisible sans ce réglage. Vérifie la carte du style dans la galerie, et le contraste du lien retour et de l'attribution sur la page.
 
 ## Polices
 
@@ -29,14 +29,20 @@ Mesurés sur cette machine, à une densité de pixels de 2 :
 - **image en mouvement** (`onFrame`) : quelques millisecondes ; jamais de re-rendu de la carte pendant le zoom ;
 - **taille des données** : 2 Mo pour 2 km × 2 km dans un centre-ville dense.
 
-Mesurer avec la poignée de développement (`window.__map`), en relançant le rendu plusieurs fois et en gardant la valeur stable, pas la première.
+**Mesurer le vrai coût.** Le navigateur envoie le dessin à la carte graphique et rend la main aussitôt. Un chronomètre autour du seul rendu (par exemple la fonction `full()` de la poignée de développement `window.__map`) ne voit donc que la préparation. Il affiche quelques millisecondes même quand le dessin réel est lent. Pour forcer la fin du dessin, terminer la mesure par la lecture d'un seul pixel du canvas visible :
+
+```js
+const c = document.querySelector('#stage canvas'), x = c.getContext('2d');
+const t = performance.now(); window.__map.full(); x.getImageData(0, 0, 1, 1); performance.now() - t;
+```
+
+Relancer trois ou quatre fois et garder la valeur stable, pas la première, qui inclut la mise en route. Ne pas faire de dizaines de lectures : au-delà de quelques-unes, Chrome repasse le canvas en rendu logiciel et toutes les mesures suivantes deviennent fausses (recharger la page remet tout en ordre). Pour la fluidité du zoom, juger aussi à l'œil avec une vraie molette, le panneau Browser visible.
 
 ## Pièges déjà rencontrés
 
 - **Un seul énorme tracé est très lent.** Remplir 11 000 bâtiments en un seul `fill()` prenait 750 ms ; un `beginPath()`/`fill()` par bâtiment, 16 ms. Grouper par petits paquets, ou par élément.
 - **`shadowBlur` par élément est coûteux.** Pour une lueur (néon), dessiner les traits dans un tampon, puis le recopier flouté en une seule opération, sous les traits nets. `ctx.filter = 'blur(…)'` n'est pas reconnu partout (Safari) : le repli universel consiste à réduire le tampon (¼ ou ⅛) puis à l'agrandir avec lissage.
 - **Motifs à l'échelle de l'écran.** Hachures et trames doivent garder la même finesse à tout zoom : construire les tracés en pixels (le projecteur le fait) et remplir avec un `CanvasPattern` défini en pixels écran.
-- **Ne pas mesurer avec `getImageData` en boucle** : après plusieurs lectures, Chrome repasse le canvas en rendu logiciel et les mesures deviennent fausses.
 - **Panneau caché** : sans taille, `ResizeObserver` ne se déclenche pas et `requestAnimationFrame` est suspendu. Le viewport fait un premier rendu synchrone ; pour vérifier, fixer une taille avec `resize_window`.
 - **Tremblé du trait** : `makeProjector().pt(x, y, k, out)` avec `k = 0` pour des traits parfaitement réguliers (cyanotype), `k > 0` pour un tracé à la main.
 - **Noms de rues** : `placeLabels()` place les noms ; le style choisit lesquels selon le zoom (moins de noms en vue d'ensemble), leur taille, leur couleur et la façon de les détacher du fond (halo, cartouche, aucun).

@@ -7,6 +7,7 @@ import { computeLayout, knockouts, avoidBoxes, scaleBar } from '../../toolkit/la
 import { makeProjector, fadePlate } from '../../toolkit/projection.js';
 import { prepareLabels, placeLabels, drawJob } from '../../toolkit/labels.js';
 import { pixelCanvas } from '../../toolkit/noise.js';
+import { loadFont } from '../../toolkit/fonts.js';
 import { renderPaper } from './paper.js';
 import { makeInkTexture, applyInkTexture, makePatterns } from './inks.js';
 import { preparePlates, renderPlateA, renderPlateB } from './plates.js';
@@ -17,7 +18,7 @@ import { DEFAULTS } from './defaults.js';
 export async function mount({ container, data, options, shell }) {
   const o = { ...DEFAULTS, ...options };
   const ink = { a: o.inkA, b: o.inkB };
-  await document.fonts.load('20px "Bebas Neue"');
+  await loadFont('Bebas Neue', 'bebasneue/BebasNeue-Regular.ttf');
 
   const canvas = createStageCanvas(container, shell.label);
   const ctx = canvas.getContext('2d');

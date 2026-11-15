@@ -63,7 +63,7 @@ function frame(A: Ctx, B: Ctx, L: Layout, ink: Inks): void {
   }
 }
 
-function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta, ink: Inks): void {
+function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta & { title: string }, ink: Inks): void {
   const [x0, y0, x1, y1] = L.cart;
   const cw = x1 - x0, ch = y1 - y0;
   const pad = cw * 0.06;
@@ -72,7 +72,7 @@ function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta, ink: In
   A.strokeStyle = ink.a;
   strokeRect(A, [x0 + 4, y0 + 4, x1 - 4, y1 - 4], 0.8);
 
-  const title = meta.name.toUpperCase();
+  const title = meta.title.toUpperCase();
   const sub = meta.district.toUpperCase();
   const coords = `${Math.abs(meta.lat).toFixed(4)}°${meta.lat >= 0 ? 'N' : 'S'}  ·  ${Math.abs(meta.lon).toFixed(4)}°${meta.lon >= 0 ? 'E' : 'W'}`;
   A.font = `100px ${FONT}`;
@@ -228,7 +228,7 @@ function legend(A: Ctx, B: Ctx, box: Rect, patterns: InkPatterns, dpr: number, i
   B.textBaseline = 'alphabetic';
 }
 
-export function renderUI(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta, dpr: number, patterns: InkPatterns, ink: Inks): void {
+export function renderUI(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta & { title: string }, dpr: number, patterns: InkPatterns, ink: Inks): void {
   for (const ctx of [A, B]) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   frame(A, B, L, ink);
   cartouche(A, B, L, view, meta, ink);

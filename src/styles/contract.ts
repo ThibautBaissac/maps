@@ -17,7 +17,7 @@ export interface MountArgs<O> {
 /** What mount() resolves to. In development it is exposed as window.__map. */
 export interface MapHandle {
   destroy(): void;
-  /** Debug: the navigation, when the style uses the toolkit viewport. */
+  /** Navigation for the page's zoom buttons, when the style uses the toolkit viewport. */
   viewport?: Viewport;
   /** Debug: a crisp render, returns its duration in ms. */
   full?(): number;
@@ -40,6 +40,8 @@ export interface CardColors {
 /** A style as declared in src/styles/index.ts. */
 export interface StyleDef<O> {
   label: string;
+  /** Text equivalent of the visual symbols, used by the map description. */
+  legend: readonly string[];
   /** Imports the style code, only on the pages that use it. */
   load(): Promise<StyleModule<O>>;
   card(options?: Partial<O>): CardColors;

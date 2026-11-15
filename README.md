@@ -1,6 +1,6 @@
 # Cartes illustrées
 
-Site statique de plans de quartiers dessinés en Canvas 2D, chacun dans un style graphique choisi en développement. Écrit en TypeScript 7 strict, construit avec Vite. Le visiteur parcourt la galerie, ouvre une carte, zoome (molette) et se déplace (souris).
+Site statique de plans de quartiers dessinés en Canvas 2D, chacun dans un style graphique choisi en développement. Écrit en TypeScript 7 strict, construit avec Vite. Le visiteur parcourt la galerie, ouvre une carte, zoome avec les boutons, la molette ou le clavier et se déplace par glisser ou avec les flèches. Le bouton « Description » donne accès à la légende et aux voies nommées avec leur position approximative dans la zone.
 
 ## Lancer
 

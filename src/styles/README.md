@@ -27,13 +27,13 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
 
 `defaults.ts` exporte l'interface des options du style (`NomOptions`, chaque champ documenté) et `DEFAULTS`, ses valeurs par défaut.
 
-Le style se déclare ensuite dans `src/styles/index.ts` : son interface d'options dans `StyleOptions` (la clé devient un nom de style valide dans le registre, et les `options` de ses cartes sont vérifiées contre cette interface), puis dans `STYLES` un libellé, un `load()` paresseux et un `card(options)` qui renvoie `{ bg, fg, accent }` pour la galerie (avec `dark: true` si le style trace en clair sur un fond sombre : la galerie inverse alors son mélange de couleurs).
+Le style se déclare ensuite dans `src/styles/index.ts` : son interface d'options dans `StyleOptions` (la clé devient un nom de style valide dans le registre, et les `options` de ses cartes sont vérifiées contre cette interface), puis dans `STYLES` un libellé, une `legend` textuelle expliquant ses symboles, un `load()` paresseux et un `card(options)` qui renvoie `{ bg, fg, accent }` pour la galerie (avec `dark: true` si le style trace en clair sur un fond sombre : la galerie inverse alors son mélange de couleurs).
 
-En développement, la valeur renvoyée par `mount` est exposée dans `window.__map` ; les champs facultatifs `viewport` et `full()` de `MapHandle` servent aux vérifications.
+La page branche ses boutons de zoom sur le champ facultatif `viewport` de `MapHandle`. Un style qui utilise le viewport de la boîte à outils le renvoie pour activer ces boutons ; sinon il fournit ses propres commandes. En développement, la valeur renvoyée par `mount` est exposée dans `window.__map`, avec `full()` pour les vérifications de rendu.
 
 ### Ce que tout style doit respecter
 
-- L'attribution OSM et le lien retour restent visibles : les positionner avec `shell.place(...)`, les habiller avec `shell.theme(...)`, ne jamais les masquer.
+- L'attribution OSM et les commandes communes restent visibles : les positionner avec `shell.place(...)`, les habiller avec `shell.theme(...)`, ne jamais les masquer. Réserver la zone de navigation au lien retour, aux boutons de zoom et au bouton de description.
 - La navigation au clavier et à la souris fonctionne (le viewport de la boîte à outils gère les deux).
 - Aucune requête vers un serveur extérieur : les polices vont dans `public/fonts/` avec leur licence et se chargent avec `loadFont()`.
 - S'inspirer d'un genre, jamais copier une œuvre existante.
@@ -41,7 +41,7 @@ En développement, la valeur renvoyée par `mount` est exposée dans `window.__m
 ### Shell
 
 - `shell.label` : description accessible à poser sur l'élément focalisable (`aria-label`).
-- `shell.place({ back: { left, top, right, bottom }, attribution: { … } })` : en px CSS ; une valeur absente garde le coin par défaut (lien retour en haut à gauche, attribution en bas à droite).
+- `shell.place({ back: { left, top, right, bottom }, attribution: { … } })` : en px CSS ; `back` place le groupe du lien retour et des commandes. Une valeur absente garde le coin par défaut (commandes en haut à gauche, attribution en bas à droite).
 - `shell.theme({ bg, accent, font })` : couleurs et police des éléments HTML superposés.
 
 ## Données

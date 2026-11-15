@@ -24,10 +24,25 @@ function pageHtml(map: MapEntry, place: Place, styleLabel: string): string {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/src/map-page.css" />
   </head>
-  <body data-map="${esc(map.id)}" data-label="Plan illustré : ${esc(title)}, ${esc(place.district)}. Molette ou touches plus et moins pour zoomer, glisser ou flèches pour déplacer.">
+  <body data-map="${esc(map.id)}" data-label="Plan illustré : ${esc(title)}, ${esc(place.district)}. Boutons de zoom, molette ou touches plus et moins pour zoomer ; glisser ou flèches pour déplacer.">
     <div id="stage"></div>
+    <p id="map-summary" class="sr-only">Consultez le bouton Description pour le contenu textuel du plan.</p>
     <p class="loading" role="status">Chargement du plan…</p>
-    <a class="back" href="../../">← Toutes les cartes</a>
+    <div class="map-tools">
+      <a class="back" href="../../">← Toutes les cartes</a>
+      <div class="map-actions">
+        <div class="zoom-controls" role="group" aria-label="Zoom du plan">
+          <button class="zoom-in" type="button" aria-label="Agrandir le plan (+)" disabled>+</button>
+          <button class="zoom-out" type="button" aria-label="Réduire le plan (−)" disabled>−</button>
+        </div>
+        <button class="description-button" type="button" aria-haspopup="dialog" aria-controls="map-description" disabled>Description</button>
+      </div>
+    </div>
+    <dialog id="map-description" aria-labelledby="description-title">
+      <form method="dialog"><button autofocus>Fermer</button></form>
+      <h1 id="description-title">Description du plan</h1>
+      <div id="description-content"></div>
+    </dialog>
     <small class="attribution"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© contributeurs OpenStreetMap</a></small>
     <script type="module" src="/src/map-page.ts"></script>
   </body>

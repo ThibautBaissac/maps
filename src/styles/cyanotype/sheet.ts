@@ -44,7 +44,7 @@ export function sheetLayout(w: number, h: number): SheetLayout {
   const cw = clamp(Math.min(mw * 0.62, 360), 196, 360);
   const ch = Math.round(cw * 0.5);
   const cart: Rect = [map[2] - pad - cw, map[3] - pad - ch, map[2] - pad, map[3] - pad];
-  const nav: Rect = [map[0] + 6, map[1] + 6, map[0] + 6 + 200, map[1] + 6 + 28];
+  const nav: Rect = [map[0] + 6, map[1] + 6, map[0] + 6 + 224, map[1] + 6 + 80];
   // The OSM attribution sits on top of the title block, right-aligned with it.
   const attr: Rect = [Math.max(map[0], cart[2] - 260), cart[1] - 6 - 24, cart[2], cart[1] - 6];
   return { w, h, u, m, band, frame, map, plate, pad, cart, nav, attr };

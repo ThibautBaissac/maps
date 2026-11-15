@@ -47,6 +47,8 @@ export interface Viewport {
   readonly size: ViewportSize | null;
   /** Starts measuring and drawing; call once the style is ready. */
   start(): void;
+  /** Animated zoom around the centre, shared by buttons and keyboard navigation. */
+  zoom(factor: number): void;
   /** Moves the view (clamped) and redraws crisply. */
   setView(v: Partial<View>): void;
   redraw(): void;
@@ -178,6 +180,7 @@ export function createViewport({ element, half, maxScale = 10, onResize, onFrame
     view,
     get size() { return size; },
     start() { onElementResize(); ro.observe(element); },
+    zoom(factor) { if (size) zoomAt(size, size.w / 2, size.h / 2, factor); },
     setView(v) {
       Object.assign(view, v);
       if (size) clampView(view, size);

@@ -24,7 +24,7 @@ export interface Shell {
 
 export function createShell({ label, colors }: { label: string; colors: ShellTheme }): Shell {
   const root = document.documentElement.style;
-  const back = element('.back', HTMLElement);
+  const back = element('.map-tools', HTMLElement);
   const attribution = element('.attribution', HTMLElement);
   const loading = document.querySelector('.loading');
   const px = (v: number | undefined): string => (v == null ? '' : `${v}px`);

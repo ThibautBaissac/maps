@@ -9,5 +9,5 @@
     "module": "nodenext",
     "types": ["node", "vite/client"]
   },
-  "include": ["vite.config.ts", "scripts", ".claude/skills/new-map/scripts", "places"]
+  "include": ["vite.config.ts", "scripts", ".claude/skills/new-map/scripts", "places", "tests"]
 }

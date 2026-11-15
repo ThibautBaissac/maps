@@ -41,8 +41,8 @@ export function computeLayout(w: number, h: number): Layout {
   // (pan sideways) so the page is not mostly empty.
   const plate = mh > mw ? Math.min(mh, Math.sqrt(mw * mh)) : Math.min(mw, mh);
   const side = (mw - plate) / 2, below = (mh - plate) / 2;
-  const navH = 28; // "back to gallery" link, top-left of the map window
-  const nav: Rect = [map[0] + 6, map[1] + 6, map[0] + 6 + 150, map[1] + 6 + navH];
+  const navH = 80; // back link and navigation buttons, top-left of the map window
+  const nav: Rect = [map[0] + 6, map[1] + 6, map[0] + 6 + 224, map[1] + 6 + navH];
   let cw = clamp(Math.min(w * 0.5, u * 0.46), 180, 360);
   const r = clamp(u * 0.055, 24, 50);
   let cart: Rect, comp: Circle, legend: Rect | null = null;

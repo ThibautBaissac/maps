@@ -233,7 +233,7 @@ export function renderMap(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingCon
     ctx.lineWidth = (gap < 1.2 ? 0.7 : 1) * dpr;
     ctx.setLineDash(k === 'service' ? [3 * dpr, 1.5 * dpr] : []);
     ctx.beginPath();
-    for (const r of list) if (!r.b) addLine(ctx, P, r.p, 1e9, 0);
+    for (const r of list) addLine(ctx, P, r.p, 1e9, 0);
     ctx.stroke();
   }
   ctx.setLineDash([]);

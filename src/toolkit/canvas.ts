@@ -32,6 +32,7 @@ export function createStageCanvas(container: HTMLElement, label: string): HTMLCa
   c.tabIndex = 0;
   c.setAttribute('role', 'img');
   c.setAttribute('aria-label', label);
+  c.setAttribute('aria-describedby', 'map-summary');
   container.append(c);
   return c;
 }

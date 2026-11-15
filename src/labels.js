@@ -98,7 +98,7 @@ function layout(g, start, widths, tw, size, bounds) {
     if (prev !== null) {
       let da = Math.abs(a - prev);
       if (da > Math.PI) da = 2 * Math.PI - da;
-      if (da > 0.32) return null;
+      if (da > 0.4) return null;
     }
     prev = a; minA = Math.min(minA, a); maxA = Math.max(maxA, a);
     const c = pointAt(g, dc);
@@ -106,7 +106,7 @@ function layout(g, start, widths, tw, size, bounds) {
     glyphs.push({ x: c[0], y: c[1], a, cw });
     acc += cw;
   }
-  if (maxA - minA > 0.85) return null;
+  if (maxA - minA > 1.1) return null;
   return glyphs;
 }
 
@@ -123,7 +123,7 @@ export function renderLabels(pinkCtx, blueCtx, L, P, dpr, view, mapRect, avoid) 
     pinkCtx.font = font;
     const widths = [...text].map((ch) => pinkCtx.measureText(ch).width + spacing * dpr);
     const tw = widths.reduce((s, w) => s + w, 0);
-    const step = Math.max(tw * 2.6, 460 * dpr);
+    const step = Math.max(tw * 2.2, 380 * dpr);
     let count = 0;
     for (const chain of item.chains) {
       if (count >= maxPer) break;
@@ -131,6 +131,8 @@ export function renderLabels(pinkCtx, blueCtx, L, P, dpr, view, mapRect, avoid) 
       const g = toScreen(chain.p, P);
       const centers = [g.len / 2];
       for (let d = step; g.len / 2 + d + tw / 2 < g.len; d += step) centers.push(g.len / 2 + d, g.len / 2 - d);
+      // Off-centre fallbacks when the middle is taken or too curvy.
+      for (const f of [0.3, 0.7, 0.15, 0.85]) centers.push(g.len * f);
       for (const c of centers) {
         if (count >= maxPer) break;
         const start = c - tw / 2;
@@ -149,8 +151,10 @@ export function renderLabels(pinkCtx, blueCtx, L, P, dpr, view, mapRect, avoid) 
 
   const bigCanals = L.canals.slice(0, 10), smallCanals = L.canals.slice(10);
   for (const c of bigCanals) tryItem(c, 'pink', 13.5 * zf, 1.8, view.s > 1.5 ? 3 : 2);
-  for (const s of L.streets) tryItem(s, 'blue', (s.w >= 3 ? 12.5 : 10.5) * zf, 0.6, view.s > 1.5 ? 3 : 1);
-  for (const c of smallCanals) tryItem(c, 'pink', 11 * zf, 1.4, 1);
+  // Fewer, more important streets when zoomed out.
+  const nStreets = view.s < 0.6 ? 28 : view.s < 1.2 ? 60 : L.streets.length;
+  for (const s of L.streets.slice(0, nStreets)) tryItem(s, 'blue', (s.w >= 3 ? 12.5 : 10.5) * zf, 0.6, view.s > 1.5 ? 3 : view.s > 0.8 ? 2 : 1);
+  if (view.s >= 0.6) for (const c of smallCanals) tryItem(c, 'pink', 11 * zf, 1.4, 1);
 
   // Paper halo in both inks, then the letters in their own ink.
   const draw = (ctx, job, mode) => {

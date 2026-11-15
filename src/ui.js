@@ -11,12 +11,37 @@ export function computeLayout(w, h) {
   const frame = [m, m, w - m, h - m];
   const map = [m + band, m + band, w - m - band, h - m - band];
   const pad = clamp(u * 0.025, 10, 22);
-  const cw = clamp(Math.min(w * 0.5, u * 0.46), 180, 360);
-  const ch = cw * 0.5;
-  const cart = [map[0] + pad, map[3] - pad - ch, map[0] + pad + cw, map[3] - pad];
+  const mw = map[2] - map[0], mh = map[3] - map[1];
+  // Square map plate size at full zoom-out. In portrait it overflows the width a little
+  // (pan sideways) so the page is not mostly empty.
+  const plate = mh > mw ? Math.min(mh, Math.sqrt(mw * mh)) : Math.min(mw, mh);
+  const side = (mw - plate) / 2, below = (mh - plate) / 2;
+  let cw = clamp(Math.min(w * 0.5, u * 0.46), 180, 360);
   const r = clamp(u * 0.055, 24, 50);
-  const comp = { x: map[2] - pad - r, y: map[1] + pad + r * 1.25, r };
-  return { w, h, u, m, band, frame, map, pad, cart, comp };
+  let cart, comp, legend = null;
+  if (side >= 180 + pad * 2) {
+    // Landscape with room beside the plate: cartouche left, compass and legend right.
+    // Full-height column: the title is set vertically.
+    cw = Math.min(cw, side - pad * 2);
+    const cx = map[0] + (side - cw) / 2;
+    cart = [cx, map[1] + pad * 2, cx + cw, map[3] - pad * 2];
+    const rx = map[2] - side / 2;
+    comp = { x: rx, y: map[1] + pad * 2 + r * 1.4, r };
+    const lw = Math.min(side - pad * 2, 220);
+    if (side >= 150 + pad * 2) legend = [rx - lw / 2, comp.y + r * 1.6, rx + lw / 2, comp.y + r * 1.6 + lw * 0.78];
+  } else if (below >= cw * 0.5 + pad + 30) {
+    // Portrait with room under the plate.
+    const ch = cw * 0.5;
+    const cx = (w - cw) / 2;
+    const attrH = 30; // keep clear of the attribution in the bottom-right corner
+    cart = [cx, map[3] - pad - attrH - ch, cx + cw, map[3] - pad - attrH];
+    comp = { x: map[2] - pad - r, y: map[1] + pad + r * 1.25, r };
+  } else {
+    const ch = cw * 0.5;
+    cart = [map[0] + pad, map[3] - pad - ch, map[0] + pad + cw, map[3] - pad];
+    comp = { x: map[2] - pad - r, y: map[1] + pad + r * 1.25, r };
+  }
+  return { w, h, u, m, band, frame, map, pad, plate, cart, comp, legend };
 }
 
 export function scaleBar(s, maxLen) {
@@ -87,29 +112,47 @@ function cartouche(pink, blue, L, view, meta) {
   strokeRect(pink, [x0 + 4, y0 + 4, x1 - 4, y1 - 4], 0.8);
 
   const title = meta.name.toUpperCase();
+  const sub = meta.district.toUpperCase();
+  const coords = `${Math.abs(meta.lat).toFixed(4)}°${meta.lat >= 0 ? 'N' : 'S'}  ·  ${Math.abs(meta.lon).toFixed(4)}°${meta.lon >= 0 ? 'E' : 'W'}`;
   pink.font = `100px ${FONT}`;
   pink.letterSpacing = '0px';
-  const fs = Math.min(ch * 0.44, ((cw - pad * 2) / pink.measureText(title).width) * 100);
-  const ty = y0 + pad * 0.6 + fs * 0.86;
-  pink.font = blue.font = `${fs}px ${FONT}`;
-  pink.textBaseline = blue.textBaseline = 'alphabetic';
-  const off = Math.max(2, fs * 0.04);
-  blue.fillStyle = INK.blue;
-  blue.fillText(title, x0 + pad + off, ty + off);
-  pink.fillStyle = INK.pink;
-  pink.fillText(title, x0 + pad, ty);
-
-  const sub = `${meta.district.toUpperCase()}`;
+  const tw100 = pink.measureText(title).width;
+  const vertical = ch > cw * 1.4;
+  let fs, cs;
+  if (vertical) {
+    cs = clamp(cw * 0.075, 11, 16);
+    const along = ch - pad * 2 - cs * 4.5;
+    fs = Math.min((cw - pad * 2 - cs * 1.8) / 1.45, (along / tw100) * 100);
+  } else {
+    fs = Math.min(ch * 0.44, ((cw - pad * 2) / tw100) * 100);
+    cs = fs * 0.3 * 0.62;
+  }
   const ss = fs * 0.3;
+  // Text block in its own frame: horizontal at the top, or rotated up the column.
+  for (const ctx of [pink, blue]) {
+    ctx.save();
+    if (vertical) {
+      ctx.translate(x0 + pad + fs * 0.86, y0 + pad + (tw100 * fs) / 100);
+      ctx.rotate(-Math.PI / 2);
+    } else ctx.translate(x0 + pad, y0 + pad * 0.6 + fs * 0.86);
+    ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = 'left';
+  }
+  const off = Math.max(2, fs * 0.04);
+  pink.font = blue.font = `${fs}px ${FONT}`;
+  blue.fillStyle = INK.blue;
+  blue.fillText(title, off, off);
+  pink.fillStyle = INK.pink;
+  pink.fillText(title, 0, 0);
   blue.font = `${ss}px ${FONT}`;
   blue.letterSpacing = `${ss * 0.18}px`;
-  blue.fillText(sub, x0 + pad, ty + ss * 1.25);
-  const coords = `${Math.abs(meta.lat).toFixed(4)}°${meta.lat >= 0 ? 'N' : 'S'}  ·  ${Math.abs(meta.lon).toFixed(4)}°${meta.lon >= 0 ? 'E' : 'W'}`;
-  const cs = ss * 0.62;
+  blue.fillText(sub, 0, ss * 1.25);
   pink.font = `${cs}px ${FONT}`;
   pink.letterSpacing = `${cs * 0.12}px`;
-  pink.fillText(coords, x0 + pad, ty + ss * 1.25 + cs * 1.45);
+  pink.fillText(coords, 0, ss * 1.25 + cs * 1.45);
   pink.letterSpacing = blue.letterSpacing = '0px';
+  pink.restore();
+  blue.restore();
 
   // Scale bar (4 alternating blocks).
   const maxLen = cw - pad * 2 - cs * 3;
@@ -179,11 +222,57 @@ function compass(pink, blue, L) {
   }
 }
 
-export function renderUI(pink, blue, L, view, meta, dpr) {
+function legend(pink, blue, L, patterns, dpr) {
+  const [x0, y0, x1, y1] = L.legend;
+  const lw = x1 - x0;
+  const row = (y1 - y0) / 5;
+  const fs = clamp(row * 0.42, 11, 18);
+  blue.fillStyle = INK.blue;
+  blue.strokeStyle = INK.blue;
+  blue.font = `${fs * 1.15}px ${FONT}`;
+  blue.letterSpacing = `${fs * 0.2}px`;
+  blue.textBaseline = 'middle';
+  blue.textAlign = 'left';
+  blue.fillText('LÉGENDE', x0, y0 + row * 0.4);
+  blue.letterSpacing = '0px';
+  blue.lineWidth = 1;
+  blue.beginPath(); blue.moveTo(x0, y0 + row * 0.85); blue.lineTo(x1, y0 + row * 0.85); blue.stroke();
+  const sw = Math.min(row * 0.62, lw * 0.18), sh = sw * 0.62;
+  const items = ['BÂTIMENTS', 'RUES & QUAIS', 'EAU', 'PARCS & JARDINS'];
+  items.forEach((label, i) => {
+    const cy = y0 + row * (1.5 + i);
+    const sx = x0, sy = cy - sh / 2;
+    if (i === 0) { pink.fillStyle = INK.pink; pink.fillRect(sx, sy, sw, sh); }
+    if (i === 1) {
+      blue.lineWidth = 2.4; blue.lineCap = 'round';
+      blue.beginPath(); blue.moveTo(sx, cy + sh * 0.25); blue.quadraticCurveTo(sx + sw * 0.5, cy - sh * 0.5, sx + sw, cy); blue.stroke();
+    }
+    if (i === 2 || i === 3) {
+      // Patterns are defined in device pixels: draw them with an identity transform.
+      blue.save();
+      blue.setTransform(1, 0, 0, 1, 0, 0);
+      blue.fillStyle = i === 2 ? patterns.lines : patterns.dots;
+      blue.fillRect(sx * dpr, sy * dpr, sw * dpr, sh * dpr);
+      blue.restore();
+      blue.lineWidth = 1;
+      blue.setLineDash(i === 3 ? [2.5, 2] : []);
+      blue.strokeRect(sx, sy, sw, sh);
+      blue.setLineDash([]);
+    }
+    blue.font = `${fs}px ${FONT}`;
+    blue.letterSpacing = `${fs * 0.08}px`;
+    blue.fillText(label, sx + sw + fs * 0.7, cy + 1);
+    blue.letterSpacing = '0px';
+  });
+  blue.textBaseline = 'alphabetic';
+}
+
+export function renderUI(pink, blue, L, view, meta, dpr, patterns) {
   for (const ctx of [pink, blue]) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   frame(pink, blue, L);
   cartouche(pink, blue, L, view, meta);
   compass(pink, blue, L);
+  if (L.legend) legend(pink, blue, L, patterns, dpr);
 }
 
 // Areas where the map is replaced by bare paper (CSS px).
@@ -191,7 +280,7 @@ export function knockouts(L) {
   const c = L.comp;
   const fs = c.r * 0.5;
   return {
-    rects: [[L.cart[0] - 3, L.cart[1] - 3, L.cart[2] + 3, L.cart[3] + 3]],
+    rects: [[L.cart[0] - 3, L.cart[1] - 3, L.cart[2] + 3, L.cart[3] + 3], ...(L.legend ? [[L.legend[0] - 8, L.legend[1] - 8, L.legend[2] + 8, L.legend[3] + 4]] : [])],
     circles: [{ x: c.x, y: c.y, r: c.r * 1.22 }, { x: c.x, y: c.y - c.r - fs * 0.5, r: fs * 0.62 }],
   };
 }

@@ -203,3 +203,33 @@ export function renderBlue(ctx, M, P, dpr, view, patterns) {
     ctx.stroke();
   }
 }
+
+// Inks thin out towards the edge of the square plate, like a print running out.
+export function fadePlate(ctx, P, half) {
+  const { S, cx, cy, view } = P;
+  const x0 = (-half - view.x) * S + cx, x1 = (half - view.x) * S + cx;
+  const y0 = cy - (half - view.y) * S, y1 = cy - (-half - view.y) * S;
+  const f = Math.min((x1 - x0) * 0.14, Math.max(50 * (S / view.s), 170 * S));
+  const { width: W, height: H } = ctx.canvas;
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.beginPath();
+  ctx.rect(0, 0, W, H);
+  ctx.rect(x0, y0, x1 - x0, y1 - y0);
+  ctx.fillStyle = '#000';
+  ctx.fill('evenodd');
+  const strip = (gx0, gy0, gx1, gy1, rx, ry, rw, rh) => {
+    const g = ctx.createLinearGradient(gx0, gy0, gx1, gy1);
+    g.addColorStop(0, 'rgba(0,0,0,1)');
+    g.addColorStop(0.35, 'rgba(0,0,0,0.55)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(rx, ry, rw, rh);
+  };
+  strip(x0, 0, x0 + f, 0, x0, y0, f, y1 - y0);
+  strip(x1, 0, x1 - f, 0, x1 - f, y0, f, y1 - y0);
+  strip(0, y0, 0, y0 + f, x0, y0, x1 - x0, f);
+  strip(0, y1, 0, y1 - f, x0, y1 - f, x1 - x0, f);
+  ctx.restore();
+}

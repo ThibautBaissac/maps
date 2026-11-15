@@ -1,7 +1,7 @@
 import data from '../data/quartier.json';
 import { renderPaper } from './paper.js';
 import { makeInkTexture, applyInkTexture, makePatterns } from './inks.js';
-import { prepare, makeProjector, renderPink, renderBlue } from './map.js';
+import { prepare, makeProjector, renderPink, renderBlue, fadePlate } from './map.js';
 import { prepareLabels, renderLabels } from './labels.js';
 import { computeLayout, renderUI, knockouts, scaleBar } from './ui.js';
 import { makeCanvas, pixelCanvas } from './noise.js';
@@ -25,14 +25,17 @@ const attribution = document.querySelector('.attribution');
 const view = { x: 0, y: 0, s: 1 };
 const target = { x: 0, y: 0, s: 1 }; // where wheel zoom is heading (animated)
 const MAX_S = 10; // px per metre
-// Extent of the drawn city (buildings), with a small margin.
-const EXT = M.buildings.reduce((e, b) => [Math.min(e[0], b.bb[0]), Math.min(e[1], b.bb[1]), Math.max(e[2], b.bb[2]), Math.max(e[3], b.bb[3])], [Infinity, Infinity, -Infinity, -Infinity]);
-EXT[0] -= 40; EXT[1] -= 40; EXT[2] += 40; EXT[3] += 40;
+// The printed plate: the downloaded square, inks fade out at its edges.
+const PLATE = data.meta.half + 40;
+const EXT = [-PLATE, -PLATE, PLATE, PLATE];
 
+// Keeps the zoom in range and, when zoomed in, the viewport inside the plate.
 function clampView(v) {
   v.s = Math.min(MAX_S, Math.max(env.minS, v.s));
-  v.x = Math.min(EXT[2], Math.max(EXT[0], v.x));
-  v.y = Math.min(EXT[3], Math.max(EXT[1], v.y));
+  const L = env.layout;
+  const hw = (L.map[2] - L.map[0]) / 2 / v.s, hh = (L.map[3] - L.map[1]) / 2 / v.s;
+  v.x = hw < PLATE ? Math.min(PLATE - hw, Math.max(-PLATE + hw, v.x)) : 0;
+  v.y = hh < PLATE ? Math.min(PLATE - hh, Math.max(-PLATE + hh, v.y)) : 0;
   return v;
 }
 let env = null; // size-dependent buffers
@@ -58,8 +61,7 @@ function setup() {
   env.patterns = makePatterns(env.blue.x, dpr);
   const grain = pixelCanvas(256, 256, 5, (r) => { const v = 128 + (r() - 0.5) * 100; return [v, v, v, 255]; });
   env.grain = ctx.createPattern(grain, 'repeat');
-  const mw = layout.map[2] - layout.map[0], mh = layout.map[3] - layout.map[1];
-  env.minS = Math.min(mw / (EXT[2] - EXT[0]), mh / (EXT[3] - EXT[1]));
+  env.minS = layout.plate / (EXT[2] - EXT[0]);
   if (first) Object.assign(view, { x: (EXT[0] + EXT[2]) / 2, y: (EXT[1] + EXT[3]) / 2, s: env.minS });
   clampView(view);
   Object.assign(target, view);
@@ -105,6 +107,8 @@ export function renderMap() {
   renderBlue(blue.x, M, P, dpr, view, env.patterns);
   const mr = env.layout.map.map((v) => v * dpr);
   renderLabels(pink.x, blue.x, LABELS, P, dpr, view, mr, deviceAvoid());
+  fadePlate(pink.x, P, PLATE);
+  fadePlate(blue.x, P, PLATE);
   applyInkTexture(pink.x, env.texPink);
   applyInkTexture(blue.x, env.texBlue);
   compose(env.ink.x, pink.c, blue.c, MISREG.x * dpr, MISREG.y * dpr);
@@ -115,7 +119,7 @@ export function renderMap() {
 function renderUiLayers() {
   const { uiPink, uiBlue, dpr } = env;
   clear(uiPink.x); clear(uiBlue.x);
-  renderUI(uiPink.x, uiBlue.x, env.layout, view, data.meta, dpr);
+  renderUI(uiPink.x, uiBlue.x, env.layout, view, data.meta, dpr, env.patterns);
   applyInkTexture(uiPink.x, env.texPink);
   applyInkTexture(uiBlue.x, env.texBlue);
   compose(env.uiInk.x, uiPink.c, uiBlue.c, MISREG.x * dpr, MISREG.y * dpr);

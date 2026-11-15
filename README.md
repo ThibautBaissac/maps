@@ -17,9 +17,9 @@ Puis ouvrir http://localhost:5173/maps/. Version de production : `npm run build`
 places/<lieu>.js          un lieu : nom, quartier, latitude, longitude, taille de la zone
 public/data/<lieu>.json   ses données OpenStreetMap, téléchargées une fois
 src/registry.js           la liste des cartes : un lieu × un style (+ options)
-src/styles/<style>/       le rendu d'un style ; src/styles/index.js les déclare
-src/engine/               commun : vue, zoom, déplacement, mise en page, placement des noms
-src/map-page.js           point d'entrée de chaque page de carte
+src/styles/<style>/       un style : il dessine toute la page ; src/styles/index.js les déclare
+src/toolkit/              boîte à outils facultative : navigation, projection, noms, mise en page type…
+src/map-page.js, shell.js page commune : charge les données et le style, lien retour, attribution
 src/gallery/              la page d'accueil
 ```
 
@@ -35,7 +35,7 @@ Au build, `vite.config.js` lit le registre, vérifie chaque entrée et génère 
    { id: 'lisbonne-riso', place: 'lisbonne-alfama', style: 'riso', options: { inkA: '#00A95C' } },
    ```
 
-Les options possibles d'un style sont dans son fichier `defaults.js`. Un nouveau style se crée dans `src/styles/<nom>/` (interface décrite en tête de `src/engine/app.js`) et se déclare dans `src/styles/index.js`.
+Les options possibles d'un style sont dans son fichier `defaults.js`. Pour créer un style, voir [`src/styles/README.md`](src/styles/README.md) : contrat, format des données, boîte à outils.
 
 ## Publier sur GitHub Pages
 

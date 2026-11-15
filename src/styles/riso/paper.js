@@ -1,4 +1,4 @@
-import { makeCanvas, mulberry32, pixelCanvas } from '../../engine/noise.js';
+import { makeCanvas, mulberry32, pixelCanvas } from '../../toolkit/noise.js';
 
 // Paper texture at device resolution: fine grain, fibres, mottling, stains, darker edges.
 export function renderPaper(W, H, dpr, color, seed = 7) {

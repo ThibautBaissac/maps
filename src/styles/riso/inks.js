@@ -1,4 +1,4 @@
-import { makeCanvas, pixelCanvas, vnoise } from '../../engine/noise.js';
+import { makeCanvas, pixelCanvas, vnoise } from '../../toolkit/noise.js';
 
 // Per-ink texture: speckled drop-outs plus large uneven coverage, removed with destination-out.
 export function makeInkTexture(W, H, seed) {

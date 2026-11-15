@@ -22,8 +22,8 @@ function pageHtml(map, place, style) {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/src/map-page.css" />
   </head>
-  <body data-map="${esc(map.id)}">
-    <canvas id="map" tabindex="0" role="img" aria-label="Plan illustré : ${esc(title)}, ${esc(place.district)}. Molette ou touches plus et moins pour zoomer, glisser ou flèches pour déplacer."></canvas>
+  <body data-map="${esc(map.id)}" data-label="Plan illustré : ${esc(title)}, ${esc(place.district)}. Molette ou touches plus et moins pour zoomer, glisser ou flèches pour déplacer.">
+    <div id="stage"></div>
     <p class="loading" role="status">Chargement du plan…</p>
     <a class="back" href="../../">← Toutes les cartes</a>
     <small class="attribution"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© contributeurs OpenStreetMap</a></small>

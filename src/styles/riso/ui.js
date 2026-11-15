@@ -1,6 +1,6 @@
 // Riso frame furniture: neatline, registration marks, cartouche, compass, legend.
 // A / B are the contexts of the two ink plates; ink = { a, b } are their colours.
-import { clamp, scaleBar } from '../../engine/layout.js';
+import { clamp, scaleBar } from '../../toolkit/layout.js';
 import { FONT } from './font.js';
 
 function strokeRect(ctx, r, lw) {

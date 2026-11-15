@@ -1,5 +1,6 @@
-// Available styles. `load` imports the style code only on the pages that use it;
-// `card` gives the gallery its colours from the map's options.
+// Available styles (contract in src/styles/README.md). `load` imports the style code
+// only on the pages that use it; `card` gives the gallery and the page overlays their
+// colours from the map's options.
 import { DEFAULTS as RISO } from './riso/defaults.js';
 
 export const STYLES = {

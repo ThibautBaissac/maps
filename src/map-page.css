@@ -4,12 +4,15 @@
   font-display: block;
 }
 html, body { margin: 0; height: 100%; background: var(--bg, #F6F1E7); overflow: hidden; }
-canvas { display: block; width: 100vw; height: 100vh; cursor: grab; touch-action: none; }
-canvas.dragging { cursor: grabbing; }
-canvas:focus-visible { outline: 3px solid var(--accent, #1E5FD8); outline-offset: -3px; }
+#stage { position: fixed; inset: 0; }
+#stage > canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+#stage > canvas.dragging { cursor: grabbing; }
+#stage > canvas:focus-visible { outline: 3px solid var(--accent, #1E5FD8); outline-offset: -3px; }
 .attribution {
   position: fixed;
-  font: 13px/1 'Bebas Neue', 'Arial Narrow', sans-serif;
+  right: 12px;
+  bottom: 12px;
+  font: 13px/1 var(--font, 'Bebas Neue', 'Arial Narrow', sans-serif);
   letter-spacing: 0.06em;
   color: var(--accent, #1E5FD8);
   background: color-mix(in srgb, var(--bg, #F6F1E7) 92%, transparent);
@@ -21,7 +24,9 @@ canvas:focus-visible { outline: 3px solid var(--accent, #1E5FD8); outline-offset
 .attribution a:hover, .attribution a:focus-visible { text-decoration: underline; }
 .back {
   position: fixed;
-  font: 15px/1 'Bebas Neue', 'Arial Narrow', sans-serif;
+  left: 12px;
+  top: 12px;
+  font: 15px/1 var(--font, 'Bebas Neue', 'Arial Narrow', sans-serif);
   letter-spacing: 0.08em;
   color: var(--accent, #1E5FD8);
   background: color-mix(in srgb, var(--bg, #F6F1E7) 92%, transparent);
@@ -35,7 +40,7 @@ canvas:focus-visible { outline: 3px solid var(--accent, #1E5FD8); outline-offset
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
   margin: 0;
-  font: 22px/1 'Bebas Neue', 'Arial Narrow', sans-serif;
+  font: 22px/1 var(--font, 'Bebas Neue', 'Arial Narrow', sans-serif);
   letter-spacing: 0.1em;
   color: var(--accent, #1E5FD8);
 }

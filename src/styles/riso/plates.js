@@ -1,6 +1,6 @@
 // The two printing plates of the riso style:
 // plate A (first ink) = buildings, plate B (second ink) = water, parks, streams, roads.
-import { addLine, addRings, bboxOf } from '../../engine/projection.js';
+import { addLine, addRings, bboxOf } from '../../toolkit/projection.js';
 
 // Road stroke width in CSS px at s = 0.5 px/m, and minimum zoom (px/m) to show it.
 const ROADS = {

@@ -16,10 +16,11 @@ Node 24 ou plus récent : les scripts `.ts` tournent directement avec `node`, qu
 ## Organisation
 
 ```
-places/<lieu>.ts          un lieu : nom, quartier, latitude, longitude, taille de la zone
+places/index.ts           les lieux : nom, quartier, latitude, longitude, taille de la zone
 public/data/<lieu>.json   ses données OpenStreetMap, téléchargées une fois
 public/vignettes/<id>.webp  image de la carte dans la galerie (npm run vignettes)
 src/registry.ts           la liste des cartes : un lieu × un style (+ options)
+src/catalogue.ts          chaque carte résolue : titre, lieu, style, chemins ; lu par tout le site
 src/styles/<style>/       un style : il dessine toute la page ; src/styles/index.ts les déclare
 src/toolkit/              boîte à outils facultative : navigation, projection, noms, mise en page type…
 src/map-page.ts, shell.ts page commune : charge les données et le style, lien retour, attribution
@@ -29,12 +30,12 @@ scripts/fetch-osm.ts      téléchargement des données d'un lieu
 scripts/vignettes.ts      image de chaque carte pour la galerie (Chrome headless)
 ```
 
-Au build, `vite.config.ts` lit le registre, vérifie chaque entrée et génère une page par carte dans `cartes/<id>/` (dossier généré, ignoré par Git).
+Au build, `vite.config.ts` lit le catalogue, vérifie que les données de chaque carte existent et correspondent encore à son lieu, puis génère une page par carte dans `cartes/<id>/` (dossier généré, ignoré par Git).
 
 ## Ajouter une carte
 
-1. Créer `places/<lieu>.ts` (copier `places/amsterdam-centre.ts`).
-2. Télécharger ses données : `npm run fetch-data -- <lieu>`.
+1. Ajouter le lieu à `places/index.ts` : `node .claude/skills/new-map/scripts/new-place.ts --city "<ville>" --district "<quartier>"`, ou à la main en copiant une entrée.
+2. Télécharger ses données : `npm run fetch-data -- <lieu>`. À refaire après toute modification du lieu : le build refuse des données qui ne correspondent plus à leur lieu.
 3. Ajouter une ligne dans `src/registry.ts` :
 
    ```ts

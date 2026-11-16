@@ -1,6 +1,6 @@
 // The drawing sheet around the map: layout, paper, reference grid, dimension chains on
 // the four edges and the title block (bottom right). All in CSS px, drawn each frame.
-import type { MapMeta } from '../../data.ts';
+import type { MountMeta } from '../contract.ts';
 import { formatLat, formatLon } from '../../place.ts';
 import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
 import { growRect, type Point, type Rect } from '../../toolkit/geometry.ts';
@@ -210,7 +210,7 @@ function fit(c: Ctx, family: string, text: string, width: number, max: number, w
 
 interface TextOptions { bold?: boolean; align?: CanvasTextAlign; base?: CanvasTextBaseline; alpha?: number }
 
-export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MapMeta & { title: string }, o: CyanotypeOptions, paper: HTMLCanvasElement): void {
+export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MountMeta, o: CyanotypeOptions, paper: HTMLCanvasElement): void {
   const [x0, y0, x1, y1] = L.cart;
   const cw = x1 - x0, ch = y1 - y0;
 

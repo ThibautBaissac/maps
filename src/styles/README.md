@@ -21,7 +21,7 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
 |---|---|
 | `container` | `<div id="stage">` vide qui remplit la fenêtre |
 | `data` | les données OSM du lieu (format plus bas) |
-| `meta` | `data.meta` plus `title` (titre du registre ou nom du lieu) |
+| `meta` | `data.meta` sans `name`, plus `title` (titre du registre ou nom du lieu, résolu par `src/catalogue.ts`) : c'est le titre qu'un style imprime, jamais le nom du lieu |
 | `options` | les `options` de la carte dans `src/registry.ts`, à fusionner avec le `defaults.ts` du style |
 | `shell` | le cadre de page commun (plus bas) |
 

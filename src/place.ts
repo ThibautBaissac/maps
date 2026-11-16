@@ -1,4 +1,4 @@
-// A place to map (places/<place>.ts): what fetch-osm downloads and the pages display.
+// A place to map (an entry of places/index.ts): what fetch-osm downloads and the pages display.
 // Runs in the browser and in Node (vite.config.ts, scripts/): no DOM, no Node API.
 
 export interface Place {
@@ -15,7 +15,7 @@ export interface Place {
 
 export const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
 
-/** Map and place ids: file names of places/ and page paths. */
+/** Map and place ids: keys of places/index.ts, data file names and page paths. */
 export const isSlug = (s: string): boolean => /^[a-z0-9-]+$/.test(s);
 
 /** 52.3731°N; `digits` decimals. */

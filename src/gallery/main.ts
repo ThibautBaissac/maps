@@ -1,14 +1,7 @@
+import { CATALOGUE, type CatalogueMapOf } from '../catalogue.ts';
 import { element } from '../dom.ts';
-import type { Place } from '../place.ts';
-import { MAPS, type MapEntryOf } from '../registry.ts';
-import { STYLES, type StyleKey } from '../styles/index.ts';
-
-const places = new Map(
-  Object.entries(import.meta.glob<Place>('../../places/*.ts', { eager: true, import: 'default' }))
-    .map(([path, place]) => [path.replace(/^.*\/|\.ts$/g, ''), place]),
-);
-
-const fmt = (v: number, pos: string, neg: string): string => `${Math.abs(v).toFixed(2)}° ${v >= 0 ? pos : neg}`;
+import { formatLat, formatLon } from '../place.ts';
+import type { StyleKey } from '../styles/index.ts';
 
 function span(className: string, text: string): HTMLSpanElement {
   const s = document.createElement('span');
@@ -21,12 +14,9 @@ const ARROW = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" strok
 
 // One vertical strip: the map's picture (public/vignettes/<id>.webp, made by
 // npm run vignettes), its name read upwards, and what it is.
-function strip<K extends StyleKey>(m: MapEntryOf<K>): HTMLLIElement {
-  const place = places.get(m.place);
-  if (!place) throw new Error(`No file places/${m.place}.ts (${m.id})`);
-  const style = STYLES[m.style];
+function strip<K extends StyleKey>(m: CatalogueMapOf<K>): HTMLLIElement {
+  const { place, styleDef: style, title: name } = m;
   const colors = style.card(m.options);
-  const name = m.title ?? place.name;
 
   const li = document.createElement('li');
   li.className = 'strip';
@@ -37,11 +27,11 @@ function strip<K extends StyleKey>(m: MapEntryOf<K>): HTMLLIElement {
   if (colors.dark) li.classList.add('dark'); // light ink on a dark ground: no offset shadow
 
   const a = document.createElement('a');
-  a.href = `cartes/${m.id}/`;
+  a.href = m.paths.page;
 
   // Without its picture, the strip keeps the style's paper and a dot screen.
   const img = document.createElement('img');
-  img.src = `${import.meta.env.BASE_URL}vignettes/${m.id}.webp`;
+  img.src = `${import.meta.env.BASE_URL}${m.paths.vignette}`;
   img.alt = '';
   img.decoding = 'async';
   img.addEventListener('error', () => img.remove());
@@ -54,7 +44,7 @@ function strip<K extends StyleKey>(m: MapEntryOf<K>): HTMLLIElement {
   go.insertAdjacentHTML('beforeend', ARROW);
   info.append(
     span('district', place.district),
-    span('meta', `${style.label} · ${fmt(place.lat, 'N', 'S')} ${fmt(place.lon, 'E', 'O')}`),
+    span('meta', `${style.label} · ${formatLat(place.lat, 2)} ${formatLon(place.lon, 2, 'O')}`),
     go,
   );
 
@@ -64,4 +54,4 @@ function strip<K extends StyleKey>(m: MapEntryOf<K>): HTMLLIElement {
 }
 
 const list = element('.strips', HTMLUListElement);
-for (const m of MAPS) list.append(strip(m));
+for (const m of CATALOGUE) list.append(strip(m));

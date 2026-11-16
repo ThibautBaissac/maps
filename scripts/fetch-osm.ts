@@ -1,20 +1,20 @@
-// Downloads OpenStreetMap data for one place of places/ (once), projects it to
-// local metres and writes a compact public/data/<place>.json.
+// Downloads OpenStreetMap data for one place of places/index.ts (once), projects it to
+// local metres and writes a compact public/data/<place>.json (dataPath in places/index.ts).
 // Usage: npm run fetch-data -- <place-id>     (e.g. amsterdam-centre)
-import { access, mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { endpointKey as key, r1, seaPolygons } from './coastline.ts';
 import { featureCounts, isRoadKind, type BBox, type Line, type MapData, type Ring, type Road, type Waterway } from '../src/data.ts';
-import { isRecord, isSlug, parsePlace } from '../src/place.ts';
+import { dataPath, isPlaceId, PLACES } from '../places/index.ts';
+import { isRecord } from '../src/place.ts';
 import { fail, message } from './cli.ts';
 
 // Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)
 // is always defined, hence the `!` in the loops below.
 
 const PLACE = process.argv[2] ?? '';
-if (!isSlug(PLACE)) fail('Usage: npm run fetch-data -- <place-id>   (a file name of places/, without .ts)');
-const placeUrl = new URL(`../places/${PLACE}.ts`, import.meta.url);
-try { await access(placeUrl); } catch { fail(`No such place: places/${PLACE}.ts`); }
-const CITY = parsePlace((await import(placeUrl.href) as { default?: unknown }).default, `places/${PLACE}.ts`);
+if (!PLACE) fail('Usage: npm run fetch-data -- <place-id>   (a key of places/index.ts)');
+if (!isPlaceId(PLACE)) fail(`No such place: ${PLACE}. Known: ${Object.keys(PLACES).join(', ')}`);
+const CITY = PLACES[PLACE];
 
 const SERVERS = [
   'https://overpass-api.de/api/interpreter',
@@ -217,8 +217,8 @@ for (const el of json.elements) {
 
 data.water.push(...seaPolygons(coast, half));
 
-await mkdir(new URL('../public/data/', import.meta.url), { recursive: true });
-const out = new URL(`../public/data/${PLACE}.json`, import.meta.url);
+const out = new URL(`../public/${dataPath(PLACE)}`, import.meta.url);
+await mkdir(new URL('.', out), { recursive: true });
 await writeFile(out, JSON.stringify(data));
 
 console.log(`\n${CITY.name} — ${CITY.district} (${CITY.sizeKm} km × ${CITY.sizeKm} km)`);

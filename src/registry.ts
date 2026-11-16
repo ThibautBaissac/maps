@@ -1,13 +1,14 @@
-// The maps of the site. Each map is a place (places/<place>.ts, data in
-// public/data/<place>.json) drawn in a style (src/styles/). One page per entry is
-// generated at build time, at cartes/<id>/.
+// The maps of the site. Each map is a place of places/index.ts drawn in a style
+// (src/styles/). src/catalogue.ts resolves each entry (title, place, style, paths);
+// vite.config.ts generates one page per entry at build time.
+import type { PlaceId } from '../places/index.ts';
 import type { StyleKey, StyleOptions } from './styles/index.ts';
 
 export interface MapEntryOf<K extends StyleKey> {
   /** URL slug, unique, [a-z0-9-]. */
   id: string;
-  /** File name in places/, without .ts. */
-  place: string;
+  /** Key of places/index.ts. */
+  place: PlaceId;
   /** Key of src/styles/index.ts. */
   style: K;
   /** Defaults to the place name. */

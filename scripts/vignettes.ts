@@ -7,14 +7,15 @@ import { execFile, execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { promisify } from 'node:util';
-import { MAPS } from '../src/registry.ts';
+import { CATALOGUE, findMap, type CatalogueMap } from '../src/catalogue.ts';
 import { fail, message } from './cli.ts';
 
 const args = process.argv.slice(2);
 const baseAt = args.indexOf('--base');
 const base = baseAt >= 0 ? args.splice(baseAt, 2)[1] ?? fail('--base needs a URL') : 'http://localhost:5173/maps/';
-const ids = args.length ? args : MAPS.map((m) => m.id);
-for (const id of ids) if (!MAPS.some((m) => m.id === id)) fail(`Unknown map "${id}" (src/registry.ts)`);
+const maps: CatalogueMap[] = args.length
+  ? args.map((id) => findMap(id) ?? fail(`Unknown map "${id}" (src/registry.ts)`))
+  : [...CATALOGUE];
 
 function findChrome(): string {
   const env = process.env['CHROME'];
@@ -41,11 +42,10 @@ try {
 
 const chrome = findChrome();
 const run = promisify(execFile);
-const outDir = new URL('../public/vignettes/', import.meta.url);
-await mkdir(outDir, { recursive: true });
+const publicDir = new URL('../public/', import.meta.url);
 
-for (const id of ids) {
-  const url = new URL(`cartes/${id}/#vignette`, base).href;
+for (const { id, paths } of maps) {
+  const url = new URL(`${paths.page}#vignette`, base).href;
   const { stdout } = await run(chrome, [
     '--headless=new', '--disable-gpu', '--hide-scrollbars', '--mute-audio',
     '--window-size=1600,1000', '--force-device-scale-factor=2',
@@ -53,8 +53,9 @@ for (const id of ids) {
   ], { maxBuffer: 256 * 1024 * 1024 });
   const src = /<output[^>]*id="vignette"[^>]*data-src="data:image\/webp;base64,([^"]+)"/.exec(stdout)?.[1];
   if (!src) fail(`${id}: no picture in the page (${url}); open it in a browser and read the console.`);
-  const file = new URL(`${id}.webp`, outDir);
+  const file = new URL(paths.vignette, publicDir);
   const bytes = Buffer.from(src, 'base64');
+  await mkdir(new URL('.', file), { recursive: true });
   await writeFile(file, bytes);
-  console.log(`public/vignettes/${id}.webp  ${(bytes.length / 1024).toFixed(0)} Ko`);
+  console.log(`public/${paths.vignette}  ${(bytes.length / 1024).toFixed(0)} Ko`);
 }

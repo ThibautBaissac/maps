@@ -1,6 +1,6 @@
 // Riso frame furniture: neatline, registration marks, cartouche, compass, legend.
 // A / B are the contexts of the two ink plates; ink = { a, b } are their colours.
-import type { MapMeta } from '../../data.ts';
+import type { MountMeta } from '../contract.ts';
 import { formatLat, formatLon } from '../../place.ts';
 import type { Point, Rect } from '../../toolkit/geometry.ts';
 import { clamp, scaleBar, type Layout } from '../../toolkit/layout.ts';
@@ -64,7 +64,7 @@ function frame(A: Ctx, B: Ctx, L: Layout, ink: Inks): void {
   }
 }
 
-function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta & { title: string }, ink: Inks): void {
+function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MountMeta, ink: Inks): void {
   const [x0, y0, x1, y1] = L.cart;
   const cw = x1 - x0, ch = y1 - y0;
   const pad = cw * 0.06;
@@ -229,7 +229,7 @@ function legend(A: Ctx, B: Ctx, box: Rect, patterns: InkPatterns, dpr: number, i
   B.textBaseline = 'alphabetic';
 }
 
-export function renderUI(A: Ctx, B: Ctx, L: Layout, view: View, meta: MapMeta & { title: string }, dpr: number, patterns: InkPatterns, ink: Inks): void {
+export function renderUI(A: Ctx, B: Ctx, L: Layout, view: View, meta: MountMeta, dpr: number, patterns: InkPatterns, ink: Inks): void {
   for (const ctx of [A, B]) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   frame(A, B, L, ink);
   cartouche(A, B, L, view, meta, ink);

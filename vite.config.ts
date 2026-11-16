@@ -1,19 +1,15 @@
 import { defineConfig, type Plugin } from 'vite';
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { message } from './scripts/cli.ts';
-import { isSlug, parsePlace, type Place } from './src/place.ts';
-import { MAPS, type MapEntry } from './src/registry.ts';
-import { STYLES, isStyleKey } from './src/styles/index.ts';
+import { CATALOGUE, catalogueProblems, PAGES_DIR, type CatalogueMap } from './src/catalogue.ts';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
-const PAGES = 'cartes'; // generated, git-ignored
 
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ESCAPES[c] ?? c);
 
-function pageHtml(map: MapEntry, place: Place, styleLabel: string): string {
-  const title = map.title ?? place.name;
+function pageHtml(map: CatalogueMap): string {
+  const { title, place, styleDef: { label: styleLabel } } = map;
   return `<!doctype html>
 <!-- Generated from src/registry.ts by vite.config.ts: do not edit. -->
 <html lang="fr">
@@ -52,58 +48,54 @@ function pageHtml(map: MapEntry, place: Place, styleLabel: string): string {
 }
 
 // Checks the registry and writes one HTML page per map; returns the build inputs.
-// The registry is type-checked, but the files it points to are only known here.
-// A broken entry stops the build; in development it is skipped with a warning so the
-// other maps keep working while a place's data is still downloading.
-async function generatePages(strict: boolean): Promise<Record<string, string>> {
-  rmSync(new URL(PAGES, pathToFileURL(root)), { recursive: true, force: true });
+// The registry is type-checked; whether each map's data exists and matches its place
+// is only known here (src/catalogue.ts). A problem stops the build; in development the
+// map is skipped with a warning so the others keep working while data downloads.
+function generatePages(strict: boolean): Record<string, string> {
+  rmSync(new URL(PAGES_DIR, pathToFileURL(root)), { recursive: true, force: true }); // generated, git-ignored
   const input: Record<string, string> = { index: `${root}index.html` };
-  const seen = new Set<string>();
-  const problem = (msg: string): void => {
-    if (strict) throw new Error(`registry: ${msg}`);
-    console.warn(`\x1b[33m[registry] skipped: ${msg}\x1b[0m`);
-  };
-  for (const m of MAPS) {
-    if (!isSlug(m.id) || seen.has(m.id)) { problem(`invalid or duplicate id "${m.id}"`); continue; }
-    seen.add(m.id);
-    if (!isStyleKey(m.style)) { problem(`unknown style "${m.style}" (${m.id}); known: ${Object.keys(STYLES).join(', ')}`); continue; }
-    const placeFile = `${root}places/${m.place}.ts`;
-    if (!existsSync(placeFile)) { problem(`no file places/${m.place}.ts (${m.id})`); continue; }
-    if (!existsSync(`${root}public/data/${m.place}.json`)) { problem(`no data for ${m.place} (${m.id}); run npm run fetch-data -- ${m.place}`); continue; }
-    let place: Place;
-    try {
-      const mod = (await import(`${pathToFileURL(placeFile).href}?t=${Date.now()}`)) as { default?: unknown };
-      place = parsePlace(mod.default, `places/${m.place}.ts`);
-    } catch (err) {
-      problem(message(err));
-      continue;
-    }
-    if (!existsSync(`${root}public/vignettes/${m.id}.webp`)) {
+  const skipped = new Set<string>();
+  for (const { id, message } of catalogueProblems(readPublicJson)) {
+    if (strict) throw new Error(`registry: ${message}`);
+    console.warn(`\x1b[33m[registry] skipped: ${message}\x1b[0m`);
+    skipped.add(id);
+  }
+  for (const m of CATALOGUE) {
+    if (skipped.has(m.id)) continue;
+    if (!existsSync(`${root}public/${m.paths.vignette}`)) {
       console.warn(`\x1b[33m[registry] ${m.id}: no gallery picture; run npm run vignettes -- ${m.id} with the dev server up\x1b[0m`);
     }
-    const dir = `${root}${PAGES}/${m.id}`;
+    const dir = `${root}${m.paths.page}`;
     mkdirSync(dir, { recursive: true });
-    writeFileSync(`${dir}/index.html`, pageHtml(m, place, STYLES[m.style].label));
-    input[m.id] = `${dir}/index.html`;
+    writeFileSync(`${dir}index.html`, pageHtml(m));
+    input[m.id] = `${dir}index.html`;
   }
   return input;
 }
 
-// In development, regenerate the pages when a place file or a data file appears,
-// changes or disappears (the registry and styles index already restart the server).
-const watchPlaces = (): Plugin => ({
-  name: 'watch-places',
+// Parsed public/<path>; undefined when the file does not exist, null when it is not
+// valid JSON (a download cut short): the catalogue reports both, naming the file.
+function readPublicJson(path: string): unknown {
+  const file = `${root}public/${path}`;
+  if (!existsSync(file)) return undefined;
+  try { return JSON.parse(readFileSync(file, 'utf8')) as unknown; } catch { return null; }
+}
+
+// In development, regenerate the pages when a data file appears, changes or disappears
+// (the registry, places/index.ts and the styles index already restart the server).
+const watchData = (): Plugin => ({
+  name: 'watch-data',
   configureServer(server) {
-    const dirs = [`${root}places/`, `${root}public/data/`];
-    server.watcher.add(dirs);
-    const restart = (file: string): void => { if (dirs.some((d) => file.startsWith(d))) void server.restart(); };
+    const dir = `${root}public/data/`;
+    server.watcher.add(dir);
+    const restart = (file: string): void => { if (file.startsWith(dir)) void server.restart(); };
     for (const ev of ['add', 'change', 'unlink'] as const) server.watcher.on(ev, restart);
   },
 });
 
-export default defineConfig(async ({ command }) => ({
+export default defineConfig(({ command }) => ({
   // GitHub Pages serves the site under /<repository>/.
   base: process.env['BASE_PATH'] ?? '/maps/',
-  plugins: [watchPlaces()],
-  build: { rolldownOptions: { input: await generatePages(command === 'build') } },
+  plugins: [watchData()],
+  build: { rolldownOptions: { input: generatePages(command === 'build') } },
 }));

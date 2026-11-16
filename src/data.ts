@@ -57,7 +57,7 @@ export type Building = Ring[];
 export type BBox = [south: number, west: number, north: number, east: number];
 
 export interface MapMeta extends Place {
-  /** File name in places/, without extension. */
+  /** Key of places/index.ts. */
   place: string;
   bbox: BBox;
   /** Metres from the centre to the edge of the square. */

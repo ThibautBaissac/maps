@@ -3,12 +3,17 @@ import type { MapData, MapMeta } from '../data.ts';
 import type { Shell } from '../shell.ts';
 import type { Viewport } from '../toolkit/viewport.ts';
 
+/** What a style prints about its map: the data's meta without the place name, plus the title. */
+export type MountMeta = Omit<MapMeta, 'name'> & {
+  /** The registry title, or the place name (src/catalogue.ts): print this, never data.meta.name. */
+  title: string;
+};
+
 export interface MountArgs<O> {
   /** Empty <div id="stage"> filling the window. */
   container: HTMLElement;
   data: MapData;
-  /** data.meta plus the title (from the registry, or the place name). */
-  meta: MapMeta & { title: string };
+  meta: MountMeta;
   /** The map's options in src/registry.ts, to merge over the style's defaults. */
   options: Partial<O>;
   shell: Shell;

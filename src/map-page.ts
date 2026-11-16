@@ -1,12 +1,12 @@
 // Entry of every generated map page: <body data-map="<id>">. Loads the map's data and
 // style, then hands the stage over to the style's mount().
-import { featureCounts, parseMapData } from './data.ts';
+import { featureCounts, parseMapData, type MapMeta } from './data.ts';
 import { bodyData, element } from './dom.ts';
 import { describeMap } from './map-description.ts';
-import { MAPS, type MapEntryOf } from './registry.ts';
+import { findMap, type CatalogueMapOf } from './catalogue.ts';
 import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
-import { STYLES, type StyleKey, type StyleOptions } from './styles/index.ts';
+import type { StyleKey } from './styles/index.ts';
 import { ZOOM_STEP } from './toolkit/viewport.ts';
 
 declare global {
@@ -16,25 +16,23 @@ declare global {
   }
 }
 
-async function open<K extends StyleKey>(entry: MapEntryOf<K>): Promise<MapHandle> {
-  const style = STYLES[entry.style];
-  const options: Partial<StyleOptions[K]> = entry.options ?? {};
+async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHandle> {
+  const { styleDef: style, options, title } = map;
 
   const shell = createShell({
     label: bodyData('label'),
     colors: style.card(options),
   });
 
-  const url = `${import.meta.env.BASE_URL}data/${entry.place}.json`;
+  const url = `${import.meta.env.BASE_URL}${map.paths.data}`;
   const [styleModule, data] = await Promise.all([
     style.load(),
     fetch(url).then(async (r) => {
-      if (!r.ok) throw new Error(`Missing data for ${entry.place}: HTTP ${r.status}`);
+      if (!r.ok) throw new Error(`Missing data for ${map.placeId}: HTTP ${r.status}`);
       return parseMapData(await r.json(), url);
     }),
   ]);
 
-  const title = entry.title ?? data.meta.name;
   describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, title, style.legend);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
@@ -49,7 +47,7 @@ async function open<K extends StyleKey>(entry: MapEntryOf<K>): Promise<MapHandle
   const handle = await styleModule.mount({
     container: element('#stage', HTMLElement),
     data,
-    meta: { ...data.meta, title },
+    meta: { ...withoutName(data.meta), title },
     options,
     shell,
   });
@@ -67,11 +65,14 @@ async function open<K extends StyleKey>(entry: MapEntryOf<K>): Promise<MapHandle
   return handle;
 }
 
+// Styles get the catalogue title, never the place name copied into the data.
+function withoutName({ name: _, ...rest }: MapMeta): Omit<MapMeta, 'name'> { return rest; }
+
 const id = bodyData('map');
-const entry = MAPS.find((m) => m.id === id);
+const map = findMap(id);
 try {
-  if (!entry) throw new Error(`Unknown map "${id}" (src/registry.ts)`);
-  const handle = await open(entry);
+  if (!map) throw new Error(`Unknown map "${id}" (src/registry.ts)`);
+  const handle = await open(map);
   if (import.meta.env.DEV) window.__map = handle;
   if (window.location.hash === '#vignette') {
     const { captureVignette } = await import('./vignette.ts');

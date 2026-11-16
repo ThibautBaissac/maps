@@ -22,7 +22,8 @@ const STYLES = {
 async function mountStyle(t: Parameters<typeof installPage>[0], style: keyof typeof STYLES, { title = 'Mon quartier', dpr = 1 } = {}) {
   const page = installPage(t, { ...SIZE, dpr });
   const { mount } = await STYLES[style]();
-  const args: MountArgs<object> = { container: page.container, data, meta: { ...data.meta, title }, options: {}, shell: page.shell };
+  const { name: _, ...meta } = data.meta;
+  const args: MountArgs<object> = { container: page.container, data, meta: { ...meta, title }, options: {}, shell: page.shell };
   const handle: MapHandle = await (mount as (a: MountArgs<object>) => Promise<MapHandle>)(args);
   page.cleanup(() => handle.destroy());
   return { ...page, handle };

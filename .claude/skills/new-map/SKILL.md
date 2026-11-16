@@ -1,6 +1,6 @@
 ---
 name: new-map
-description: Ajoute une nouvelle carte au site de cartes illustrées à partir d'un lieu (ville, quartier ou coordonnées) et d'un style (style déjà codé, preset du catalogue, ou description libre). Crée le fichier du lieu, télécharge les données OpenStreetMap, ajoute la carte au registre, code le style s'il n'existe pas encore, vérifie le rendu par captures et commite. À utiliser dès que l'utilisateur veut une nouvelle carte, un nouveau quartier ou une nouvelle ville, un nouveau style graphique ou une variante de couleurs, même s'il ne nomme pas le skill (« fais-moi Lisbonne en gravure », « ajoute Kyoto », « je veux un style néon »).
+description: Ajoute une nouvelle carte au site de cartes illustrées à partir d'un lieu (ville, quartier ou coordonnées) et d'un style (style déjà codé, preset du catalogue, ou description libre). Ajoute le lieu à `places/index.ts`, télécharge les données OpenStreetMap, ajoute la carte au registre, code le style s'il n'existe pas encore, vérifie le rendu par captures et commite. À utiliser dès que l'utilisateur veut une nouvelle carte, un nouveau quartier ou une nouvelle ville, un nouveau style graphique ou une variante de couleurs, même s'il ne nomme pas le skill (« fais-moi Lisbonne en gravure », « ajoute Kyoto », « je veux un style néon »).
 argument-hint: "<lieu> <style ou description du style>"
 ---
 
@@ -8,7 +8,7 @@ argument-hint: "<lieu> <style ou description du style>"
 
 Demande : $ARGUMENTS
 
-Une carte = un **lieu** (`places/<lieu>.ts` + `public/data/<lieu>.json`) × un **style** (`src/styles/<style>/`), déclarée dans `src/registry.ts`. Avant toute chose, lis `src/styles/README.md` (contrat d'un style, format des données, boîte à outils), `src/registry.ts` et `src/styles/index.ts` : ils décrivent l'état réel du projet, qui a pu évoluer depuis l'écriture de ce skill.
+Une carte = un **lieu** (une entrée de `places/index.ts` + `public/data/<lieu>.json`) × un **style** (`src/styles/<style>/`), déclarée dans `src/registry.ts`. Avant toute chose, lis `src/styles/README.md` (contrat d'un style, format des données, boîte à outils), `src/registry.ts` et `src/styles/index.ts` : ils décrivent l'état réel du projet, qui a pu évoluer depuis l'écriture de ce skill.
 
 ## 1. Comprendre la demande
 
@@ -25,13 +25,13 @@ Pose une question seulement si le choix change vraiment le résultat : quartier 
 
 ## 2. Le lieu
 
-Si `places/<id>.ts` existe déjà, réutilise-le. Sinon :
+Si le lieu est déjà une clé de `places/index.ts`, réutilise-le. Sinon :
 
 ```bash
 node .claude/skills/new-map/scripts/new-place.ts --city "<ville>" --district "<quartier>"
 ```
 
-Le script interroge une fois Nominatim (OpenStreetMap) et écrit `places/<id>.ts`. Vérifie que les coordonnées trouvées tombent bien au centre du quartier voulu, pas sur une ville homonyme : le script affiche le lieu trouvé et les autres candidats. Si besoin, relance avec `--lat`/`--lon` (et `--size` pour une zone différente de 2 km).
+Le script interroge une fois Nominatim (OpenStreetMap) et ajoute le lieu à `places/index.ts` (il refuse un id déjà pris). Vérifie que les coordonnées trouvées tombent bien au centre du quartier voulu, pas sur une ville homonyme : le script affiche le lieu trouvé et les autres candidats. Si besoin, relance avec `--lat`/`--lon` (et `--size` pour une zone différente de 2 km).
 
 Puis télécharge les données :
 
@@ -53,7 +53,7 @@ Ajoute l'entrée dans `src/registry.ts` :
 
 L'`id` donne l'URL de la page (`/cartes/<id>/`) : court et lisible. Par défaut `<ville>-<style>`. Si la ville a déjà une carte dans ce style, prends `<ville>-<quartier>-<style>`, et pour une variante ajoute un mot qui la distingue (`amsterdam-riso-vert`). Une demande explicite de l'utilisateur l'emporte.
 
-`npm run build` vérifie strictement le registre : d'abord les types (`tsc -b` : clé de style connue, `options` conformes au `defaults.ts` du style), puis la présence du lieu et des données. En développement, une entrée incomplète est seulement ignorée avec un avertissement dans la console du serveur, et sa page apparaît d'elle-même dès que le lieu et les données existent.
+`npm run build` vérifie strictement le registre : d'abord les types (`tsc -b` : lieu présent dans `places/index.ts`, clé de style connue, `options` conformes au `defaults.ts` du style), puis les données (`src/catalogue.ts`) : présentes, et toujours d'accord avec le lieu (nom, quartier, coordonnées, taille). Si tu modifies un lieu, relance `npm run fetch-data -- <lieu>`. En développement, une entrée en défaut est seulement ignorée avec un avertissement dans la console du serveur, et sa page apparaît d'elle-même dès que les données sont là.
 
 ## 4. Coder un nouveau style
 

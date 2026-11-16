@@ -1,4 +1,4 @@
-// Creates places/<id>.ts for a new place.
+// Adds a new place to places/index.ts.
 //
 //   node .claude/skills/new-map/scripts/new-place.ts --city "Lisbonne" --district "Alfama"
 //   node .claude/skills/new-map/scripts/new-place.ts --city Kyoto --district Gion --lat 35.0037 --lon 135.7788
@@ -7,9 +7,10 @@
 // --id (default: slug of city-district), --name / --district-label (displayed texts),
 // --dry-run (print, write nothing).
 // Without --lat/--lon, the place is geocoded once with OpenStreetMap Nominatim.
-import { access, writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { fail, message } from '../../../../scripts/cli.ts';
+import { PLACES } from '../../../../places/index.ts';
 import { isRecord, isSlug, parsePlace, type Place } from '../../../../src/place.ts';
 
 function parseCli() {
@@ -38,11 +39,10 @@ const city = args.city ?? fail('Missing --city. Example: --city "Lisbonne" --dis
 const slug = (s: string): string => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const id = args.id ?? slug([city, args.district].filter(Boolean).join(' '));
 if (!isSlug(id)) fail(`Invalid id "${id}"`);
-const file = new URL(`../../../../places/${id}.ts`, import.meta.url);
-if (!args['dry-run']) {
-  const exists = await access(file).then(() => true, () => false);
-  if (exists) fail(`places/${id}.ts already exists: reuse it or pass another --id.`);
-}
+if (Object.hasOwn(PLACES, id)) fail(`"${id}" is already in places/index.ts: reuse it or pass another --id.`);
+const indexFile = new URL('../../../../places/index.ts', import.meta.url);
+/** Last line of the PLACES object: new entries go just before it. */
+const CLOSE = '} as const satisfies Record<string, Place>;';
 
 interface NominatimHit { lat: string; lon: string; display_name: string }
 const isHits = (v: unknown): v is NominatimHit[] =>
@@ -77,22 +77,32 @@ const place: Place = parsePlace({
   sizeKm: Number(args.size ?? 2),
 }, 'arguments');
 
-const str = (s: string): string => `'${s.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
-const src = `// A place to map. Download its data with: npm run fetch-data -- ${id}
-// Located from: ${found.replace(/\n/g, ' ')}
-import type { Place } from '../src/place.ts';
-
-export default {
-  name: ${str(place.name)},
-  district: ${str(place.district)},
-  lat: ${place.lat},
-  lon: ${place.lon},
-  sizeKm: ${place.sizeKm},
-} satisfies Place;
+// A string literal for any input (quotes, backslashes, line breaks).
+const str = (s: string): string => JSON.stringify(s);
+const entry = `  // npm run fetch-data -- ${id}
+  // Located from: ${found.replace(/\n/g, ' ')}
+  ${str(id)}: {
+    name: ${str(place.name)},
+    district: ${str(place.district)},
+    lat: ${place.lat},
+    lon: ${place.lon},
+    sizeKm: ${place.sizeKm},
+  },
 `;
-console.log(`id: ${id}\nfound: ${found}\n\n${src}`);
+console.log(`id: ${id}\nfound: ${found}\n\n${entry}`);
 console.log(`Check on a map: https://www.openstreetmap.org/#map=16/${place.lat}/${place.lon}`);
 if (!args['dry-run']) {
-  await writeFile(file, src);
-  console.log(`Written places/${id}.ts`);
+  const source = await readFile(indexFile, 'utf8');
+  const at = source.indexOf(`\n${CLOSE}`);
+  if (at < 0) fail(`places/index.ts: no line "${CLOSE}" to insert before; add the entry by hand.`);
+  await writeFile(indexFile, source.slice(0, at + 1) + entry + source.slice(at + 1));
+  // Read the file back as the site will; put it back as it was if that fails.
+  try {
+    const fresh = (await import(`${indexFile.href}?t=${Date.now()}`)) as { PLACES: Record<string, unknown> };
+    parsePlace(fresh.PLACES[id], `places/index.ts (${id})`);
+  } catch (err) {
+    await writeFile(indexFile, source);
+    fail(`places/index.ts left unchanged: the new entry does not read back (${message(err)}).`);
+  }
+  console.log(`Added ${id} to places/index.ts`);
 }

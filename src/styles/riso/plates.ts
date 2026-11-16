@@ -1,6 +1,7 @@
 // The two printing plates of the riso style:
 // plate A (first ink) = buildings, plate B (second ink) = water, parks, streams, roads.
-import type { Line, MapData, Ring, Road, RoadKind } from '../../data.ts';
+import { isRoadKind, type Line, type Ring, type Road, type RoadKind } from '../../data.ts';
+import { featuresOf, isBridge, isTunnel, type Layer } from '../../layers.ts';
 import { recordOf, typedKeys } from '../../toolkit/geometry.ts';
 import { addLine, addRings, withBox, type Projector, type WithBox } from '../../toolkit/projection.ts';
 import type { InkPatterns } from './inks.ts';
@@ -53,14 +54,20 @@ export interface Plates {
   roads: Record<RoadKind, WithBox<Road>[]>;
 }
 
-export function preparePlates(data: MapData): Plates {
+export function preparePlates(layers: readonly Layer[]): Plates {
   const roads = recordOf(ROAD_ORDER, (): WithBox<Road>[] => []);
-  for (const r of data.roads) roads[r.k].push(withBox(r, [r.p]));
+  for (const f of featuresOf(layers, 'roads', 'lines')) {
+    if (!f.k || !isRoadKind(f.k)) continue;
+    const road: Road = { k: f.k, p: f.g, ...(isBridge(f) && { b: 1 as const }), ...(isTunnel(f) && { u: 1 as const }) };
+    roads[f.k].push(withBox(road, [f.g]));
+  }
+  const areas = (role: 'buildings' | 'water' | 'parks'): WithBox<{ r: Ring[] }>[] =>
+    featuresOf(layers, role, 'areas').map((f) => withBox({ r: f.g }, f.g));
   return {
-    buildings: data.buildings.map((r) => withBox({ r }, r)),
-    water: data.water.map((w) => withBox({ r: w.r }, w.r)),
-    parks: data.parks.map((p) => withBox({ r: p.r }, p.r)),
-    streams: data.waterways.filter((w) => !/^(canal|river)$/.test(w.k) && !w.u).map((w) => withBox({ p: w.p }, [w.p])),
+    buildings: areas('buildings'),
+    water: areas('water'),
+    parks: areas('parks'),
+    streams: featuresOf(layers, 'waterways', 'lines').filter((w) => !/^(canal|river)$/.test(w.k ?? '') && !isTunnel(w)).map((w) => withBox({ p: w.g }, [w.g])),
     roads,
   };
 }

@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import { parseMapData, type MapData } from '../src/data.ts';
 import { DEFAULTS } from '../src/styles/cyanotype/defaults.ts';
 import { prepareMap, renderMap } from '../src/styles/cyanotype/map.ts';
+import { preparePlates, renderPlateA, renderPlateB } from '../src/styles/riso/plates.ts';
 import { makeProjector } from '../src/toolkit/projection.ts';
 import { installPage, recordingContext, type Call } from './dom.ts';
 import type { Layer } from '../src/layers.ts';
@@ -144,3 +145,32 @@ for (const style of ['riso', 'cyanotype'] as const) {
     assert.deepEqual(arcs.map((c) => c.args.slice(0, 3)), [[400, 300, 4]]);
   });
 }
+
+// Riso plates on a small fixture: a bridge, a tunnel, a stream, a canal, a lake, a park and a house.
+// The digest was recorded when the plates were still prepared from the map data and matched
+// the sequence drawn from layers: it guards the drawing of the plates.
+const SMALL: MapData = {
+  meta: data.meta,
+  buildings: [[[-30, -30, -10, -30, -10, -10, -30, -10, -30, -30]]],
+  roads: [
+    { k: 'residential', n: 'A', p: [-50, 0, 50, 0] },
+    { k: 'primary', p: [0, -50, 0, 50], b: 1 },
+    { k: 'footway', p: [-40, 20, 40, 20], u: 1 },
+    { k: 'steps', p: [-40, 30, 40, 30] },
+  ],
+  waterways: [{ k: 'canal', p: [-45, -20, 45, -20] }, { k: 'stream', p: [-45, 10, 45, 10] }, { k: 'ditch', p: [-45, 12, 45, 12], u: 1 }],
+  water: [{ r: [[20, 20, 40, 20, 40, 40, 20, 40, 20, 20]] }],
+  parks: [{ k: 'park', r: [[-40, 25, -20, 25, -20, 45, -40, 45, -40, 25]] }],
+};
+test('riso plates drawn from layers keep their recorded canvas calls', () => {
+  const plates = preparePlates(osmLayers(SMALL));
+  const calls = [0.5, 2.5].flatMap((s) => {
+    const out = canvas();
+    const P = makeProjector({ x: 0, y: 0, s }, 320, 640, 1);
+    renderPlateA(out.ctx, plates, P, '#111');
+    renderPlateB(out.ctx, plates, P, '#222', { lines: '#333', dots: '#444' } as never);
+    return out.calls;
+  });
+  assert.ok(calls.length > 100, 'the recorded sequence is not empty');
+  assert.equal(digest(calls), '41d4b63b13cd370440a59023ef990fdaeae8cf3a');
+});

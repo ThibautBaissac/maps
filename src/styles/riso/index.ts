@@ -40,12 +40,12 @@ interface Env {
   uiKey: string;
 }
 
-export async function mount({ container, data, meta, locale, options, shell, layers, topic }: MountArgs<RisoOptions>): Promise<MapHandle> {
+export async function mount({ container, meta, locale, options, shell, layers, topic }: MountArgs<RisoOptions>): Promise<MapHandle> {
   const o: RisoOptions = { ...DEFAULTS, ...options };
   const ink: Inks = { a: o.inkA, b: o.inkB };
   await loadFont('Bebas Neue', 'bebasneue/BebasNeue-Regular.ttf');
 
-  const plates = preparePlates(data);
+  const plates = preparePlates(layers);
   // Size-independent textures, made once.
   const speckleA = makeSpeckle(11), speckleB = makeSpeckle(23);
   const grainTile = pixelCanvas(256, 256, 5, (r) => { const v = 128 + (r() - 0.5) * 100; return [v, v, v, 255]; });

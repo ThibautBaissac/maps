@@ -117,7 +117,15 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
     for (const { id, path } of m.layers) {
       const file = readData(path);
       if (file === undefined) return `no data for layer "${id}" of ${m.placeId} (${m.id}); run ${relayer}`;
-      const { square } = parseLayerFile(file, path);
+      const { square, layers: parsed } = parseLayerFile(file, path);
+      const declared = layers[m.placeId]?.[id];
+      const found = parsed[0];
+      if (declared && found) {
+        for (const k of ['id', 'kind', 'attribution'] as const) {
+          const want = k === 'id' ? id : declared[k];
+          if (found[k] !== want) return `layer "${id}" of ${m.placeId} does not match places/layers.ts (${m.id}): ${k} differs; run ${relayer}`;
+        }
+      }
       for (const k of ['lat', 'lon', 'sizeKm'] as const) {
         if (square[k] !== place[k]) {
           return `layer "${id}" of ${m.placeId} is out of date (${m.id}): ${k} is ${JSON.stringify(place[k])} in places/index.ts but ${JSON.stringify(square[k])} in the data; run ${relayer}`;

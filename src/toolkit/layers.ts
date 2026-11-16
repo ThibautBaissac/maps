@@ -33,7 +33,7 @@ export function drawLayers(ctx: CanvasRenderingContext2D, P: Projector, layers: 
     ctx.beginPath();
     addRings(ctx, P, g, 0);
     ctx.globalAlpha = AREA_FILL_ALPHA;
-    ctx.fill();
+    ctx.fill('evenodd');
     ctx.globalAlpha = 1;
     ctx.stroke();
   }

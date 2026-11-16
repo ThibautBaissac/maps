@@ -115,7 +115,7 @@ export async function mount({ container, data, meta, locale, options, shell, lay
       b.x.globalAlpha = topic ? 0.45 : 1;
       renderPlateB(b.x, plates, P, ink.b, e.patterns);
       b.x.globalAlpha = 1;
-      drawLayers(b.x, P, layers, { stroke: ink.b, fill: '#FFFFFF', width: 1.5, radius: 4 });
+      drawLayers(b.x, P, layers, { stroke: ink.b, fill: '#FFFFFF', width: o.layerWidth, radius: o.layerRadius });
       if (topic) drawTopic(b.x, topic, P, ink.b, '#FFFFFF');
 
       // Names: paper halo knocked out of both plates, letters in their own ink.

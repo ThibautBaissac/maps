@@ -83,6 +83,14 @@ test('an area layer closes its rings, fills then outlines them', () => {
   assert.ok(names.lastIndexOf('stroke') > names.indexOf('fill'));
 });
 
+test('an area layer fills even-odd, so a hole wound like its ring stays empty', () => {
+  const outer = [-10, -10, 10, -10, 10, 10, -10, 10];
+  const hole = [-5, -5, 5, -5, 5, 5, -5, 5];
+  const fills = drawn([layer('areas', [outer, hole])]).filter((c) => c.method === 'fill');
+  assert.equal(fills.length, 1);
+  assert.deepEqual(fills[0]?.args, ['evenodd']);
+});
+
 test('objects off screen and empty layer lists draw nothing', () => {
   for (const calls of [drawn([layer('points', [5000, 0])]), drawn([layer('lines', [5000, 0, 5010, 0])]), drawn([])]) {
     assert.deepEqual(methods(calls).filter((m) => ['arc', 'moveTo', 'lineTo', 'fill', 'stroke'].includes(m)), []);
@@ -99,6 +107,7 @@ test('the context state is saved and restored around the layers', () => {
   assert.equal(names.at(-1), 'restore');
 });
 
+// The digest is the pre-layers baseline: re-record it after any intentional change to a style's drawing.
 // Digest of every canvas call of a mount with no layer, recorded from the styles as they were
 // before they drew layers: a map without layers must stay as it was.
 function digest(calls: readonly Call[]): string {
@@ -115,5 +124,22 @@ for (const style of ['riso', 'cyanotype'] as const) {
     const handle = await mount({ container: page.container, data, meta: { ...meta, title: 'Test' }, locale: 'fr', options: {}, shell: page.shell, layers: [] } as never);
     page.cleanup(() => handle.destroy());
     assert.equal(digest(page.canvases.flatMap((c) => c.calls)), BASELINE[style]);
+  });
+}
+
+// Each style must draw the layers it is given, on its own canvas: the point at the square's
+// centre lands in the middle of the 800 × 600 stage. Canvas indices follow creation order
+// (riso: plate B; cyanotype: the map).
+const LAYERED_CANVAS = { riso: 5, cyanotype: 1 } as const;
+for (const style of ['riso', 'cyanotype'] as const) {
+  test(`${style} draws an overlay point layer at its projected point`, async (t) => {
+    const page = installPage(t, { width: 800, height: 600 });
+    const { mount } = await import(`../src/styles/${style}/index.ts`) as { mount: (a: never) => Promise<{ destroy(): void }> };
+    const { name: _, ...meta } = data.meta;
+    const layers = [layer('points', [0, 0])];
+    const handle = await mount({ container: page.container, data, meta: { ...meta, title: 'Test' }, locale: 'fr', options: {}, shell: page.shell, layers } as never);
+    page.cleanup(() => handle.destroy());
+    const arcs = page.canvases[LAYERED_CANVAS[style]]?.calls.filter((c) => c.method === 'arc' && c.args[2] === 4) ?? [];
+    assert.deepEqual(arcs.map((c) => c.args.slice(0, 3)), [[400, 300, 4]]);
   });
 }

@@ -72,7 +72,7 @@ export async function mount({ container, data, meta, locale, options, shell, lay
         c.globalCompositeOperation = 'source-over';
       }
       // After the subject's dimming: the layers stay at full strength.
-      drawLayers(c, P, layers, { stroke: o.line, fill: o.paper, width: 1.5, radius: 4 });
+      drawLayers(c, P, layers, { stroke: o.line, fill: o.paper, width: o.layerWidth, radius: o.layerRadius });
       if (topic) {
         drawTopic(c, topic, P, o.line, o.paper);
       }

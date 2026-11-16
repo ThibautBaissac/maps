@@ -16,6 +16,10 @@ export interface CyanotypeOptions {
   road: number;
   /** Park cross-hatching pitch, CSS px. */
   hatch: number;
+  /** Line width of the external layers, CSS px. */
+  layerWidth: number;
+  /** Point radius of the external layers, CSS px. */
+  layerRadius: number;
   /** CSS font-family list. */
   font: string;
 }
@@ -29,5 +33,7 @@ export const DEFAULTS: CyanotypeOptions = {
   building: 0.75,
   road: 0.8,
   hatch: 6,
+  layerWidth: 1.5,
+  layerRadius: 4,
   font: '"Space Mono", ui-monospace, monospace',
 };

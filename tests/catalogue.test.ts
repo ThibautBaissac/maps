@@ -146,6 +146,18 @@ test('a layer file for another square size is out of date', () => {
   assert.equal(problems[0]?.message, 'layer "ponts" of amsterdam-centre is out of date (with-layer): sizeKm is 2 in places/index.ts but 3 in the data; run npm run layers -- amsterdam-centre');
 });
 
+test('a layer file that differs from its declaration is out of date, field by field', () => {
+  const file = (patch: object): unknown => {
+    const f = layerFile() as { layers: object[] };
+    return { ...f, layers: [{ ...f.layers[0], ...patch }] };
+  };
+  const relayer = 'run npm run layers -- amsterdam-centre';
+  for (const [field, patch] of [['id', { id: 'tunnels' }], ['kind', { kind: 'lines', features: [{ g: [0, 0, 5, 5] }] }], ['attribution', { attribution: '© Autre' }]] as const) {
+    const problems = problemsOf([layered()], withLayer(file(patch)), LAYER_REGISTRY);
+    assert.equal(problems[0]?.message, `layer "ponts" of amsterdam-centre does not match places/layers.ts (with-layer): ${field} differs; ${relayer}`);
+  }
+});
+
 test('an invalid layer file is a problem prefixed by its path', () => {
   const problems = problemsOf([layered()], withLayer({ square: 1 }), LAYER_REGISTRY);
   assert.match(problems[0]?.message ?? '', /^data\/amsterdam-centre\/ponts\.json: square must hold/);

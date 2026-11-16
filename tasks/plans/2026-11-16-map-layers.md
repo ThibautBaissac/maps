@@ -506,23 +506,23 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Write the regression test**
+- [x] **Step 1: Write the regression test**
 
   Même méthode que la tâche 10 sur `public/data/lisbonne-alfama.json`, vue `{ x: 0, y: 0, s: 0.5 }`, plus le test existant du pont résidentiel réécrit en couche `roads` (`p: { bridge: true }`), avec la même assertion `lineTo(162, 320)`.
 
-- [ ] **Step 2: Run the test and watch it fail**
+- [x] **Step 2: Run the test and watch it fail**
 
   Run: `node --test tests/rendering.test.ts`
   Expected: FAIL.
 
-- [ ] **Step 3: Migrate cyanotype**
+- [x] **Step 3: Migrate cyanotype**
 
-- [ ] **Step 4: Run and check pixels**
+- [x] **Step 4: Run and check pixels**
 
   Run: `npm test && npm run typecheck`, puis `npm run vignettes -- lisbonne-cyanotype`.
   Expected: PASS ; `git status public/vignettes` vide.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add src/styles/cyanotype tests/rendering.test.ts

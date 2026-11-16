@@ -115,12 +115,14 @@ test('the context state is saved and restored around the layers', () => {
 // The digest is the pre-layers baseline: re-record it after any intentional change to a style's drawing.
 // Digest of every canvas call of a mount with the OpenStreetMap layers only, recorded from the
 // styles as they were before they drew layers: a map without external layers must stay as it was.
+// Numbers are rounded to 0.001 px: Math.pow and friends may differ by one ulp between platforms
+// (macOS arm64 locally, Linux x86 on CI), which a full-precision digest would turn into a failure.
 function digest(calls: readonly Call[]): string {
   const h = createHash('sha1');
-  for (const c of calls) h.update(JSON.stringify([c.method, c.args.map((a) => (typeof a === 'number' || typeof a === 'string' || typeof a === 'boolean' ? a : typeof a))]));
+  for (const c of calls) h.update(JSON.stringify([c.method, c.args.map((a) => (typeof a === 'number' ? Math.round(a * 1000) / 1000 : typeof a === 'string' || typeof a === 'boolean' ? a : typeof a))]));
   return h.digest('hex');
 }
-const BASELINE: Record<string, string> = { riso: 'f35ab5f59f01e75f1546ebc0f64cbafc5076692a', cyanotype: '1b9cacefa6f2532505bf059614d2059cdaeb413a' };
+const BASELINE: Record<string, string> = { riso: 'f1a8f0d3496041c637eda0df71ba456e9995700a', cyanotype: 'ea2d3b2cb02d86018a0c78f264101679623d8402' };
 for (const style of ['riso', 'cyanotype'] as const) {
   test(`${style} makes the same canvas calls as before layers existed when the map has no external layer`, async (t) => {
     const page = installPage(t, { width: 800, height: 600 });
@@ -172,7 +174,7 @@ test('riso plates drawn from layers keep their recorded canvas calls', () => {
     return out.calls;
   });
   assert.ok(calls.length > 100, 'the recorded sequence is not empty');
-  assert.equal(digest(calls), '41d4b63b13cd370440a59023ef990fdaeae8cf3a');
+  assert.equal(digest(calls), '19e67f6524aa4856e44c18c1182c5eef52960b1c');
 });
 
 // Cyanotype map on a small fixture: a bridge, a tunnel, a canal, a stream, a fairway, a lake, a park, a house and stairs.
@@ -200,5 +202,5 @@ test('cyanotype map drawn from layers keeps its recorded canvas calls', (t) => {
     return out.calls;
   });
   assert.ok(calls.length > 100, 'the recorded sequence is not empty');
-  assert.equal(digest(calls), '5292207282756130a3b8be66ca318b1c5152a07d');
+  assert.equal(digest(calls), 'e5bea847c7733e1de8d2905c21627703fdd1f356');
 });

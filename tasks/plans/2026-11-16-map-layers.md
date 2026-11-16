@@ -547,24 +547,24 @@ Phase 2 :
 
 **Risk:** high (migre les données publiées)
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
   `tests/catalogue.test.ts` : `osm.json` dont `square.lat` diffère → `data for amsterdam-centre is out of date (<map id>): lat is 52.3712 in places/index.ts but 52.4 in the data; run npm run fetch-data -- amsterdam-centre` ; sans `fetchedAt` → `data/amsterdam-centre/osm.json has no fetchedAt (<map id>); run npm run fetch-data -- amsterdam-centre`.
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/catalogue.test.ts`
   Expected: FAIL.
 
-- [ ] **Step 3: Convert the committed data without network**
+- [x] **Step 3: Convert the committed data without network**
 
   Script ponctuel dans le scratchpad (non versionné) : pour chaque place, lire `public/data/<place>.json` avec `parseMapData`, écrire `public/data/<place>/osm.json` = `{ square: { lat, lon, sizeKm } du meta, fetchedAt, server, osmTimestamp, layers: osmLayers(data) }`, puis supprimer l'ancien fichier. Mettre à jour les tests qui lisaient l'ancien chemin (`tests/rendering.test.ts`, `tests/topics.test.ts`, `tests/stage.test.ts`, `tests/descriptions.test.ts`) pour lire `osm.json` avec `parseLayerFile`.
 
-- [ ] **Step 4: Run and verify**
+- [x] **Step 4: Run and verify**
 
   Run: `npm test && npm run typecheck && npm run build`, puis `npm run fetch-data -- amsterdam-centre --offline` si le cache `.cache/overpass/` existe (sinon le signaler) et `git diff --stat public/data` : aucune différence attendue. Vignettes des deux cartes régénérées : `git status public/vignettes` vide.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add scripts/fetch-osm.ts places/index.ts src/catalogue.ts src/map-page.ts public/data tests/

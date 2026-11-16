@@ -26,7 +26,7 @@ export interface SheetLayout {
   plate: number;
   /** Title block. */
   cart: Rect;
-  /** "Back to gallery" link. */
+  /** Zoom and description controls. */
   nav: Rect;
   /** OSM attribution. */
   attr: Rect;

@@ -24,7 +24,7 @@ export interface CanvasLayout {
   map: Rect;
   /** Side of the printed square at full zoom-out. */
   plate: number;
-  /** Slot of the HTML group: back link and map controls. */
+  /** Slot of the HTML zoom and description controls. */
   nav: Rect;
   /** Slot of the HTML OSM attribution. */
   attr: Rect;

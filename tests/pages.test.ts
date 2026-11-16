@@ -59,3 +59,17 @@ test('the validated subjects appear in map headings and gallery cards before Jav
   assert.match(galleryHtml('fr', '/maps/'), /Où franchit-on les canaux/);
   assert.match(pageHtml(findMap('amsterdam-riso', 'en')!, 'en', '/maps/'), /Where can you cross the canals/);
 });
+
+test('map navigation precedes the drawing while zoom and description stay with the map', () => {
+  for (const locale of ['fr', 'en', 'es'] as const) for (const id of ['amsterdam-riso', 'lisbonne-cyanotype']) {
+    const html = pageHtml(findMap(id, locale)!, locale, '/maps/');
+    const header = /<header\b[^>]*>([\s\S]*?)<\/header>/.exec(html)?.[1] ?? '';
+    const workspace = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(html)?.[1] ?? '';
+    assert.match(header, /class="back"/);
+    assert.match(header, /class="languages"/);
+    assert.ok(html.indexOf('</header>') < html.indexOf('<main'));
+    assert.doesNotMatch(workspace, /class="back"|class="languages"/);
+    assert.match(workspace, /class="zoom-in"/);
+    assert.match(workspace, /class="description-button"/);
+  }
+});

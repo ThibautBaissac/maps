@@ -35,13 +35,18 @@ export function pageHtml(map: CatalogueMap, locale: Locale, base: string, siteUr
     <link rel="stylesheet" href="/src/map-page.css" />
   </head>
   <body${topic ? ' class="has-topic"' : ''} data-map="${esc(map.id)}" data-label="${esc([topic?.question, copy.label(title, place.district)].filter(Boolean).join(' '))}">
-    ${topic ? `<header class="topic-heading"><p>${esc(text.topic.eyebrow)} · ${esc(title)} / ${esc(place.district)}</p><h1>${esc(topic.question)}</h1></header>` : ''}
+    <header class="topic-heading">
+      <div class="page-navigation">
+        <a class="back" href="${esc(base + pathFor(locale))}">← ${esc(copy.back)}</a>
+        ${topic ? `<div class="topic-titles"><p>${esc(title)} / ${esc(place.district)}</p><h1>${esc(topic.question)}</h1></div>` : ''}
+        ${languageNav(locale, base, map)}
+      </div>
+    </header>
     <main class="map-workspace">
     <div id="stage"></div>
     <p id="map-summary" class="sr-only">${esc(copy.summaryHelp)}</p>
     <p class="loading" role="status">${esc(copy.loading)}</p>
     <div class="map-tools">
-      <a class="back" href="${esc(base + pathFor(locale))}">← ${esc(copy.back)}</a>
       <div class="map-actions">
         <div class="zoom-controls" role="group" aria-label="${esc(copy.zoom)}">
           <button class="zoom-in" type="button" aria-label="${esc(copy.zoomIn)}" disabled>+</button>
@@ -49,7 +54,6 @@ export function pageHtml(map: CatalogueMap, locale: Locale, base: string, siteUr
         </div>
         <button class="description-button" type="button" aria-haspopup="dialog" aria-controls="map-description" disabled>${esc(copy.descriptionButton)}</button>
       </div>
-      ${languageNav(locale, base, map)}
     </div>
     <dialog id="map-description" aria-labelledby="description-title">
       <form method="dialog"><button autofocus>${esc(copy.close)}</button></form>

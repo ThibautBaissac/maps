@@ -17,7 +17,7 @@ export interface Layout {
   map: Rect;
   /** Square plate size at full zoom-out. */
   plate: number;
-  /** "Back to gallery" link and map controls (HTML). */
+  /** Zoom and description controls (HTML). */
   nav: Rect;
   /** OSM attribution (HTML), bottom right of the map window. */
   attr: Rect;
@@ -30,8 +30,8 @@ export interface Layout {
   furniture: Rect[];
 }
 
-/** Height of the back link and navigation buttons (HTML), top-left of the map window. */
-const NAV_H = 144;
+/** Height of the zoom and description controls (HTML), top-left of the map window. */
+const NAV_H = 44;
 /** Size of the OSM attribution (HTML) and its distance to the map window's corner. */
 const ATTR_W = 320, ATTR_H = 48, ATTR_INSET = 6;
 

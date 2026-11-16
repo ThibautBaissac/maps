@@ -1,4 +1,4 @@
-// The thin page frame every map shares: back link, OSM attribution, loading text,
+// The thin page frame every map shares: map controls, OSM attribution, loading text,
 // accessible label and colours. Styles position and theme it, nothing more.
 import { element } from './dom.ts';
 
@@ -15,7 +15,7 @@ export interface ShellTheme {
 export interface Shell {
   /** Accessible description for the focusable element (aria-label). */
   readonly label: string;
-  /** Positions of the back link and the attribution. */
+  /** Positions of the map controls and the attribution. */
   place(p?: { back?: Inset; attribution?: Inset }): void;
   /** Look of the HTML overlays. */
   theme(t?: ShellTheme): void;

@@ -39,7 +39,7 @@ Les styles Canvas existants utilisent `drawTopic()` pour les tronçons et `drawT
 
 ### Ce que tout style doit respecter
 
-- L'attribution OSM et les commandes communes restent visibles : les positionner avec `shell.place(...)` (un style construit sur `mountCanvasMap()` les fait placer par le stage), les habiller avec `shell.theme(...)`, ne jamais les masquer. Réserver la zone de navigation au lien retour, aux boutons de zoom, au bouton de description et aux langues.
+- Le lien retour et les langues restent dans l’en-tête, au-dessus du plan. La zone de commandes du plan contient le zoom et la description. Positionner ce groupe et l’attribution OSM avec `shell.place(...)` (le stage le fait pour `mountCanvasMap()`), les habiller avec `shell.theme(...)` et les garder visibles.
 - La navigation au clavier et à la souris fonctionne (le viewport de la boîte à outils gère les deux).
 - Aucune requête vers un serveur extérieur : les polices vont dans `public/fonts/` avec leur licence et se chargent avec `loadFont()`.
 - S'inspirer d'un genre, jamais copier une œuvre existante.
@@ -47,7 +47,7 @@ Les styles Canvas existants utilisent `drawTopic()` pour les tronçons et `drawT
 ### Shell
 
 - `shell.label` : description accessible à poser sur l'élément focalisable (`aria-label`).
-- `shell.place({ back: { left, top, right, bottom }, attribution: { … } })` : en px CSS ; `back` place le groupe du lien retour et des commandes. Une valeur absente garde le coin par défaut (commandes en haut à gauche, attribution en bas à droite).
+- `shell.place({ back: { left, top, right, bottom }, attribution: { … } })` : en px CSS ; `back` place les commandes de zoom et de description dans le plan. Une valeur absente garde le coin par défaut (commandes en haut à gauche, attribution en bas à droite).
 - `shell.theme({ bg, accent, font })` : couleurs et police des éléments HTML superposés.
 
 ## Données

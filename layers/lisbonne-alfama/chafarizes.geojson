@@ -1,0 +1,215 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.13527757835858,
+     38.7131902112672
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz da Achada",
+    "MORADA": "Largo da Achada"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.13016983367819,
+     38.7109799816238
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz da Rua da Adiça",
+    "MORADA": "Rua da Adiça"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.12948873113295,
+     38.7101478046581
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz da Rua da Judiaria",
+    "MORADA": "Rua da Judiaria"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.12957851018964,
+     38.7109962287014
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz das Escadinhas de São Miguel",
+    "MORADA": "Beco de São Miguel, Escadinhas de São Miguel"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.12812568719027,
+     38.7112965222701
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz de Dentro",
+    "MORADA": "Largo do Chafariz de Dentro"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.12946720784253,
+     38.7097258030554
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz d'El Rey",
+    "MORADA": "Rua do Cais de Santarém"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.13412593082652,
+     38.7112309216164
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz do Caldas",
+    "MORADA": "Rua de São Mamede"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.13574049141283,
+     38.7199175584767
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz do Intendente ou do Desterro",
+    "MORADA": "Rua da Palma"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.13034307375871,
+     38.7117852920606
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz do Jardim Júlio de Castilho",
+    "MORADA": "Largo de Santa Luzia, Jardim Júlio de Castilho"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.12934134161371,
+     38.7104135452026
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz do Largo de São Rafael",
+    "MORADA": "Largo de São Rafael"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.12821061257367,
+     38.7150373323047
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz do Largo de São Vicente",
+    "MORADA": "Largo de São Vicente, Arco Grande de Cima"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.12256115627186,
+     38.7158721077889
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz do Largo Dr. Bernardino António Gomes (Pai)",
+    "MORADA": "Largo Dr. Bernardino António Gomes (Pai)"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.13266340635662,
+     38.7189760417589
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz do Miradouro da Senhora do Monte",
+    "MORADA": "Largo do Monte"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.13045495111499,
+     38.7114796239809
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz do Miradouro de Santa Luzia",
+    "MORADA": "Largo de Santa Luzia, (Miradouro)"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -9.12964631791482,
+     38.7171529767015
+    ]
+   },
+   "properties": {
+    "DESIGNACAO": "Chafariz no Largo da Graça",
+    "MORADA": "Largo da Graça, Rua da Voz do Operário"
+   }
+  }
+ ]
+}

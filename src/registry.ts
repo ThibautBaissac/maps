@@ -28,5 +28,5 @@ export type MapEntry = { [K in StyleKey]: MapEntryOf<K> }[StyleKey];
 
 export const MAPS: readonly MapEntry[] = [
   { id: 'amsterdam-riso', place: 'amsterdam-centre', style: 'riso', topic: 'canal-crossings' },
-  { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', topic: 'steps' },
+  { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', topic: 'steps', layers: ['chafarizes'], options: { layerRadius: 6, layerWidth: 2 } },
 ];

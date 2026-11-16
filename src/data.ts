@@ -5,10 +5,14 @@ import { isRecord, type Place } from './place.ts';
 
 /** Flat polyline [x0, y0, x1, y1, …]. */
 export type Line = number[];
-/** Flat closed ring [x0, y0, x1, y1, …] (last point not repeated). */
+/**
+ * Flat ring [x0, y0, x1, y1, …]. Rings drawn from OSM ways repeat their first point at the end;
+ * sea rings rebuilt from the coastline and rings of incomplete relations may not: close the
+ * path yourself rather than rely on the repeat.
+ */
 export type Ring = number[];
 
-/** OSM highway values kept by fetch-osm. */
+/** OSM highway values kept by the conversion (scripts/osm.ts). */
 export const ROAD_KINDS = [
   'motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'unclassified', 'residential',
   'motorway_link', 'trunk_link', 'primary_link', 'secondary_link', 'tertiary_link',

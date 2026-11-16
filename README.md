@@ -27,6 +27,7 @@ src/map-page.ts, shell.ts page commune : charge les données et le style, lien r
 src/data.ts, place.ts     types des données et des lieux, partagés avec les scripts Node
 src/gallery/              la page d'accueil : une bande verticale par carte
 scripts/fetch-osm.ts      téléchargement des données d'un lieu
+scripts/osm.ts            conversion d'une réponse Overpass en données de carte (pure, testée)
 scripts/vignettes.ts      image de chaque carte pour la galerie (Chrome headless)
 ```
 

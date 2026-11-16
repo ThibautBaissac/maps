@@ -41,7 +41,7 @@ npm run fetch-data -- <id>
 
 Les serveurs Overpass publics sont souvent surchargés. Le script les essaie tous, deux tours de suite, avec une pause entre les deux (jusqu'à une dizaine de minutes en cas d'échec) : lance-le en arrière-plan. S'il échoue quand même, relance-le une fois quelques minutes plus tard. Si ce second essai échoue aussi, arrête-toi et explique le problème à l'utilisateur plutôt que d'inventer des données. Au-delà d'environ 8 Mo de JSON, propose une zone plus petite : le chargement de la page en souffrirait.
 
-Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.org autour du lieu, surtout l'eau : mer, estuaire, fleuve, lac. Le script reconstitue la mer à partir du littoral (`natural=coastline`). Si une étendue d'eau visible sur OSM manque dans `water`, c'est un manque du script à corriger dans `scripts/fetch-osm.ts`, et à documenter dans `src/styles/README.md`, avant de dessiner.
+Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.org autour du lieu, surtout l'eau : mer, estuaire, fleuve, lac. Le script reconstitue la mer à partir du littoral (`natural=coastline`). Si une étendue d'eau visible sur OSM manque dans `water`, c'est un manque de la conversion à corriger dans `scripts/osm.ts` (requête Overpass et règles de classement, avec un test dans `tests/osm.test.ts`), et à documenter dans `src/styles/README.md`, avant de dessiner.
 
 ## 3. Le registre
 

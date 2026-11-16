@@ -50,7 +50,7 @@ La page branche ses boutons de zoom sur le champ facultatif `viewport` de `MapHa
 
 Les types font foi : `MapData` et ses éléments dans `src/data.ts`, `Place` dans `src/place.ts`. Les deux tournent aussi sous Node (`scripts/fetch-osm.ts`, `vite.config.ts`) : ni DOM ni API Node dedans.
 
-`data.meta` : `name`, `district`, `lat`, `lon`, `sizeKm`, `half` (mètres du centre au bord du carré), `attribution`, date de téléchargement. Les coordonnées sont en mètres locaux, x vers l'est, y vers le nord, origine au centre du lieu ; les géométries sont des tableaux plats `[x0, y0, x1, y1, …]`.
+`data.meta` : `name`, `district`, `lat`, `lon`, `sizeKm`, `half` (mètres du centre au bord du carré), `attribution`, date de téléchargement. Les coordonnées sont en mètres locaux, x vers l'est, y vers le nord, origine au centre du lieu ; les géométries sont des tableaux plats `[x0, y0, x1, y1, …]`. Un anneau tiré d'un chemin OSM répète son premier point à la fin, mais pas forcément un anneau de mer reconstitué à partir du littoral, ni celui d'une relation incomplète : fermer le tracé soi-même (`closePath()`) plutôt que compter sur cette répétition.
 
 | Clé | Éléments |
 |---|---|

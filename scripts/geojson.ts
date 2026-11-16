@@ -2,7 +2,7 @@
 // what touches its square. Pure: no file, no process, no console.
 // scripts/build-layers.ts reads the source files and writes the layer files.
 import { localProjection, survey } from '../src/geo.ts';
-import { parseLayer, type Feature, type Layer, type LayerKind, type LayerSource, type Scalar } from '../src/layers.ts';
+import { isScalar, parseLayer, type Feature, type Layer, type LayerKind, type LayerSource, type Scalar } from '../src/layers.ts';
 import { isRecord, type Place } from '../src/place.ts';
 import type { Point } from '../src/toolkit/geometry.ts';
 
@@ -16,7 +16,6 @@ const GEOMETRIES: Record<LayerKind, readonly [string, string]> = {
   areas: ['Polygon', 'MultiPolygon'],
 };
 
-const isScalar = (v: unknown): v is Scalar => typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean';
 const text = (v: unknown): string | undefined => (typeof v === 'string' && v ? v : undefined);
 
 export function geojsonLayer(json: unknown, place: Place, id: string, spec: LayerSource): Layer {
@@ -78,11 +77,18 @@ export function geojsonLayer(json: unknown, place: Place, id: string, spec: Laye
 
 // Whether the bounding box of a geometry meets the square [-half, half]²: lines and areas
 // leaving the square are kept whole, those entirely outside are dropped.
+// This is a bounding-box approximation: a diagonal line clipping only a corner of its box
+// is kept although it never enters the square; the styles cull it at draw time.
 function touchesSquare(part: Part, half: number): boolean {
-  const xs: number[] = [];
-  const ys: number[] = [];
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
   for (const flat of Array.isArray(part[0]) ? (part as number[][]) : [part as number[]]) {
-    for (let i = 0; i + 1 < flat.length; i += 2) xs.push(flat[i]!), ys.push(flat[i + 1]!);
+    for (let i = 0; i + 1 < flat.length; i += 2) {
+      const x = flat[i]!, y = flat[i + 1]!;
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    }
   }
-  return Math.min(...xs) <= half && Math.max(...xs) >= -half && Math.min(...ys) <= half && Math.max(...ys) >= -half;
+  return minX <= half && maxX >= -half && minY <= half && maxY >= -half;
 }

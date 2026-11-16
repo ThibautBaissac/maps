@@ -1,9 +1,6 @@
 import type { Line, Ring, Water } from '../src/data.ts';
 import { r1 } from '../src/geo.ts';
 
-// Kept exported here for the modules that import it from this file.
-export { r1 };
-
 // Coordinate pairs are complete in the OSM data, hence the bounded index assertions.
 /** The point at index i of a line, as a string to match endpoints. */
 export const endpointKey = (a: Line, i: number): string => `${a[i]},${a[i + 1]}`;

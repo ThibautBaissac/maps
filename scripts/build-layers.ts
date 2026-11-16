@@ -19,6 +19,7 @@ if (!SPECS.length) fail(`No layers for ${PLACE} (places/layers.ts)`);
 
 const counts: Record<string, number> = {};
 for (const [id, spec] of SPECS) {
+  if (id === 'osm') fail(`layer id "osm" is reserved (${PLACE})`);
   const source = new URL(`../${spec.file}`, import.meta.url);
   const text = await readFile(source, 'utf8').catch(() => fail(`${id}: cannot read ${spec.file}`));
   let layer;

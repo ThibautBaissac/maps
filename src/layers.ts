@@ -75,7 +75,7 @@ export interface LayerSource {
 
 const isKind = (v: unknown): v is LayerKind => (LAYER_KINDS as readonly unknown[]).includes(v);
 const isRole = (v: unknown): v is LayerRole => (LAYER_ROLES as readonly unknown[]).includes(v);
-const isScalar = (v: unknown): v is Scalar => typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean';
+export const isScalar = (v: unknown): v is Scalar => typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean';
 
 /** A flat array of at least `min` [x, y] pairs, as a polyline or a ring. */
 const isFlat = (v: unknown, min: number): v is number[] => Array.isArray(v) && v.length % 2 === 0 && v.length >= min * 2;

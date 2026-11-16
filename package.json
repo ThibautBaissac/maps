@@ -13,6 +13,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "fetch-data": "node scripts/fetch-osm.ts",
+    "layers": "node scripts/build-layers.ts",
     "vignettes": "node scripts/vignettes.ts"
   },
   "devDependencies": {

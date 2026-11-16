@@ -35,7 +35,7 @@ export async function mount({ container, data, meta, locale, options, shell, lay
   const M = prepareMap(data);
   const half = data.meta.half;
 
-  return mountCanvasMap<Env, NameKind>({ container, data, shell, ...(topic ? { topic } : {}) }, {
+  return mountCanvasMap<Env, NameKind>({ container, layers, meta, shell, ...(topic ? { topic } : {}) }, {
     font: o.font,
 
     labels(view, names) {

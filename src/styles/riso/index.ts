@@ -71,7 +71,7 @@ export async function mount({ container, data, meta, locale, options, shell, lay
     compose(e.ui.x, a.c, b.c, dpr);
   }
 
-  return mountCanvasMap<Env, Plate>({ container, data, shell, ...(topic ? { topic } : {}) }, {
+  return mountCanvasMap<Env, Plate>({ container, layers, meta, shell, ...(topic ? { topic } : {}) }, {
     font: FONT,
     blend: 'multiply',
 

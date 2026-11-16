@@ -71,11 +71,11 @@ export interface CanvasStyle<E extends CanvasEnv, K extends string> {
  * if the container has a size (otherwise on its first resize): vignette capture relies on it.
  */
 export function mountCanvasMap<E extends CanvasEnv, K extends string>(
-  { container, data, shell, topic }: Pick<MountArgs<unknown>, 'container' | 'data' | 'shell' | 'topic'>,
+  { container, layers, meta, shell, topic }: Pick<MountArgs<unknown>, 'container' | 'layers' | 'meta' | 'shell' | 'topic'>,
   style: CanvasStyle<E, K>,
 ): MapHandle {
-  const half = data.meta.half + PLATE_MARGIN;
-  const names = prepareLabels(data);
+  const half = meta.half + PLATE_MARGIN;
+  const names = prepareLabels(layers);
   const canvas = createStageCanvas(container, shell.label);
   const ctx = context2d(canvas);
   let sized: { env: E; layout: CanvasLayout; dpr: number; W: number; H: number; avoid: Rect[] } | null = null; // state for the current size

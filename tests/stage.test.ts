@@ -10,6 +10,7 @@ import { computeLayout } from '../src/toolkit/layout.ts';
 import { installPage, nameGlyphs, type FakeCanvas } from './dom.ts';
 import type { Locale } from '../src/i18n/index.ts';
 import { osmLayers } from '../src/osm-layers.ts';
+import { prepareLabels } from '../src/toolkit/labels.ts';
 import { analyseTopic } from '../src/topics.ts';
 
 const data = parseMapData(JSON.parse(readFileSync(new URL('../public/data/amsterdam-centre.json', import.meta.url), 'utf8')), 'fixture');
@@ -26,7 +27,7 @@ async function mountStyle(t: Parameters<typeof installPage>[0], style: keyof typ
   const page = installPage(t, { width, height, dpr });
   const { mount } = await STYLES[style]();
   const { name: _, ...meta } = data.meta;
-  const args: MountArgs<object> = { container: page.container, data, meta: { ...meta, title }, locale, options: {}, shell: page.shell, layers: [] };
+  const args: MountArgs<object> = { container: page.container, data, meta: { ...meta, title }, locale, options: {}, shell: page.shell, layers: osmLayers(data) };
   const handle: MapHandle = await (mount as (a: MountArgs<object>) => Promise<MapHandle>)(args);
   page.cleanup(() => handle.destroy());
   return { ...page, handle };
@@ -63,7 +64,7 @@ for (const style of ['riso', 'cyanotype'] as const) {
     const map = { ...data, roads: [{ k: 'steps' as const, n: 'Escadinhas', p: [-20, 0, 20, 0] }], buildings: [], parks: [], waterways: [], water: [] };
     const { name: _, ...meta } = map.meta;
     const { mount } = await STYLES[style]();
-    const handle = await mount({ container: page.container, shell: page.shell, data: map, meta: { ...meta, title: 'Test' }, options: {}, locale: 'fr', layers: [], topic: analyseTopic(map.meta, osmLayers(map), 'steps') });
+    const handle = await mount({ container: page.container, shell: page.shell, data: map, meta: { ...meta, title: 'Test' }, options: {}, locale: 'fr', layers: osmLayers(map), topic: analyseTopic(map.meta, osmLayers(map), 'steps') });
     page.cleanup(() => handle.destroy());
     for (const c of page.canvases) c.calls.length = 0;
     Object.assign(handle.viewport!.view, { x: 0, y: 0, s: 0.1 });
@@ -135,3 +136,22 @@ for (const style of ['riso', 'cyanotype'] as const) {
     assert.deepEqual(hidden, []);
   });
 }
+
+test('names come from the road and waterway layers, tunnels left out, with the usual weights', () => {
+  const layers = osmLayers({
+    ...data, buildings: [], parks: [], water: [],
+    roads: [
+      { k: 'residential', n: 'Damrak', p: [0, 0, 50, 0] },
+      { k: 'residential', n: 'Under', u: 1, p: [0, 10, 50, 10] },
+      { k: 'footway', n: 'Pad', p: [0, 20, 50, 20] },
+    ],
+    waterways: [
+      { k: 'canal', n: 'Singel', p: [0, 0, 0, 50] },
+      { k: 'canal', n: 'Buried', u: 1, p: [5, 0, 5, 50] },
+      { k: 'stream', n: 'Beek', p: [9, 0, 9, 50] },
+    ],
+  });
+  const names = prepareLabels(layers);
+  assert.deepEqual(names.streets.map((s) => s.name), ['Damrak']);
+  assert.deepEqual(names.canals.map((c) => c.name), ['Singel']);
+});

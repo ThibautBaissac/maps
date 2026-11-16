@@ -109,8 +109,8 @@ test('the context state is saved and restored around the layers', () => {
 });
 
 // The digest is the pre-layers baseline: re-record it after any intentional change to a style's drawing.
-// Digest of every canvas call of a mount with no layer, recorded from the styles as they were
-// before they drew layers: a map without layers must stay as it was.
+// Digest of every canvas call of a mount with the OpenStreetMap layers only, recorded from the
+// styles as they were before they drew layers: a map without external layers must stay as it was.
 function digest(calls: readonly Call[]): string {
   const h = createHash('sha1');
   for (const c of calls) h.update(JSON.stringify([c.method, c.args.map((a) => (typeof a === 'number' || typeof a === 'string' || typeof a === 'boolean' ? a : typeof a))]));
@@ -118,11 +118,11 @@ function digest(calls: readonly Call[]): string {
 }
 const BASELINE: Record<string, string> = { riso: 'f35ab5f59f01e75f1546ebc0f64cbafc5076692a', cyanotype: '1b9cacefa6f2532505bf059614d2059cdaeb413a' };
 for (const style of ['riso', 'cyanotype'] as const) {
-  test(`${style} makes the same canvas calls as before layers existed when the map has none`, async (t) => {
+  test(`${style} makes the same canvas calls as before layers existed when the map has no external layer`, async (t) => {
     const page = installPage(t, { width: 800, height: 600 });
     const { mount } = await import(`../src/styles/${style}/index.ts`) as { mount: (a: never) => Promise<{ destroy(): void }> };
     const { name: _, ...meta } = data.meta;
-    const handle = await mount({ container: page.container, data, meta: { ...meta, title: 'Test' }, locale: 'fr', options: {}, shell: page.shell, layers: [] } as never);
+    const handle = await mount({ container: page.container, data, meta: { ...meta, title: 'Test' }, locale: 'fr', options: {}, shell: page.shell, layers: osmLayers(data) } as never);
     page.cleanup(() => handle.destroy());
     assert.equal(digest(page.canvases.flatMap((c) => c.calls)), BASELINE[style]);
   });
@@ -137,7 +137,7 @@ for (const style of ['riso', 'cyanotype'] as const) {
     const page = installPage(t, { width: 800, height: 600 });
     const { mount } = await import(`../src/styles/${style}/index.ts`) as { mount: (a: never) => Promise<{ destroy(): void }> };
     const { name: _, ...meta } = data.meta;
-    const layers = [layer('points', [0, 0])];
+    const layers = [...osmLayers(data), layer('points', [0, 0])];
     const handle = await mount({ container: page.container, data, meta: { ...meta, title: 'Test' }, locale: 'fr', options: {}, shell: page.shell, layers } as never);
     page.cleanup(() => handle.destroy());
     const arcs = page.canvases[LAYERED_CANVAS[style]]?.calls.filter((c) => c.method === 'arc' && c.args[2] === 4) ?? [];

@@ -1,6 +1,7 @@
 // Street and waterway name placement along their lines (style-independent).
 // Styles decide which names, sizes and inks; they also draw the returned glyphs.
-import type { Line, MapData, RoadKind } from '../data.ts';
+import type { Line, RoadKind } from '../data.ts';
+import { featuresOf, isTunnel, type Layer } from '../layers.ts';
 import type { Point, Rect } from './geometry.ts';
 import type { Projector } from './projection.ts';
 
@@ -52,7 +53,7 @@ export interface LabelJob<K extends string> {
   glyphs: Glyph[];
 }
 
-interface Named { n?: string; p: Line }
+interface Named { n?: string; g: Line }
 
 // Joins open polylines sharing endpoints into longer chains.
 function joinChains(lines: readonly Line[]): Chain[] {
@@ -92,7 +93,7 @@ function group<T extends Named>(items: readonly T[], weightOf: (it: T) => number
     if (!it.n || !w) continue;
     const g = m.get(it.n) ?? { name: it.n, w: 0, lines: [] };
     g.w = Math.max(g.w, w);
-    g.lines.push(it.p);
+    g.lines.push(it.g);
     m.set(it.n, g);
   }
   return [...m.values()].map((g) => {
@@ -102,9 +103,9 @@ function group<T extends Named>(items: readonly T[], weightOf: (it: T) => number
   }).sort((a, b) => b.score - a.score);
 }
 
-export function prepareLabels(data: MapData): Labels {
-  const streets = group(data.roads.filter((r) => !r.u), (r) => STREET_WEIGHT[r.k] ?? 0).slice(0, 90);
-  const canals = group(data.waterways.filter((w) => !w.u), (w) => (/^(canal|river|fairway)$/.test(w.k) ? 1 : 0)).slice(0, 40);
+export function prepareLabels(layers: readonly Layer[]): Labels {
+  const streets = group(featuresOf(layers, 'roads', 'lines').filter((r) => !isTunnel(r)), (r) => STREET_WEIGHT[r.k as RoadKind] ?? 0).slice(0, 90);
+  const canals = group(featuresOf(layers, 'waterways', 'lines').filter((w) => !isTunnel(w)), (w) => (/^(canal|river|fairway)$/.test(w.k ?? '') ? 1 : 0)).slice(0, 40);
   return { streets, canals };
 }
 

@@ -1,0 +1,29 @@
+# Repository Guidelines
+
+## Project Structure & Module Organization
+
+The application is a static TypeScript 7 site built with Vite. Browser code lives in `src/`. Shared map rendering helpers belong in `src/toolkit/`; visual implementations belong in `src/styles/<style>/`; translations belong in `src/i18n/`. Keep place metadata in `places/index.ts` and map registrations in `src/registry.ts`.
+
+Node scripts live in `scripts/`. Tests live in `tests/` and mirror the domain they cover, such as `tests/catalogue.test.ts`. Store committed OpenStreetMap extracts in `public/data/`, local fonts in `public/fonts/`, and gallery images in `public/vignettes/<locale>/`. Vite generates localized page directories during development and build; do not commit them.
+
+## Build, Test, and Development Commands
+
+- `npm ci`: install the locked dependencies. Use Node 24 or newer.
+- `npm run dev`: start the Vite development server at `/maps/`.
+- `npm test`: run all Node test-runner suites.
+- `npm run typecheck`: check strict TypeScript without emitting files.
+- `npm run build`: type-check, validate translations and map data, then create `dist/`.
+- `npm run fetch-data -- <place-id>`: download and convert OpenStreetMap data for a registered place.
+- `npm run vignettes -- <map-id>`: regenerate localized gallery images while the development server runs.
+
+## Coding Style & Naming Conventions
+
+Use two-space indentation, single quotes, semicolons, and ESM imports with explicit `.ts` extensions. Follow the strict options in `tsconfig.base.json`; avoid `any` and handle indexed access explicitly. Use `camelCase` for variables and functions, `PascalCase` for types, and kebab-case for map, place, and style identifiers. Keep browser-free domain types reusable by both Vite and Node scripts.
+
+## Testing Guidelines
+
+Use `node:test` with `node:assert/strict`. Name files `<subject>.test.ts` and describe observable behavior in each test title. Add regression tests for bug fixes and unit tests for pure conversion, catalogue, translation, layout, or rendering logic. The repository has no numeric coverage threshold. Run `npm test` and `npm run build` before submitting changes.
+
+## Commit & Pull Request Guidelines
+
+Write short imperative commit subjects, matching history: `Add French, English and Spanish localization`. Keep each commit focused. Pull requests should explain the user-visible result, list validation commands, and link related issues. Include screenshots for gallery, map, responsive, or localization changes. Note regenerated data or vignettes and commit those outputs. Confirm keyboard navigation and readable descriptions for interface changes.

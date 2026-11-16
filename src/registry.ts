@@ -17,6 +17,8 @@ export interface MapEntryOf<K extends StyleKey> {
   topic: TopicId;
   /** Defaults to the place name. */
   title?: LocalizedText;
+  /** Ids of the external layers of the place (places/layers.ts) drawn over the map. */
+  layers?: readonly string[];
   /** Style settings (see the style's defaults.ts). */
   options?: Partial<StyleOptions[K]>;
 }

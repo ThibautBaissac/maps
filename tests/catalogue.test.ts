@@ -113,3 +113,54 @@ test('a map without a subject is refused before page generation', () => {
   assert.match(problemsOf([missing], () => ({ meta: AMSTERDAM_META }))[0]?.message ?? '', /missing topic/);
   assert.deepEqual(catalogueOf([missing]), []);
 });
+
+// External layers: the registry injected into problemsOf and catalogueOf stands for places/layers.ts.
+const SPEC = { title: { fr: 'Ponts', en: 'Bridges', es: 'Puentes' }, file: 'layers/amsterdam-centre/ponts.geojson', kind: 'points', role: 'overlay', attribution: '© Ville d’Amsterdam' } as const;
+const LAYER_REGISTRY = { 'amsterdam-centre': { ponts: SPEC } } as const;
+const layerFile = (sizeKm = 2): unknown => ({
+  square: { lat: 52.3712, lon: 4.8936, sizeKm },
+  layers: [{ id: 'ponts', kind: 'points', role: 'overlay', attribution: '© Ville d’Amsterdam', source: 'layers/amsterdam-centre/ponts.geojson', features: [{ g: [0, 0], n: 'Magere Brug' }] }],
+});
+const withLayer = (file: unknown) => (path: string): unknown => path === 'data/amsterdam-centre/ponts.json' ? file : { meta: AMSTERDAM_META };
+const layered = (id = 'with-layer'): MapEntry => entry(id, { layers: ['ponts'] });
+
+test('a map naming a layer the place does not declare is a problem listing the known layers', () => {
+  const problems = problemsOf([entry('amsterdam-test', { layers: ['tunnels'] })], withLayer(layerFile()), LAYER_REGISTRY);
+  assert.equal(problems[0]?.message, 'unknown layer "tunnels" for amsterdam-centre (amsterdam-test); known: ponts');
+});
+
+test('layer ids "osm" and not-a-slug are refused', () => {
+  const reserved = problemsOf([layered()], withLayer(layerFile()), { 'amsterdam-centre': { osm: SPEC } });
+  assert.equal(reserved[0]?.message, 'layer id "osm" is reserved (amsterdam-centre)');
+  const invalid = problemsOf([layered()], withLayer(layerFile()), { 'amsterdam-centre': { Ponts: SPEC } });
+  assert.equal(invalid[0]?.message, 'invalid layer id "Ponts" for amsterdam-centre (use a-z, 0-9 and -)');
+});
+
+test('a layer without its file is a problem that says how to convert it', () => {
+  const problems = problemsOf([layered()], withLayer(undefined), LAYER_REGISTRY);
+  assert.equal(problems[0]?.message, 'no data for layer "ponts" of amsterdam-centre (with-layer); run npm run layers -- amsterdam-centre');
+});
+
+test('a layer file for another square size is out of date', () => {
+  const problems = problemsOf([layered()], withLayer(layerFile(3)), LAYER_REGISTRY);
+  assert.equal(problems[0]?.message, 'layer "ponts" of amsterdam-centre is out of date (with-layer): sizeKm is 2 in places/index.ts but 3 in the data; run npm run layers -- amsterdam-centre');
+});
+
+test('an invalid layer file is a problem prefixed by its path', () => {
+  const problems = problemsOf([layered()], withLayer({ square: 1 }), LAYER_REGISTRY);
+  assert.match(problems[0]?.message ?? '', /^data\/amsterdam-centre\/ponts\.json: square must hold/);
+});
+
+test('a valid layer file is no problem, and the catalogue lists the layer and its attribution', () => {
+  assert.deepEqual(problemsOf([layered()], withLayer(layerFile()), LAYER_REGISTRY), []);
+  const [m] = catalogueOf([layered(), ], 'fr', LAYER_REGISTRY);
+  assert.deepEqual(m?.layers, [{ id: 'ponts', title: 'Ponts', path: 'data/amsterdam-centre/ponts.json' }]);
+  assert.deepEqual(m?.attributions, ['© Ville d’Amsterdam']);
+  assert.equal(catalogueOf([layered()], 'en', LAYER_REGISTRY)[0]?.layers[0]?.title, 'Bridges');
+});
+
+test('a map without layers has none and no extra attribution', () => {
+  const [m] = catalogueOf([entry('plain')]);
+  assert.deepEqual(m?.layers, []);
+  assert.deepEqual(m?.attributions, []);
+});

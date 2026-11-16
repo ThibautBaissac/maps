@@ -3,6 +3,7 @@ import type { MapData, MapMeta } from '../data.ts';
 import type { Shell } from '../shell.ts';
 import type { Viewport } from '../toolkit/viewport.ts';
 import type { Locale } from '../i18n/index.ts';
+import type { Layer } from '../layers.ts';
 import type { TopicAnalysis } from '../topics.ts';
 
 /** What a style prints about its map: the data's meta without the place name, plus the title. */
@@ -20,6 +21,8 @@ export interface MountArgs<O> {
   /** The map's options in src/registry.ts, to merge over the style's defaults. */
   options: Partial<O>;
   shell: Shell;
+  /** The external layers of the map, in the registry order; empty without any. */
+  layers: readonly Layer[];
   /** Geographic evidence used by both the thematic drawing and its text. */
   topic?: TopicAnalysis;
 }

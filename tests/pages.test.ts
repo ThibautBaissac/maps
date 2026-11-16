@@ -73,3 +73,14 @@ test('map navigation precedes the drawing while zoom and description stay with t
     assert.match(workspace, /class="description-button"/);
   }
 });
+
+test('the attribution line adds the credits of the external layers after the OpenStreetMap link', () => {
+  const map = { ...findMap('amsterdam-riso', 'fr')!, attributions: ['© Ville d’Amsterdam', '<b>&'] };
+  const html = pageHtml(map, 'fr', '/maps/');
+  assert.match(html, /<small class="attribution"><a href="https:\/\/www\.openstreetmap\.org\/copyright" target="_blank" rel="noopener">© contributeurs OpenStreetMap<\/a> · © Ville d’Amsterdam · &lt;b&gt;&amp;<\/small>/);
+});
+
+test('without layers the attribution line is the OpenStreetMap link alone', () => {
+  const html = pageHtml(findMap('amsterdam-riso', 'fr')!, 'fr', '/maps/');
+  assert.ok(html.includes('<small class="attribution"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© contributeurs OpenStreetMap</a></small>'));
+});

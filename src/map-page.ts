@@ -4,6 +4,7 @@ import { featureCounts, parseMapData, type MapMeta } from './data.ts';
 import { bodyData, element } from './dom.ts';
 import { describeMap } from './map-description.ts';
 import { findMap, type CatalogueMapOf } from './catalogue.ts';
+import { parseLayerFile, type Layer } from './layers.ts';
 import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
@@ -32,17 +33,25 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   });
 
   const url = `${import.meta.env.BASE_URL}${map.paths.data}`;
-  const [styleModule, data] = await Promise.all([
+  const [styleModule, data, layerSets] = await Promise.all([
     style.load(),
     fetch(url).then(async (r) => {
       if (!r.ok) throw new Error(`Missing data for ${map.placeId}: HTTP ${r.status}`);
       return parseMapData(await r.json(), url);
     }),
+    Promise.all(map.layers.map(async ({ id, path }) => {
+      const layerUrl = `${import.meta.env.BASE_URL}${path}`;
+      const r = await fetch(layerUrl);
+      if (!r.ok) throw new Error(`Missing layer ${id} for ${map.placeId}: HTTP ${r.status}`);
+      return { id, layers: parseLayerFile(await r.json(), layerUrl).layers };
+    })),
   ]);
+  const layers: Layer[] = layerSets.flatMap((set) => set.layers);
+  const overlays = layerSets.flatMap((set, i) => set.layers.map((layer) => ({ title: map.layers[i]?.title ?? set.id, layer })));
 
   const meta = { ...withoutName(data.meta), title, district: map.place.district };
   const topic = map.topic ? analyseTopic(data, map.topic) : undefined;
-  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, meta, style.legend, locale, topic);
+  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, meta, style.legend, locale, topic, overlays);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
   description.disabled = false;
@@ -60,6 +69,7 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
     locale,
     options,
     shell,
+    layers,
     ...(topic ? { topic } : {}),
   });
   if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), data, topic, locale, handle, url);

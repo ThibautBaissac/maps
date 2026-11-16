@@ -25,7 +25,7 @@ async function mountStyle(t: Parameters<typeof installPage>[0], style: keyof typ
   const page = installPage(t, { width, height, dpr });
   const { mount } = await STYLES[style]();
   const { name: _, ...meta } = data.meta;
-  const args: MountArgs<object> = { container: page.container, data, meta: { ...meta, title }, locale, options: {}, shell: page.shell };
+  const args: MountArgs<object> = { container: page.container, data, meta: { ...meta, title }, locale, options: {}, shell: page.shell, layers: [] };
   const handle: MapHandle = await (mount as (a: MountArgs<object>) => Promise<MapHandle>)(args);
   page.cleanup(() => handle.destroy());
   return { ...page, handle };
@@ -62,7 +62,7 @@ for (const style of ['riso', 'cyanotype'] as const) {
     const map = { ...data, roads: [{ k: 'steps' as const, n: 'Escadinhas', p: [-20, 0, 20, 0] }], buildings: [], parks: [], waterways: [], water: [] };
     const { name: _, ...meta } = map.meta;
     const { mount } = await STYLES[style]();
-    const handle = await mount({ container: page.container, shell: page.shell, data: map, meta: { ...meta, title: 'Test' }, options: {}, locale: 'fr', topic: analyseTopic(map, 'steps') });
+    const handle = await mount({ container: page.container, shell: page.shell, data: map, meta: { ...meta, title: 'Test' }, options: {}, locale: 'fr', layers: [], topic: analyseTopic(map, 'steps') });
     page.cleanup(() => handle.destroy());
     for (const c of page.canvases) c.calls.length = 0;
     Object.assign(handle.viewport!.view, { x: 0, y: 0, s: 0.1 });

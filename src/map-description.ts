@@ -1,5 +1,6 @@
 import type { Line, MapData } from './data.ts';
 import { featureCount, formatDate, formatNumber, messages, type Locale } from './i18n/index.ts';
+import type { Layer } from './layers.ts';
 import type { TopicAnalysis } from './topics.ts';
 import { topicContent } from './topic-content.ts';
 
@@ -31,7 +32,7 @@ function namedFeatures(features: readonly Feature[], half: number, locale: Local
 }
 
 /** Whole-survey description, independent of the visual zoom and the drawing technique. */
-export function describeMap(container: HTMLElement, summary: HTMLElement, data: MapData, display: { title: string; district: string }, legend: readonly string[], locale: Locale, topic?: TopicAnalysis): void {
+export function describeMap(container: HTMLElement, summary: HTMLElement, data: MapData, display: { title: string; district: string }, legend: readonly string[], locale: Locale, topic?: TopicAnalysis, overlays: readonly { title: string; layer: Layer }[] = []): void {
   const { meta } = data;
   const copy = messages(locale).description;
   const fmt = (n: number): string => formatNumber(locale, n);
@@ -69,6 +70,9 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, data: 
       ...data.water.map((w): Feature => [w.n, w.r]),
     ]],
   ];
+  for (const { title, layer } of overlays) {
+    sections.push([title, layer.features.map((f): Feature => [f.n, layer.kind === 'areas' ? f.g as Line[] : [f.g as Line]])]);
+  }
   for (const [title, features] of sections) {
     const list = namedFeatures(features, meta.half, locale);
     const details = document.createElement('details');

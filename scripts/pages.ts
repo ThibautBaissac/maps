@@ -60,7 +60,7 @@ export function pageHtml(map: CatalogueMap, locale: Locale, base: string, siteUr
       <h2 id="description-title">${esc(copy.descriptionTitle)}</h2>
       <div id="description-content"></div>
     </dialog>
-    <small class="attribution"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">${esc(text.attribution)}</a></small>
+    <small class="attribution"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">${esc(text.attribution)}</a>${map.attributions.map((credit) => ` · ${esc(credit)}`).join('')}</small>
     </main>
     ${topic ? `<aside id="topic-panel" class="topic-panel" aria-label="${esc(topic.question)}"><p>${esc(topic.intro)}</p><p>${esc(topic.legend)}</p></aside>` : ''}
     <script type="module" src="/src/map-page.ts"></script>

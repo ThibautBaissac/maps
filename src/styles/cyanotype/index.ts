@@ -3,6 +3,7 @@
 import { buffer, clear, type CanvasBuffer } from '../../toolkit/canvas.ts';
 import { loadFont } from '../../toolkit/fonts.ts';
 import { fillLabels, knockOutLabels } from '../../toolkit/labels.ts';
+import { drawLayers } from '../../toolkit/layers.ts';
 import { mountCanvasMap } from '../../toolkit/stage.ts';
 import { drawTopic, drawTopicMarkers } from '../../toolkit/topic.ts';
 import type { MapHandle, MountArgs } from '../contract.ts';
@@ -23,7 +24,7 @@ interface Env {
   hatch: CanvasPattern;
 }
 
-export async function mount({ container, data, meta, locale, options, shell, topic }: MountArgs<CyanotypeOptions>): Promise<MapHandle> {
+export async function mount({ container, data, meta, locale, options, shell, layers, topic }: MountArgs<CyanotypeOptions>): Promise<MapHandle> {
   const o: CyanotypeOptions = { ...DEFAULTS, ...options };
   await Promise.all([
     loadFont('Space Mono', 'spacemono/SpaceMono-Regular.ttf', { weight: '400' }),
@@ -69,6 +70,10 @@ export async function mount({ container, data, meta, locale, options, shell, top
         c.globalCompositeOperation = 'destination-in';
         c.fillStyle = 'rgba(0,0,0,0.35)'; c.fillRect(0, 0, c.canvas.width, c.canvas.height);
         c.globalCompositeOperation = 'source-over';
+      }
+      // After the subject's dimming: the layers stay at full strength.
+      drawLayers(c, P, layers, { stroke: o.line, fill: o.paper, width: 1.5, radius: 4 });
+      if (topic) {
         drawTopic(c, topic, P, o.line, o.paper);
       }
 

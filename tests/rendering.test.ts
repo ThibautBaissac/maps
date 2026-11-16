@@ -1,11 +1,14 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { test } from 'node:test';
 import { parseMapData, type MapData } from '../src/data.ts';
 import { DEFAULTS } from '../src/styles/cyanotype/defaults.ts';
 import { prepareMap, renderMap } from '../src/styles/cyanotype/map.ts';
 import { makeProjector } from '../src/toolkit/projection.ts';
-import { recordingContext, type Call } from './dom.ts';
+import { installPage, recordingContext, type Call } from './dom.ts';
+import type { Layer } from '../src/layers.ts';
+import { drawLayers } from '../src/toolkit/layers.ts';
 import * as thematic from '../src/toolkit/topic.ts';
 import { analyseTopic } from '../src/topics.ts';
 
@@ -45,3 +48,72 @@ test('numbered references move clear of navigation with their anchor preserved o
   assert.deepEqual(markers[0]?.anchor, [80, 80]);
   assert.ok(markers[0]!.x - 12 >= 100 || markers[0]!.y - 12 >= 100, 'The badge must clear the navigation');
 });
+
+// External layers: the generic overlay drawing of the toolkit.
+const INK = { stroke: '#112233', fill: '#ffffff', width: 1.5, radius: 4 };
+const layer = <K extends Layer['kind']>(kind: K, g: unknown, extra: Partial<Layer> = {}): Layer =>
+  ({ id: 'test', kind, role: 'overlay', attribution: '© test', source: 'layers/test.geojson', features: [{ g }], ...extra }) as Layer;
+function drawn(layers: readonly Layer[], dpr = 1): Call[] {
+  const out = canvas();
+  drawLayers(out.ctx, makeProjector({ x: 0, y: 0, s: 1 }, 200, 200, dpr), layers, INK);
+  return out.calls;
+}
+const methods = (calls: readonly Call[]): string[] => calls.map((c) => c.method);
+
+test('a point layer draws a filled, outlined circle at the projected point', () => {
+  const calls = drawn([layer('points', [0, 0])]);
+  assert.deepEqual(calls.find((c) => c.method === 'arc')?.args, [100, 100, 4, 0, 2 * Math.PI]);
+  assert.ok(methods(calls).includes('fill') && methods(calls).includes('stroke'));
+});
+
+test('a line layer strokes a straight polyline', () => {
+  const calls = drawn([layer('lines', [-10, 0, 10, 0])]);
+  const names = methods(calls);
+  const move = names.indexOf('moveTo');
+  assert.deepEqual(calls[move]?.args, [90, 100]);
+  assert.deepEqual(calls[move + 1]?.args, [110, 100]);
+  assert.equal(names[move + 1], 'lineTo');
+  assert.ok(names.indexOf('stroke') > move + 1);
+});
+
+test('an area layer closes its rings, fills then outlines them', () => {
+  const names = methods(drawn([layer('areas', [[-10, -10, 10, -10, 10, 10, -10, 10]])]));
+  assert.ok(names.includes('closePath'));
+  assert.ok(names.indexOf('fill') > names.indexOf('closePath'));
+  assert.ok(names.lastIndexOf('stroke') > names.indexOf('fill'));
+});
+
+test('objects off screen and empty layer lists draw nothing', () => {
+  for (const calls of [drawn([layer('points', [5000, 0])]), drawn([layer('lines', [5000, 0, 5010, 0])]), drawn([])]) {
+    assert.deepEqual(methods(calls).filter((m) => ['arc', 'moveTo', 'lineTo', 'fill', 'stroke'].includes(m)), []);
+  }
+});
+
+test('the point radius is in CSS px, scaled by the pixel density', () => {
+  assert.equal(drawn([layer('points', [0, 0])], 2).find((c) => c.method === 'arc')?.args[2], 8);
+});
+
+test('the context state is saved and restored around the layers', () => {
+  const names = methods(drawn([layer('points', [0, 0])]));
+  assert.equal(names[0], 'save');
+  assert.equal(names.at(-1), 'restore');
+});
+
+// Digest of every canvas call of a mount with no layer, recorded from the styles as they were
+// before they drew layers: a map without layers must stay as it was.
+function digest(calls: readonly Call[]): string {
+  const h = createHash('sha1');
+  for (const c of calls) h.update(JSON.stringify([c.method, c.args.map((a) => (typeof a === 'number' || typeof a === 'string' || typeof a === 'boolean' ? a : typeof a))]));
+  return h.digest('hex');
+}
+const BASELINE: Record<string, string> = { riso: 'f35ab5f59f01e75f1546ebc0f64cbafc5076692a', cyanotype: '1b9cacefa6f2532505bf059614d2059cdaeb413a' };
+for (const style of ['riso', 'cyanotype'] as const) {
+  test(`${style} makes the same canvas calls as before layers existed when the map has none`, async (t) => {
+    const page = installPage(t, { width: 800, height: 600 });
+    const { mount } = await import(`../src/styles/${style}/index.ts`) as { mount: (a: never) => Promise<{ destroy(): void }> };
+    const { name: _, ...meta } = data.meta;
+    const handle = await mount({ container: page.container, data, meta: { ...meta, title: 'Test' }, locale: 'fr', options: {}, shell: page.shell, layers: [] } as never);
+    page.cleanup(() => handle.destroy());
+    assert.equal(digest(page.canvases.flatMap((c) => c.calls)), BASELINE[style]);
+  });
+}

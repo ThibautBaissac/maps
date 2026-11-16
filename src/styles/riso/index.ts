@@ -6,6 +6,7 @@ import { loadFont } from '../../toolkit/fonts.ts';
 import { fillLabels, knockOutLabels, type LabelGroup } from '../../toolkit/labels.ts';
 import { computeLayout, knockouts, scaleBar, type Layout } from '../../toolkit/layout.ts';
 import { pixelCanvas } from '../../toolkit/noise.ts';
+import { drawLayers } from '../../toolkit/layers.ts';
 import { mountCanvasMap } from '../../toolkit/stage.ts';
 import { drawTopic, drawTopicMarkers } from '../../toolkit/topic.ts';
 import type { View } from '../../toolkit/viewport.ts';
@@ -39,7 +40,7 @@ interface Env {
   uiKey: string;
 }
 
-export async function mount({ container, data, meta, locale, options, shell, topic }: MountArgs<RisoOptions>): Promise<MapHandle> {
+export async function mount({ container, data, meta, locale, options, shell, layers, topic }: MountArgs<RisoOptions>): Promise<MapHandle> {
   const o: RisoOptions = { ...DEFAULTS, ...options };
   const ink: Inks = { a: o.inkA, b: o.inkB };
   await loadFont('Bebas Neue', 'bebasneue/BebasNeue-Regular.ttf');
@@ -114,6 +115,7 @@ export async function mount({ container, data, meta, locale, options, shell, top
       b.x.globalAlpha = topic ? 0.45 : 1;
       renderPlateB(b.x, plates, P, ink.b, e.patterns);
       b.x.globalAlpha = 1;
+      drawLayers(b.x, P, layers, { stroke: ink.b, fill: '#FFFFFF', width: 1.5, radius: 4 });
       if (topic) drawTopic(b.x, topic, P, ink.b, '#FFFFFF');
 
       // Names: paper halo knocked out of both plates, letters in their own ink.

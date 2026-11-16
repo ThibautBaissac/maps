@@ -10,7 +10,7 @@ Un style est un dossier `src/styles/<nom>/` dont `index.ts` exporte une fonction
 import type { MapHandle, MountArgs } from '../contract.ts';
 import { DEFAULTS, type NomOptions } from './defaults.ts';
 
-export async function mount({ container, data, meta, locale, options, shell }: MountArgs<NomOptions>): Promise<MapHandle> {
+export async function mount({ container, data, meta, locale, options, shell, layers }: MountArgs<NomOptions>): Promise<MapHandle> {
   const o: NomOptions = { ...DEFAULTS, ...options };
   // construit la page dans `container` et commence à dessiner
   return { destroy() {} };
@@ -25,6 +25,7 @@ export async function mount({ container, data, meta, locale, options, shell }: M
 | `locale` | langue de la page ; utiliser `messages(locale)` et les fonctions de formatage de `src/i18n/index.ts` pour les textes dessinés |
 | `options` | les `options` de la carte dans `src/registry.ts`, à fusionner avec le `defaults.ts` du style |
 | `shell` | le cadre de page commun (plus bas) |
+| `layers` | couches extérieures de la carte (`Layer[]` de `src/layers.ts`, déclarées dans `places/layers.ts` et le champ `layers` de la carte), déjà en mètres locaux ; `[]` sans couche. Un style Canvas les dessine avec `drawLayers()`, un autre les traite comme il l'entend |
 | `topic` | analyse du sujet validé, si présent : géométries retenues, longueurs, secteurs et repères. La page utilise la même analyse pour le texte ; le style l’utilise pour mettre le sujet en évidence. |
 
 `defaults.ts` exporte l'interface des options du style (`NomOptions`, chaque champ documenté) et `DEFAULTS`, ses valeurs par défaut.
@@ -74,6 +75,7 @@ Les types font foi : `MapData` et ses éléments dans `src/data.ts`, `Place` dan
 | `projection.ts` | mètres → px avec tremblé du trait facultatif, construction de tracés, élimination hors écran, fondu du carré |
 | `labels.ts` | noms candidats tirés des données, placement le long des lignes sans collision, dessin des lettres (`knockOutLabels()` pour le halo, `fillLabels()`) ; `LabelGroup<K>` porte l'étiquette propre au style (encre, couleur…) jusqu'aux `LabelJob<K>` |
 | `layout.ts` | `mapWindow()` (cadre, fenêtre de carte, taille du carré, zone de navigation) partagé par toutes les mises en page, une mise en page type (`computeLayout()` : emplacements du cartouche, de la rose des vents, de la légende, de l'attribution, et mobilier à éviter ; elle se passe telle quelle à `mountCanvasMap()`) et les pas de l'échelle ; à prendre, adapter ou ignorer |
+| `layers.ts` | `drawLayers(ctx, P, layers, ink)` : dessin générique des couches de rôle `overlay` (points en disques, lignes, surfaces à fond transparent et contour), d'une seule encre ; ne fait rien sans couche, ce qui laisse la carte inchangée. Un style l'appelle dans `render()` avec ses propres couleurs |
 | `geometry.ts` | types `Point`, `Rect`, `Circle`, `scaleRect()`, et des aides typées pour les objets à clés connues (`typedKeys`, `isKeyOf`, `recordOf`) |
 | `noise.ts` | aléatoire reproductible, bruit, canvas de pixels pour les textures |
 | `fonts.ts` | `loadFont(famille, fichier)` depuis `public/fonts/` |

@@ -33,7 +33,7 @@ test('a layer with an unknown kind is rejected', () => {
 });
 
 test('a layer with an unknown role is rejected', () => {
-  assert.throws(() => parseLayer(broken({ role: 'roads' }), 'f'), { message: 'f: role must be overlay' });
+  assert.throws(() => parseLayer(broken({ role: 'ground' }), 'f'), { message: 'f: role must be one of buildings, roads, waterways, water, parks, overlay' });
 });
 
 test('a layer id that is not a slug is rejected', () => {
@@ -91,4 +91,9 @@ test('a layer file with two layers of the same id is rejected', () => {
 
 test('featuresOf gathers the features of the layers of one role and kind', () => {
   assert.deepEqual(featuresOf([FOUNTAINS, LINES], 'overlay', 'points'), FOUNTAINS.features);
+});
+
+test('an OpenStreetMap role is reserved for the layer whose id is that role', () => {
+  assert.throws(() => parseLayer({ ...FOUNTAINS, id: 'batiments', role: 'buildings', kind: 'areas', features: [] }, 'f'), /role buildings is reserved for OpenStreetMap layers/);
+  assert.doesNotThrow(() => parseLayer({ ...FOUNTAINS, id: 'buildings', role: 'buildings', kind: 'areas', features: [] }, 'f'));
 });

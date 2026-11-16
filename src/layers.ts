@@ -11,9 +11,15 @@ import type { Point } from './toolkit/geometry.ts';
 
 export const LAYER_KINDS = ['points', 'lines', 'areas'] as const;
 export type LayerKind = (typeof LAYER_KINDS)[number];
-/** What a layer is for: an overlay is drawn on top of the base map. */
-export const LAYER_ROLES = ['overlay'] as const;
+/**
+ * What a layer is for: an overlay is drawn on top of the base map; the other roles are the
+ * OpenStreetMap layers (osmLayers), whose id is their role.
+ */
+export const LAYER_ROLES = ['buildings', 'roads', 'waterways', 'water', 'parks', 'overlay'] as const;
 export type LayerRole = (typeof LAYER_ROLES)[number];
+export const OSM_ROLES = ['buildings', 'roads', 'waterways', 'water', 'parks'] as const;
+export type OsmRole = (typeof OSM_ROLES)[number];
+const isOsmRole = (v: unknown): v is OsmRole => (OSM_ROLES as readonly unknown[]).includes(v);
 
 /** The geometry of one object: a point, a flat polyline, or rings (outer one first, then holes). */
 export type Geometry<K extends LayerKind> = K extends 'points' ? Point : K extends 'lines' ? Line : Ring[];
@@ -65,7 +71,7 @@ export interface LayerSource {
   /** GeoJSON file, relative to the repository root. */
   file: string;
   kind: LayerKind;
-  role: LayerRole;
+  role: 'overlay';
   attribution: string;
   /** Property holding the name of an object. */
   nameField?: string;
@@ -86,7 +92,8 @@ export function parseLayer(v: unknown, source: string): Layer {
   const { id, kind, role, attribution, features } = v;
   if (typeof id !== 'string' || !isSlug(id)) return fail(`invalid id "${String(id)}" (use a-z, 0-9 and -)`);
   if (!isKind(kind)) return fail('kind must be points, lines or areas');
-  if (!isRole(role)) return fail('role must be overlay');
+  if (!isRole(role)) return fail(`role must be one of ${LAYER_ROLES.join(', ')}`);
+  if (isOsmRole(role) && id !== role) return fail(`role ${role} is reserved for OpenStreetMap layers`);
   if (typeof attribution !== 'string' || !attribution.trim()) return fail('attribution must be a non-empty string');
   if (typeof v['source'] !== 'string') return fail('source must be a string');
   if (!Array.isArray(features)) return fail('features must be an array');
@@ -131,6 +138,9 @@ export function parseLayerFile(v: unknown, source: string): LayerFile {
   // Every field is checked above.
   return v as unknown as LayerFile;
 }
+
+export const isBridge = (f: Feature<unknown>): boolean => f.p?.['bridge'] === true;
+export const isTunnel = (f: Feature<unknown>): boolean => f.p?.['tunnel'] === true;
 
 /** The objects of the layers of a role and kind, in the order of the layers. */
 export function featuresOf<K extends LayerKind>(layers: readonly Layer[], role: LayerRole, kind: K): Feature<Geometry<K>>[] {

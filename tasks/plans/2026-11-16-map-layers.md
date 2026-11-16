@@ -352,7 +352,7 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
   Sur `convertOsm(ANSWER, 'amsterdam-centre', SOURCE)` (réponse de `tests/osm.test.ts`, à extraire dans `tests/fixtures/overpass.ts` pour la partager) :
   - nombre d'objets de chaque couche = longueur de la collection correspondante.
@@ -362,19 +362,19 @@ Phase 2 :
   - chaque couche passe `parseLayer`.
   - `parseLayer` d'une couche `id: 'batiments', role: 'buildings'` → lève le message de rôle réservé.
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/osm-layers.test.ts`
   Expected: FAIL.
 
-- [ ] **Step 3: Implement the adapter**
+- [x] **Step 3: Implement the adapter**
 
-- [ ] **Step 4: Run the tests and watch them pass**
+- [x] **Step 4: Run the tests and watch them pass**
 
   Run: `npm test && npm run typecheck`
   Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add src/osm-layers.ts src/layers.ts tests/
@@ -398,23 +398,23 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Rewrite the tests at the new seams**
+- [x] **Step 1: Rewrite the tests at the new seams**
 
   `tests/topics.test.ts` : mêmes routes et cours d'eau, exprimés en couches `roads` / `waterways` (`b: 1` → `p: { bridge: true }`, `u: 1` → `p: { tunnel: true }`). Toutes les valeurs attendues restent identiques (longueur 20, secteur central 20/3, `Escadinhas` en `[0, 0]`, etc.) ; `segments.map((f) => f.g)` remplace `segments.map((r) => r.p)`. Idem dans `tests/descriptions.test.ts` (mêmes textes attendus) et `tests/rendering.test.ts` (repères).
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/topics.test.ts tests/descriptions.test.ts tests/rendering.test.ts`
   Expected: FAIL sur la signature.
 
-- [ ] **Step 3: Migrate the consumers**
+- [x] **Step 3: Migrate the consumers**
 
-- [ ] **Step 4: Run the tests and watch them pass**
+- [x] **Step 4: Run the tests and watch them pass**
 
   Run: `npm test && npm run typecheck`
   Expected: PASS avec les valeurs attendues d'origine.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add src/topics.ts src/toolkit/topic.ts src/topic-content.ts src/topic-panel.ts src/map-description.ts src/map-page.ts src/layers.ts tests/
@@ -436,23 +436,23 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Adapt the tests**
+- [x] **Step 1: Adapt the tests**
 
   `tests/stage.test.ts` passe `layers: osmLayers(data)` ; mêmes assertions (titre imprimé, nom de lieu absent, plateau).
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/stage.test.ts`
   Expected: FAIL.
 
-- [ ] **Step 3: Migrate labels and stage**
+- [x] **Step 3: Migrate labels and stage**
 
-- [ ] **Step 4: Run the tests and watch them pass**
+- [x] **Step 4: Run the tests and watch them pass**
 
   Run: `npm test && npm run typecheck`
   Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add src/toolkit/labels.ts src/toolkit/stage.ts src/styles/contract.ts tests/stage.test.ts
@@ -471,23 +471,23 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Write the regression test**
+- [x] **Step 1: Write the regression test**
 
   Sur `public/data/amsterdam-centre.json`, la séquence d'appels de `renderPlateA` et `renderPlateB` (contexte enregistreur 320 × 640, vue `{ x: 0, y: 0, s: 0.5 }`) avec `preparePlates(osmLayers(data))` est égale à celle obtenue avec l'ancien `preparePlates(data)`. Écrire le test avant de changer la signature, en gardant l'ancienne fonction sous le nom `preparePlatesFromMapData` le temps de la tâche.
 
-- [ ] **Step 2: Run the test and watch it fail**
+- [x] **Step 2: Run the test and watch it fail**
 
   Run: `node --test tests/rendering.test.ts`
   Expected: FAIL.
 
-- [ ] **Step 3: Migrate riso, then delete `preparePlatesFromMapData` and the comparison, keeping a recorded-calls snapshot assertion on a small fixture**
+- [x] **Step 3: Migrate riso, then delete `preparePlatesFromMapData` and the comparison, keeping a recorded-calls snapshot assertion on a small fixture**
 
-- [ ] **Step 4: Run and check pixels**
+- [x] **Step 4: Run and check pixels**
 
   Run: `npm test && npm run typecheck`, puis serveur de dev et `npm run vignettes -- amsterdam-riso`.
   Expected: PASS ; `git status public/vignettes` vide. Si les octets diffèrent, comparer les images à l'œil et le signaler avant de continuer.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add src/styles/riso tests/rendering.test.ts

@@ -4,6 +4,7 @@ import { featureCounts, parseMapData, type MapMeta } from './data.ts';
 import { bodyData, element } from './dom.ts';
 import { describeMap } from './map-description.ts';
 import { findMap, type CatalogueMapOf } from './catalogue.ts';
+import { osmLayers } from './osm-layers.ts';
 import { parseLayerFile, type Layer } from './layers.ts';
 import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
@@ -46,12 +47,12 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
       return { id, layers: parseLayerFile(await r.json(), layerUrl).layers };
     })),
   ]);
-  const layers: Layer[] = layerSets.flatMap((set) => set.layers);
+  const layers: Layer[] = [...osmLayers(data), ...layerSets.flatMap((set) => set.layers)];
   const overlays = layerSets.flatMap((set, i) => set.layers.map((layer) => ({ title: map.layers[i]?.title ?? set.id, layer })));
 
   const meta = { ...withoutName(data.meta), title, district: map.place.district };
-  const topic = map.topic ? analyseTopic(data, map.topic) : undefined;
-  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, meta, style.legend, locale, topic, overlays);
+  const topic = map.topic ? analyseTopic(data.meta, layers, map.topic) : undefined;
+  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data.meta, layers, meta, style.legend, locale, topic, overlays);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
   description.disabled = false;
@@ -72,7 +73,7 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
     layers,
     ...(topic ? { topic } : {}),
   });
-  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), data, topic, locale, handle, url);
+  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), data.meta, topic, locale, handle, url);
   if (handle.viewport) {
     const viewport = handle.viewport;
     for (const [selector, factor] of [['.zoom-in', ZOOM_STEP], ['.zoom-out', 1 / ZOOM_STEP]] as const) {

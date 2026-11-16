@@ -1,11 +1,11 @@
-import type { MapData } from './data.ts';
+import type { Survey } from './layers.ts';
 import type { MapHandle } from './styles/contract.ts';
 import type { Locale } from './i18n/index.ts';
 import type { TopicAnalysis } from './topics.ts';
 import { topicContent } from './topic-content.ts';
 
-export function mountTopicPanel(container: HTMLElement, data: MapData, topic: TopicAnalysis, locale: Locale, handle: MapHandle, dataUrl: string): void {
-  const content = topicContent(data, topic, locale);
+export function mountTopicPanel(container: HTMLElement, survey: Survey, topic: TopicAnalysis, locale: Locale, handle: MapHandle, dataUrl: string): void {
+  const content = topicContent(survey, topic, locale);
   const { copy, subject } = content;
   const el = <K extends keyof HTMLElementTagNameMap>(tag: K, text?: string, className?: string): HTMLElementTagNameMap[K] => {
     const node = document.createElement(tag);

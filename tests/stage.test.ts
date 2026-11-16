@@ -9,6 +9,7 @@ import type { Rect } from '../src/toolkit/geometry.ts';
 import { computeLayout } from '../src/toolkit/layout.ts';
 import { installPage, nameGlyphs, type FakeCanvas } from './dom.ts';
 import type { Locale } from '../src/i18n/index.ts';
+import { osmLayers } from '../src/osm-layers.ts';
 import { analyseTopic } from '../src/topics.ts';
 
 const data = parseMapData(JSON.parse(readFileSync(new URL('../public/data/amsterdam-centre.json', import.meta.url), 'utf8')), 'fixture');
@@ -62,7 +63,7 @@ for (const style of ['riso', 'cyanotype'] as const) {
     const map = { ...data, roads: [{ k: 'steps' as const, n: 'Escadinhas', p: [-20, 0, 20, 0] }], buildings: [], parks: [], waterways: [], water: [] };
     const { name: _, ...meta } = map.meta;
     const { mount } = await STYLES[style]();
-    const handle = await mount({ container: page.container, shell: page.shell, data: map, meta: { ...meta, title: 'Test' }, options: {}, locale: 'fr', layers: [], topic: analyseTopic(map, 'steps') });
+    const handle = await mount({ container: page.container, shell: page.shell, data: map, meta: { ...meta, title: 'Test' }, options: {}, locale: 'fr', layers: [], topic: analyseTopic(map.meta, osmLayers(map), 'steps') });
     page.cleanup(() => handle.destroy());
     for (const c of page.canvases) c.calls.length = 0;
     Object.assign(handle.viewport!.view, { x: 0, y: 0, s: 0.1 });

@@ -1,9 +1,9 @@
-import type { MapData } from './data.ts';
 import { formatDate, formatNumber, messages, type Locale } from './i18n/index.ts';
+import type { Survey } from './layers.ts';
 import type { TopicAnalysis } from './topics.ts';
 
 /** One interpretation of the measurements for the sidebar and the text equivalent. */
-export function topicContent(data: MapData, topic: TopicAnalysis, locale: Locale) {
+export function topicContent(survey: Survey, topic: TopicAnalysis, locale: Locale) {
   const text = messages(locale), copy = text.topic, subject = text.topics[topic.id];
   const positions = text.description.positions.flat();
   const metres = (n: number): string => formatNumber(locale, Math.round(n), { maximumFractionDigits: 0 });
@@ -13,7 +13,7 @@ export function topicContent(data: MapData, topic: TopicAnalysis, locale: Locale
     copy, subject,
     value: `≈ ${metres(topic.length >= 100 ? Math.round(topic.length / 10) * 10 : topic.length)} m`,
     concentration: topic.length ? copy.concentration(positions[strongest]!, String(share)) : copy.empty,
-    source: copy.source(formatDate(locale, data.meta.fetchedAt), formatNumber(locale, data.meta.sizeKm)),
+    source: copy.source(formatDate(locale, survey.fetchedAt), formatNumber(locale, survey.sizeKm)),
     references: topic.places.map((p, index) => ({
       number: index + 1, name: p.name, point: p.point,
       detail: `${positions[p.sector]} · ≈ ${metres(p.length)} m${p.waters.length ? `. ${copy.waterCrossed(p.waters.join(', '))}` : ''}`,

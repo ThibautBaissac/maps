@@ -1,6 +1,7 @@
 // Geographic evidence shared by the drawing and its text. Coordinates and lengths are
 // local metres; nothing here depends on the browser or on a language.
-import type { Line, MapData, Road } from './data.ts';
+import type { Line } from './data.ts';
+import { featuresOf, isBridge, isTunnel, type Feature, type Layer, type Survey } from './layers.ts';
 import type { Point, Rect } from './toolkit/geometry.ts';
 
 export const TOPIC_IDS = ['canal-crossings', 'steps'] as const;
@@ -18,7 +19,7 @@ export interface TopicPlace {
 
 export interface TopicAnalysis {
   id: TopicId;
-  segments: Road[];
+  segments: Feature<Line>[];
   length: number;
   sectors: { length: number }[];
   places: TopicPlace[];
@@ -100,18 +101,18 @@ function crosses(a: Line, b: Line): boolean {
 }
 
 /** Analyse only geometry inside the surveyed square, independently of the current zoom. */
-export function analyseTopic(data: MapData, id: TopicId): TopicAnalysis {
-  const { half } = data.meta;
+export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: TopicId): TopicAnalysis {
+  const { half } = survey;
   const square: Rect = [-half, -half, half, half];
-  const canals = id === 'canal-crossings' ? data.waterways.filter((w) => w.k === 'canal' && !w.u)
-    .flatMap((w) => clipLine(w.p, square).map((p) => ({ ...w, p }))) : [];
-  const waters = new Map<Road, string[]>();
+  const canals = id === 'canal-crossings' ? featuresOf(layers, 'waterways', 'lines').filter((w) => w.k === 'canal' && !isTunnel(w))
+    .flatMap((w) => clipLine(w.g, square).map((g) => ({ ...w, g }))) : [];
+  const waters = new Map<Feature<Line>, string[]>();
   const canalNames = new Set<string>();
-  const segments = data.roads.filter((r) => !r.u && (id === 'steps' ? r.k === 'steps' : !!r.b))
-    .flatMap((r) => clipLine(r.p, square).map((p) => ({ ...r, p })));
+  const segments = featuresOf(layers, 'roads', 'lines').filter((r) => !isTunnel(r) && (id === 'steps' ? r.k === 'steps' : isBridge(r)))
+    .flatMap((r) => clipLine(r.g, square).map((g) => ({ ...r, g })));
   const selected = segments.filter((r) => {
     if (id === 'steps') return true;
-    const crossed = canals.filter((w) => crosses(r.p, w.p));
+    const crossed = canals.filter((w) => crosses(r.g, w.g));
     const names = [...new Set(crossed.flatMap((w) => w.n ? [w.n] : []))].sort();
     waters.set(r, names);
     for (const n of names) canalNames.add(n);
@@ -121,12 +122,12 @@ export function analyseTopic(data: MapData, id: TopicId): TopicAnalysis {
   const named = new Map<string, { lines: Line[]; length: number; waters: Set<string> }>();
   let length = 0;
   for (const r of selected) {
-    const metres = lengthOf(r.p);
+    const metres = lengthOf(r.g);
     length += metres;
-    distribute(r.p, half, sectors);
+    distribute(r.g, half, sectors);
     if (r.n) {
       const group = named.get(r.n) ?? { lines: [], length: 0, waters: new Set<string>() };
-      group.lines.push(r.p); group.length += metres;
+      group.lines.push(r.g); group.length += metres;
       for (const n of waters.get(r) ?? []) group.waters.add(n);
       named.set(r.n, group);
     }

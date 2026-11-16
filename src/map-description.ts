@@ -1,6 +1,6 @@
-import type { Line, MapData } from './data.ts';
+import type { Line } from './data.ts';
 import { featureCount, formatDate, formatNumber, messages, type Locale } from './i18n/index.ts';
-import type { Layer } from './layers.ts';
+import { featuresOf, isTunnel, type Layer, type Survey } from './layers.ts';
 import type { TopicAnalysis } from './topics.ts';
 import { topicContent } from './topic-content.ts';
 
@@ -32,11 +32,10 @@ function namedFeatures(features: readonly Feature[], half: number, locale: Local
 }
 
 /** Whole-survey description, independent of the visual zoom and the drawing technique. */
-export function describeMap(container: HTMLElement, summary: HTMLElement, data: MapData, display: { title: string; district: string }, legend: readonly string[], locale: Locale, topic?: TopicAnalysis, overlays: readonly { title: string; layer: Layer }[] = []): void {
-  const { meta } = data;
+export function describeMap(container: HTMLElement, summary: HTMLElement, survey: Survey, layers: readonly Layer[], display: { title: string; district: string }, legend: readonly string[], locale: Locale, topic?: TopicAnalysis, overlays: readonly { title: string; layer: Layer }[] = []): void {
   const copy = messages(locale).description;
   const fmt = (n: number): string => formatNumber(locale, n);
-  const overview = copy.overview(display.title, display.district, fmt(meta.sizeKm));
+  const overview = copy.overview(display.title, display.district, fmt(survey.sizeKm));
   summary.textContent = `${overview} ${copy.help}`;
   container.replaceChildren();
   const paragraph = (text: string): void => {
@@ -46,13 +45,13 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, data: 
   };
   paragraph(overview);
   if (topic) {
-    const content = topicContent(data, topic, locale);
+    const content = topicContent(survey, topic, locale);
     summary.textContent = `${content.subject.question} ${content.value} ${content.subject.metric}. ${content.concentration} ${overview} ${copy.help}`;
     for (const text of [content.subject.question, content.subject.intro, `${content.value} ${content.subject.metric}.`, content.concentration,
       ...content.references.map((ref) => `${ref.number}. ${ref.name} : ${ref.detail}`), content.subject.legend, content.source, content.subject.method, content.subject.limits]) paragraph(text);
   }
-  paragraph(copy.centre(fmt(meta.lat), fmt(meta.lon), formatDate(locale, meta.fetchedAt)));
-  paragraph(copy.counts(featureCount(locale, 0, data.buildings.length), featureCount(locale, 1, data.roads.length), featureCount(locale, 2, data.parks.length), featureCount(locale, 3, data.water.length)));
+  paragraph(copy.centre(fmt(survey.lat), fmt(survey.lon), formatDate(locale, survey.fetchedAt)));
+  paragraph(copy.counts(featureCount(locale, 0, featuresOf(layers, 'buildings', 'areas').length), featureCount(locale, 1, featuresOf(layers, 'roads', 'lines').length), featureCount(locale, 2, featuresOf(layers, 'parks', 'areas').length), featureCount(locale, 3, featuresOf(layers, 'water', 'areas').length)));
   const heading = document.createElement('h2');
   heading.textContent = copy.legend;
   const key = document.createElement('ul');
@@ -64,17 +63,17 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, data: 
   container.append(heading, key);
   paragraph(copy.positionsHelp);
   const sections: [string, Feature[]][] = [
-    [copy.roads, data.roads.map((r) => [r.n, [r.p]])],
+    [copy.roads, featuresOf(layers, 'roads', 'lines').map((r): Feature => [r.n, [r.g]])],
     [copy.water, [
-      ...data.waterways.filter((w) => !w.u).map((w): Feature => [w.n, [w.p]]),
-      ...data.water.map((w): Feature => [w.n, w.r]),
+      ...featuresOf(layers, 'waterways', 'lines').filter((w) => !isTunnel(w)).map((w): Feature => [w.n, [w.g]]),
+      ...featuresOf(layers, 'water', 'areas').map((w): Feature => [w.n, w.g]),
     ]],
   ];
   for (const { title, layer } of overlays) {
     sections.push([title, layer.features.map((f): Feature => [f.n, layer.kind === 'areas' ? f.g as Line[] : [f.g as Line]])]);
   }
   for (const [title, features] of sections) {
-    const list = namedFeatures(features, meta.half, locale);
+    const list = namedFeatures(features, survey.half, locale);
     const details = document.createElement('details');
     const caption = document.createElement('summary');
     caption.textContent = `${title} (${fmt(list.childElementCount)})`;

@@ -10,6 +10,7 @@ import { installPage, recordingContext, type Call } from './dom.ts';
 import type { Layer } from '../src/layers.ts';
 import { drawLayers } from '../src/toolkit/layers.ts';
 import * as thematic from '../src/toolkit/topic.ts';
+import { osmLayers } from '../src/osm-layers.ts';
 import { analyseTopic } from '../src/topics.ts';
 
 const data = parseMapData(JSON.parse(readFileSync(new URL('../public/data/amsterdam-centre.json', import.meta.url), 'utf8')), 'fixture');
@@ -40,7 +41,7 @@ test('cyanotype draws a residential bridge when zoomed out to a single line', (t
 
 test('numbered references move clear of navigation with their anchor preserved on the feature', () => {
   assert.equal(typeof thematic.placeTopicMarkers, 'function');
-  const topic = analyseTopic({ ...data, meta: { ...data.meta, half: 100 }, roads: [{ k: 'steps', n: 'Steps', p: [-30, 20, -10, 20] }] }, 'steps');
+  const topic = analyseTopic({ half: 100 }, osmLayers({ ...data, meta: { ...data.meta, half: 100 }, roads: [{ k: 'steps', n: 'Steps', p: [-30, 20, -10, 20] }] }), 'steps');
   const markers = thematic.placeTopicMarkers(topic, makeProjector({ x: 0, y: 0, s: 1 }, 200, 200, 1), {
     map: [0, 0, 200, 200], nav: [0, 0, 100, 100], attr: [180, 180, 200, 200], furniture: [],
   });

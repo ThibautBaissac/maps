@@ -65,6 +65,17 @@ export interface LayerFile {
   osmTimestamp?: string;
 }
 
+/** The square a map covers and when it was surveyed, as the pages need them. */
+export interface Survey {
+  /** Metres from the centre to the edge of the square. */
+  half: number;
+  sizeKm: number;
+  lat: number;
+  lon: number;
+  /** ISO date of the download. */
+  fetchedAt: string;
+}
+
 /** The declaration of an external layer in places/layers.ts. */
 export interface LayerSource {
   title: LocalizedText;

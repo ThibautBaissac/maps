@@ -37,7 +37,7 @@ export function drawTopic(ctx: CanvasRenderingContext2D, topic: TopicAnalysis, P
   ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.setLineDash([]);
   const lines = (): void => {
     ctx.beginPath();
-    for (const r of topic.segments) addLine(ctx, P, r.p, 1e9, 0);
+    for (const r of topic.segments) addLine(ctx, P, r.g, 1e9, 0);
     ctx.stroke();
   };
   ctx.strokeStyle = background; ctx.lineWidth = width + 3 * dpr;
@@ -50,9 +50,9 @@ export function drawTopic(ctx: CanvasRenderingContext2D, topic: TopicAnalysis, P
     ctx.beginPath();
     for (const r of topic.segments) {
       let carry = 2.5 * dpr;
-      for (let i = 2; i < r.p.length; i += 2) {
-        const x = P.sx(r.p[i - 2]!), y = P.sy(r.p[i - 1]!);
-        const dx = P.sx(r.p[i]!) - x, dy = P.sy(r.p[i + 1]!) - y, length = Math.hypot(dx, dy);
+      for (let i = 2; i < r.g.length; i += 2) {
+        const x = P.sx(r.g[i - 2]!), y = P.sy(r.g[i - 1]!);
+        const dx = P.sx(r.g[i]!) - x, dy = P.sy(r.g[i + 1]!) - y, length = Math.hypot(dx, dy);
         if (!length) continue;
         let distance = carry;
         for (; distance < length; distance += 5 * dpr) {

@@ -229,7 +229,7 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
   `tests/catalogue.test.ts`, registre injecté `{ 'amsterdam-centre': { ponts: SPEC } }` :
   - entrée avec `layers: ['tunnels']` → problème `unknown layer "tunnels" for amsterdam-centre (<map id>); known: ponts`.
@@ -241,21 +241,21 @@ Phase 2 :
   `tests/pages.test.ts` : carte avec `attributions: ['© Ville d’Amsterdam']` → `.attribution` contient le lien OSM puis ` · © Ville d’Amsterdam` échappé ; sans couche → HTML identique à aujourd'hui.
   `tests/descriptions.test.ts` : overlay `{ title: 'Ponts', layer }` avec un point nommé `Magere Brug` en `[0, 0]` → une section `<details>` dont le résumé vaut `Ponts (1)` et un item `Magere Brug — <position centre>.`.
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/catalogue.test.ts tests/pages.test.ts tests/descriptions.test.ts`
   Expected: FAIL sur les nouveaux cas.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
   `map-page.ts` charge les fichiers de couche en parallèle de la donnée OSM et du style, valide avec `parseLayerFile`, aplatit leurs `layers` et les passe à `mount` et à `describeMap`. Un fichier manquant fait échouer le chargement comme la donnée OSM (`Missing layer <id> for <place>: HTTP <status>`). La section de description réutilise `namedFeatures` : un point `[x, y]` est une ligne d'une seule paire.
 
-- [ ] **Step 4: Run the tests and watch them pass**
+- [x] **Step 4: Run the tests and watch them pass**
 
   Run: `npm test && npm run typecheck`
   Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add src/registry.ts src/catalogue.ts src/styles/contract.ts src/map-page.ts scripts/pages.ts src/map-description.ts tests/
@@ -275,7 +275,7 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
   Contexte enregistreur 200 × 200, `makeProjector({ x: 0, y: 0, s: 1 }, 200, 200, 1)` :
   - couche points, objet en `[0, 0]`, `radius: 4` → un appel `arc` d'arguments `(100, 100, 4, 0, 2π)`.
@@ -286,21 +286,21 @@ Phase 2 :
   - avec `dpr = 2` et `radius: 4` → rayon 8.
   - Rendu riso et cyanotype avec `layers: []` : séquence d'appels identique à celle d'avant (enregistrée dans le test avant modification des styles).
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/rendering.test.ts`
   Expected: FAIL, `drawLayers` introuvable.
 
-- [ ] **Step 3: Implement and wire the styles**
+- [x] **Step 3: Implement and wire the styles**
 
   Riso : encre `ink.b`, fond `'#FFFFFF'`, largeur 1,5, rayon 4. Cyanotype : `o.line`, `o.paper`, largeur 1,5, rayon 4. Aucun changement quand la carte n'a pas de couche.
 
-- [ ] **Step 4: Run the tests and watch them pass; check in the browser**
+- [x] **Step 4: Run the tests and watch them pass; check in the browser**
 
   Run: `npm test && npm run typecheck && npm run build`
   Expected: PASS. Puis, avec une couche temporaire (tâche 3) ajoutée à `lisbonne-cyanotype` : `npm run dev`, ouvrir `/maps/fr/cartes/lisbonne-cyanotype/`, capture d'écran, vérifier points, attribution et section de description, puis retirer la couche temporaire. Vignettes inchangées (`git status public/vignettes` vide).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add src/toolkit/layers.ts src/styles tests/rendering.test.ts .claude/skills/new-map/references/new-style.md
@@ -319,16 +319,16 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Document**
+- [x] **Step 1: Document**
 
   Une section courte dans `SKILL.md` : quand proposer une couche extérieure, où ranger la source, comment déclarer l'attribution et la licence (ODbL côté OSM, licence de la source côté couche).
 
-- [ ] **Step 2: Verify the whole phase**
+- [x] **Step 2: Verify the whole phase**
 
   Run: `npm test && npm run typecheck && npm run build`
   Expected: PASS ; `git status` sans fichier généré ni couche temporaire.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
   ```bash
   git add .claude/skills/new-map/SKILL.md

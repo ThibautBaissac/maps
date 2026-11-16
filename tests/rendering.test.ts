@@ -22,20 +22,25 @@ function canvas() {
   return { ctx: recordingContext({ width: 320, height: 640 }, calls), calls };
 }
 
-test('cyanotype draws a residential bridge when zoomed out to a single line', (t) => {
+// Path2D does not exist in Node: a stand-in that accepts every call.
+function stubPath2D(t: { after(fn: () => void): void }): void {
   const original = globalThis.Path2D;
-  globalThis.Path2D = class {} as typeof Path2D;
+  globalThis.Path2D = class { constructor() { return new Proxy(this, { get: (o, k) => (k in o ? Reflect.get(o, k) : () => {}) }); } } as unknown as typeof Path2D;
   t.after(() => {
     if (original) globalThis.Path2D = original;
     else Reflect.deleteProperty(globalThis, 'Path2D');
   });
-  const map: MapData = {
-    meta: data.meta, buildings: [], water: [], waterways: [], parks: [],
-    roads: [{ k: 'residential', p: [-10, 0, 10, 0], b: 1 }],
+}
+
+test('cyanotype draws a residential bridge when zoomed out to a single line', (t) => {
+  stubPath2D(t);
+  const roads: Layer = {
+    id: 'roads', role: 'roads', kind: 'lines', attribution: '© test', source: 'openstreetmap',
+    features: [{ g: [-10, 0, 10, 0], k: 'residential', p: { bridge: true } }],
   };
   const out = canvas(), tmp = canvas();
   const view = { x: 0, y: 0, s: 0.2 };
-  renderMap(out.ctx, tmp.ctx, prepareMap(map), makeProjector(view, 320, 640, 1), DEFAULTS, {} as CanvasPattern);
+  renderMap(out.ctx, tmp.ctx, prepareMap([roads], data.meta.half), makeProjector(view, 320, 640, 1), DEFAULTS, {} as CanvasPattern);
   assert.ok(out.calls.some((c) => c.method === 'lineTo' && c.args[0] === 162 && c.args[1] === 320),
     'The bridge must reach its projected endpoint at low zoom');
 });
@@ -173,4 +178,33 @@ test('riso plates drawn from layers keep their recorded canvas calls', () => {
   });
   assert.ok(calls.length > 100, 'the recorded sequence is not empty');
   assert.equal(digest(calls), '41d4b63b13cd370440a59023ef990fdaeae8cf3a');
+});
+
+// Cyanotype map on a small fixture: a bridge, a tunnel, a canal, a stream, a fairway, a lake, a park, a house and stairs.
+// The digest was recorded when the map was still prepared from the map data and matched the
+// sequence drawn from layers: it guards the drawing of the map.
+const SMALL_CYANOTYPE: MapData = {
+  meta: data.meta,
+  buildings: [[[-30, -30, -10, -30, -10, -10, -30, -10, -30, -30]]],
+  roads: [
+    { k: 'residential', n: 'A', p: [-50, 0, 50, 0] },
+    { k: 'primary', p: [0, -50, 0, 50], b: 1 },
+    { k: 'secondary', p: [-50, -40, 50, -40], u: 1 },
+    { k: 'footway', p: [-40, 20, 40, 20] },
+    { k: 'steps', p: [-40, 30, 40, 30] },
+  ],
+  waterways: [{ k: 'canal', p: [-45, -20, 45, -20] }, { k: 'stream', p: [-45, 10, 45, 10] }, { k: 'fairway', p: [-45, 14, 45, 14] }, { k: 'ditch', p: [-45, 12, 45, 12], u: 1 }],
+  water: [{ r: [[20, 20, 40, 20, 40, 40, 20, 40, 20, 20]] }],
+  parks: [{ k: 'park', r: [[-40, 25, -20, 25, -20, 45, -40, 45, -40, 25]] }],
+};
+test('cyanotype map drawn from layers keeps its recorded canvas calls', (t) => {
+  stubPath2D(t);
+  const prepared = prepareMap(osmLayers(SMALL_CYANOTYPE), SMALL_CYANOTYPE.meta.half);
+  const calls = [0.5, 2.5].flatMap((s) => {
+    const out = canvas(), tmp = canvas();
+    renderMap(out.ctx, tmp.ctx, prepared, makeProjector({ x: 0, y: 0, s }, 320, 640, 1), DEFAULTS, {} as CanvasPattern);
+    return out.calls;
+  });
+  assert.ok(calls.length > 100, 'the recorded sequence is not empty');
+  assert.equal(digest(calls), '5292207282756130a3b8be66ca318b1c5152a07d');
 });

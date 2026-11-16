@@ -24,7 +24,7 @@ interface Env {
   hatch: CanvasPattern;
 }
 
-export async function mount({ container, data, meta, locale, options, shell, layers, topic }: MountArgs<CyanotypeOptions>): Promise<MapHandle> {
+export async function mount({ container, meta, locale, options, shell, layers, topic }: MountArgs<CyanotypeOptions>): Promise<MapHandle> {
   const o: CyanotypeOptions = { ...DEFAULTS, ...options };
   await Promise.all([
     loadFont('Space Mono', 'spacemono/SpaceMono-Regular.ttf', { weight: '400' }),
@@ -32,8 +32,8 @@ export async function mount({ container, data, meta, locale, options, shell, lay
   ]);
   shell.theme({ font: o.font });
 
-  const M = prepareMap(data);
-  const half = data.meta.half;
+  const M = prepareMap(layers, meta.half);
+  const half = meta.half;
 
   return mountCanvasMap<Env, NameKind>({ container, layers, meta, shell, ...(topic ? { topic } : {}) }, {
     font: o.font,

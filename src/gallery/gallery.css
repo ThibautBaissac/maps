@@ -30,13 +30,15 @@ body {
 a { color: inherit; }
 
 header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(200px, 26%);
+  align-items: stretch;
   gap: 24px 48px;
   padding: 40px var(--gutter) 36px;
 }
+.gallery-heading { min-width: 0; }
+.gallery-context { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+.gallery-context .languages { justify-content: flex-end; }
 .kicker {
   margin: 0 0 14px;
   font: 14px/1 var(--mono);
@@ -51,7 +53,6 @@ h1 {
 }
 h1 span { display: block; color: var(--muted); }
 .intro { margin: 0; max-width: 36ch; font-size: 17px; color: var(--soft); }
-header > .languages { flex-basis: 100%; justify-content: flex-end; }
 
 /* The strips share the width; the one pointed at or focused opens wider. */
 .strips {
@@ -147,7 +148,11 @@ footer {
 }
 @media (max-width: 720px) {
   :root { --gutter: 16px; }
-  header { padding-top: 24px; padding-bottom: 24px; }
+  header { grid-template-columns: minmax(0, 1fr); padding-top: 24px; padding-bottom: 24px; }
+  .gallery-heading { grid-row: 2; }
+  .gallery-context { display: contents; }
+  .gallery-context .languages { grid-row: 1; }
+  .gallery-context .intro { grid-row: 3; }
   .strips { flex-direction: column; height: auto; }
   .strip { flex: none; height: 440px; }
 }

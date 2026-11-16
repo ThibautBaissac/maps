@@ -102,9 +102,11 @@ export function galleryHtml(locale: Locale, base: string, siteUrl?: string): str
   </head>
   <body>
     <header>
-      ${languageNav(locale, base)}
-      <div><p class="kicker">${esc(copy.title)}</p><h1>${esc(copy.heading[0])} <span>${esc(copy.heading[1])}</span></h1></div>
-      <p class="intro">${esc(copy.intro)}</p>
+      <div class="gallery-heading"><p class="kicker">${esc(copy.title)}</p><h1>${esc(copy.heading[0])} <span>${esc(copy.heading[1])}</span></h1></div>
+      <div class="gallery-context">
+        ${languageNav(locale, base)}
+        <p class="intro">${esc(copy.intro)}</p>
+      </div>
     </header>
     <main><ul class="strips" aria-label="${esc(copy.maps)}">
       ${mapsForLocale(locale).map((map) => strip(map, locale, base)).join('\n      ')}

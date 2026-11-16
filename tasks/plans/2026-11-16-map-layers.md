@@ -589,24 +589,24 @@ Phase 2 :
 
 **Risk:** high (supprime un type public utilisé par tous les styles)
 
-- [ ] **Step 1: Rewrite `tests/osm.test.ts` at the new output**
+- [x] **Step 1: Rewrite `tests/osm.test.ts` at the new output**
 
   Mêmes cas et mêmes valeurs qu'aujourd'hui, lus par rôle : bâtiment en degrés projeté exactement, multipolygone assemblé avec son trou, `building:part` et `building=no` exclus, `Damrak` pont, `area=yes` exclu, footway tunnel, `bridge=no` / `tunnel=no` ignorés, `highway=proposed` exclu, `Singel`, culvert tunnel, `dam` et `riverbank` exclus des cours d'eau, `basin` / `riverbank` / `Vijver` dans `water`, parcs `garden` / `grass` / `wood` / `park`, mer reconstituée à l'ouest du littoral.
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/osm.test.ts`
   Expected: FAIL.
 
-- [ ] **Step 3: Contract**
+- [x] **Step 3: Contract**
 
   Supprimer `src/data.ts` et `src/osm-layers.ts` ; aucun fichier ne doit plus importer `../data.ts` (`grep -rn "data.ts" src scripts tests` vide). Réécrire les docs listées.
 
-- [ ] **Step 4: Verify the whole migration**
+- [x] **Step 4: Verify the whole migration**
 
   Run: `npm test && npm run typecheck && npm run build`, puis `npm run fetch-data -- amsterdam-centre --offline` et `npm run fetch-data -- lisbonne-alfama --offline` si le cache existe : `git diff --stat public/data` vide. Vignettes des deux cartes régénérées : `git status public/vignettes` vide. Navigation clavier et description vérifiées dans le navigateur sur les deux cartes.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add -A src scripts tests places .claude AGENTS.md

@@ -1,0 +1,18 @@
+# Décisions prises pendant le build (spec : 2026-11-16-canvas-map-stage.md)
+
+Points où le spec ne tranchait pas, ou admettait deux lectures.
+
+1. **Les mises en page portent elles-mêmes `attr` et `furniture`.** La mise en page type du toolkit (`computeLayout`) et celle de cyanotype (`sheetLayout`) renvoient directement un objet compatible avec `CanvasLayout`. Le hook `resize` renvoie donc la mise en page telle quelle, et un futur style qui reprend `computeLayout` hérite du mobilier à éviter sans rien écrire.
+2. **Les rects attendus par le test d'évitement viennent des fonctions de mise en page, pas de `shell.place`.** `shell.place` ne reçoit que des coins (`left`/`top`, `right`/`bottom`), pas des rects entiers. Le test calcule donc `nav` et `attr` avec `computeLayout` ou `sheetLayout` à la taille de la fausse page. Le test de placement vérifie de son côté que `shell.place` reçoit bien les coins de ces mêmes rects.
+3. **Le test d'évitement couvre la vue d'ensemble, plus cinq vues rapprochées** (zooms 1 et 2 px/m, centres décalés), rendues via `viewport.view` et `full()`, qui font partie de `MapHandle`. En vue d'ensemble seule, aucun nom n'approche la navigation ni l'attribution, et le test ne détectait pas la suppression de l'évitement. Les vues ont été choisies en sondant celles qui amènent des noms dans ces deux coins pour les deux styles. Le test tourne à une densité de 2 et compare aux emplacements élargis de 4 px.
+4. **Le test du titre couvre aussi cyanotype.** Le cartouche de cyanotype n'avait aucun test, et le test coûte une ligne de plus dans la boucle.
+5. **Faux DOM : `DOMMatrix` et `Path2D` en plus de la liste du spec.** Les deux styles appellent `DOMMatrix` pour orienter leurs motifs, et cyanotype utilise `Path2D`. `FakePage.cleanup()` détruit le handle avant de retirer les faux globaux, parce que `destroy()` appelle `cancelAnimationFrame`.
+6. **Riso mesure ses noms sur le contexte de `env.map`, plus sur celui de la plaque A.** `placeLabels` fixe lui-même la police avant chaque mesure : le contexte utilisé ne change pas les largeurs.
+7. **L'`Env` de cyanotype perd `W` et `H`.** Seul le projecteur en avait besoin, et c'est maintenant le stage qui le construit.
+
+## Après la revue de code
+
+8. **L'étape de vérification de `/new-map` fixe la vue avec `Object.assign(window.__map.viewport.view, …)` puis appelle `full()`, au lieu de `zoom(facteur)` + `full()`.** `zoom()` anime la vue vers sa cible, image par image. Un `full()` appelé juste après rend donc la vue de départ, pas la vue zoomée. `zoom()` reste cité pour zoomer comme les boutons. Fixer la vue saute le `clampView` du viewport : la doc donne un centre (0, 0), qui est toujours dans le carré.
+9. **Le faux DOM ne fournit pas `getImageData`.** Aucun code ne lit de pixels. `putImageData` est enregistré comme n'importe quel appel. Le faux shell enregistre `theme` comme `place`.
+10. **La marge de 4 px autour de la navigation et de l'attribution n'est pas fixée par un test.** Le test d'évitement regarde le centre de chaque lettre (le seul point que les appels enregistrés donnent). Ce centre est à environ 5 px du bord de la lettre, plus que la marge. La vérifier demanderait de reconstruire la boîte de chaque lettre à partir de sa police, ce qui rendrait le test fragile. Le test fixe l'évitement lui-même, la conversion en px device (à une densité de 2) et l'évitement de l'attribution (avec des vues centrées pour amener des noms dans ce coin).
+11. **`overlay(ctx, env, view)` ne reçoit ni `dpr` ni la mise en page,** comme le spec le fixe. Chaque style les garde donc dans son `Env`. Si un troisième style montre la même répétition, on passera un petit objet d'image à `overlay`.

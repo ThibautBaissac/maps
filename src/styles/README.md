@@ -29,11 +29,13 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
 
 Le style se déclare ensuite dans `src/styles/index.ts` : son interface d'options dans `StyleOptions` (la clé devient un nom de style valide dans le registre, et les `options` de ses cartes sont vérifiées contre cette interface), puis dans `STYLES` un libellé, une `legend` textuelle expliquant ses symboles, un `load()` paresseux et un `card(options)` qui renvoie `{ bg, fg, accent }` pour la galerie (avec `dark: true` si le style trace en clair sur un fond sombre : la galerie inverse alors son mélange de couleurs).
 
+`mount` ne se termine qu'une fois la carte dessinée : la capture de vignette lit le canvas de `#stage` dès que la promesse est résolue (`mountCanvasMap()` le garantit si la scène a une taille).
+
 La page branche ses boutons de zoom sur le champ facultatif `viewport` de `MapHandle`. Un style qui utilise le viewport de la boîte à outils le renvoie pour activer ces boutons ; sinon il fournit ses propres commandes. En développement, la valeur renvoyée par `mount` est exposée dans `window.__map`, avec `full()` pour les vérifications de rendu.
 
 ### Ce que tout style doit respecter
 
-- L'attribution OSM et les commandes communes restent visibles : les positionner avec `shell.place(...)`, les habiller avec `shell.theme(...)`, ne jamais les masquer. Réserver la zone de navigation au lien retour, aux boutons de zoom et au bouton de description.
+- L'attribution OSM et les commandes communes restent visibles : les positionner avec `shell.place(...)` (un style construit sur `mountCanvasMap()` les fait placer par le stage), les habiller avec `shell.theme(...)`, ne jamais les masquer. Réserver la zone de navigation au lien retour, aux boutons de zoom et au bouton de description.
 - La navigation au clavier et à la souris fonctionne (le viewport de la boîte à outils gère les deux).
 - Aucune requête vers un serveur extérieur : les polices vont dans `public/fonts/` avec leur licence et se chargent avec `loadFont()`.
 - S'inspirer d'un genre, jamais copier une œuvre existante.
@@ -62,12 +64,12 @@ Les types font foi : `MapData` et ses éléments dans `src/data.ts`, `Place` dan
 
 | Module | Fournit |
 |---|---|
-| `stage.ts` | `mountCanvasMap()` : canvas de scène, viewport et boucle « rendu net à l'arrêt, image re-projetée en mouvement » ; le style ne fournit que `onResize`, `render` et `present`. `drawReprojected()` pour poser le tampon net dans la fenêtre de carte |
+| `stage.ts` | `mountCanvasMap(args, adapter)` : toute la carte Canvas 2D. Canvas de scène, viewport, boucle « rendu net à l'arrêt, image re-projetée en mouvement », carré imprimé (marge de 40 m, échelle minimale, fondu), placement du lien retour et de l'attribution, placement des noms à l'écart des overlays et du mobilier, pose du papier et du tampon net. L'adapter (`CanvasStyle`) ne porte que les choix graphiques : `font`, `resize` (tampons et mise en page), `labels` (quels noms selon le zoom), `render` (rendu net, reçoit les noms placés et `fade`), `blend`, `overlay` (habillage) |
 | `viewport.ts` | `createViewport()` : vue `{ x, y, s }`, navigation molette/glisser/clavier, `onFrame` pendant le mouvement, `onSettle` pour le rendu net ; `reprojection()` pour réutiliser la dernière image nette pendant le mouvement |
 | `canvas.ts` | canvas de scène focalisable, dimensionnement selon la densité de pixels, tampons hors écran ; `context2d()` et `pattern()`, qui lèvent une erreur au lieu de renvoyer `null` |
 | `projection.ts` | mètres → px avec tremblé du trait facultatif, construction de tracés, élimination hors écran, fondu du carré |
 | `labels.ts` | noms candidats tirés des données, placement le long des lignes sans collision, dessin des lettres (`knockOutLabels()` pour le halo, `fillLabels()`) ; `LabelGroup<K>` porte l'étiquette propre au style (encre, couleur…) jusqu'aux `LabelJob<K>` |
-| `layout.ts` | `mapWindow()` (cadre, fenêtre de carte, taille du carré, zone de navigation) partagé par toutes les mises en page, une mise en page type (`computeLayout()` : emplacements du cartouche, de la rose des vents, de la légende) et les pas de l'échelle ; à prendre, adapter ou ignorer |
+| `layout.ts` | `mapWindow()` (cadre, fenêtre de carte, taille du carré, zone de navigation) partagé par toutes les mises en page, une mise en page type (`computeLayout()` : emplacements du cartouche, de la rose des vents, de la légende, de l'attribution, et mobilier à éviter ; elle se passe telle quelle à `mountCanvasMap()`) et les pas de l'échelle ; à prendre, adapter ou ignorer |
 | `geometry.ts` | types `Point`, `Rect`, `Circle`, `scaleRect()`, et des aides typées pour les objets à clés connues (`typedKeys`, `isKeyOf`, `recordOf`) |
 | `noise.ts` | aléatoire reproductible, bruit, canvas de pixels pour les textures |
 | `fonts.ts` | `loadFont(famille, fichier)` depuis `public/fonts/` |

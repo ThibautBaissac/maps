@@ -7,6 +7,8 @@ export type Rect = [x0: number, y0: number, x1: number, y1: number];
 export interface Circle { x: number; y: number; r: number }
 
 export const scaleRect = (r: Rect, k: number): Rect => [r[0] * k, r[1] * k, r[2] * k, r[3] * k];
+/** `r` widened by `d` on each side. */
+export const growRect = (r: Rect, d: number): Rect => [r[0] - d, r[1] - d, r[2] + d, r[3] + d];
 
 // Object.keys keeps the declaration order; typed for objects with known keys.
 export const typedKeys = <T extends object>(o: T): (keyof T & string)[] => Object.keys(o) as (keyof T & string)[];

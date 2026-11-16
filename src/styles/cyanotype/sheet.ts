@@ -3,7 +3,7 @@
 import type { MapMeta } from '../../data.ts';
 import { formatLat, formatLon } from '../../place.ts';
 import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
-import type { Point, Rect } from '../../toolkit/geometry.ts';
+import { growRect, type Point, type Rect } from '../../toolkit/geometry.ts';
 import { clamp, mapWindow, scaleBar } from '../../toolkit/layout.ts';
 import { pixelCanvas, vnoise } from '../../toolkit/noise.ts';
 import { makeProjector, type Projector } from '../../toolkit/projection.ts';
@@ -30,6 +30,8 @@ export interface SheetLayout {
   nav: Rect;
   /** OSM attribution. */
   attr: Rect;
+  /** Boxes of the drawn furniture, for names to avoid. */
+  furniture: Rect[];
 }
 
 export function sheetLayout(w: number, h: number): SheetLayout {
@@ -44,7 +46,8 @@ export function sheetLayout(w: number, h: number): SheetLayout {
   const cart: Rect = [map[2] - pad - cw, map[3] - pad - ch, map[2] - pad, map[3] - pad];
   // The OSM attribution sits on top of the title block, right-aligned with it.
   const attr: Rect = [Math.max(map[0], cart[2] - 260), cart[1] - 6 - 24, cart[2], cart[1] - 6];
-  return { w, h, m, band, frame, map, plate, cart, nav, attr };
+  const furniture = [growRect(cart, 4)];
+  return { w, h, m, band, frame, map, plate, cart, nav, attr, furniture };
 }
 
 // Blue ground with soft mottling, fine grain and a slightly darker rim.

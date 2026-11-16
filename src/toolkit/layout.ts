@@ -1,4 +1,4 @@
-import { scaleRect, type Circle, type Rect } from './geometry.ts';
+import type { Circle, Rect } from './geometry.ts';
 
 export const clamp = (v: number, a: number, b: number): number => Math.min(b, Math.max(a, v));
 
@@ -17,17 +17,23 @@ export interface Layout {
   map: Rect;
   /** Square plate size at full zoom-out. */
   plate: number;
-  /** "Back to gallery" link. */
+  /** "Back to gallery" link and map controls (HTML). */
   nav: Rect;
+  /** OSM attribution (HTML), bottom right of the map window. */
+  attr: Rect;
   /** Cartouche. */
   cart: Rect;
   /** Compass rose. */
   comp: Circle;
   legend: Rect | null;
+  /** Boxes of the drawn furniture, for names to avoid. */
+  furniture: Rect[];
 }
 
 /** Height of the back link and navigation buttons (HTML), top-left of the map window. */
 const NAV_H = 80;
+/** Size of the OSM attribution (HTML) and its distance to the map window's corner. */
+const ATTR_W = 224, ATTR_H = 28, ATTR_INSET = 6;
 
 // Frame at margin m, map window inside a band, square plate size at full zoom-out
 // and the box of the navigation overlay, all in CSS px.
@@ -77,7 +83,10 @@ export function computeLayout(w: number, h: number): Layout {
     cart = [map[0] + pad, map[3] - pad - ch, map[0] + pad + cw, map[3] - pad];
     comp = { x: map[2] - pad - r, y: map[1] + pad + r * 1.25, r };
   }
-  return { w, h, u, m, band, frame, map, plate, nav, cart, comp, legend };
+  const attr: Rect = [map[2] - ATTR_INSET - ATTR_W, map[3] - ATTR_INSET - ATTR_H, map[2] - ATTR_INSET, map[3] - ATTR_INSET];
+  const ko = knockouts({ cart, comp, legend });
+  const furniture = [...ko.rects, ...ko.circles.map((k): Rect => [k.x - k.r, k.y - k.r, k.x + k.r, k.y + k.r])];
+  return { w, h, u, m, band, frame, map, plate, nav, attr, cart, comp, legend, furniture };
 }
 
 const SCALE_STEPS = [10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000] as const;
@@ -100,16 +109,4 @@ export function knockouts(L: Pick<Layout, 'cart' | 'comp' | 'legend'>): { rects:
     ],
     circles: [{ x: c.x, y: c.y, r: c.r * 1.22 }, { x: c.x, y: c.y - c.r - fs * 0.5, r: fs * 0.62 }],
   };
-}
-
-// Boxes (device px) that map labels must avoid: furniture and HTML overlays.
-export function avoidBoxes(L: Layout, dpr: number): Rect[] {
-  const ko = knockouts(L);
-  const attr: Rect = [L.map[2] - 230, L.map[3] - 34, L.map[2], L.map[3]];
-  return [
-    ...ko.rects,
-    ...ko.circles.map((c): Rect => [c.x - c.r, c.y - c.r, c.x + c.r, c.y + c.r]),
-    L.nav,
-    attr,
-  ].map((r) => scaleRect(r, dpr));
 }

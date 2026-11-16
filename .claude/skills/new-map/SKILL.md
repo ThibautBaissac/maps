@@ -71,7 +71,7 @@ Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n
 
 1. Lance le serveur de développement avec `preview_start` (configuration `vite` de `.claude/launch.json`), puis ouvre `http://localhost:5173/maps/cartes/<id>/`. Si le port 5173 est déjà pris, un serveur tourne déjà pour ce dossier (une autre session, par exemple) : ouvre simplement l'URL dans le navigateur intégré. Si l'URL renvoie la galerie ou une erreur 404, lis la console du serveur : l'avertissement `[registry] skipped` en donne la raison.
 2. Si le panneau Browser est caché, la page mesure 0 × 0 et ne dessine rien. Fixe une taille avec `resize_window` (par exemple 1280 × 800) et recharge.
-3. Prends des captures à **trois niveaux de zoom** : vue d'ensemble, environ 1 px/m, environ 4 px/m. En développement, `window.__map` expose la poignée renvoyée par `mount` : pour un style construit sur le viewport, utilise `window.__map.viewport.setView({ x, y, s })`.
+3. Prends des captures à **trois niveaux de zoom** : vue d'ensemble, environ 1 px/m, environ 4 px/m. En développement, `window.__map` expose la poignée renvoyée par `mount` : pour un style construit sur le viewport, fixe la vue avec `Object.assign(window.__map.viewport.view, { x: 0, y: 0, s: 1 })` puis force le rendu net avec `window.__map.full()` (ou zoome comme les boutons avec `window.__map.viewport.zoom(1.5)`).
 4. Teste aussi la largeur téléphone (`resize_window` avec le preset `mobile`), une vraie molette et un vrai glisser.
 5. Contrôle :
    - console sans erreur ;

@@ -61,6 +61,18 @@ Les serveurs Overpass publics sont souvent surchargés. Le script les essaie tou
 
 Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.org autour du lieu, surtout l'eau : mer, estuaire, fleuve, lac. Le script reconstitue la mer à partir du littoral (`natural=coastline`). Si une étendue d'eau visible sur OSM manque dans `water`, c'est un manque de la conversion à corriger dans `scripts/osm.ts` (requête Overpass et règles de classement, avec un test dans `tests/osm.test.ts`), et à documenter dans `src/styles/README.md`, avant de dessiner. Si la correction ne touche que les règles de classement (pas la requête), vérifie-la sans retélécharger : `npm run fetch-data -- <lieu> --offline`.
 
+### Couches extérieures (facultatif)
+
+OSM ne contient pas tout. Si le sujet validé repose sur des objets qu'OSM n'a pas (équipements recensés par une ville, tracé historique, relevé d'une association), propose une **couche extérieure** : un fichier GeoJSON ajouté à la carte, sans toucher aux données OSM. Ne la propose que si la source est ouverte et son usage libre, et dis à l'utilisateur d'où elle vient avant de l'utiliser.
+
+1. **Ranger la source** dans `layers/<lieu>/<id>.geojson` (versionnée, en WGS84). `<id>` est un identifiant `a-z0-9-` ; `osm` est réservé.
+2. **La déclarer** dans `places/layers.ts`, sous l'id du lieu : `title` (texte ou `{ fr, en, es }`, affiché dans la description), `file`, `kind` (`points`, `lines` ou `areas`), `role` (`overlay`, dessinée par-dessus la carte), `nameField` et `categoryField` si la source en a.
+3. **Créditer** dans `attribution` (obligatoire, non vide) : l'auteur et la licence de la source, par exemple `© Ville d’Amsterdam, CC BY 4.0`. La page l'affiche à la suite du crédit OSM (ODbL, déjà présent) ; ne l'invente pas, relève-la sur la page du jeu de données. Sans licence claire, n'utilise pas la source.
+4. **Convertir** : `npm run layers -- <lieu>` écrit `public/data/<lieu>/<id>.json` en mètres locaux ; committe ce fichier avec la source.
+5. **L'attacher à la carte** : `layers: ['<id>']` dans l'entrée de `src/registry.ts`. Le build refuse un id inconnu, un fichier absent ou converti pour un autre carré.
+
+Un style Canvas dessine ces couches avec `drawLayers()` (voir `src/styles/README.md`) ; vérifie à l'œil qu'elles se lisent à côté du sujet. La description accessible en liste déjà les objets nommés, dans une section par couche.
+
 ## 3. Le registre
 
 Ajoute l'entrée dans `src/registry.ts` :

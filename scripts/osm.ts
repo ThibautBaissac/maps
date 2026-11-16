@@ -3,7 +3,7 @@
 // scripts/fetch-osm.ts downloads and writes; this module decides what the data holds.
 import { PLACES, type PlaceId } from '../places/index.ts';
 import { isRoadKind, type BBox, type Line, type MapData, type Ring, type Road, type Waterway } from '../src/data.ts';
-import { isRecord, type Place } from '../src/place.ts';
+import { isRecord, parsePlace, type Place } from '../src/place.ts';
 import { endpointKey as key, r1, seaPolygons } from './coastline.ts';
 
 // Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)
@@ -73,6 +73,30 @@ export function parseOverpassAnswer(json: unknown): OverpassAnswer {
   const answer = json;
   if (!answer.elements.length) throw new Error(`no elements (${answer.remark ?? 'empty answer'})`);
   return answer;
+}
+
+/** A download kept for converting again without network: the place as it was then, and the answer. */
+export interface CachedAnswer { place: Place; server: string; fetchedAt: string; answer: OverpassAnswer }
+
+/** Fields that set the downloaded square: when one changed, the cached answer covers other ground. */
+const SQUARE_FIELDS = ['lat', 'lon', 'sizeKm'] as const;
+
+/**
+ * The cached download, checked against the place as it is now. Throws when the cache is
+ * damaged or was downloaded for another square; a renamed place is fine (same ground).
+ */
+export function parseCachedAnswer(json: unknown, place: Place): CachedAnswer {
+  if (!isRecord(json) || typeof json['server'] !== 'string' || typeof json['fetchedAt'] !== 'string') {
+    throw new Error('damaged cache: expected { place, server, fetchedAt, answer }');
+  }
+  const cachedPlace = parsePlace(json['place'], 'cache');
+  const answer = parseOverpassAnswer(json['answer']);
+  for (const k of SQUARE_FIELDS) {
+    if (cachedPlace[k] !== place[k]) {
+      throw new Error(`the cache was downloaded for ${k} = ${cachedPlace[k]}, the place now has ${k} = ${place[k]}: run fetch-data without --offline`);
+    }
+  }
+  return { place: cachedPlace, server: json['server'], fetchedAt: json['fetchedAt'], answer };
 }
 
 // Joins relation member ways into closed rings by matching endpoints.

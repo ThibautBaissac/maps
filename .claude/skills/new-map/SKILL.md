@@ -41,7 +41,7 @@ npm run fetch-data -- <id>
 
 Les serveurs Overpass publics sont souvent surchargés. Le script les essaie tous, deux tours de suite, avec une pause entre les deux (jusqu'à une dizaine de minutes en cas d'échec) : lance-le en arrière-plan. S'il échoue quand même, relance-le une fois quelques minutes plus tard. Si ce second essai échoue aussi, arrête-toi et explique le problème à l'utilisateur plutôt que d'inventer des données. Au-delà d'environ 8 Mo de JSON, propose une zone plus petite : le chargement de la page en souffrirait.
 
-Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.org autour du lieu, surtout l'eau : mer, estuaire, fleuve, lac. Le script reconstitue la mer à partir du littoral (`natural=coastline`). Si une étendue d'eau visible sur OSM manque dans `water`, c'est un manque de la conversion à corriger dans `scripts/osm.ts` (requête Overpass et règles de classement, avec un test dans `tests/osm.test.ts`), et à documenter dans `src/styles/README.md`, avant de dessiner.
+Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.org autour du lieu, surtout l'eau : mer, estuaire, fleuve, lac. Le script reconstitue la mer à partir du littoral (`natural=coastline`). Si une étendue d'eau visible sur OSM manque dans `water`, c'est un manque de la conversion à corriger dans `scripts/osm.ts` (requête Overpass et règles de classement, avec un test dans `tests/osm.test.ts`), et à documenter dans `src/styles/README.md`, avant de dessiner. Si la correction ne touche que les règles de classement (pas la requête), vérifie-la sans retélécharger : `npm run fetch-data -- <lieu> --offline`.
 
 ## 3. Le registre
 
@@ -53,7 +53,7 @@ Ajoute l'entrée dans `src/registry.ts` :
 
 L'`id` donne l'URL de la page (`/cartes/<id>/`) : court et lisible. Par défaut `<ville>-<style>`. Si la ville a déjà une carte dans ce style, prends `<ville>-<quartier>-<style>`, et pour une variante ajoute un mot qui la distingue (`amsterdam-riso-vert`). Une demande explicite de l'utilisateur l'emporte.
 
-`npm run build` vérifie strictement le registre : d'abord les types (`tsc -b` : lieu présent dans `places/index.ts`, clé de style connue, `options` conformes au `defaults.ts` du style), puis les données (`src/catalogue.ts`) : présentes, et toujours d'accord avec le lieu (nom, quartier, coordonnées, taille). Si tu modifies un lieu, relance `npm run fetch-data -- <lieu>`. En développement, une entrée en défaut est seulement ignorée avec un avertissement dans la console du serveur, et sa page apparaît d'elle-même dès que les données sont là.
+`npm run build` vérifie strictement le registre : d'abord les types (`tsc -b` : lieu présent dans `places/index.ts`, clé de style connue, `options` conformes au `defaults.ts` du style), puis les données (`src/catalogue.ts`) : présentes, et toujours d'accord avec le lieu (nom, quartier, coordonnées, taille). Si tu modifies un lieu, relance `npm run fetch-data -- <lieu>` ; pour un simple changement de nom ou de quartier, `npm run fetch-data -- <lieu> --offline` suffit (il reconvertit la réponse gardée en cache, sans réseau). En développement, une entrée en défaut est seulement ignorée avec un avertissement dans la console du serveur, et sa page apparaît d'elle-même dès que les données sont là.
 
 ## 4. Coder un nouveau style
 

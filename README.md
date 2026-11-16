@@ -36,7 +36,7 @@ Au build, `vite.config.ts` lit le catalogue, vérifie que les données de chaque
 ## Ajouter une carte
 
 1. Ajouter le lieu à `places/index.ts` : `node .claude/skills/new-map/scripts/new-place.ts --city "<ville>" --district "<quartier>"`, ou à la main en copiant une entrée.
-2. Télécharger ses données : `npm run fetch-data -- <lieu>`. À refaire après toute modification du lieu : le build refuse des données qui ne correspondent plus à leur lieu.
+2. Télécharger ses données : `npm run fetch-data -- <lieu>`. À refaire après toute modification du lieu : le build refuse des données qui ne correspondent plus à leur lieu. La réponse Overpass brute est gardée dans `.cache/overpass/<lieu>.json` (ignoré par Git, une douzaine de Mo par lieu) : `npm run fetch-data -- <lieu> --offline` reconvertit cette réponse sans réseau, après un changement de la conversion (`scripts/osm.ts`) ou un simple renommage du lieu. Si le centre ou la taille du lieu a changé, il faut retélécharger.
 3. Ajouter une ligne dans `src/registry.ts` :
 
    ```ts

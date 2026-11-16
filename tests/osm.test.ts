@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { PLACES } from '../places/index.ts';
 import type { Ring } from '../src/data.ts';
-import { convertOsm, overpassQuery, parseOverpassAnswer, type OverpassAnswer } from '../scripts/osm.ts';
+import { convertOsm, overpassQuery, parseCachedAnswer, parseOverpassAnswer, type OverpassAnswer } from '../scripts/osm.ts';
 
 const PLACE = PLACES['amsterdam-centre'];
 const HALF = 1000;
@@ -152,4 +152,31 @@ test('an Overpass answer must hold elements', () => {
   assert.throws(() => parseOverpassAnswer({ elements: [], remark: 'runtime error: timeout' }), /no elements \(runtime error: timeout\)/);
   assert.throws(() => parseOverpassAnswer({ elements: [] }), /no elements \(empty answer\)/);
   assert.equal(parseOverpassAnswer(ANSWER), ANSWER);
+});
+
+// The cache of a download: { place, server, fetchedAt, answer }, place as it was then.
+const cached = (place: object = PLACE) => ({ place, server: SOURCE.server, fetchedAt: SOURCE.fetchedAt, answer: ANSWER });
+
+test('a cached answer for the same square is read back with its server and date', () => {
+  assert.deepEqual(parseCachedAnswer(cached(), PLACE), { place: PLACE, server: SOURCE.server, fetchedAt: SOURCE.fetchedAt, answer: ANSWER });
+});
+
+test('a cached answer still serves a place renamed since the download', () => {
+  const renamed = { ...PLACE, name: 'Mokum', district: 'Binnenstad' };
+  assert.equal(parseCachedAnswer(cached(), renamed).answer, ANSWER);
+});
+
+test('a cached answer for another square is refused, naming the field and the way out', () => {
+  for (const [field, value] of [['lat', 52.4], ['lon', 4.9], ['sizeKm', 3]] as const) {
+    const moved = { ...PLACE, [field]: value };
+    assert.throws(() => parseCachedAnswer(cached(), moved), (err: Error) =>
+      err.message.includes(field) && err.message.includes(String(value)) && err.message.includes(String(PLACE[field]))
+      && err.message.includes('without --offline'));
+  }
+});
+
+test('a damaged cache is refused', () => {
+  assert.throws(() => parseCachedAnswer({ place: PLACE }, PLACE), /cache/);
+  assert.throws(() => parseCachedAnswer({ ...cached(), answer: { elements: [] } }, PLACE), /no elements/);
+  assert.throws(() => parseCachedAnswer(null, PLACE), /cache/);
 });

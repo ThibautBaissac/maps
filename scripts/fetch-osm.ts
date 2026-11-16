@@ -1,15 +1,19 @@
 // Downloads OpenStreetMap data for one place of places/index.ts (once), converts it to
 // local metres (scripts/osm.ts) and writes a compact public/data/<place>.json (dataPath in
-// places/index.ts).
-// Usage: npm run fetch-data -- <place-id>     (e.g. amsterdam-centre)
-import { mkdir, writeFile } from 'node:fs/promises';
+// places/index.ts). The raw answer is kept in .cache/overpass/<place>.json (git-ignored):
+// --offline converts that cached answer again, without network, keeping its server and date.
+// Usage: npm run fetch-data -- <place-id> [--offline]     (e.g. amsterdam-centre)
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dataPath, isPlaceId, PLACES } from '../places/index.ts';
 import { featureCounts } from '../src/data.ts';
 import { fail, message } from './cli.ts';
-import { convertOsm, overpassQuery, parseOverpassAnswer, QUERY_TIMEOUT_S, type OverpassAnswer } from './osm.ts';
+import { convertOsm, overpassQuery, parseCachedAnswer, parseOverpassAnswer, QUERY_TIMEOUT_S, type CachedAnswer, type OverpassAnswer } from './osm.ts';
 
-const PLACE = process.argv[2] ?? '';
-if (!PLACE) fail('Usage: npm run fetch-data -- <place-id>   (a key of places/index.ts)');
+const args = process.argv.slice(2);
+const OFFLINE = args.includes('--offline');
+const PLACE = args.find((a) => !a.startsWith('--')) ?? '';
+const unknown = args.filter((a) => a.startsWith('--') && a !== '--offline');
+if (!PLACE || unknown.length) fail('Usage: npm run fetch-data -- <place-id> [--offline]   (a key of places/index.ts)');
 if (!isPlaceId(PLACE)) fail(`No such place: ${PLACE}. Known: ${Object.keys(PLACES).join(', ')}`);
 const CITY = PLACES[PLACE];
 
@@ -55,8 +59,29 @@ async function download(query: string): Promise<{ answer: OverpassAnswer; url: s
   throw new Error('All Overpass servers failed:\n  ' + errors.join('\n  '));
 }
 
-const { answer, url } = await download(overpassQuery(CITY));
-const data = convertOsm(answer, PLACE, { server: url, fetchedAt: new Date().toISOString() });
+const cacheFile = new URL(`../.cache/overpass/${PLACE}.json`, import.meta.url);
+
+// The download to convert: the cached one with --offline, otherwise a new one, cached.
+async function source(): Promise<CachedAnswer> {
+  if (OFFLINE) {
+    const text = await readFile(cacheFile, 'utf8').catch(() =>
+      fail(`No cached answer for ${PLACE} (.cache/overpass/${PLACE}.json): run npm run fetch-data -- ${PLACE} once without --offline.`));
+    try {
+      return parseCachedAnswer(JSON.parse(text), CITY);
+    } catch (err) {
+      return fail(`.cache/overpass/${PLACE}.json: ${message(err)}`);
+    }
+  }
+  const { answer, url } = await download(overpassQuery(CITY));
+  const cached: CachedAnswer = { place: CITY, server: url, fetchedAt: new Date().toISOString(), answer };
+  await mkdir(new URL('.', cacheFile), { recursive: true });
+  await writeFile(cacheFile, JSON.stringify(cached));
+  return cached;
+}
+
+const { server, fetchedAt, answer } = await source();
+if (OFFLINE) console.log(`Converting the answer cached on ${fetchedAt} (${server})`);
+const data = convertOsm(answer, PLACE, { server, fetchedAt });
 
 const out = new URL(`../public/${dataPath(PLACE)}`, import.meta.url);
 await mkdir(new URL('.', out), { recursive: true });

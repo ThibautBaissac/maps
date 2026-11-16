@@ -3,3 +3,5 @@ dist
 .DS_Store
 # generated from src/registry.js by vite.config.js
 cartes/
+# raw Overpass answers kept by scripts/fetch-osm.ts for --offline
+.cache/

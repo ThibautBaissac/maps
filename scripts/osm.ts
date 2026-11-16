@@ -2,9 +2,10 @@
 // conversion to local metres. Pure: no network, no file, no process, no console.
 // scripts/fetch-osm.ts downloads and writes; this module decides what the data holds.
 import { PLACES, type PlaceId } from '../places/index.ts';
-import { isRoadKind, type BBox, type Line, type MapData, type Ring, type Road, type Waterway } from '../src/data.ts';
+import { isRoadKind, type Line, type MapData, type Ring, type Road, type Waterway } from '../src/data.ts';
 import { isRecord, parsePlace, type Place } from '../src/place.ts';
-import { endpointKey as key, r1, seaPolygons } from './coastline.ts';
+import { localProjection, survey } from '../src/geo.ts';
+import { endpointKey as key, seaPolygons } from './coastline.ts';
 
 // Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)
 // is always defined, hence the `!` in the loops below.
@@ -30,17 +31,6 @@ interface OsmTags {
 interface OsmMember { type: string; role: string; geometry?: LatLon[] }
 interface OsmElement { type: 'node' | 'way' | 'relation'; tags?: OsmTags; geometry?: LatLon[]; members?: OsmMember[] }
 export interface OverpassAnswer { elements: OsmElement[]; remark?: string; osm3s?: { timestamp_osm_base?: string } }
-
-const R = 6371008.8;
-const toRad = (d: number): number => (d * Math.PI) / 180;
-
-// The downloaded square: metres from the centre to its edge, and its bounds in degrees.
-function survey(place: Place): { half: number; bbox: BBox } {
-  const half = (place.sizeKm * 1000) / 2;
-  const dLat = (half / R) * (180 / Math.PI);
-  const dLon = dLat / Math.cos(toRad(place.lat));
-  return { half, bbox: [place.lat - dLat, place.lon - dLon, place.lat + dLat, place.lon + dLon] };
-}
 
 /** The Overpass QL query for everything a map draws inside the place's square. */
 export function overpassQuery(place: Place): string {
@@ -143,14 +133,8 @@ export function convertOsm(answer: OverpassAnswer, placeId: PlaceId, source: { s
   const place = PLACES[placeId];
   const { half, bbox } = survey(place);
 
-  // Local equirectangular projection, metres, x east / y north, 0.1 m precision.
-  const kx = R * toRad(1) * Math.cos(toRad(place.lat));
-  const ky = R * toRad(1);
-  const project = (geom: readonly LatLon[]): Line => {
-    const out: Line = [];
-    for (const p of geom) out.push(r1((p.lon - place.lon) * kx), r1((p.lat - place.lat) * ky));
-    return out;
-  };
+  const toLocal = localProjection(place);
+  const project = (geom: readonly LatLon[]): Line => geom.flatMap((p) => toLocal(p.lat, p.lon));
   const polygonRings = (el: OsmElement): Ring[] => {
     if (el.type === 'way') return el.geometry ? [project(el.geometry)] : [];
     const members = (el.members ?? []).flatMap((m) => (m.type === 'way' && m.geometry ? [{ role: m.role, geometry: m.geometry }] : []));

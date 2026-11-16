@@ -1,6 +1,5 @@
-import type { Line } from './data.ts';
 import { featureCount, formatDate, formatNumber, messages, type Locale } from './i18n/index.ts';
-import { featuresOf, isTunnel, type Layer, type Survey } from './layers.ts';
+import { featuresOf, isTunnel, type Layer, type Line, type Survey } from './layers.ts';
 import type { TopicAnalysis } from './topics.ts';
 import { topicContent } from './topic-content.ts';
 

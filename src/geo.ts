@@ -2,8 +2,7 @@
 // (scripts/osm.ts for OpenStreetMap, scripts/geojson.ts for GeoJSON layers).
 // Local metres: x east, y north, origin at the place centre, 0.1 m precision.
 // Runs in the browser and in Node: no DOM, no Node API.
-import type { BBox } from './data.ts';
-import type { Square } from './layers.ts';
+import type { BBox, Square } from './layers.ts';
 import type { Point } from './toolkit/geometry.ts';
 
 const R = 6371008.8;

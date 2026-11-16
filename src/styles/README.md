@@ -52,17 +52,25 @@ Les styles Canvas existants utilisent `drawTopic()` pour les tronçons et `drawT
 
 ## Données
 
-Les types font foi : `MapData` et ses éléments dans `src/data.ts`, `Place` dans `src/place.ts`. Les deux tournent aussi sous Node (`scripts/fetch-osm.ts`, `vite.config.ts`) : ni DOM ni API Node dedans.
+Une carte reçoit ses données sous forme de **couches** (`Layer`, `src/layers.ts`), dans `MountArgs.layers`. Les types font foi : `Layer`, `Feature` et leurs aides dans `src/layers.ts`, `Place` dans `src/place.ts`. Les deux tournent aussi sous Node (`scripts/fetch-osm.ts`, `vite.config.ts`) : ni DOM ni API Node dedans. Ce que la carte imprime sur elle-même (titre, carré, date, attribution) vient de `MountArgs.meta`.
 
-`data.meta` : `name`, `district`, `lat`, `lon`, `sizeKm`, `half` (mètres du centre au bord du carré), `attribution`, date de téléchargement. Les coordonnées sont en mètres locaux, x vers l'est, y vers le nord, origine au centre du lieu ; les géométries sont des tableaux plats `[x0, y0, x1, y1, …]`. Un anneau tiré d'un chemin OSM répète son premier point à la fin, mais pas forcément un anneau de mer reconstitué à partir du littoral, ni celui d'une relation incomplète : fermer le tracé soi-même (`closePath()`) plutôt que compter sur cette répétition.
+Les coordonnées sont en mètres locaux, x vers l'est, y vers le nord, origine au centre du lieu, arrondies à 0,1 m ; les géométries sont des tableaux plats `[x0, y0, x1, y1, …]`. Un anneau tiré d'un chemin OSM répète son premier point à la fin, mais pas forcément un anneau de mer reconstitué à partir du littoral, ni celui d'une relation incomplète : fermer le tracé soi-même (`closePath()`) plutôt que compter sur cette répétition.
 
-| Clé | Éléments |
-|---|---|
-| `buildings` | `[anneau, anneau…]` (le premier extérieur, les suivants des trous) |
-| `roads` | `{ k: type highway, p: ligne, n?: nom, b?: pont, u?: tunnel }` |
-| `waterways` | `{ k: type waterway, p: ligne, n?, u? }` |
-| `water` | `{ r: anneaux, n? }` : plans d'eau, plus la mer ou l'estuaire reconstitués à partir du littoral OSM (`natural=coastline`), découpés au carré du lieu |
-| `parks` | `{ k: valeur leisure/landuse/natural, r: anneaux }` |
+Une couche porte un `id`, un `kind` (`points`, `lines` ou `areas`), un `role`, une `attribution` non vide, une `source` et ses `features`. Chaque objet est `{ g, k?, n?, p? }` : `g` la géométrie (un point `[x, y]`, une ligne, ou des anneaux dont le premier est extérieur et les suivants des trous), `k` la catégorie, `n` le nom, `p` des propriétés scalaires.
+
+Les couches OpenStreetMap (`public/data/<lieu>/osm.json`, écrites par `npm run fetch-data`) sont cinq, dans l'ordre où les styles les dessinent. Leur `id` est leur rôle ; `osm` est réservé :
+
+| Rôle (`id`) | Genre | Objets |
+|---|---|---|
+| `buildings` | `areas` | `{ g: anneaux }` (le premier extérieur, les suivants des trous) |
+| `roads` | `lines` | `{ g: ligne, k: type highway, n?: nom, p?: { bridge?, tunnel? } }` |
+| `waterways` | `lines` | `{ g: ligne, k: type waterway, n?, p?: { tunnel? } }` |
+| `water` | `areas` | `{ g: anneaux, n? }` : plans d'eau, plus la mer ou l'estuaire reconstitués à partir du littoral OSM (`natural=coastline`), découpés au carré du lieu |
+| `parks` | `areas` | `{ g: anneaux, k: valeur leisure/landuse/natural }` |
+
+Les couches extérieures ont le rôle `overlay` et se dessinent par-dessus la carte (`drawLayers()`).
+
+Pour lire les couches, ne pas chercher une couche par son `id` : `featuresOf(layers, role, kind)` renvoie les objets de toutes les couches d'un rôle et d'un genre, dans l'ordre des couches. `isBridge(f)` et `isTunnel(f)` lisent les propriétés `p.bridge` et `p.tunnel` d'une route ou d'un cours d'eau. `RoadKind` (valeurs `highway` retenues) et `isRoadKind()` sont dans le même module.
 
 ## Boîte à outils
 

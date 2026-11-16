@@ -1,4 +1,4 @@
-import type { Line, Ring, Water } from '../src/data.ts';
+import type { Feature, Line, Ring } from '../src/layers.ts';
 import { r1 } from '../src/geo.ts';
 
 // Coordinate pairs are complete in the OSM data, hence the bounded index assertions.
@@ -8,7 +8,7 @@ const key = endpointKey;
 
 // Sea and estuaries are not water areas in OSM but coastline ways (land on the left,
 // water on the right). Turns those crossing the square [-H, H]² into water polygons.
-export function seaPolygons(lines: readonly Line[], H: number): Water[] {
+export function seaPolygons(lines: readonly Line[], H: number): Feature<Ring[]>[] {
   // Directed chains: a way's end joins the next way's start.
   const pool = lines.filter((l) => l.length >= 4).map((l) => l.slice());
   const chains: Line[] = [];
@@ -75,7 +75,7 @@ export function seaPolygons(lines: readonly Line[], H: number): Water[] {
     .map((p) => ({ p, tin: along(p[0]!, p[1]!), tout: along(p.at(-2)!, p.at(-1)!) }));
 
   // Follow each piece, then the border clockwise to the next piece's entry, until closed.
-  const polys: { r: Ring[] }[] = [];
+  const polys: Feature<Ring[]>[] = [];
   const used = new Set<Piece>();
   for (const start of ok) {
     if (used.has(start)) continue;
@@ -100,10 +100,10 @@ export function seaPolygons(lines: readonly Line[], H: number): Water[] {
       ring.push(...next.p);
       cur = next;
     }
-    polys.push({ r: [ring] });
+    polys.push({ g: [ring] });
   }
   if (!polys.length && islands.length) {
-    polys.push({ r: [[-H, H, H, H, H, -H, -H, -H]] });
+    polys.push({ g: [[-H, H, H, H, H, -H, -H, -H]] });
   }
   // Each island becomes a hole of the one sea polygon that contains it.
   const contains = (ring: Ring, x: number, y: number): boolean => {
@@ -114,6 +114,6 @@ export function seaPolygons(lines: readonly Line[], H: number): Water[] {
     }
     return inPoly;
   };
-  for (const isl of islands) polys.find((p) => contains(p.r[0]!, isl[0]!, isl[1]!))?.r.push(isl);
+  for (const isl of islands) polys.find((p) => contains(p.g[0]!, isl[0]!, isl[1]!))?.g.push(isl);
   return polys;
 }

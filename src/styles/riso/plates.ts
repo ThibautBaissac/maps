@@ -1,10 +1,12 @@
 // The two printing plates of the riso style:
 // plate A (first ink) = buildings, plate B (second ink) = water, parks, streams, roads.
-import { isRoadKind, type Line, type Ring, type Road, type RoadKind } from '../../data.ts';
-import { featuresOf, isBridge, isTunnel, type Layer } from '../../layers.ts';
+import { featuresOf, isBridge, isRoadKind, isTunnel, type Layer, type Line, type Ring, type RoadKind } from '../../layers.ts';
 import { recordOf, typedKeys } from '../../toolkit/geometry.ts';
 import { addLine, addRings, withBox, type Projector, type WithBox } from '../../toolkit/projection.ts';
 import type { InkPatterns } from './inks.ts';
+
+/** A road as the plates draw it: highway kind, polyline, bridge and tunnel flags. */
+interface Road { k: RoadKind; p: Line; b?: 1; u?: 1 }
 
 interface RoadStyle {
   /** Stroke width in CSS px at s = 0.5 px/m. */

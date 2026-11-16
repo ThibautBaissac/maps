@@ -1,8 +1,8 @@
-// OpenStreetMap → MapData: the Overpass query for a place, the check of an answer and its
+// OpenStreetMap → layers: the Overpass query for a place, the check of an answer and its
 // conversion to local metres. Pure: no network, no file, no process, no console.
 // scripts/fetch-osm.ts downloads and writes; this module decides what the data holds.
 import { PLACES, type PlaceId } from '../places/index.ts';
-import { isRoadKind, type Line, type MapData, type Ring, type Road, type Waterway } from '../src/data.ts';
+import { isRoadKind, type Feature, type Layer, type Line, type Ring } from '../src/layers.ts';
 import { isRecord, parsePlace, type Place } from '../src/place.ts';
 import { localProjection, survey } from '../src/geo.ts';
 import { endpointKey as key, seaPolygons } from './coastline.ts';
@@ -128,10 +128,10 @@ const isPark = (t: OsmTags): boolean =>
   /^(grass|recreation_ground|village_green|forest|meadow|cemetery|allotments)$/.test(t.landuse ?? '') ||
   /^(wood|scrub|grassland)$/.test(t.natural ?? '');
 
-/** The map data of a place from its Overpass answer: local metres, x east, y north, 0.1 m. */
-export function convertOsm(answer: OverpassAnswer, placeId: PlaceId, source: { server: string; fetchedAt: string }): MapData {
+/** The OpenStreetMap layers of a place from its Overpass answer: local metres, x east, y north, 0.1 m. */
+export function convertOsm(answer: OverpassAnswer, placeId: PlaceId, _source: { server: string; fetchedAt: string }): Layer[] {
   const place = PLACES[placeId];
-  const { half, bbox } = survey(place);
+  const { half } = survey(place);
 
   const toLocal = localProjection(place);
   const project = (geom: readonly LatLon[]): Line => geom.flatMap((p) => toLocal(p.lat, p.lon));
@@ -143,24 +143,11 @@ export function convertOsm(answer: OverpassAnswer, placeId: PlaceId, source: { s
     return [...outer, ...inner];
   };
 
-  const osmTimestamp = answer.osm3s?.timestamp_osm_base;
-  const data: MapData = {
-    meta: {
-      place: placeId,
-      ...place,
-      bbox,
-      half,
-      server: source.server,
-      fetchedAt: source.fetchedAt,
-      ...(osmTimestamp ? { osmTimestamp } : {}),
-      attribution: '© contributeurs OpenStreetMap (ODbL)',
-    },
-    buildings: [],
-    roads: [],
-    waterways: [],
-    water: [],
-    parks: [],
-  };
+  const buildings: Feature<Ring[]>[] = [];
+  const roads: Feature<Line>[] = [];
+  const waterways: Feature<Line>[] = [];
+  const water: Feature<Ring[]>[] = [];
+  const parks: Feature<Ring[]>[] = [];
 
   const coast: Line[] = [];
   for (const el of answer.elements) {
@@ -168,31 +155,32 @@ export function convertOsm(answer: OverpassAnswer, placeId: PlaceId, source: { s
     if (el.type === 'way' && t.natural === 'coastline') {
       if (el.geometry) coast.push(project(el.geometry));
     } else if (isSet(t.building) && !t['building:part']) {
-      const r = polygonRings(el);
-      if (r.length) data.buildings.push(r);
+      const g = polygonRings(el);
+      if (g.length) buildings.push({ g });
     } else if (el.type === 'way' && t.highway && isRoadKind(t.highway) && t.area !== 'yes') {
       if (!el.geometry) continue;
-      const road: Road = { k: t.highway, p: project(el.geometry) };
-      if (t.name) road.n = t.name;
-      if (isSet(t.bridge)) road.b = 1;
-      if (isSet(t.tunnel)) road.u = 1;
-      data.roads.push(road);
+      const p = { ...(isSet(t.bridge) && { bridge: true }), ...(isSet(t.tunnel) && { tunnel: true }) };
+      roads.push({ g: project(el.geometry), k: t.highway, ...(t.name && { n: t.name }), ...(Object.keys(p).length && { p }) });
     } else if (el.type === 'way' && t.waterway && t.waterway !== 'riverbank' && t.waterway !== 'dam') {
       if (!el.geometry) continue;
-      const w: Waterway = { k: t.waterway, p: project(el.geometry) };
-      if (t.name) w.n = t.name;
-      if (isSet(t.tunnel)) w.u = 1;
-      data.waterways.push(w);
+      waterways.push({ g: project(el.geometry), k: t.waterway, ...(t.name && { n: t.name }), ...(isSet(t.tunnel) && { p: { tunnel: true } }) });
     } else if (isWater(t)) {
-      const r = polygonRings(el);
-      if (r.length) data.water.push(t.name ? { n: t.name, r } : { r });
+      const g = polygonRings(el);
+      if (g.length) water.push({ g, ...(t.name && { n: t.name }) });
     } else if (isPark(t)) {
-      const r = polygonRings(el);
+      const g = polygonRings(el);
       const k = t.leisure ?? t.landuse ?? t.natural;
-      if (r.length && k) data.parks.push({ k, r });
+      if (g.length && k) parks.push({ g, k });
     }
   }
 
-  data.water.push(...seaPolygons(coast, half));
-  return data;
+  water.push(...seaPolygons(coast, half));
+  const base = { source: 'openstreetmap', attribution: '© contributeurs OpenStreetMap (ODbL)' } as const;
+  return [
+    { ...base, id: 'buildings', role: 'buildings', kind: 'areas', features: buildings },
+    { ...base, id: 'roads', role: 'roads', kind: 'lines', features: roads },
+    { ...base, id: 'waterways', role: 'waterways', kind: 'lines', features: waterways },
+    { ...base, id: 'water', role: 'water', kind: 'areas', features: water },
+    { ...base, id: 'parks', role: 'parks', kind: 'areas', features: parks },
+  ];
 }

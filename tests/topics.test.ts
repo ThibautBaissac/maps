@@ -1,23 +1,19 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import type { MapData } from '../src/data.ts';
-import type { Layer } from '../src/layers.ts';
-import { osmLayers } from '../src/osm-layers.ts';
+import type { Feature, Layer, Line } from '../src/layers.ts';
 import * as topics from '../src/topics.ts';
-import { readOsm } from './osm-file.ts';
+import { osmLayersOf } from './osm-file.ts';
 
-const meta = readOsm('lisbonne-alfama').mapMeta;
 const survey = { half: 10 };
-const map = (roads: MapData['roads'], waterways: MapData['waterways'] = []): Layer[] =>
-  osmLayers({ meta: { ...meta, half: 10, sizeKm: 0.02 }, roads, buildings: [], parks: [], water: [], waterways });
+const map = (roads: Feature<Line>[], waterways: Feature<Line>[] = []): Layer[] => osmLayersOf({ roads, waterways });
 
 test('the stairs subject measures only stair geometry inside the survey, splitting its length across sectors', () => {
   assert.equal(typeof topics.analyseTopic, 'function');
   const layers = map([
-    { k: 'steps', n: 'Escadinhas', p: [-20, 0, 20, 0] },
-    { k: 'residential', p: [-10, 1, 10, 1] },
-    { k: 'steps', p: [20, 20, 25, 25] },
-    { k: 'steps', u: 1, p: [-5, 1, 5, 1] },
+    { g: [-20, 0, 20, 0], k: 'steps', n: 'Escadinhas' },
+    { g: [-10, 1, 10, 1], k: 'residential' },
+    { g: [20, 20, 25, 25], k: 'steps' },
+    { g: [-5, 1, 5, 1], k: 'steps', p: { tunnel: true } },
   ]);
   const result = topics.analyseTopic(survey, layers, 'steps');
   assert.equal(result.length, 20);
@@ -31,18 +27,18 @@ test('the stairs subject measures only stair geometry inside the survey, splitti
 
 test('the canals subject requires a bridge crossing a surface canal inside the survey', () => {
   const layers = map([
-    { k: 'residential', b: 1, n: 'Bridge', p: [-5, -2, 5, -2] },
-    { k: 'cycleway', b: 1, n: 'Bridge', p: [-5, -1, 5, -1] },
-    { k: 'residential', n: 'No bridge tag', p: [-5, 0, 5, 0] },
-    { k: 'footway', b: 1, n: 'Over a road', p: [2, 2, 8, 2] },
-    { k: 'steps', p: [-1, -1, 1, -1] },
-    { k: 'residential', b: 1, u: 1, p: [-5, 1, 5, 1] },
-    { k: 'residential', b: 1, n: 'Outside crossing', p: [5, 4, 25, 4] },
-    { k: 'residential', b: 1, n: 'Culvert', p: [5, 6, 9, 6] },
+    { g: [-5, -2, 5, -2], k: 'residential', n: 'Bridge', p: { bridge: true } },
+    { g: [-5, -1, 5, -1], k: 'cycleway', n: 'Bridge', p: { bridge: true } },
+    { g: [-5, 0, 5, 0], k: 'residential', n: 'No bridge tag' },
+    { g: [2, 2, 8, 2], k: 'footway', n: 'Over a road', p: { bridge: true } },
+    { g: [-1, -1, 1, -1], k: 'steps' },
+    { g: [-5, 1, 5, 1], k: 'residential', p: { bridge: true, tunnel: true } },
+    { g: [5, 4, 25, 4], k: 'residential', n: 'Outside crossing', p: { bridge: true } },
+    { g: [5, 6, 9, 6], k: 'residential', n: 'Culvert', p: { bridge: true } },
   ], [
-    { k: 'canal', n: 'Canal', p: [0, -10, 0, 10] },
-    { k: 'canal', n: 'Outside', p: [20, -10, 20, 10] },
-    { k: 'canal', n: 'Covered', u: 1, p: [7, 5, 7, 9] },
+    { g: [0, -10, 0, 10], k: 'canal', n: 'Canal' },
+    { g: [20, -10, 20, 10], k: 'canal', n: 'Outside' },
+    { g: [7, 5, 7, 9], k: 'canal', n: 'Covered', p: { tunnel: true } },
   ]);
   const result = topics.analyseTopic(survey, layers, 'canal-crossings');
   assert.deepEqual(result.segments.map((f) => f.n), ['Bridge', 'Bridge']);

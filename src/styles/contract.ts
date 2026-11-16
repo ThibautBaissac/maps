@@ -1,9 +1,8 @@
 // What a style is (see src/styles/README.md).
-import type { BBox } from '../data.ts';
 import type { Shell } from '../shell.ts';
 import type { Viewport } from '../toolkit/viewport.ts';
 import type { Locale } from '../i18n/index.ts';
-import type { Layer } from '../layers.ts';
+import type { BBox, Layer } from '../layers.ts';
 import type { TopicAnalysis } from '../topics.ts';
 
 /** What a style prints about its map. */

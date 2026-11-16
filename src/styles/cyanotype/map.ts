@@ -1,12 +1,19 @@
 // The drawing itself: white linework on transparent, rendered once per settled view.
 // Buildings in outline, parks cross-hatched, water as a flat tint with a shoreline,
 // streets as double lines (single at small scale), stairs as ladders.
-import { isRoadKind, type Line, type Park, type Ring, type Road, type RoadKind, type Water, type Waterway } from '../../data.ts';
-import { featuresOf, isBridge, isTunnel, type Layer } from '../../layers.ts';
+import { featuresOf, isBridge, isRoadKind, isTunnel, type Layer, type Line, type Ring, type RoadKind } from '../../layers.ts';
 import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
 import { isKeyOf, recordOf, typedKeys, type Point } from '../../toolkit/geometry.ts';
 import { addLine, addRings, withBox, type Projector, type WithBox } from '../../toolkit/projection.ts';
 import type { CyanotypeOptions } from './defaults.ts';
+
+/** A road as the map draws it: highway kind, polyline, name, bridge and tunnel flags. */
+interface Road { k: RoadKind; p: Line; n?: string; b?: 1; u?: 1 }
+/** A stream, canal or other waterway; `u` marks a tunnel or culvert. */
+interface Waterway { k: string; p: Line; n?: string; u?: 1 }
+/** A water area: rings, outer ones first, then holes. */
+interface Water { r: Ring[]; n?: string }
+interface Park { k: string; r: Ring[] }
 
 // Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)
 // is always defined, hence the `!` in the loops below.

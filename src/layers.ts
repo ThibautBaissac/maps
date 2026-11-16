@@ -1,19 +1,36 @@
 // Map layers: the format of the files in public/data/<place>/ that hold the objects a map
 // draws, in local metres (x east, y north, origin at the place centre, 0.1 m). A layer is
 // one kind of geometry with its attribution; scripts/geojson.ts writes them from GeoJSON.
-// Unlike parseMapData, every object is checked: layer sources are versioned and may be
-// edited by hand.
+// Every object is checked: layer sources are versioned and may be edited by hand.
 // Runs in the browser and in Node: no DOM, no Node API.
 import type { LocalizedText } from './i18n/index.ts';
-import type { Line, Ring } from './data.ts';
 import { isRecord, isSlug } from './place.ts';
 import type { Point } from './toolkit/geometry.ts';
+
+/** Flat polyline [x0, y0, x1, y1, …]. */
+export type Line = number[];
+/**
+ * Flat ring [x0, y0, x1, y1, …]. Rings drawn from OSM ways repeat their first point at the end;
+ * sea rings rebuilt from the coastline and rings of incomplete relations may not: close the
+ * path yourself rather than rely on the repeat.
+ */
+export type Ring = number[];
+export type BBox = [south: number, west: number, north: number, east: number];
+
+/** OSM highway values kept by the conversion (scripts/osm.ts). */
+export const ROAD_KINDS = [
+  'motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'unclassified', 'residential',
+  'motorway_link', 'trunk_link', 'primary_link', 'secondary_link', 'tertiary_link',
+  'living_street', 'service', 'pedestrian', 'footway', 'cycleway', 'path', 'steps', 'track',
+] as const;
+export type RoadKind = (typeof ROAD_KINDS)[number];
+export const isRoadKind = (k: string): k is RoadKind => (ROAD_KINDS as readonly string[]).includes(k);
 
 export const LAYER_KINDS = ['points', 'lines', 'areas'] as const;
 export type LayerKind = (typeof LAYER_KINDS)[number];
 /**
  * What a layer is for: an overlay is drawn on top of the base map; the other roles are the
- * OpenStreetMap layers (osmLayers), whose id is their role.
+ * OpenStreetMap layers, whose id is their role.
  */
 export const LAYER_ROLES = ['buildings', 'roads', 'waterways', 'water', 'parks', 'overlay'] as const;
 export type LayerRole = (typeof LAYER_ROLES)[number];
@@ -156,4 +173,16 @@ export const isTunnel = (f: Feature<unknown>): boolean => f.p?.['tunnel'] === tr
 /** The objects of the layers of a role and kind, in the order of the layers. */
 export function featuresOf<K extends LayerKind>(layers: readonly Layer[], role: LayerRole, kind: K): Feature<Geometry<K>>[] {
   return layers.flatMap((layer) => (layer.role === role && layer.kind === kind ? (layer.features as Feature<Geometry<K>>[]) : []));
+}
+
+/** Number of objects per OpenStreetMap role, with French labels (console tables). */
+export function featureCounts(layers: readonly Layer[]): Record<string, number> {
+  const count = (role: OsmRole): number => layers.reduce((n, layer) => n + (layer.role === role ? layer.features.length : 0), 0);
+  return {
+    bâtiments: count('buildings'),
+    routes: count('roads'),
+    'cours d’eau': count('waterways'),
+    'plans d’eau': count('water'),
+    'parcs / espaces verts': count('parks'),
+  };
 }

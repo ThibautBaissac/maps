@@ -51,7 +51,7 @@ node .claude/skills/new-map/scripts/new-place.ts --city "<ville>" --district "<q
 
 Le script interroge une fois Nominatim (OpenStreetMap) et ajoute le lieu à `places/index.ts` (il refuse un id déjà pris). Vérifie que les coordonnées trouvées tombent bien au centre du quartier voulu, pas sur une ville homonyme : le script affiche le lieu trouvé et les autres candidats. Si besoin, relance avec `--lat`/`--lon` (et `--size` pour une zone différente de 2 km).
 
-Puis télécharge les données :
+Puis télécharge les données (couches OpenStreetMap écrites dans `public/data/<id>/osm.json`) :
 
 ```bash
 npm run fetch-data -- <id>
@@ -59,7 +59,7 @@ npm run fetch-data -- <id>
 
 Les serveurs Overpass publics sont souvent surchargés. Le script les essaie tous, deux tours de suite, avec une pause entre les deux (jusqu'à une dizaine de minutes en cas d'échec) : lance-le en arrière-plan. S'il échoue quand même, relance-le une fois quelques minutes plus tard. Si ce second essai échoue aussi, arrête-toi et explique le problème à l'utilisateur plutôt que d'inventer des données. Au-delà d'environ 8 Mo de JSON, propose une zone plus petite : le chargement de la page en souffrirait.
 
-Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.org autour du lieu, surtout l'eau : mer, estuaire, fleuve, lac. Le script reconstitue la mer à partir du littoral (`natural=coastline`). Si une étendue d'eau visible sur OSM manque dans `water`, c'est un manque de la conversion à corriger dans `scripts/osm.ts` (requête Overpass et règles de classement, avec un test dans `tests/osm.test.ts`), et à documenter dans `src/styles/README.md`, avant de dessiner. Si la correction ne touche que les règles de classement (pas la requête), vérifie-la sans retélécharger : `npm run fetch-data -- <lieu> --offline`.
+Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.org autour du lieu, surtout l'eau : mer, estuaire, fleuve, lac. Le script reconstitue la mer à partir du littoral (`natural=coastline`). Si une étendue d'eau visible sur OSM manque dans la couche `water`, c'est un manque de la conversion à corriger dans `scripts/osm.ts` (requête Overpass et règles de classement, avec un test dans `tests/osm.test.ts`), et à documenter dans `src/styles/README.md`, avant de dessiner. Si la correction ne touche que les règles de classement (pas la requête), vérifie-la sans retélécharger : `npm run fetch-data -- <lieu> --offline`.
 
 ### Couches extérieures (facultatif)
 

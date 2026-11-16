@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { seaPolygons } from '../scripts/coastline.ts';
-import type { Ring, Water } from '../src/data.ts';
+import type { Feature, Ring } from '../src/layers.ts';
 
 
 function area(r: Ring): number {
@@ -11,14 +11,14 @@ function area(r: Ring): number {
   }
   return Math.abs(sum) / 2;
 }
-function waterArea(water: Water[]): number {
-  return water.reduce((sum, w) => sum + area(w.r[0]!) - w.r.slice(1).reduce((holes, r) => holes + area(r), 0), 0);
+function waterArea(water: Feature<Ring[]>[]): number {
+  return water.reduce((sum, w) => sum + area(w.g[0]!) - w.g.slice(1).reduce((holes, r) => holes + area(r), 0), 0);
 }
 
 test('an island entirely inside the survey leaves sea around its land', () => {
   const water = seaPolygons([[-2, -2, 2, -2, 2, 2, -2, 2, -2, -2]], 10);
   assert.equal(waterArea(water), 384, '400 m² survey minus 16 m² island must leave 384 m² of sea');
-  assert.equal(water[0]?.r.length, 2, 'The island must remain a hole in the sea');
+  assert.equal(water[0]?.g.length, 2, 'The island must remain a hole in the sea');
 });
 
 test('a closed coastline starting inside the survey preserves the sea outside its land', () => {

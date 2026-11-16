@@ -1,7 +1,6 @@
 // Street and waterway name placement along their lines (style-independent).
 // Styles decide which names, sizes and inks; they also draw the returned glyphs.
-import type { Line, RoadKind } from '../data.ts';
-import { featuresOf, isTunnel, type Layer } from '../layers.ts';
+import { featuresOf, isTunnel, type Layer, type Line, type RoadKind } from '../layers.ts';
 import type { Point, Rect } from './geometry.ts';
 import type { Projector } from './projection.ts';
 

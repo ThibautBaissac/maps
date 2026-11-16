@@ -7,8 +7,7 @@ import type { Rect } from '../src/toolkit/geometry.ts';
 import { computeLayout } from '../src/toolkit/layout.ts';
 import { installPage, nameGlyphs, type FakeCanvas } from './dom.ts';
 import type { Locale } from '../src/i18n/index.ts';
-import { osmLayers } from '../src/osm-layers.ts';
-import { readOsm } from './osm-file.ts';
+import { osmLayersOf, readOsm } from './osm-file.ts';
 import { prepareLabels } from '../src/toolkit/labels.ts';
 import { analyseTopic } from '../src/topics.ts';
 
@@ -59,9 +58,9 @@ test('a reference can centre the real viewport, render immediately and return to
 for (const style of ['riso', 'cyanotype'] as const) {
   test(`${style} shows the subject's stairs even at the overview zoom`, async (t) => {
     const page = installPage(t, SIZE);
-    const map = { meta: osm.mapMeta, roads: [{ k: 'steps' as const, n: 'Escadinhas', p: [-20, 0, 20, 0] }], buildings: [], parks: [], waterways: [], water: [] };
+    const layers = osmLayersOf({ roads: [{ g: [-20, 0, 20, 0], k: 'steps', n: 'Escadinhas' }] });
     const { mount } = await STYLES[style]();
-    const handle = await mount({ container: page.container, shell: page.shell, meta: osm.mountMeta('Test'), options: {}, locale: 'fr', layers: osmLayers(map), topic: analyseTopic(osm.survey, osmLayers(map), 'steps') });
+    const handle = await mount({ container: page.container, shell: page.shell, meta: osm.mountMeta('Test'), options: {}, locale: 'fr', layers, topic: analyseTopic(osm.survey, layers, 'steps') });
     page.cleanup(() => handle.destroy());
     for (const c of page.canvases) c.calls.length = 0;
     Object.assign(handle.viewport!.view, { x: 0, y: 0, s: 0.1 });
@@ -135,17 +134,16 @@ for (const style of ['riso', 'cyanotype'] as const) {
 }
 
 test('names come from the road and waterway layers, tunnels left out, with the usual weights', () => {
-  const layers = osmLayers({
-    meta: osm.mapMeta, buildings: [], parks: [], water: [],
+  const layers = osmLayersOf({
     roads: [
-      { k: 'residential', n: 'Damrak', p: [0, 0, 50, 0] },
-      { k: 'residential', n: 'Under', u: 1, p: [0, 10, 50, 10] },
-      { k: 'footway', n: 'Pad', p: [0, 20, 50, 20] },
+      { g: [0, 0, 50, 0], k: 'residential', n: 'Damrak' },
+      { g: [0, 10, 50, 10], k: 'residential', n: 'Under', p: { tunnel: true } },
+      { g: [0, 20, 50, 20], k: 'footway', n: 'Pad' },
     ],
     waterways: [
-      { k: 'canal', n: 'Singel', p: [0, 0, 0, 50] },
-      { k: 'canal', n: 'Buried', u: 1, p: [5, 0, 5, 50] },
-      { k: 'stream', n: 'Beek', p: [9, 0, 9, 50] },
+      { g: [0, 0, 0, 50], k: 'canal', n: 'Singel' },
+      { g: [5, 0, 5, 50], k: 'canal', n: 'Buried', p: { tunnel: true } },
+      { g: [9, 0, 9, 50], k: 'stream', n: 'Beek' },
     ],
   });
   const names = prepareLabels(layers);

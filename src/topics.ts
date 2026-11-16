@@ -1,7 +1,6 @@
 // Geographic evidence shared by the drawing and its text. Coordinates and lengths are
 // local metres; nothing here depends on the browser or on a language.
-import type { Line } from './data.ts';
-import { featuresOf, isBridge, isTunnel, type Feature, type Layer, type Survey } from './layers.ts';
+import { featuresOf, isBridge, isTunnel, type Feature, type Layer, type Line, type Survey } from './layers.ts';
 import type { Point, Rect } from './toolkit/geometry.ts';
 
 export const TOPIC_IDS = ['canal-crossings', 'steps'] as const;

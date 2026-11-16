@@ -1,17 +1,15 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { test } from 'node:test';
-import type { MapData } from '../src/data.ts';
 import { DEFAULTS } from '../src/styles/cyanotype/defaults.ts';
 import { prepareMap, renderMap } from '../src/styles/cyanotype/map.ts';
 import { preparePlates, renderPlateA, renderPlateB } from '../src/styles/riso/plates.ts';
 import { makeProjector } from '../src/toolkit/projection.ts';
 import { installPage, recordingContext, type Call } from './dom.ts';
-import { readOsm } from './osm-file.ts';
+import { osmLayersOf, readOsm } from './osm-file.ts';
 import type { Layer } from '../src/layers.ts';
 import { drawLayers } from '../src/toolkit/layers.ts';
 import * as thematic from '../src/toolkit/topic.ts';
-import { osmLayers } from '../src/osm-layers.ts';
 import { analyseTopic } from '../src/topics.ts';
 
 const osm = readOsm('amsterdam-centre');
@@ -47,7 +45,7 @@ test('cyanotype draws a residential bridge when zoomed out to a single line', (t
 
 test('numbered references move clear of navigation with their anchor preserved on the feature', () => {
   assert.equal(typeof thematic.placeTopicMarkers, 'function');
-  const topic = analyseTopic({ half: 100 }, osmLayers({ meta: { ...osm.mapMeta, half: 100 }, buildings: [], roads: [{ k: 'steps', n: 'Steps', p: [-30, 20, -10, 20] }], waterways: [], water: [], parks: [] }), 'steps');
+  const topic = analyseTopic({ half: 100 }, osmLayersOf({ roads: [{ g: [-30, 20, -10, 20], k: 'steps', n: 'Steps' }] }), 'steps');
   const markers = thematic.placeTopicMarkers(topic, makeProjector({ x: 0, y: 0, s: 1 }, 200, 200, 1), {
     map: [0, 0, 200, 200], nav: [0, 0, 100, 100], attr: [180, 180, 200, 200], furniture: [],
   });
@@ -152,21 +150,20 @@ for (const style of ['riso', 'cyanotype'] as const) {
 // Riso plates on a small fixture: a bridge, a tunnel, a stream, a canal, a lake, a park and a house.
 // The digest was recorded when the plates were still prepared from the map data and matched
 // the sequence drawn from layers: it guards the drawing of the plates.
-const SMALL: MapData = {
-  meta: osm.mapMeta,
-  buildings: [[[-30, -30, -10, -30, -10, -10, -30, -10, -30, -30]]],
+const SMALL = osmLayersOf({
+  buildings: [{ g: [[-30, -30, -10, -30, -10, -10, -30, -10, -30, -30]] }],
   roads: [
-    { k: 'residential', n: 'A', p: [-50, 0, 50, 0] },
-    { k: 'primary', p: [0, -50, 0, 50], b: 1 },
-    { k: 'footway', p: [-40, 20, 40, 20], u: 1 },
-    { k: 'steps', p: [-40, 30, 40, 30] },
+    { g: [-50, 0, 50, 0], k: 'residential', n: 'A' },
+    { g: [0, -50, 0, 50], k: 'primary', p: { bridge: true } },
+    { g: [-40, 20, 40, 20], k: 'footway', p: { tunnel: true } },
+    { g: [-40, 30, 40, 30], k: 'steps' },
   ],
-  waterways: [{ k: 'canal', p: [-45, -20, 45, -20] }, { k: 'stream', p: [-45, 10, 45, 10] }, { k: 'ditch', p: [-45, 12, 45, 12], u: 1 }],
-  water: [{ r: [[20, 20, 40, 20, 40, 40, 20, 40, 20, 20]] }],
-  parks: [{ k: 'park', r: [[-40, 25, -20, 25, -20, 45, -40, 45, -40, 25]] }],
-};
+  waterways: [{ g: [-45, -20, 45, -20], k: 'canal' }, { g: [-45, 10, 45, 10], k: 'stream' }, { g: [-45, 12, 45, 12], k: 'ditch', p: { tunnel: true } }],
+  water: [{ g: [[20, 20, 40, 20, 40, 40, 20, 40, 20, 20]] }],
+  parks: [{ g: [[-40, 25, -20, 25, -20, 45, -40, 45, -40, 25]], k: 'park' }],
+});
 test('riso plates drawn from layers keep their recorded canvas calls', () => {
-  const plates = preparePlates(osmLayers(SMALL));
+  const plates = preparePlates(SMALL);
   const calls = [0.5, 2.5].flatMap((s) => {
     const out = canvas();
     const P = makeProjector({ x: 0, y: 0, s }, 320, 640, 1);
@@ -181,23 +178,22 @@ test('riso plates drawn from layers keep their recorded canvas calls', () => {
 // Cyanotype map on a small fixture: a bridge, a tunnel, a canal, a stream, a fairway, a lake, a park, a house and stairs.
 // The digest was recorded when the map was still prepared from the map data and matched the
 // sequence drawn from layers: it guards the drawing of the map.
-const SMALL_CYANOTYPE: MapData = {
-  meta: osm.mapMeta,
-  buildings: [[[-30, -30, -10, -30, -10, -10, -30, -10, -30, -30]]],
+const SMALL_CYANOTYPE = osmLayersOf({
+  buildings: [{ g: [[-30, -30, -10, -30, -10, -10, -30, -10, -30, -30]] }],
   roads: [
-    { k: 'residential', n: 'A', p: [-50, 0, 50, 0] },
-    { k: 'primary', p: [0, -50, 0, 50], b: 1 },
-    { k: 'secondary', p: [-50, -40, 50, -40], u: 1 },
-    { k: 'footway', p: [-40, 20, 40, 20] },
-    { k: 'steps', p: [-40, 30, 40, 30] },
+    { g: [-50, 0, 50, 0], k: 'residential', n: 'A' },
+    { g: [0, -50, 0, 50], k: 'primary', p: { bridge: true } },
+    { g: [-50, -40, 50, -40], k: 'secondary', p: { tunnel: true } },
+    { g: [-40, 20, 40, 20], k: 'footway' },
+    { g: [-40, 30, 40, 30], k: 'steps' },
   ],
-  waterways: [{ k: 'canal', p: [-45, -20, 45, -20] }, { k: 'stream', p: [-45, 10, 45, 10] }, { k: 'fairway', p: [-45, 14, 45, 14] }, { k: 'ditch', p: [-45, 12, 45, 12], u: 1 }],
-  water: [{ r: [[20, 20, 40, 20, 40, 40, 20, 40, 20, 20]] }],
-  parks: [{ k: 'park', r: [[-40, 25, -20, 25, -20, 45, -40, 45, -40, 25]] }],
-};
+  waterways: [{ g: [-45, -20, 45, -20], k: 'canal' }, { g: [-45, 10, 45, 10], k: 'stream' }, { g: [-45, 14, 45, 14], k: 'fairway' }, { g: [-45, 12, 45, 12], k: 'ditch', p: { tunnel: true } }],
+  water: [{ g: [[20, 20, 40, 20, 40, 40, 20, 40, 20, 20]] }],
+  parks: [{ g: [[-40, 25, -20, 25, -20, 45, -40, 45, -40, 25]], k: 'park' }],
+});
 test('cyanotype map drawn from layers keeps its recorded canvas calls', (t) => {
   stubPath2D(t);
-  const prepared = prepareMap(osmLayers(SMALL_CYANOTYPE), SMALL_CYANOTYPE.meta.half);
+  const prepared = prepareMap(SMALL_CYANOTYPE, osm.survey.half);
   const calls = [0.5, 2.5].flatMap((s) => {
     const out = canvas(), tmp = canvas();
     renderMap(out.ctx, tmp.ctx, prepared, makeProjector({ x: 0, y: 0, s }, 320, 640, 1), DEFAULTS, {} as CanvasPattern);

@@ -1,4 +1,4 @@
-import type { Line, Ring } from '../data.ts';
+import type { Line, Ring } from '../layers.ts';
 import type { Point, Rect } from './geometry.ts';
 import { vnoise } from './noise.ts';
 import type { View } from './viewport.ts';

@@ -13,7 +13,7 @@ Node scripts live in `scripts/`. Tests live in `tests/` and mirror the domain th
 - `npm test`: run all Node test-runner suites.
 - `npm run typecheck`: check strict TypeScript without emitting files.
 - `npm run build`: type-check, validate translations and map data, then create `dist/`.
-- `npm run fetch-data -- <place-id>`: download and convert OpenStreetMap data for a registered place.
+- `npm run fetch-data -- <place-id>`: download OpenStreetMap data for a registered place and write its layer file, `public/data/<place-id>/osm.json`.
 - `npm run layers -- <place-id>`: convert the GeoJSON sources declared in `places/layers.ts` into layer files in `public/data/<place-id>/`.
 - `npm run vignettes -- <map-id>`: regenerate localized gallery images while the development server runs.
 

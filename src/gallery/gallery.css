@@ -1,3 +1,5 @@
+@import '../languages.css';
+
 @font-face {
   font-family: 'Bebas Neue';
   src: url('/fonts/bebasneue/BebasNeue-Regular.ttf') format('truetype');
@@ -49,6 +51,7 @@ h1 {
 }
 h1 span { display: block; color: var(--muted); }
 .intro { margin: 0; max-width: 36ch; font-size: 17px; color: var(--soft); }
+header > .languages { flex-basis: 100%; justify-content: flex-end; }
 
 /* The strips share the width; the one pointed at or focused opens wider. */
 .strips {

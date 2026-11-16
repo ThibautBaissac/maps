@@ -31,9 +31,9 @@ export interface Layout {
 }
 
 /** Height of the back link and navigation buttons (HTML), top-left of the map window. */
-const NAV_H = 80;
+const NAV_H = 144;
 /** Size of the OSM attribution (HTML) and its distance to the map window's corner. */
-const ATTR_W = 224, ATTR_H = 28, ATTR_INSET = 6;
+const ATTR_W = 320, ATTR_H = 48, ATTR_INSET = 6;
 
 // Frame at margin m, map window inside a band, square plate size at full zoom-out
 // and the box of the navigation overlay, all in CSS px.
@@ -83,7 +83,7 @@ export function computeLayout(w: number, h: number): Layout {
     cart = [map[0] + pad, map[3] - pad - ch, map[0] + pad + cw, map[3] - pad];
     comp = { x: map[2] - pad - r, y: map[1] + pad + r * 1.25, r };
   }
-  const attr: Rect = [map[2] - ATTR_INSET - ATTR_W, map[3] - ATTR_INSET - ATTR_H, map[2] - ATTR_INSET, map[3] - ATTR_INSET];
+  const attr: Rect = [Math.max(map[0], map[2] - ATTR_INSET - ATTR_W), map[3] - ATTR_INSET - ATTR_H, map[2] - ATTR_INSET, map[3] - ATTR_INSET];
   const ko = knockouts({ cart, comp, legend });
   const furniture = [...ko.rects, ...ko.circles.map((k): Rect => [k.x - k.r, k.y - k.r, k.x + k.r, k.y + k.r])];
   return { w, h, u, m, band, frame, map, plate, nav, attr, cart, comp, legend, furniture };

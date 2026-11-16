@@ -6,6 +6,7 @@ import { isRecord, isSlug, type Place } from './place.ts';
 import { MAPS, type MapEntry, type MapEntryOf } from './registry.ts';
 import type { StyleDef } from './styles/contract.ts';
 import { isStyleKey, STYLES, type StyleKey, type StyleOptions } from './styles/index.ts';
+import { DEFAULT_LOCALE, LOCALES, messages, type Locale } from './i18n/index.ts';
 
 export interface CatalogueMapOf<K extends StyleKey> {
   id: string;
@@ -26,17 +27,17 @@ export type CatalogueMap = { [K in StyleKey]: CatalogueMapOf<K> }[StyleKey];
 /** Folder of the generated map pages, relative to the site root. */
 export const PAGES_DIR = 'cartes';
 
-function resolve<K extends StyleKey>(m: MapEntryOf<K>): CatalogueMapOf<K> {
-  const place = PLACES[m.place];
+function resolve<K extends StyleKey>(m: MapEntryOf<K>, locale: Locale): CatalogueMapOf<K> {
+  const place = { ...PLACES[m.place], ...messages(locale).places[m.place] };
   return {
     id: m.id,
-    title: m.title ?? place.name,
+    title: typeof m.title === 'string' ? m.title : m.title?.[locale] ?? place.name,
     placeId: m.place,
     place,
     style: m.style,
-    styleDef: STYLES[m.style],
+    styleDef: { ...STYLES[m.style], ...messages(locale).styles[m.style] },
     options: m.options ?? {},
-    paths: { page: `${PAGES_DIR}/${m.id}/`, data: dataPath(m.place), vignette: `vignettes/${m.id}.webp` },
+    paths: { page: `${locale}/${PAGES_DIR}/${m.id}/`, data: dataPath(m.place), vignette: `vignettes/${locale}/${m.id}.webp` },
   };
 }
 
@@ -44,14 +45,16 @@ function resolve<K extends StyleKey>(m: MapEntryOf<K>): CatalogueMapOf<K> {
 const resolvable = (m: MapEntry): boolean => isPlaceId(m.place) && isStyleKey(m.style);
 
 /** For tests: resolves any registry, leaving out entries with an unknown place or style (problemsOf reports them). */
-export function catalogueOf(maps: readonly MapEntry[]): CatalogueMap[] {
-  return maps.filter(resolvable).map((m) => resolve(m) as CatalogueMap);
+export function catalogueOf(maps: readonly MapEntry[], locale: Locale = DEFAULT_LOCALE): CatalogueMap[] {
+  return maps.filter(resolvable).map((m) => resolve(m, locale) as CatalogueMap);
 }
 
-export const CATALOGUE: readonly CatalogueMap[] = catalogueOf(MAPS);
+const catalogues = new Map(LOCALES.map((locale) => [locale, catalogueOf(MAPS, locale)]));
+export const mapsForLocale = (locale: Locale): readonly CatalogueMap[] => catalogues.get(locale)!;
+export const CATALOGUE = mapsForLocale(DEFAULT_LOCALE);
 
-export function findMap(id: string): CatalogueMap | undefined {
-  return CATALOGUE.find((m) => m.id === id);
+export function findMap(id: string, locale: Locale = DEFAULT_LOCALE): CatalogueMap | undefined {
+  return mapsForLocale(locale).find((m) => m.id === id);
 }
 
 /** A registry entry the build cannot publish. */
@@ -70,15 +73,16 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
     seen.add(entry.id);
     if (!isPlaceId(entry.place)) return `unknown place "${entry.place}" (${entry.id}); known: ${Object.keys(PLACES).join(', ')}`;
     if (!isStyleKey(entry.style)) return `unknown style "${entry.style}" (${entry.id}); known: ${Object.keys(STYLES).join(', ')}`;
-    const m = resolve(entry) as CatalogueMap;
+    const m = resolve(entry, DEFAULT_LOCALE) as CatalogueMap;
+    const place = PLACES[entry.place]; // Display translations never invalidate geographic data.
     const refetch = `npm run fetch-data -- ${m.placeId}`;
     const data = readData(m.paths.data);
     if (data === undefined) return `no data for ${m.placeId} (${m.id}); run ${refetch}`;
     const meta = isRecord(data) ? data['meta'] : undefined;
     if (!isRecord(meta)) return `${m.paths.data} is unreadable or has no meta (${m.id}); run ${refetch}`;
     for (const k of PLACE_FIELDS) {
-      if (meta[k] !== m.place[k]) {
-        return `data for ${m.placeId} is out of date (${m.id}): ${k} is ${JSON.stringify(m.place[k])} in places/index.ts but ${JSON.stringify(meta[k])} in the data; run ${refetch}`;
+      if (meta[k] !== place[k]) {
+        return `data for ${m.placeId} is out of date (${m.id}): ${k} is ${JSON.stringify(place[k])} in places/index.ts but ${JSON.stringify(meta[k])} in the data; run ${refetch}`;
       }
     }
     return null;

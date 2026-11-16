@@ -1,7 +1,7 @@
 // The drawing sheet around the map: layout, paper, reference grid, dimension chains on
 // the four edges and the title block (bottom right). All in CSS px, drawn each frame.
 import type { MountMeta } from '../contract.ts';
-import { formatLat, formatLon } from '../../place.ts';
+import { formatCoordinate, formatDate, formatNumber, messages, type Locale } from '../../i18n/index.ts';
 import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
 import { growRect, type Point, type Rect } from '../../toolkit/geometry.ts';
 import { clamp, mapWindow, scaleBar } from '../../toolkit/layout.ts';
@@ -45,7 +45,7 @@ export function sheetLayout(w: number, h: number): SheetLayout {
   const ch = Math.round(cw * 0.5);
   const cart: Rect = [map[2] - pad - cw, map[3] - pad - ch, map[2] - pad, map[3] - pad];
   // The OSM attribution sits on top of the title block, right-aligned with it.
-  const attr: Rect = [Math.max(map[0], cart[2] - 260), cart[1] - 6 - 24, cart[2], cart[1] - 6];
+  const attr: Rect = [Math.max(map[0], cart[2] - 320), cart[1] - 6 - 48, cart[2], cart[1] - 6];
   const furniture = [growRect(cart, 4)];
   return { w, h, m, band, frame, map, plate, cart, nav, attr, furniture };
 }
@@ -84,7 +84,7 @@ function gridStep(s: number): number {
   return 1000;
 }
 
-const fmt = (n: number): string => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const fmt = (locale: Locale, n: number): string => formatNumber(locale, n, { maximumFractionDigits: 0 });
 
 // Map metres -> CSS px for the current view.
 const cssProjector = (L: SheetLayout, view: View): Projector => makeProjector(view, L.w, L.h, 1);
@@ -117,7 +117,7 @@ export function drawGrid(c: Ctx, L: SheetLayout, view: View, half: number, o: Cy
 
 // Border, and a chain of dimensions on each edge: running totals (from the south-west
 // corner of the survey) on top and left, partial lengths on bottom and right.
-export function drawBorder(c: Ctx, L: SheetLayout, view: View, half: number, o: CyanotypeOptions): void {
+export function drawBorder(c: Ctx, L: SheetLayout, view: View, half: number, o: CyanotypeOptions, locale: Locale): void {
   const { frame: F, map: M, band, m } = L;
   c.strokeStyle = o.line;
   c.fillStyle = o.line;
@@ -170,10 +170,10 @@ export function drawBorder(c: Ctx, L: SheetLayout, view: View, half: number, o: 
     };
     const tw = c.measureText('0000').width;
     for (const mk of marks) {
-      if (labels && mk.p - tw / 2 > p0 + 2 && mk.p + tw / 2 < p1 - 2) put(fmt(mk.v + half), mk.p);
+      if (labels && mk.p - tw / 2 > p0 + 2 && mk.p + tw / 2 < p1 - 2) put(fmt(locale, mk.v + half), mk.p);
       if (partial && prev && Math.abs(mk.p - prev.p) > tw * 1.3) {
         const mid = (mk.p + prev.p) / 2;
-        put(fmt(G), mid);
+        put(fmt(locale, G), mid);
       }
       prev = mk;
     }
@@ -198,7 +198,7 @@ export function drawBorder(c: Ctx, L: SheetLayout, view: View, half: number, o: 
     c.stroke();
   }
   c.textAlign = 'center';
-  c.fillText('M', M[0] - band / 2, M[1] - band / 2 + r + fs * 0.9);
+  c.fillText('m', M[0] - band / 2, M[1] - band / 2 + r + fs * 0.9);
 }
 
 // Largest font size (px) at which `text` fits in `width`, capped at `max`.
@@ -210,7 +210,8 @@ function fit(c: Ctx, family: string, text: string, width: number, max: number, w
 
 interface TextOptions { bold?: boolean; align?: CanvasTextAlign; base?: CanvasTextBaseline; alpha?: number }
 
-export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MountMeta, o: CyanotypeOptions, paper: HTMLCanvasElement): void {
+export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MountMeta, o: CyanotypeOptions, paper: HTMLCanvasElement, locale: Locale): void {
+  const copy = messages(locale).canvas;
   const [x0, y0, x1, y1] = L.cart;
   const cw = x1 - x0, ch = y1 - y0;
 
@@ -251,12 +252,13 @@ export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MountMe
   const caption = (t: string, x: number, y: number): void => text(t, x + p * 0.8, y + small + p * 0.4, small * 0.85, { alpha: 0.7 });
 
   // Title and district.
-  const title = meta.title.toUpperCase();
+  const title = meta.title.toLocaleUpperCase(locale);
   const tw = north - x0 - 2 * p;
   const ts = fit(c, o.font, title, tw, ch * 0.2, 'bold ');
-  caption('OUVRAGE', x0, y0);
+  caption(copy.work, x0, y0);
   text(title, x0 + p, y0 + small + p * 0.6 + ts * 0.95, ts, { bold: true });
-  text(meta.district.toUpperCase(), x0 + p, r1 - p * 0.9, fit(c, o.font, meta.district.toUpperCase(), tw, ch * 0.09), {});
+  const district = meta.district.toLocaleUpperCase(locale);
+  text(district, x0 + p, r1 - p * 0.9, fit(c, o.font, district, tw, ch * 0.09), {});
 
   // North arrow.
   const nx = (north + x1) / 2, ny = (y0 + r1) / 2 + small * 0.4, nr = (r1 - y0) * 0.28;
@@ -269,17 +271,17 @@ export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MountMe
   c.beginPath();
   c.moveTo(nx, ny - nr * 1.15); c.lineTo(nx - nr * 0.38, ny + nr * 0.6); c.lineTo(nx, ny + nr * 0.25); c.closePath();
   c.stroke();
-  text('N', nx, y0 + p * 0.5 + small, small, { align: 'center', bold: true });
+  text(copy.north, nx, y0 + p * 0.5 + small, small, { align: 'center', bold: true });
 
   // Drawing kind and sheet number.
   const rowMid = (a: number, b: number): number => (a + b) / 2 + small * 0.35;
-  text('PLAN DE QUARTIER', x0 + p, rowMid(r1, r2), small);
-  text('FEUILLE 01 / 01', x1 - p, rowMid(r1, r2), small, { align: 'right' });
+  text(copy.kind, x0 + p, rowMid(r1, r2), fit(c, o.font, copy.kind, mid - x0 - 2 * p, small));
+  text(copy.sheet, x1 - p, rowMid(r1, r2), fit(c, o.font, copy.sheet, x1 - mid - 2 * p, small), { align: 'right' });
 
   // Scale: bar in four segments, and the ratio at screen resolution (96 px / in).
-  caption('ÉCHELLE', x0, r2);
+  caption(copy.scale, x0, r2);
   const ratio = 1 / (view.s * 0.0254 / 96);
-  const rText = `1:${fmt(Number(ratio.toPrecision(2)))}`;
+  const rText = `1:${fmt(locale, Number(ratio.toPrecision(2)))}`;
   c.font = `${small}px ${o.font}`;
   const rW = c.measureText(rText).width;
   const sb = scaleBar(view.s, cw - 2 * p - rW - p * 3 - c.measureText(' 0000 M').width);
@@ -291,13 +293,13 @@ export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MountMe
     c.strokeRect(sx0, by - bh, sb.len / 4, bh);
   }
   text('0', bx, by + small * 1.05, small * 0.9, { align: 'center' });
-  text(`${sb.d} M`, bx + sb.len + p * 0.6, by, small * 0.9);
+  text(`${fmt(locale, sb.d)} m`, bx + sb.len + p * 0.6, by, small * 0.9);
   text(rText, x1 - p, by, small, { align: 'right' });
 
   // Coordinates and survey source.
-  const lat = formatLat(meta.lat, 4), lon = formatLon(meta.lon, 4);
-  const date = meta.fetchedAt.slice(0, 10);
+  const lat = formatCoordinate(locale, meta.lat, 'lat', 4), lon = formatCoordinate(locale, meta.lon, 'lon', 4);
+  const date = formatDate(locale, meta.fetchedAt);
   const bs = Math.min(small, fit(c, o.font, `${lat} ${lon}`, mid - x0 - 2 * p, small));
   text(`${lat} ${lon}`, x0 + p, rowMid(r3, y1), bs);
-  text(`RELEVÉ OSM ${date}`, x1 - p, rowMid(r3, y1), Math.min(small, fit(c, o.font, `RELEVÉ OSM ${date}`, x1 - mid - 2 * p, small)), { align: 'right' });
+  text(copy.survey(date), x1 - p, rowMid(r3, y1), Math.min(small, fit(c, o.font, copy.survey(date), x1 - mid - 2 * p, small)), { align: 'right' });
 }

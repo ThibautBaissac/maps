@@ -8,6 +8,7 @@ import { sheetLayout } from '../src/styles/cyanotype/sheet.ts';
 import type { Rect } from '../src/toolkit/geometry.ts';
 import { computeLayout } from '../src/toolkit/layout.ts';
 import { installPage, nameGlyphs, type FakeCanvas } from './dom.ts';
+import type { Locale } from '../src/i18n/index.ts';
 
 const data = parseMapData(JSON.parse(readFileSync(new URL('../public/data/amsterdam-centre.json', import.meta.url), 'utf8')), 'fixture');
 const SIZE = { width: 800, height: 600 };
@@ -19,11 +20,11 @@ const STYLES = {
   cyanotype: () => import('../src/styles/cyanotype/index.ts'),
 } as const;
 
-async function mountStyle(t: Parameters<typeof installPage>[0], style: keyof typeof STYLES, { title = 'Mon quartier', dpr = 1 } = {}) {
-  const page = installPage(t, { ...SIZE, dpr });
+async function mountStyle(t: Parameters<typeof installPage>[0], style: keyof typeof STYLES, { title = 'Mon quartier', dpr = 1, locale = 'fr' as Locale, width = SIZE.width, height = SIZE.height } = {}) {
+  const page = installPage(t, { width, height, dpr });
   const { mount } = await STYLES[style]();
   const { name: _, ...meta } = data.meta;
-  const args: MountArgs<object> = { container: page.container, data, meta: { ...meta, title }, options: {}, shell: page.shell };
+  const args: MountArgs<object> = { container: page.container, data, meta: { ...meta, title }, locale, options: {}, shell: page.shell };
   const handle: MapHandle = await (mount as (a: MountArgs<object>) => Promise<MapHandle>)(args);
   page.cleanup(() => handle.destroy());
   return { ...page, handle };
@@ -45,6 +46,17 @@ for (const style of ['riso', 'cyanotype'] as const) {
 
 const texts = (page: { canvases: FakeCanvas[] }): unknown[] =>
   page.canvases.flatMap((c) => c.calls.filter((k) => k.method === 'fillText').map((k) => k.args[0]));
+
+for (const [locale, riso, cyanotype] of [['en', 'LEGEND', 'SCALE'], ['es', 'LEYENDA', 'ESCALA']] as const) {
+  for (const style of ['riso', 'cyanotype'] as const) {
+    test(`${style} draws its Canvas text in ${locale}`, async (t) => {
+      const page = await mountStyle(t, style, { locale, width: 1600, height: 800 });
+      const printed = texts(page);
+      assert.ok(printed.includes(style === 'riso' ? riso : cyanotype), `Expected ${style} furniture in ${locale}`);
+      assert.ok(!printed.includes(style === 'riso' ? 'LÉGENDE' : 'ÉCHELLE'));
+    });
+  }
+}
 
 for (const style of ['riso', 'cyanotype'] as const) {
   test(`${style} prints the registry title instead of the place name`, async (t) => {

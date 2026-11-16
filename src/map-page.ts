@@ -8,6 +8,11 @@ import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
 import { ZOOM_STEP } from './toolkit/viewport.ts';
+import { DEFAULT_LOCALE, isLocale, messages } from './i18n/index.ts';
+
+const lang = document.documentElement.lang;
+const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
+const copy = messages(locale).map;
 
 declare global {
   interface Window {
@@ -33,7 +38,8 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
     }),
   ]);
 
-  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, title, style.legend);
+  const meta = { ...withoutName(data.meta), title, district: map.place.district };
+  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, meta, style.legend, locale);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
   description.disabled = false;
@@ -47,7 +53,8 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   const handle = await styleModule.mount({
     container: element('#stage', HTMLElement),
     data,
-    meta: { ...withoutName(data.meta), title },
+    meta,
+    locale,
     options,
     shell,
   });
@@ -69,7 +76,7 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
 function withoutName({ name: _, ...rest }: MapMeta): Omit<MapMeta, 'name'> { return rest; }
 
 const id = bodyData('map');
-const map = findMap(id);
+const map = findMap(id, locale);
 try {
   if (!map) throw new Error(`Unknown map "${id}" (src/registry.ts)`);
   const handle = await open(map);
@@ -83,10 +90,10 @@ try {
   element('#stage', HTMLElement).replaceChildren();
   const status = element('.loading', HTMLElement);
   status.setAttribute('role', 'alert');
-  status.textContent = 'Impossible de charger le plan. Vérifiez votre connexion, puis réessayez.';
+  status.textContent = copy.error;
   const retry = document.createElement('button');
   retry.type = 'button';
-  retry.textContent = 'Réessayer';
+  retry.textContent = copy.retry;
   retry.addEventListener('click', () => window.location.reload());
   status.append(document.createElement('br'), retry);
 }

@@ -1,15 +1,11 @@
 import type { Line, MapData } from './data.ts';
+import { featureCount, formatDate, formatNumber, messages, type Locale } from './i18n/index.ts';
 
 type Feature = readonly [name: string | undefined, paths: readonly Line[]];
 interface Bounds { left: number; right: number; bottom: number; top: number }
 
-const positions = [
-  ['au sud-ouest', 'au sud', 'au sud-est'],
-  ['à l’ouest', 'au centre', 'à l’est'],
-  ['au nord-ouest', 'au nord', 'au nord-est'],
-] as const;
-
-function namedFeatures(features: readonly Feature[], half: number): HTMLUListElement {
+function namedFeatures(features: readonly Feature[], half: number, locale: Locale): HTMLUListElement {
+  const { positions } = messages(locale).description;
   const names = new Map<string, Bounds>();
   for (const [name, paths] of features) {
     if (!name) continue;
@@ -24,7 +20,7 @@ function namedFeatures(features: readonly Feature[], half: number): HTMLUListEle
   }
   const band = (v: number): 0 | 1 | 2 => v < -half / 3 ? 0 : v > half / 3 ? 2 : 1;
   const list = document.createElement('ul');
-  for (const [name, b] of [...names].sort(([a], [b]) => a.localeCompare(b, 'fr'))) {
+  for (const [name, b] of [...names].sort(([a], [b]) => a.localeCompare(b, locale))) {
     const item = document.createElement('li');
     item.textContent = `${name} — ${positions[band((b.bottom + b.top) / 2)][band((b.left + b.right) / 2)]}.`;
     list.append(item);
@@ -33,11 +29,12 @@ function namedFeatures(features: readonly Feature[], half: number): HTMLUListEle
 }
 
 /** Whole-survey description, independent of the visual zoom and the drawing technique. */
-export function describeMap(container: HTMLElement, summary: HTMLElement, data: MapData, title: string, legend: readonly string[]): void {
+export function describeMap(container: HTMLElement, summary: HTMLElement, data: MapData, display: { title: string; district: string }, legend: readonly string[], locale: Locale): void {
   const { meta } = data;
-  const fmt = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 4 });
-  const overview = `${title}, ${meta.district}. Zone carrée de ${fmt.format(meta.sizeKm)} km de côté. Le nord se trouve en haut.`;
-  summary.textContent = `${overview} Consultez le bouton Description pour la légende et les voies nommées.`;
+  const copy = messages(locale).description;
+  const fmt = (n: number): string => formatNumber(locale, n);
+  const overview = copy.overview(display.title, display.district, fmt(meta.sizeKm));
+  summary.textContent = `${overview} ${copy.help}`;
   container.replaceChildren();
   const paragraph = (text: string): void => {
     const p = document.createElement('p');
@@ -45,10 +42,10 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, data: 
     container.append(p);
   };
   paragraph(overview);
-  paragraph(`Centre : latitude ${fmt.format(meta.lat)}°, longitude ${fmt.format(meta.lon)}°. Relevé OpenStreetMap du ${meta.fetchedAt.slice(0, 10)}.`);
-  paragraph(`Contenu du relevé : ${fmt.format(data.buildings.length)} bâtiments, ${fmt.format(data.roads.length)} tronçons de voies, ${fmt.format(data.parks.length)} espaces verts et ${fmt.format(data.water.length)} surfaces d’eau.`);
+  paragraph(copy.centre(fmt(meta.lat), fmt(meta.lon), formatDate(locale, meta.fetchedAt)));
+  paragraph(copy.counts(featureCount(locale, 0, data.buildings.length), featureCount(locale, 1, data.roads.length), featureCount(locale, 2, data.parks.length), featureCount(locale, 3, data.water.length)));
   const heading = document.createElement('h2');
-  heading.textContent = 'Légende';
+  heading.textContent = copy.legend;
   const key = document.createElement('ul');
   for (const text of legend) {
     const item = document.createElement('li');
@@ -56,24 +53,24 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, data: 
     key.append(item);
   }
   container.append(heading, key);
-  paragraph('Les positions indiquent un secteur approximatif par rapport au centre du plan. Elles décrivent la zone entière, quel que soit le zoom.');
+  paragraph(copy.positionsHelp);
   const sections: [string, Feature[]][] = [
-    ['Rues et voies nommées', data.roads.map((r) => [r.n, [r.p]])],
-    ['Eaux nommées', [
+    [copy.roads, data.roads.map((r) => [r.n, [r.p]])],
+    [copy.water, [
       ...data.waterways.filter((w) => !w.u).map((w): Feature => [w.n, [w.p]]),
       ...data.water.map((w): Feature => [w.n, w.r]),
     ]],
   ];
   for (const [title, features] of sections) {
-    const list = namedFeatures(features, meta.half);
+    const list = namedFeatures(features, meta.half, locale);
     const details = document.createElement('details');
     const caption = document.createElement('summary');
-    caption.textContent = `${title} (${list.childElementCount})`;
+    caption.textContent = `${title} (${fmt(list.childElementCount)})`;
     details.append(caption);
     if (list.childElementCount) details.append(list);
     else {
       const empty = document.createElement('p');
-      empty.textContent = 'Aucun nom dans le relevé pour cette zone.';
+      empty.textContent = copy.empty;
       details.append(empty);
     }
     container.append(details);

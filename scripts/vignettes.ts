@@ -1,7 +1,8 @@
-// Takes the gallery's picture of each map: public/vignettes/<id>.webp, a portrait crop
+// Takes each localized map's gallery picture: public/vignettes/<locale>/<id>.webp.
+// A portrait crop
 // drawn by the map page itself (src/vignette.ts) in headless Chrome. Needs a running
 // server: `npm run dev` (default address below) or `npm run preview -- --port 5173`.
-// Usage: npm run vignettes [-- <map-id>…] [--base http://localhost:5173/maps/]
+// Usage: npm run vignettes [-- <map-id>…] [--locale fr|en|es] [--base http://localhost:5173/maps/]
 // Chrome is looked up in the usual places; set CHROME to its path otherwise.
 import { execFile, execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
@@ -9,10 +10,15 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { promisify } from 'node:util';
 import { CATALOGUE, findMap, type CatalogueMap } from '../src/catalogue.ts';
 import { fail, message } from './cli.ts';
+import { LOCALES, isLocale, type Locale } from '../src/i18n/index.ts';
 
 const args = process.argv.slice(2);
 const baseAt = args.indexOf('--base');
 const base = baseAt >= 0 ? args.splice(baseAt, 2)[1] ?? fail('--base needs a URL') : 'http://localhost:5173/maps/';
+const localeAt = args.indexOf('--locale');
+const selected = localeAt >= 0 ? args.splice(localeAt, 2)[1] : undefined;
+if (localeAt >= 0 && (!selected || !isLocale(selected))) fail(`--locale needs one of: ${LOCALES.join(', ')}`);
+const locales: readonly Locale[] = selected && isLocale(selected) ? [selected] : LOCALES;
 const maps: CatalogueMap[] = args.length
   ? args.map((id) => findMap(id) ?? fail(`Unknown map "${id}" (src/registry.ts)`))
   : [...CATALOGUE];
@@ -44,7 +50,8 @@ const chrome = findChrome();
 const run = promisify(execFile);
 const publicDir = new URL('../public/', import.meta.url);
 
-for (const { id, paths } of maps) {
+for (const locale of locales) for (const map of maps) {
+  const { id, paths } = findMap(map.id, locale)!;
   const url = new URL(`${paths.page}#vignette`, base).href;
   const { stdout } = await run(chrome, [
     '--headless=new', '--disable-gpu', '--hide-scrollbars', '--mute-audio',

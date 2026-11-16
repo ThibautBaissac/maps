@@ -3,6 +3,7 @@
 // vite.config.ts generates one page per entry at build time.
 import type { PlaceId } from '../places/index.ts';
 import type { StyleKey, StyleOptions } from './styles/index.ts';
+import type { LocalizedText } from './i18n/index.ts';
 
 export interface MapEntryOf<K extends StyleKey> {
   /** URL slug, unique, [a-z0-9-]. */
@@ -12,7 +13,7 @@ export interface MapEntryOf<K extends StyleKey> {
   /** Key of src/styles/index.ts. */
   style: K;
   /** Defaults to the place name. */
-  title?: string;
+  title?: LocalizedText;
   /** Style settings (see the style's defaults.ts). */
   options?: Partial<StyleOptions[K]>;
 }

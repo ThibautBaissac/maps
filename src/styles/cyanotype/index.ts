@@ -22,7 +22,7 @@ interface Env {
   hatch: CanvasPattern;
 }
 
-export async function mount({ container, data, meta, options, shell }: MountArgs<CyanotypeOptions>): Promise<MapHandle> {
+export async function mount({ container, data, meta, locale, options, shell }: MountArgs<CyanotypeOptions>): Promise<MapHandle> {
   const o: CyanotypeOptions = { ...DEFAULTS, ...options };
   await Promise.all([
     loadFont('Space Mono', 'spacemono/SpaceMono-Regular.ttf', { weight: '400' }),
@@ -76,8 +76,8 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
       const { dpr, L } = e;
       c.setTransform(dpr, 0, 0, dpr, 0, 0);
       drawGrid(c, L, view, half, o);
-      drawBorder(c, L, view, half, o);
-      drawTitleBlock(c, L, view, meta, o, e.paper);
+      drawBorder(c, L, view, half, o, locale);
+      drawTitleBlock(c, L, view, meta, o, e.paper, locale);
       c.setTransform(1, 0, 0, 1, 0, 0);
     },
   });

@@ -26,15 +26,29 @@ test('a map is titled after its place unless the registry gives a title', () => 
 test('a map knows its page, data and vignette paths', () => {
   const [m] = catalogueOf([entry('amsterdam-test')]);
   assert.deepEqual(m?.paths, {
-    page: 'cartes/amsterdam-test/',
+    page: 'fr/cartes/amsterdam-test/',
     data: 'data/amsterdam-centre.json',
-    vignette: 'vignettes/amsterdam-test.webp',
+    vignette: 'vignettes/fr/amsterdam-test.webp',
   });
 });
 
 test('findMap finds a registered map by id, and nothing for an unknown id', () => {
   assert.equal(findMap('amsterdam-riso')?.placeId, 'amsterdam-centre');
   assert.equal(findMap('nowhere'), undefined);
+});
+
+test('a translated map uses the city and district of its language, sharing the same geographic data', () => {
+  const en = findMap('lisbonne-cyanotype', 'en');
+  const es = findMap('lisbonne-cyanotype', 'es');
+  assert.equal(en?.title, 'Lisbon');
+  assert.equal(es?.title, 'Lisboa');
+  assert.equal(findMap('amsterdam-riso', 'en')?.place.district, 'Historic centre');
+  assert.equal(en?.paths.page, 'en/cartes/lisbonne-cyanotype/');
+  assert.equal(es?.paths.vignette, 'vignettes/es/lisbonne-cyanotype.webp');
+  assert.equal(en?.paths.data, 'data/lisbonne-alfama.json');
+  assert.equal(en?.place.lat, findMap('lisbonne-cyanotype')?.place.lat);
+  assert.equal(en?.styleDef.label, "Architect’s cyanotype");
+  assert.deepEqual(catalogueProblems(readPublic), []);
 });
 
 test('the registry and the downloaded data agree', () => {

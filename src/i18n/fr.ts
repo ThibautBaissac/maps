@@ -1,0 +1,73 @@
+import type { Messages } from './types.ts';
+
+export const fr: Messages = {
+  languageName: 'Français',
+  languageNav: 'Langue',
+  attribution: '© contributeurs OpenStreetMap',
+  data: 'Données',
+  gallery: {
+    title: 'Cartes illustrées',
+    heading: ['Choisissez un quartier.', 'Perdez-vous dedans.'],
+    intro: 'Des plans dessinés avec du code à partir d’OpenStreetMap, chacun dans un style graphique différent.',
+    description: 'Plans de quartiers dessinés avec du code, dans des styles graphiques différents.',
+    maps: 'Cartes',
+    open: 'Ouvrir la carte',
+  },
+  map: {
+    description: (title, district, style) => `Plan illustré de ${title} (${district}), style ${style}.`,
+    label: (title, district) => `Plan illustré : ${title}, ${district}. Boutons de zoom, molette ou touches plus et moins pour zoomer ; glisser ou flèches pour déplacer.`,
+    summaryHelp: 'Consultez le bouton Description pour le contenu textuel du plan.',
+    loading: 'Chargement du plan…',
+    back: 'Toutes les cartes',
+    zoom: 'Zoom du plan',
+    zoomIn: 'Agrandir le plan (+)',
+    zoomOut: 'Réduire le plan (−)',
+    descriptionButton: 'Description',
+    descriptionTitle: 'Description du plan',
+    close: 'Fermer',
+    error: 'Impossible de charger le plan. Vérifiez votre connexion, puis réessayez.',
+    retry: 'Réessayer',
+  },
+  description: {
+    overview: (title, district, size) => `${title}, ${district}. Zone carrée de ${size} km de côté. Le nord se trouve en haut.`,
+    help: 'Consultez le bouton Description pour la légende et les voies nommées.',
+    centre: (lat, lon, date) => `Centre : latitude ${lat}°, longitude ${lon}°. Relevé OpenStreetMap du ${date}.`,
+    counts: (b, r, p, w) => `Contenu du relevé : ${b}, ${r}, ${p} et ${w}.`,
+    features: [
+      { one: '{count} bâtiment', other: '{count} bâtiments' },
+      { one: '{count} tronçon de voie', other: '{count} tronçons de voies' },
+      { one: '{count} espace vert', other: '{count} espaces verts' },
+      { one: '{count} surface d’eau', other: '{count} surfaces d’eau' },
+    ],
+    legend: 'Légende',
+    positionsHelp: 'Les positions indiquent un secteur approximatif par rapport au centre du plan. Elles décrivent la zone entière, quel que soit le zoom.',
+    positions: [['au sud-ouest', 'au sud', 'au sud-est'], ['à l’ouest', 'au centre', 'à l’est'], ['au nord-ouest', 'au nord', 'au nord-est']],
+    roads: 'Rues et voies nommées',
+    water: 'Eaux nommées',
+    empty: 'Aucun nom dans le relevé pour cette zone.',
+  },
+  canvas: {
+    legend: 'LÉGENDE',
+    items: ['BÂTIMENTS', 'RUES & QUAIS', 'EAU', 'PARCS & JARDINS'],
+    work: 'OUVRAGE',
+    kind: 'PLAN DE QUARTIER',
+    sheet: 'FEUILLE 01 / 01',
+    scale: 'ÉCHELLE',
+    survey: (date) => `RELEVÉ OSM ${date}`,
+    north: 'N', south: 'S', east: 'E', west: 'O',
+  },
+  places: {
+    'amsterdam-centre': { name: 'Amsterdam', district: 'Centre historique' },
+    'lisbonne-alfama': { name: 'Lisbonne', district: 'Alfama' },
+  },
+  styles: {
+    riso: {
+      label: 'Risographie deux encres',
+      legend: ['Bâtiments : surfaces pleines.', 'Rues et quais : traits.', 'Eau : hachures horizontales.', 'Parcs et jardins : trame de points.'],
+    },
+    cyanotype: {
+      label: 'Cyanotype d’architecte',
+      legend: ['Bâtiments : contours.', 'Rues : traits simples ou doubles selon le zoom.', 'Eau : lignes parallèles au rivage.', 'Parcs et jardins : hachures croisées.'],
+    },
+  },
+};

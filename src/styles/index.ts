@@ -3,6 +3,7 @@
 // overlays their colours from the map's options ({ bg, fg, accent }, plus dark: true for
 // a light-on-dark style).
 import type { StyleDef } from './contract.ts';
+import { messages } from '../i18n/index.ts';
 import { DEFAULTS as RISO, type RisoOptions } from './riso/defaults.ts';
 import { DEFAULTS as CYANOTYPE, type CyanotypeOptions } from './cyanotype/defaults.ts';
 
@@ -15,8 +16,7 @@ export type StyleKey = keyof StyleOptions;
 
 export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
   riso: {
-    label: 'Risographie deux encres',
-    legend: ['Bâtiments : surfaces pleines.', 'Rues et quais : traits.', 'Eau : hachures horizontales.', 'Parcs et jardins : trame de points.'],
+    ...messages('fr').styles.riso,
     load: () => import('./riso/index.ts'),
     card: (o = {}) => {
       const v = { ...RISO, ...o };
@@ -24,8 +24,7 @@ export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
     },
   },
   cyanotype: {
-    label: "Cyanotype d'architecte",
-    legend: ['Bâtiments : contours.', 'Rues : traits simples ou doubles selon le zoom.', 'Eau : lignes parallèles au rivage.', 'Parcs et jardins : hachures croisées.'],
+    ...messages('fr').styles.cyanotype,
     load: () => import('./cyanotype/index.ts'),
     card: (o = {}) => {
       const v = { ...CYANOTYPE, ...o };

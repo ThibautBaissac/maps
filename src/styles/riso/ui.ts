@@ -1,7 +1,7 @@
 // Riso frame furniture: neatline, registration marks, cartouche, compass, legend.
 // A / B are the contexts of the two ink plates; ink = { a, b } are their colours.
 import type { MountMeta } from '../contract.ts';
-import { formatLat, formatLon } from '../../place.ts';
+import { formatCoordinate, formatNumber, messages, type Locale } from '../../i18n/index.ts';
 import type { Point, Rect } from '../../toolkit/geometry.ts';
 import { clamp, scaleBar, type Layout } from '../../toolkit/layout.ts';
 import type { View } from '../../toolkit/viewport.ts';
@@ -64,7 +64,7 @@ function frame(A: Ctx, B: Ctx, L: Layout, ink: Inks): void {
   }
 }
 
-function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MountMeta, ink: Inks): void {
+function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MountMeta, ink: Inks, locale: Locale): void {
   const [x0, y0, x1, y1] = L.cart;
   const cw = x1 - x0, ch = y1 - y0;
   const pad = cw * 0.06;
@@ -73,9 +73,9 @@ function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MountMeta, ink: 
   A.strokeStyle = ink.a;
   strokeRect(A, [x0 + 4, y0 + 4, x1 - 4, y1 - 4], 0.8);
 
-  const title = meta.title.toUpperCase();
-  const sub = meta.district.toUpperCase();
-  const coords = `${formatLat(meta.lat, 4)}  ·  ${formatLon(meta.lon, 4)}`;
+  const title = meta.title.toLocaleUpperCase(locale);
+  const sub = meta.district.toLocaleUpperCase(locale);
+  const coords = `${formatCoordinate(locale, meta.lat, 'lat', 4)}  ·  ${formatCoordinate(locale, meta.lon, 'lon', 4)}`;
   A.font = `100px ${FONT}`;
   A.letterSpacing = '0px';
   const tw100 = A.measureText(title).width;
@@ -130,13 +130,13 @@ function cartouche(A: Ctx, B: Ctx, L: Layout, view: View, meta: MountMeta, ink: 
   B.textBaseline = 'top';
   B.textAlign = 'center';
   B.fillText('0', bx, by + bh + 3);
-  B.fillText(String(d / 2), bx + len / 2, by + bh + 3);
+  B.fillText(formatNumber(locale, d / 2), bx + len / 2, by + bh + 3);
   B.textAlign = 'left';
-  B.fillText(d >= 1000 ? `${d / 1000} KM` : `${d} M`, bx + len - cs * 0.3, by + bh + 3);
+  B.fillText(d >= 1000 ? `${formatNumber(locale, d / 1000)} km` : `${formatNumber(locale, d)} m`, bx + len - cs * 0.3, by + bh + 3);
   B.textBaseline = 'alphabetic';
 }
 
-function compass(A: Ctx, B: Ctx, L: Layout, ink: Inks): void {
+function compass(A: Ctx, B: Ctx, L: Layout, ink: Inks, locale: Locale): void {
   const { x, y, r } = L.comp;
   B.strokeStyle = ink.b;
   B.fillStyle = ink.b;
@@ -179,12 +179,12 @@ function compass(A: Ctx, B: Ctx, L: Layout, ink: Inks): void {
     ctx.font = `${fs}px ${FONT}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText('N', x, y - r - fs * 0.18);
+    ctx.fillText(messages(locale).canvas.north, x, y - r - fs * 0.18);
     ctx.textAlign = 'left';
   }
 }
 
-function legend(A: Ctx, B: Ctx, box: Rect, patterns: InkPatterns, dpr: number, ink: Inks): void {
+function legend(A: Ctx, B: Ctx, box: Rect, patterns: InkPatterns, dpr: number, ink: Inks, locale: Locale): void {
   const [x0, y0, x1, y1] = box;
   const lw = x1 - x0;
   const row = (y1 - y0) / 5;
@@ -195,12 +195,12 @@ function legend(A: Ctx, B: Ctx, box: Rect, patterns: InkPatterns, dpr: number, i
   B.letterSpacing = `${fs * 0.2}px`;
   B.textBaseline = 'middle';
   B.textAlign = 'left';
-  B.fillText('LÉGENDE', x0, y0 + row * 0.4);
+  B.fillText(messages(locale).canvas.legend, x0, y0 + row * 0.4);
   B.letterSpacing = '0px';
   B.lineWidth = 1;
   B.beginPath(); B.moveTo(x0, y0 + row * 0.85); B.lineTo(x1, y0 + row * 0.85); B.stroke();
   const sw = Math.min(row * 0.62, lw * 0.18), sh = sw * 0.62;
-  const items = ['BÂTIMENTS', 'RUES & QUAIS', 'EAU', 'PARCS & JARDINS'];
+  const items = messages(locale).canvas.items;
   items.forEach((label, i) => {
     const cy = y0 + row * (1.5 + i);
     const sx = x0, sy = cy - sh / 2;
@@ -223,16 +223,20 @@ function legend(A: Ctx, B: Ctx, box: Rect, patterns: InkPatterns, dpr: number, i
     }
     B.font = `${fs}px ${FONT}`;
     B.letterSpacing = `${fs * 0.08}px`;
-    B.fillText(label, sx + sw + fs * 0.7, cy + 1);
+    const tx = sx + sw + fs * 0.7;
+    const width = x1 - tx;
+    const measured = B.measureText(label).width;
+    if (measured > width) B.font = `${fs * width / measured}px ${FONT}`;
+    B.fillText(label, tx, cy + 1);
     B.letterSpacing = '0px';
   });
   B.textBaseline = 'alphabetic';
 }
 
-export function renderUI(A: Ctx, B: Ctx, L: Layout, view: View, meta: MountMeta, dpr: number, patterns: InkPatterns, ink: Inks): void {
+export function renderUI(A: Ctx, B: Ctx, L: Layout, view: View, meta: MountMeta, dpr: number, patterns: InkPatterns, ink: Inks, locale: Locale): void {
   for (const ctx of [A, B]) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   frame(A, B, L, ink);
-  cartouche(A, B, L, view, meta, ink);
-  compass(A, B, L, ink);
-  if (L.legend) legend(A, B, L.legend, patterns, dpr, ink);
+  cartouche(A, B, L, view, meta, ink, locale);
+  compass(A, B, L, ink, locale);
+  if (L.legend) legend(A, B, L.legend, patterns, dpr, ink, locale);
 }

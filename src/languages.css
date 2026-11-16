@@ -1,0 +1,17 @@
+.languages { display: flex; flex-wrap: wrap; gap: 4px; }
+.languages a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  font: 12px/1.2 system-ui, sans-serif;
+  color: inherit;
+  background: var(--language-bg, transparent);
+  border: 1px solid currentColor;
+  text-decoration: none;
+}
+.languages a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; font-weight: 700; }
+.languages a:hover { text-decoration: underline; }
+.languages a:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }

@@ -10,7 +10,7 @@ Un style est un dossier `src/styles/<nom>/` dont `index.ts` exporte une fonction
 import type { MapHandle, MountArgs } from '../contract.ts';
 import { DEFAULTS, type NomOptions } from './defaults.ts';
 
-export async function mount({ container, data, meta, options, shell }: MountArgs<NomOptions>): Promise<MapHandle> {
+export async function mount({ container, data, meta, locale, options, shell }: MountArgs<NomOptions>): Promise<MapHandle> {
   const o: NomOptions = { ...DEFAULTS, ...options };
   // construit la page dans `container` et commence à dessiner
   return { destroy() {} };
@@ -21,13 +21,14 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
 |---|---|
 | `container` | `<div id="stage">` vide qui remplit la fenêtre |
 | `data` | les données OSM du lieu (format plus bas) |
-| `meta` | `data.meta` sans `name`, plus `title` (titre du registre ou nom du lieu, résolu par `src/catalogue.ts`) : c'est le titre qu'un style imprime, jamais le nom du lieu |
+| `meta` | `data.meta` sans `name`, avec `title` et `district` dans la langue de la page, résolus par `src/catalogue.ts` : imprimer ces valeurs, jamais les noms copiés dans les données OSM |
+| `locale` | langue de la page ; utiliser `messages(locale)` et les fonctions de formatage de `src/i18n/index.ts` pour les textes dessinés |
 | `options` | les `options` de la carte dans `src/registry.ts`, à fusionner avec le `defaults.ts` du style |
 | `shell` | le cadre de page commun (plus bas) |
 
 `defaults.ts` exporte l'interface des options du style (`NomOptions`, chaque champ documenté) et `DEFAULTS`, ses valeurs par défaut.
 
-Le style se déclare ensuite dans `src/styles/index.ts` : son interface d'options dans `StyleOptions` (la clé devient un nom de style valide dans le registre, et les `options` de ses cartes sont vérifiées contre cette interface), puis dans `STYLES` un libellé, une `legend` textuelle expliquant ses symboles, un `load()` paresseux et un `card(options)` qui renvoie `{ bg, fg, accent }` pour la galerie (avec `dark: true` si le style trace en clair sur un fond sombre : la galerie inverse alors son mélange de couleurs).
+Le style se déclare ensuite dans `src/styles/index.ts` : son interface d'options dans `StyleOptions` (la clé devient un nom de style valide dans le registre, et les `options` de ses cartes sont vérifiées contre cette interface), puis dans `STYLES` ses textes français issus de `messages('fr').styles`, un `load()` paresseux et un `card(options)` qui renvoie `{ bg, fg, accent }` pour la galerie (avec `dark: true` si le style trace en clair sur un fond sombre : la galerie inverse alors son mélange de couleurs). Chaque dictionnaire fournit son libellé et sa légende textuelle ; le catalogue choisit ceux de la page.
 
 `mount` ne se termine qu'une fois la carte dessinée : la capture de vignette lit le canvas de `#stage` dès que la promesse est résolue (`mountCanvasMap()` le garantit si la scène a une taille).
 
@@ -35,7 +36,7 @@ La page branche ses boutons de zoom sur le champ facultatif `viewport` de `MapHa
 
 ### Ce que tout style doit respecter
 
-- L'attribution OSM et les commandes communes restent visibles : les positionner avec `shell.place(...)` (un style construit sur `mountCanvasMap()` les fait placer par le stage), les habiller avec `shell.theme(...)`, ne jamais les masquer. Réserver la zone de navigation au lien retour, aux boutons de zoom et au bouton de description.
+- L'attribution OSM et les commandes communes restent visibles : les positionner avec `shell.place(...)` (un style construit sur `mountCanvasMap()` les fait placer par le stage), les habiller avec `shell.theme(...)`, ne jamais les masquer. Réserver la zone de navigation au lien retour, aux boutons de zoom, au bouton de description et aux langues.
 - La navigation au clavier et à la souris fonctionne (le viewport de la boîte à outils gère les deux).
 - Aucune requête vers un serveur extérieur : les polices vont dans `public/fonts/` avec leur licence et se chargent avec `loadFont()`.
 - S'inspirer d'un genre, jamais copier une œuvre existante.

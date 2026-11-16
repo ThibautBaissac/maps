@@ -1,0 +1,73 @@
+import type { Messages } from './types.ts';
+
+export const en: Messages = {
+  languageName: 'English',
+  languageNav: 'Language',
+  attribution: '© OpenStreetMap contributors',
+  data: 'Data',
+  gallery: {
+    title: 'Illustrated maps',
+    heading: ['Choose a neighbourhood.', 'Get lost in it.'],
+    intro: 'Maps drawn with code using OpenStreetMap data, each in a different graphic style.',
+    description: 'Neighbourhood maps drawn with code in different graphic styles.',
+    maps: 'Maps',
+    open: 'Open map',
+  },
+  map: {
+    description: (title, district, style) => `Illustrated map of ${title} (${district}), ${style} style.`,
+    label: (title, district) => `Illustrated map: ${title}, ${district}. Use the zoom buttons, mouse wheel or plus and minus keys to zoom; drag or use the arrow keys to move.`,
+    summaryHelp: 'Use the Description button for the text version of the map.',
+    loading: 'Loading map…',
+    back: 'All maps',
+    zoom: 'Map zoom',
+    zoomIn: 'Zoom in (+)',
+    zoomOut: 'Zoom out (−)',
+    descriptionButton: 'Description',
+    descriptionTitle: 'Map description',
+    close: 'Close',
+    error: 'Unable to load the map. Check your connection and try again.',
+    retry: 'Try again',
+  },
+  description: {
+    overview: (title, district, size) => `${title}, ${district}. A square area with sides of ${size} km. North is at the top.`,
+    help: 'Use the Description button for the legend and named streets and waterways.',
+    centre: (lat, lon, date) => `Centre: latitude ${lat}°, longitude ${lon}°. OpenStreetMap survey dated ${date}.`,
+    counts: (b, r, p, w) => `Survey contents: ${b}, ${r}, ${p} and ${w}.`,
+    features: [
+      { one: '{count} building', other: '{count} buildings' },
+      { one: '{count} road segment', other: '{count} road segments' },
+      { one: '{count} green space', other: '{count} green spaces' },
+      { one: '{count} water area', other: '{count} water areas' },
+    ],
+    legend: 'Legend',
+    positionsHelp: 'Positions indicate an approximate sector relative to the centre of the map. They describe the whole area at every zoom level.',
+    positions: [['to the southwest', 'to the south', 'to the southeast'], ['to the west', 'in the centre', 'to the east'], ['to the northwest', 'to the north', 'to the northeast']],
+    roads: 'Named streets and roads',
+    water: 'Named bodies of water and waterways',
+    empty: 'The survey contains no names for this area.',
+  },
+  canvas: {
+    legend: 'LEGEND',
+    items: ['BUILDINGS', 'STREETS & QUAYS', 'WATER', 'PARKS & GARDENS'],
+    work: 'PROJECT',
+    kind: 'NEIGHBOURHOOD PLAN',
+    sheet: 'SHEET 01 / 01',
+    scale: 'SCALE',
+    survey: (date) => `OSM SURVEY ${date}`,
+    north: 'N', south: 'S', east: 'E', west: 'W',
+  },
+  places: {
+    'amsterdam-centre': { name: 'Amsterdam', district: 'Historic centre' },
+    'lisbonne-alfama': { name: 'Lisbon', district: 'Alfama' },
+  },
+  styles: {
+    riso: {
+      label: 'Two-ink risograph',
+      legend: ['Buildings: solid areas.', 'Streets and quays: lines.', 'Water: horizontal hatching.', 'Parks and gardens: dot patterns.'],
+    },
+    cyanotype: {
+      label: 'Architect’s cyanotype',
+      legend: ['Buildings: outlines.', 'Streets: single or double lines depending on zoom.', 'Water: lines parallel to the shore.', 'Parks and gardens: cross-hatching.'],
+    },
+  },
+};

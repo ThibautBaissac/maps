@@ -38,7 +38,7 @@ interface Env {
   uiKey: string;
 }
 
-export async function mount({ container, data, meta, options, shell }: MountArgs<RisoOptions>): Promise<MapHandle> {
+export async function mount({ container, data, meta, locale, options, shell }: MountArgs<RisoOptions>): Promise<MapHandle> {
   const o: RisoOptions = { ...DEFAULTS, ...options };
   const ink: Inks = { a: o.inkA, b: o.inkB };
   await loadFont('Bebas Neue', 'bebasneue/BebasNeue-Regular.ttf');
@@ -63,7 +63,7 @@ export async function mount({ container, data, meta, options, shell }: MountArgs
   function renderFurniture(e: Env, view: View): void {
     const { a, b, dpr } = e;
     clear(a.x); clear(b.x);
-    renderUI(a.x, b.x, e.layout, view, meta, dpr, e.patterns, ink);
+    renderUI(a.x, b.x, e.layout, view, meta, dpr, e.patterns, ink, locale);
     applyInkTexture(a.x, e.texA);
     applyInkTexture(b.x, e.texB);
     compose(e.ui.x, a.c, b.c, dpr);

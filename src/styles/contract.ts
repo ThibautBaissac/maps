@@ -2,6 +2,7 @@
 import type { MapData, MapMeta } from '../data.ts';
 import type { Shell } from '../shell.ts';
 import type { Viewport } from '../toolkit/viewport.ts';
+import type { Locale } from '../i18n/index.ts';
 
 /** What a style prints about its map: the data's meta without the place name, plus the title. */
 export type MountMeta = Omit<MapMeta, 'name'> & {
@@ -14,6 +15,7 @@ export interface MountArgs<O> {
   container: HTMLElement;
   data: MapData;
   meta: MountMeta;
+  locale: Locale;
   /** The map's options in src/registry.ts, to merge over the style's defaults. */
   options: Partial<O>;
   shell: Shell;

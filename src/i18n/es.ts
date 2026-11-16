@@ -1,0 +1,73 @@
+import type { Messages } from './types.ts';
+
+export const es: Messages = {
+  languageName: 'Español',
+  languageNav: 'Idioma',
+  attribution: '© colaboradores de OpenStreetMap',
+  data: 'Datos',
+  gallery: {
+    title: 'Mapas ilustrados',
+    heading: ['Elige un barrio.', 'Piérdete en él.'],
+    intro: 'Planos dibujados con código a partir de OpenStreetMap, cada uno con un estilo gráfico diferente.',
+    description: 'Planos de barrios dibujados con código en distintos estilos gráficos.',
+    maps: 'Mapas',
+    open: 'Abrir el mapa',
+  },
+  map: {
+    description: (title, district, style) => `Plano ilustrado de ${title} (${district}), estilo ${style}.`,
+    label: (title, district) => `Plano ilustrado: ${title}, ${district}. Usa los botones de zoom, la rueda del ratón o las teclas más y menos para ampliar o reducir; arrastra o usa las flechas para desplazarte.`,
+    summaryHelp: 'Consulta el botón Descripción para acceder al contenido textual del plano.',
+    loading: 'Cargando el plano…',
+    back: 'Todos los mapas',
+    zoom: 'Zoom del plano',
+    zoomIn: 'Ampliar el plano (+)',
+    zoomOut: 'Reducir el plano (−)',
+    descriptionButton: 'Descripción',
+    descriptionTitle: 'Descripción del plano',
+    close: 'Cerrar',
+    error: 'No se puede cargar el plano. Comprueba tu conexión e inténtalo de nuevo.',
+    retry: 'Reintentar',
+  },
+  description: {
+    overview: (title, district, size) => `${title}, ${district}. Zona cuadrada de ${size} km de lado. El norte está arriba.`,
+    help: 'Consulta el botón Descripción para ver la leyenda y las calles y aguas con nombre.',
+    centre: (lat, lon, date) => `Centro: latitud ${lat}°, longitud ${lon}°. Datos de OpenStreetMap del ${date}.`,
+    counts: (b, r, p, w) => `Contenido de los datos: ${b}, ${r}, ${p} y ${w}.`,
+    features: [
+      { one: '{count} edificio', other: '{count} edificios' },
+      { one: '{count} tramo de vía', other: '{count} tramos de vías' },
+      { one: '{count} espacio verde', other: '{count} espacios verdes' },
+      { one: '{count} superficie de agua', other: '{count} superficies de agua' },
+    ],
+    legend: 'Leyenda',
+    positionsHelp: 'Las posiciones indican un sector aproximado respecto al centro del plano. Describen toda la zona, independientemente del zoom.',
+    positions: [['al suroeste', 'al sur', 'al sureste'], ['al oeste', 'en el centro', 'al este'], ['al noroeste', 'al norte', 'al noreste']],
+    roads: 'Calles y vías con nombre',
+    water: 'Masas y cursos de agua con nombre',
+    empty: 'Los datos no contienen nombres para esta zona.',
+  },
+  canvas: {
+    legend: 'LEYENDA',
+    items: ['EDIFICIOS', 'CALLES Y MUELLES', 'AGUA', 'PARQUES Y JARDINES'],
+    work: 'PROYECTO',
+    kind: 'PLANO DEL BARRIO',
+    sheet: 'HOJA 01 / 01',
+    scale: 'ESCALA',
+    survey: (date) => `DATOS OSM ${date}`,
+    north: 'N', south: 'S', east: 'E', west: 'O',
+  },
+  places: {
+    'amsterdam-centre': { name: 'Ámsterdam', district: 'Centro histórico' },
+    'lisbonne-alfama': { name: 'Lisboa', district: 'Alfama' },
+  },
+  styles: {
+    riso: {
+      label: 'Risografía a dos tintas',
+      legend: ['Edificios: superficies sólidas.', 'Calles y muelles: líneas.', 'Agua: rayado horizontal.', 'Parques y jardines: trama de puntos.'],
+    },
+    cyanotype: {
+      label: 'Cianotipo de arquitecto',
+      legend: ['Edificios: contornos.', 'Calles: líneas simples o dobles según el zoom.', 'Agua: líneas paralelas a la orilla.', 'Parques y jardines: rayado cruzado.'],
+    },
+  },
+};

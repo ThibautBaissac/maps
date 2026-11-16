@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { parseMapData, type MapData } from '../src/data.ts';
+import type { MapData } from '../src/data.ts';
 import type { Layer } from '../src/layers.ts';
 import { osmLayers } from '../src/osm-layers.ts';
 import * as topics from '../src/topics.ts';
+import { readOsm } from './osm-file.ts';
 
-const meta = parseMapData(JSON.parse(readFileSync(new URL('../public/data/lisbonne-alfama.json', import.meta.url), 'utf8')), 'fixture').meta;
+const meta = readOsm('lisbonne-alfama').mapMeta;
 const survey = { half: 10 };
 const map = (roads: MapData['roads'], waterways: MapData['waterways'] = []): Layer[] =>
   osmLayers({ meta: { ...meta, half: 10, sizeKm: 0.02 }, roads, buildings: [], parks: [], water: [], waterways });

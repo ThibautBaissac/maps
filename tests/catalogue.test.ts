@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { catalogueOf, catalogueProblems, findMap, problemsOf } from '../src/catalogue.ts';
+import { PLACES } from '../places/index.ts';
 import type { MapEntry } from '../src/registry.ts';
 
 // The repository's own data files, as the build reads them.
@@ -14,7 +15,8 @@ function readPublic(path: string): unknown {
   }
 }
 
-const AMSTERDAM_META = (readPublic('data/amsterdam-centre.json') as { meta: Record<string, unknown> }).meta;
+// A current osm.json, reduced to what the catalogue checks: the square and the download date.
+const OSM_FILE = { square: { lat: 52.3712, lon: 4.8936, sizeKm: 2 }, fetchedAt: '2026-11-15T12:59:00.000Z', layers: [] };
 const entry = (id: string, extra: Partial<MapEntry> = {}): MapEntry => ({ id, place: 'amsterdam-centre', style: 'riso', topic: 'canal-crossings', ...extra } as MapEntry);
 
 test('a map is titled after its place unless the registry gives a title', () => {
@@ -27,7 +29,7 @@ test('a map knows its page, data and vignette paths', () => {
   const [m] = catalogueOf([entry('amsterdam-test')]);
   assert.deepEqual(m?.paths, {
     page: 'fr/cartes/amsterdam-test/',
-    data: 'data/amsterdam-centre.json',
+    data: 'data/amsterdam-centre/osm.json',
     vignette: 'vignettes/fr/amsterdam-test.webp',
   });
 });
@@ -45,7 +47,7 @@ test('a translated map uses the city and district of its language, sharing the s
   assert.equal(findMap('amsterdam-riso', 'en')?.place.district, 'Historic centre');
   assert.equal(en?.paths.page, 'en/cartes/lisbonne-cyanotype/');
   assert.equal(es?.paths.vignette, 'vignettes/es/lisbonne-cyanotype.webp');
-  assert.equal(en?.paths.data, 'data/lisbonne-alfama.json');
+  assert.equal(en?.paths.data, 'data/lisbonne-alfama/osm.json');
   assert.equal(en?.place.lat, findMap('lisbonne-cyanotype')?.place.lat);
   assert.equal(en?.styleDef.label, "Architect’s cyanotype");
   assert.deepEqual(catalogueProblems(readPublic), []);
@@ -62,29 +64,32 @@ test('a map without data is a problem that says how to download it', () => {
   assert.match(problems[0]?.message ?? '', /npm run fetch-data -- amsterdam-centre/);
 });
 
-// Each field of the place copied into the data's meta must still match it.
-for (const [field, older] of [['name', 'Amsterdam-Oost'], ['district', 'Jordaan'], ['lat', 52.1], ['lon', 4.1], ['sizeKm', 3]] as const) {
+// Each geographic field of the place recorded in the data's square must still match it.
+for (const [field, older] of [['lat', 52.4], ['lon', 4.1], ['sizeKm', 3]] as const) {
   test(`data downloaded with an older ${field} is a problem naming the field and both values`, () => {
-    const stale = { meta: { ...AMSTERDAM_META, [field]: older } };
+    const stale = { ...OSM_FILE, square: { ...OSM_FILE.square, [field]: older } };
     const problems = problemsOf([entry('amsterdam-test')], () => stale);
     assert.equal(problems.length, 1);
-    const message = problems[0]?.message ?? '';
-    for (const part of [field, JSON.stringify(AMSTERDAM_META[field]), JSON.stringify(older), 'npm run fetch-data -- amsterdam-centre']) {
-      assert.ok(message.includes(part), `"${message}" should mention ${part}`);
-    }
+    assert.equal(problems[0]?.message, `data for amsterdam-centre is out of date (amsterdam-test): ${field} is ${JSON.stringify(PLACES['amsterdam-centre'][field])} in places/index.ts but ${JSON.stringify(older)} in the data; run npm run fetch-data -- amsterdam-centre`);
   });
 }
 
-test('unreadable data or data without meta is a problem that says how to download it again', () => {
-  for (const data of [null, {}, { meta: 'x' }]) {
+test('data without fetchedAt is a problem that says how to download it again', () => {
+  const { fetchedAt: _, ...undated } = OSM_FILE;
+  const problems = problemsOf([entry('amsterdam-test')], () => undated);
+  assert.equal(problems[0]?.message, 'data/amsterdam-centre/osm.json has no fetchedAt (amsterdam-test); run npm run fetch-data -- amsterdam-centre');
+});
+
+test('unreadable data or data without a square is a problem naming the file', () => {
+  for (const data of [null, {}, { square: 'x' }]) {
     const problems = problemsOf([entry('amsterdam-test')], () => data);
     assert.equal(problems.length, 1);
-    assert.match(problems[0]?.message ?? '', /data\/amsterdam-centre\.json.*npm run fetch-data -- amsterdam-centre/);
+    assert.match(problems[0]?.message ?? '', /^data\/amsterdam-centre\/osm\.json: /);
   }
 });
 
 test('invalid and duplicate map ids are problems', () => {
-  const current = { meta: AMSTERDAM_META };
+  const current = OSM_FILE;
   const problems = problemsOf([entry('Bad_Id'), entry('twice'), entry('twice')], () => current);
   assert.deepEqual(problems.map((p) => p.id), ['Bad_Id', 'twice']);
   assert.match(problems[0]?.message ?? '', /invalid id "Bad_Id"/);
@@ -93,7 +98,7 @@ test('invalid and duplicate map ids are problems', () => {
 
 // Node and Vite strip types: an entry the type-checker would refuse still reaches the catalogue.
 test('an entry naming an unknown place or style is a problem, and is left out of the catalogue', () => {
-  const current = { meta: AMSTERDAM_META };
+  const current = OSM_FILE;
   const broken = [entry('no-place', { place: 'kyoto-gion' as never }), entry('no-style', { style: 'neon' as never })];
   const problems = problemsOf([...broken, entry('fine')], () => current);
   assert.deepEqual(problems.map((p) => p.id), ['no-place', 'no-style']);
@@ -104,13 +109,13 @@ test('an entry naming an unknown place or style is a problem, and is left out of
 
 test('an unknown subject is reported and left out of the catalogue before page generation', () => {
   const broken = entry('bad-topic', { topic: 'unknown' as never });
-  assert.match(problemsOf([broken], () => ({ meta: AMSTERDAM_META }))[0]?.message ?? '', /unknown topic/);
+  assert.match(problemsOf([broken], () => OSM_FILE)[0]?.message ?? '', /unknown topic/);
   assert.deepEqual(catalogueOf([broken, entry('fine')]).map((m) => m.id), ['fine']);
 });
 
 test('a map without a subject is refused before page generation', () => {
   const missing = entry('no-topic', { topic: undefined as never });
-  assert.match(problemsOf([missing], () => ({ meta: AMSTERDAM_META }))[0]?.message ?? '', /missing topic/);
+  assert.match(problemsOf([missing], () => OSM_FILE)[0]?.message ?? '', /missing topic/);
   assert.deepEqual(catalogueOf([missing]), []);
 });
 
@@ -121,7 +126,7 @@ const layerFile = (sizeKm = 2): unknown => ({
   square: { lat: 52.3712, lon: 4.8936, sizeKm },
   layers: [{ id: 'ponts', kind: 'points', role: 'overlay', attribution: '© Ville d’Amsterdam', source: 'layers/amsterdam-centre/ponts.geojson', features: [{ g: [0, 0], n: 'Magere Brug' }] }],
 });
-const withLayer = (file: unknown) => (path: string): unknown => path === 'data/amsterdam-centre/ponts.json' ? file : { meta: AMSTERDAM_META };
+const withLayer = (file: unknown) => (path: string): unknown => path === 'data/amsterdam-centre/ponts.json' ? file : OSM_FILE;
 const layered = (id = 'with-layer'): MapEntry => entry(id, { layers: ['ponts'] });
 
 test('a map naming a layer the place does not declare is a problem listing the known layers', () => {

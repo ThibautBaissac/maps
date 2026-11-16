@@ -10,7 +10,7 @@ Un style est un dossier `src/styles/<nom>/` dont `index.ts` exporte une fonction
 import type { MapHandle, MountArgs } from '../contract.ts';
 import { DEFAULTS, type NomOptions } from './defaults.ts';
 
-export async function mount({ container, data, meta, locale, options, shell, layers }: MountArgs<NomOptions>): Promise<MapHandle> {
+export async function mount({ container, meta, locale, options, shell, layers }: MountArgs<NomOptions>): Promise<MapHandle> {
   const o: NomOptions = { ...DEFAULTS, ...options };
   // construit la page dans `container` et commence à dessiner
   return { destroy() {} };
@@ -20,8 +20,7 @@ export async function mount({ container, data, meta, locale, options, shell, lay
 | Argument | Contenu |
 |---|---|
 | `container` | `<div id="stage">` vide qui remplit la fenêtre |
-| `data` | les données OSM du lieu (format plus bas) |
-| `meta` | `data.meta` sans `name`, avec `title` et `district` dans la langue de la page, résolus par `src/catalogue.ts` : imprimer ces valeurs, jamais les noms copiés dans les données OSM |
+| `meta` | `title` et `district` dans la langue de la page, résolus par `src/catalogue.ts` (imprimer ces valeurs), `place`, `lat`, `lon`, `sizeKm`, `half`, `bbox`, `fetchedAt` et `attribution` |
 | `locale` | langue de la page ; utiliser `messages(locale)` et les fonctions de formatage de `src/i18n/index.ts` pour les textes dessinés |
 | `options` | les `options` de la carte dans `src/registry.ts`, à fusionner avec le `defaults.ts` du style |
 | `shell` | le cadre de page commun (plus bas) |

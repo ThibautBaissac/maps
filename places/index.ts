@@ -1,4 +1,4 @@
-// The places to map, by id: the id names the data file (public/data/<id>.json) and is
+// The places to map, by id: the id names the data file (public/data/<id>/osm.json) and is
 // what src/registry.ts entries point to. Runs in the browser and in Node.
 // Add one with .claude/skills/new-map/scripts/new-place.ts, then download its data
 // with npm run fetch-data -- <id>.
@@ -29,4 +29,4 @@ export type PlaceId = keyof typeof PLACES;
 export const isPlaceId = (id: string): id is PlaceId => Object.hasOwn(PLACES, id);
 
 /** Where a place's downloaded data lives, relative to the site root (public/ on disk). */
-export const dataPath = (id: PlaceId): string => `data/${id}.json`;
+export const dataPath = (id: PlaceId): string => `data/${id}/osm.json`;

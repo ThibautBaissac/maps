@@ -3,12 +3,12 @@
 // Runs in the browser and in Node: no DOM, no Node API, no import.meta.env.
 import { dataPath, isPlaceId, PLACES, type PlaceId } from '../places/index.ts';
 import { LAYERS, layerPath } from '../places/layers.ts';
-import { isRecord, isSlug, type Place } from './place.ts';
+import { isSlug, type Place } from './place.ts';
 import { MAPS, type MapEntry, type MapEntryOf } from './registry.ts';
 import type { StyleDef } from './styles/contract.ts';
 import { isStyleKey, STYLES, type StyleKey, type StyleOptions } from './styles/index.ts';
 import { DEFAULT_LOCALE, LOCALES, messages, type Locale } from './i18n/index.ts';
-import { parseLayerFile } from './layers.ts';
+import { parseLayerFile, type Square } from './layers.ts';
 import { isTopicId, type TopicId } from './topics.ts';
 
 export interface CatalogueMapOf<K extends StyleKey> {
@@ -79,8 +79,13 @@ export function findMap(id: string, locale: Locale = DEFAULT_LOCALE): CatalogueM
 /** A registry entry the build cannot publish. */
 export interface CatalogueProblem { id: string; message: string }
 
-/** Fields of the place copied into the data's meta when it is downloaded. */
-const PLACE_FIELDS = ['name', 'district', 'lat', 'lon', 'sizeKm'] as const;
+/** The first field of a layer file's square that differs from the place, as "<field> is <place value> in places/index.ts but <file value> in the data". */
+function staleSquare(square: Square, place: Square): string | null {
+  for (const k of ['lat', 'lon', 'sizeKm'] as const) {
+    if (square[k] !== place[k]) return `${k} is ${JSON.stringify(place[k])} in places/index.ts but ${JSON.stringify(square[k])} in the data`;
+  }
+  return null;
+}
 
 /** For tests: checks any registry. `readData(path)` returns the parsed JSON, undefined when the file is missing, null when it cannot be parsed. */
 export function problemsOf(maps: readonly MapEntry[], readData: (path: string) => unknown, layers: LayerRegistry = LAYERS): CatalogueProblem[] {
@@ -106,13 +111,10 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
     const refetch = `npm run fetch-data -- ${m.placeId}`;
     const data = readData(m.paths.data);
     if (data === undefined) return `no data for ${m.placeId} (${m.id}); run ${refetch}`;
-    const meta = isRecord(data) ? data['meta'] : undefined;
-    if (!isRecord(meta)) return `${m.paths.data} is unreadable or has no meta (${m.id}); run ${refetch}`;
-    for (const k of PLACE_FIELDS) {
-      if (meta[k] !== place[k]) {
-        return `data for ${m.placeId} is out of date (${m.id}): ${k} is ${JSON.stringify(place[k])} in places/index.ts but ${JSON.stringify(meta[k])} in the data; run ${refetch}`;
-      }
-    }
+    const osm = parseLayerFile(data, m.paths.data); // Throws a message naming the file.
+    const stale = staleSquare(osm.square, place);
+    if (stale) return `data for ${m.placeId} is out of date (${m.id}): ${stale}; run ${refetch}`;
+    if (osm.fetchedAt === undefined) return `${m.paths.data} has no fetchedAt (${m.id}); run ${refetch}`;
     const relayer = `npm run layers -- ${m.placeId}`;
     for (const { id, path } of m.layers) {
       const file = readData(path);
@@ -126,11 +128,8 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
           if (found[k] !== want) return `layer "${id}" of ${m.placeId} does not match places/layers.ts (${m.id}): ${k} differs; run ${relayer}`;
         }
       }
-      for (const k of ['lat', 'lon', 'sizeKm'] as const) {
-        if (square[k] !== place[k]) {
-          return `layer "${id}" of ${m.placeId} is out of date (${m.id}): ${k} is ${JSON.stringify(place[k])} in places/index.ts but ${JSON.stringify(square[k])} in the data; run ${relayer}`;
-        }
-      }
+      const layerStale = staleSquare(square, place);
+      if (layerStale) return `layer "${id}" of ${m.placeId} is out of date (${m.id}): ${layerStale}; run ${relayer}`;
     }
     return null;
   };

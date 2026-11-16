@@ -1,21 +1,34 @@
 // What a style is (see src/styles/README.md).
-import type { MapData, MapMeta } from '../data.ts';
+import type { BBox } from '../data.ts';
 import type { Shell } from '../shell.ts';
 import type { Viewport } from '../toolkit/viewport.ts';
 import type { Locale } from '../i18n/index.ts';
 import type { Layer } from '../layers.ts';
 import type { TopicAnalysis } from '../topics.ts';
 
-/** What a style prints about its map: the data's meta without the place name, plus the title. */
-export type MountMeta = Omit<MapMeta, 'name'> & {
-  /** The registry title, or the place name (src/catalogue.ts): print this, never data.meta.name. */
+/** What a style prints about its map. */
+export interface MountMeta {
+  /** The registry title, or the place name (src/catalogue.ts). */
   title: string;
-};
+  /** The district, in the language of the page. */
+  district: string;
+  /** Key of places/index.ts. */
+  place: string;
+  lat: number;
+  lon: number;
+  sizeKm: number;
+  /** Metres from the centre to the edge of the square. */
+  half: number;
+  bbox: BBox;
+  /** ISO date of the OpenStreetMap download. */
+  fetchedAt: string;
+  /** Credit of the OpenStreetMap layers. */
+  attribution: string;
+}
 
 export interface MountArgs<O> {
   /** Empty <div id="stage"> filling the window. */
   container: HTMLElement;
-  data: MapData;
   meta: MountMeta;
   locale: Locale;
   /** The map's options in src/registry.ts, to merge over the style's defaults. */

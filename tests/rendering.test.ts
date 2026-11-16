@@ -1,20 +1,20 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { test } from 'node:test';
-import { parseMapData, type MapData } from '../src/data.ts';
+import type { MapData } from '../src/data.ts';
 import { DEFAULTS } from '../src/styles/cyanotype/defaults.ts';
 import { prepareMap, renderMap } from '../src/styles/cyanotype/map.ts';
 import { preparePlates, renderPlateA, renderPlateB } from '../src/styles/riso/plates.ts';
 import { makeProjector } from '../src/toolkit/projection.ts';
 import { installPage, recordingContext, type Call } from './dom.ts';
+import { readOsm } from './osm-file.ts';
 import type { Layer } from '../src/layers.ts';
 import { drawLayers } from '../src/toolkit/layers.ts';
 import * as thematic from '../src/toolkit/topic.ts';
 import { osmLayers } from '../src/osm-layers.ts';
 import { analyseTopic } from '../src/topics.ts';
 
-const data = parseMapData(JSON.parse(readFileSync(new URL('../public/data/amsterdam-centre.json', import.meta.url), 'utf8')), 'fixture');
+const osm = readOsm('amsterdam-centre');
 
 // Record the Canvas browser API's output; all map preparation and rendering stays real.
 function canvas() {
@@ -40,14 +40,14 @@ test('cyanotype draws a residential bridge when zoomed out to a single line', (t
   };
   const out = canvas(), tmp = canvas();
   const view = { x: 0, y: 0, s: 0.2 };
-  renderMap(out.ctx, tmp.ctx, prepareMap([roads], data.meta.half), makeProjector(view, 320, 640, 1), DEFAULTS, {} as CanvasPattern);
+  renderMap(out.ctx, tmp.ctx, prepareMap([roads], osm.survey.half), makeProjector(view, 320, 640, 1), DEFAULTS, {} as CanvasPattern);
   assert.ok(out.calls.some((c) => c.method === 'lineTo' && c.args[0] === 162 && c.args[1] === 320),
     'The bridge must reach its projected endpoint at low zoom');
 });
 
 test('numbered references move clear of navigation with their anchor preserved on the feature', () => {
   assert.equal(typeof thematic.placeTopicMarkers, 'function');
-  const topic = analyseTopic({ half: 100 }, osmLayers({ ...data, meta: { ...data.meta, half: 100 }, roads: [{ k: 'steps', n: 'Steps', p: [-30, 20, -10, 20] }] }), 'steps');
+  const topic = analyseTopic({ half: 100 }, osmLayers({ meta: { ...osm.mapMeta, half: 100 }, buildings: [], roads: [{ k: 'steps', n: 'Steps', p: [-30, 20, -10, 20] }], waterways: [], water: [], parks: [] }), 'steps');
   const markers = thematic.placeTopicMarkers(topic, makeProjector({ x: 0, y: 0, s: 1 }, 200, 200, 1), {
     map: [0, 0, 200, 200], nav: [0, 0, 100, 100], attr: [180, 180, 200, 200], furniture: [],
   });
@@ -127,8 +127,7 @@ for (const style of ['riso', 'cyanotype'] as const) {
   test(`${style} makes the same canvas calls as before layers existed when the map has no external layer`, async (t) => {
     const page = installPage(t, { width: 800, height: 600 });
     const { mount } = await import(`../src/styles/${style}/index.ts`) as { mount: (a: never) => Promise<{ destroy(): void }> };
-    const { name: _, ...meta } = data.meta;
-    const handle = await mount({ container: page.container, data, meta: { ...meta, title: 'Test' }, locale: 'fr', options: {}, shell: page.shell, layers: osmLayers(data) } as never);
+    const handle = await mount({ container: page.container, meta: osm.mountMeta('Test'), locale: 'fr', options: {}, shell: page.shell, layers: osm.layers } as never);
     page.cleanup(() => handle.destroy());
     assert.equal(digest(page.canvases.flatMap((c) => c.calls)), BASELINE[style]);
   });
@@ -142,9 +141,8 @@ for (const style of ['riso', 'cyanotype'] as const) {
   test(`${style} draws an overlay point layer at its projected point`, async (t) => {
     const page = installPage(t, { width: 800, height: 600 });
     const { mount } = await import(`../src/styles/${style}/index.ts`) as { mount: (a: never) => Promise<{ destroy(): void }> };
-    const { name: _, ...meta } = data.meta;
-    const layers = [...osmLayers(data), layer('points', [0, 0])];
-    const handle = await mount({ container: page.container, data, meta: { ...meta, title: 'Test' }, locale: 'fr', options: {}, shell: page.shell, layers } as never);
+    const layers = [...osm.layers, layer('points', [0, 0])];
+    const handle = await mount({ container: page.container, meta: osm.mountMeta('Test'), locale: 'fr', options: {}, shell: page.shell, layers } as never);
     page.cleanup(() => handle.destroy());
     const arcs = page.canvases[LAYERED_CANVAS[style]]?.calls.filter((c) => c.method === 'arc' && c.args[2] === 4) ?? [];
     assert.deepEqual(arcs.map((c) => c.args.slice(0, 3)), [[400, 300, 4]]);
@@ -155,7 +153,7 @@ for (const style of ['riso', 'cyanotype'] as const) {
 // The digest was recorded when the plates were still prepared from the map data and matched
 // the sequence drawn from layers: it guards the drawing of the plates.
 const SMALL: MapData = {
-  meta: data.meta,
+  meta: osm.mapMeta,
   buildings: [[[-30, -30, -10, -30, -10, -10, -30, -10, -30, -30]]],
   roads: [
     { k: 'residential', n: 'A', p: [-50, 0, 50, 0] },
@@ -184,7 +182,7 @@ test('riso plates drawn from layers keep their recorded canvas calls', () => {
 // The digest was recorded when the map was still prepared from the map data and matched the
 // sequence drawn from layers: it guards the drawing of the map.
 const SMALL_CYANOTYPE: MapData = {
-  meta: data.meta,
+  meta: osm.mapMeta,
   buildings: [[[-30, -30, -10, -30, -10, -10, -30, -10, -30, -30]]],
   roads: [
     { k: 'residential', n: 'A', p: [-50, 0, 50, 0] },

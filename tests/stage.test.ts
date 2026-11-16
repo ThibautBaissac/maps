@@ -1,8 +1,6 @@
 // Both styles driven through their real mount(), on a fake page (tests/dom.ts).
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { parseMapData } from '../src/data.ts';
 import type { MapHandle, MountArgs } from '../src/styles/contract.ts';
 import { sheetLayout } from '../src/styles/cyanotype/sheet.ts';
 import type { Rect } from '../src/toolkit/geometry.ts';
@@ -10,10 +8,11 @@ import { computeLayout } from '../src/toolkit/layout.ts';
 import { installPage, nameGlyphs, type FakeCanvas } from './dom.ts';
 import type { Locale } from '../src/i18n/index.ts';
 import { osmLayers } from '../src/osm-layers.ts';
+import { readOsm } from './osm-file.ts';
 import { prepareLabels } from '../src/toolkit/labels.ts';
 import { analyseTopic } from '../src/topics.ts';
 
-const data = parseMapData(JSON.parse(readFileSync(new URL('../public/data/amsterdam-centre.json', import.meta.url), 'utf8')), 'fixture');
+const osm = readOsm('amsterdam-centre');
 const SIZE = { width: 800, height: 600 };
 /** Pixel density of the overlay tests: device px differ from CSS px, as on most screens. */
 const DPR = 2;
@@ -26,8 +25,7 @@ const STYLES = {
 async function mountStyle(t: Parameters<typeof installPage>[0], style: keyof typeof STYLES, { title = 'Mon quartier', dpr = 1, locale = 'fr' as Locale, width = SIZE.width, height = SIZE.height } = {}) {
   const page = installPage(t, { width, height, dpr });
   const { mount } = await STYLES[style]();
-  const { name: _, ...meta } = data.meta;
-  const args: MountArgs<object> = { container: page.container, data, meta: { ...meta, title }, locale, options: {}, shell: page.shell, layers: osmLayers(data) };
+  const args: MountArgs<object> = { container: page.container, meta: osm.mountMeta(title), locale, options: {}, shell: page.shell, layers: osm.layers };
   const handle: MapHandle = await (mount as (a: MountArgs<object>) => Promise<MapHandle>)(args);
   page.cleanup(() => handle.destroy());
   return { ...page, handle };
@@ -61,10 +59,9 @@ test('a reference can centre the real viewport, render immediately and return to
 for (const style of ['riso', 'cyanotype'] as const) {
   test(`${style} shows the subject's stairs even at the overview zoom`, async (t) => {
     const page = installPage(t, SIZE);
-    const map = { ...data, roads: [{ k: 'steps' as const, n: 'Escadinhas', p: [-20, 0, 20, 0] }], buildings: [], parks: [], waterways: [], water: [] };
-    const { name: _, ...meta } = map.meta;
+    const map = { meta: osm.mapMeta, roads: [{ k: 'steps' as const, n: 'Escadinhas', p: [-20, 0, 20, 0] }], buildings: [], parks: [], waterways: [], water: [] };
     const { mount } = await STYLES[style]();
-    const handle = await mount({ container: page.container, shell: page.shell, data: map, meta: { ...meta, title: 'Test' }, options: {}, locale: 'fr', layers: osmLayers(map), topic: analyseTopic(map.meta, osmLayers(map), 'steps') });
+    const handle = await mount({ container: page.container, shell: page.shell, meta: osm.mountMeta('Test'), options: {}, locale: 'fr', layers: osmLayers(map), topic: analyseTopic(osm.survey, osmLayers(map), 'steps') });
     page.cleanup(() => handle.destroy());
     for (const c of page.canvases) c.calls.length = 0;
     Object.assign(handle.viewport!.view, { x: 0, y: 0, s: 0.1 });
@@ -92,7 +89,7 @@ for (const style of ['riso', 'cyanotype'] as const) {
     const page = await mountStyle(t, style, { title: 'Mon quartier' });
     const printed = texts(page);
     assert.ok(printed.includes('MON QUARTIER'), 'The printed title must use the registry override');
-    assert.ok(!printed.includes(data.meta.name.toUpperCase()));
+    assert.ok(!printed.includes(osm.place.name.toUpperCase()));
   });
 }
 
@@ -123,7 +120,7 @@ for (const style of ['riso', 'cyanotype'] as const) {
   test(`${style} keeps map names out of the navigation and attribution slots`, async (t) => {
     const page = await mountStyle(t, style, { dpr: DPR });
     const { nav, attr } = LAYOUTS[style]();
-    const half = data.meta.half;
+    const half = osm.survey.half;
     const glyphs = page.canvases.flatMap((c) => nameGlyphs(c.calls));
     for (const [fx, fy, s] of VIEWS) {
       for (const c of page.canvases) c.calls.length = 0;
@@ -139,7 +136,7 @@ for (const style of ['riso', 'cyanotype'] as const) {
 
 test('names come from the road and waterway layers, tunnels left out, with the usual weights', () => {
   const layers = osmLayers({
-    ...data, buildings: [], parks: [], water: [],
+    meta: osm.mapMeta, buildings: [], parks: [], water: [],
     roads: [
       { k: 'residential', n: 'Damrak', p: [0, 0, 50, 0] },
       { k: 'residential', n: 'Under', u: 1, p: [0, 10, 50, 10] },

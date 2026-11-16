@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { parseMapData } from '../src/data.ts';
 import type { Layer } from '../src/layers.ts';
 import { osmLayers } from '../src/osm-layers.ts';
 import { describeMap } from '../src/map-description.ts';
+import { readOsm } from './osm-file.ts';
 
 // Only the external DOM API is substituted; all description logic runs unchanged.
 class TextElement {
@@ -21,12 +20,10 @@ test('the accessible English description uses translated display metadata, plura
   const saved = Object.getOwnPropertyDescriptor(globalThis, 'document');
   Object.defineProperty(globalThis, 'document', { configurable: true, value: { createElement: () => new TextElement() } });
   t.after(() => { if (saved) Object.defineProperty(globalThis, 'document', saved); else Reflect.deleteProperty(globalThis, 'document'); });
-  const data = parseMapData(JSON.parse(readFileSync(new URL('../public/data/amsterdam-centre.json', import.meta.url), 'utf8')), 'fixture');
-  data.buildings.length = 1;
-  data.roads = [{ k: 'residential', n: 'Damrak', p: [-20, 0, 20, 0] }];
-  data.parks = []; data.waterways = []; data.water = [];
+  const osm = readOsm('amsterdam-centre');
+  const data = { meta: osm.mapMeta, buildings: [[[0, 0, 10, 0, 10, 10, 0, 10, 0, 0]]], roads: [{ k: 'residential' as const, n: 'Damrak', p: [-20, 0, 20, 0] }], parks: [], waterways: [], water: [] };
   const content = new TextElement(), summary = new TextElement();
-  describeMap(content as unknown as HTMLElement, summary as unknown as HTMLElement, data.meta, osmLayers(data),
+  describeMap(content as unknown as HTMLElement, summary as unknown as HTMLElement, osm.survey, osmLayers(data),
     { title: 'Amsterdam', district: 'Historic centre' }, ['Buildings: solid areas.'], 'en');
   assert.match(summary.textContent, /Amsterdam, Historic centre\. A square area/);
   assert.match(content.textContent, /1 building, 1 road segment, 0 green spaces and 0 water areas/);
@@ -38,10 +35,10 @@ test('an overlay layer gets its own section listing its named objects with their
   const saved = Object.getOwnPropertyDescriptor(globalThis, 'document');
   Object.defineProperty(globalThis, 'document', { configurable: true, value: { createElement: () => new TextElement() } });
   t.after(() => { if (saved) Object.defineProperty(globalThis, 'document', saved); else Reflect.deleteProperty(globalThis, 'document'); });
-  const data = parseMapData(JSON.parse(readFileSync(new URL('../public/data/amsterdam-centre.json', import.meta.url), 'utf8')), 'fixture');
+  const osm = readOsm('amsterdam-centre');
   const layer: Layer = { id: 'ponts', kind: 'points', role: 'overlay', attribution: '© test', source: 'layers/x.geojson', features: [{ g: [0, 0], n: 'Magere Brug' }, { g: [5, 5] }] };
   const content = new TextElement(), summary = new TextElement();
-  describeMap(content as unknown as HTMLElement, summary as unknown as HTMLElement, data.meta, osmLayers(data),
+  describeMap(content as unknown as HTMLElement, summary as unknown as HTMLElement, osm.survey, osm.layers,
     { title: 'Amsterdam', district: 'Historic centre' }, [], 'en', undefined, [{ title: 'Ponts', layer }]);
   assert.match(content.textContent, /Ponts \(1\)/);
   assert.match(content.textContent, /Magere Brug — in the centre\./);

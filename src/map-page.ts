@@ -1,11 +1,11 @@
 // Entry of every generated map page: <body data-map="<id>">. Loads the map's data and
 // style, then hands the stage over to the style's mount().
-import { featureCounts, parseMapData, type MapMeta } from './data.ts';
 import { bodyData, element } from './dom.ts';
 import { describeMap } from './map-description.ts';
 import { findMap, type CatalogueMapOf } from './catalogue.ts';
-import { osmLayers } from './osm-layers.ts';
-import { parseLayerFile, type Layer } from './layers.ts';
+import { survey as surveyOf } from './geo.ts';
+import { parseLayerFile, type Layer, type Survey } from './layers.ts';
+import type { MountMeta } from './styles/contract.ts';
 import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
@@ -34,11 +34,11 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   });
 
   const url = `${import.meta.env.BASE_URL}${map.paths.data}`;
-  const [styleModule, data, layerSets] = await Promise.all([
+  const [styleModule, osm, layerSets] = await Promise.all([
     style.load(),
     fetch(url).then(async (r) => {
       if (!r.ok) throw new Error(`Missing data for ${map.placeId}: HTTP ${r.status}`);
-      return parseMapData(await r.json(), url);
+      return parseLayerFile(await r.json(), url);
     }),
     Promise.all(map.layers.map(async ({ id, path }) => {
       const layerUrl = `${import.meta.env.BASE_URL}${path}`;
@@ -47,25 +47,29 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
       return { id, layers: parseLayerFile(await r.json(), layerUrl).layers };
     })),
   ]);
-  const layers: Layer[] = [...osmLayers(data), ...layerSets.flatMap((set) => set.layers)];
+  const layers: Layer[] = [...osm.layers, ...layerSets.flatMap((set) => set.layers)];
   const overlays = layerSets.flatMap((set, i) => set.layers.map((layer) => ({ title: map.layers[i]?.title ?? set.id, layer })));
 
-  const meta = { ...withoutName(data.meta), title, district: map.place.district };
-  const topic = map.topic ? analyseTopic(data.meta, layers, map.topic) : undefined;
-  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data.meta, layers, meta, style.legend, locale, topic, overlays);
+  const { half, bbox } = surveyOf(map.place);
+  const { lat, lon, sizeKm } = map.place;
+  const fetchedAt = osm.fetchedAt ?? '';
+  const survey: Survey = { half, lat, lon, sizeKm, fetchedAt };
+  const attribution = osm.layers[0]?.attribution ?? '';
+  const meta: MountMeta = { title, district: map.place.district, place: map.placeId, lat, lon, sizeKm, half, bbox, fetchedAt, attribution };
+  const topic = map.topic ? analyseTopic(survey, layers, map.topic) : undefined;
+  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), survey, layers, meta, style.legend, locale, topic, overlays);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
   description.disabled = false;
   description.addEventListener('click', () => dialog.showModal());
 
   if (import.meta.env.DEV) {
-    console.log(`${data.meta.name} — ${data.meta.district} : éléments par type`);
-    console.table(featureCounts(data));
+    console.log(`${map.place.name} — ${map.place.district} : éléments par couche`);
+    console.table(Object.fromEntries(osm.layers.map((l) => [l.id, l.features.length])));
   }
 
   const handle = await styleModule.mount({
     container: element('#stage', HTMLElement),
-    data,
     meta,
     locale,
     options,
@@ -73,7 +77,7 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
     layers,
     ...(topic ? { topic } : {}),
   });
-  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), data.meta, topic, locale, handle, url);
+  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), survey, topic, locale, handle, url);
   if (handle.viewport) {
     const viewport = handle.viewport;
     for (const [selector, factor] of [['.zoom-in', ZOOM_STEP], ['.zoom-out', 1 / ZOOM_STEP]] as const) {
@@ -87,9 +91,6 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   shell.ready();
   return handle;
 }
-
-// Styles get the catalogue title, never the place name copied into the data.
-function withoutName({ name: _, ...rest }: MapMeta): Omit<MapMeta, 'name'> { return rest; }
 
 const id = bodyData('map');
 const map = findMap(id, locale);

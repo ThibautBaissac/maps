@@ -1,11 +1,13 @@
 // Downloads OpenStreetMap data for one place of places/index.ts (once), converts it to
-// local metres (scripts/osm.ts) and writes a compact public/data/<place>.json (dataPath in
-// places/index.ts). The raw answer is kept in .cache/overpass/<place>.json (git-ignored):
+// local metres (scripts/osm.ts) and writes a compact layer file, public/data/<place>/osm.json
+// (dataPath in places/index.ts). The raw answer is kept in .cache/overpass/<place>.json (git-ignored):
 // --offline converts that cached answer again, without network, keeping its server and date.
 // Usage: npm run fetch-data -- <place-id> [--offline]     (e.g. amsterdam-centre)
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dataPath, isPlaceId, PLACES } from '../places/index.ts';
 import { featureCounts } from '../src/data.ts';
+import type { LayerFile } from '../src/layers.ts';
+import { osmLayers } from '../src/osm-layers.ts';
 import { fail, message } from './cli.ts';
 import { convertOsm, overpassQuery, parseCachedAnswer, parseOverpassAnswer, QUERY_TIMEOUT_S, type CachedAnswer, type OverpassAnswer } from './osm.ts';
 
@@ -85,7 +87,15 @@ const data = convertOsm(answer, PLACE, { server, fetchedAt });
 
 const out = new URL(`../public/${dataPath(PLACE)}`, import.meta.url);
 await mkdir(new URL('.', out), { recursive: true });
-await writeFile(out, JSON.stringify(data));
+const { lat, lon, sizeKm, osmTimestamp } = data.meta;
+const file: LayerFile = {
+  square: { lat, lon, sizeKm },
+  fetchedAt: data.meta.fetchedAt,
+  server: data.meta.server,
+  ...(osmTimestamp !== undefined && { osmTimestamp }),
+  layers: osmLayers(data),
+};
+await writeFile(out, JSON.stringify(file));
 
 console.log(`\n${CITY.name} — ${CITY.district} (${CITY.sizeKm} km × ${CITY.sizeKm} km)`);
 console.table({

@@ -1,6 +1,6 @@
 # Cartes illustrées
 
-Site statique de plans de quartiers dessinés en Canvas 2D, chacun dans un style graphique choisi en développement. Écrit en TypeScript 7 strict, construit avec Vite. Le visiteur choisit le français, l’anglais ou l’espagnol, parcourt la galerie, ouvre une carte, zoome avec les boutons, la molette ou le clavier et se déplace par glisser ou avec les flèches. Le bouton « Description » donne accès à la légende et aux voies nommées avec leur position approximative dans la zone.
+Site statique de cartes qui expliquent une particularité d’un lieu : franchissements des canaux à Amsterdam, répartition des escaliers autour d’Alfama. Chaque carte conserve son style graphique en Canvas 2D. Le visiteur lit le sujet, consulte les mesures et leur méthode, retrouve les repères numérotés, zoome et déplace le plan. Le bouton « Description » fournit le contenu textuel, la légende et les voies nommées. Le site propose le français, l’anglais et l’espagnol. Écrit en TypeScript 7 strict, construit avec Vite.
 
 ## Lancer
 
@@ -37,17 +37,21 @@ Au build, `vite.config.ts` vérifie les traductions et les données, puis génè
 
 ## Ajouter une carte
 
+Avant de réaliser la carte, l’agent examine les données, recommande un sujet et attend sa validation explicite. La [compétence de création](.claude/skills/new-map/SKILL.md) décrit ce fonctionnement. Le sujet indique ce que le lecteur pourra comprendre du lieu ; les données déterminent les observations et leurs limites.
+
 1. Ajouter le lieu à `places/index.ts` : `node .claude/skills/new-map/scripts/new-place.ts --city "<ville>" --district "<quartier>"`, ou à la main en copiant une entrée. Ajouter son nom et son quartier dans `places` de chaque dictionnaire `src/i18n/`.
 2. Télécharger ses données : `npm run fetch-data -- <lieu>`. À refaire après toute modification du lieu : le build refuse des données qui ne correspondent plus à leur lieu. La réponse Overpass brute est gardée dans `.cache/overpass/<lieu>.json` (ignoré par Git, une douzaine de Mo par lieu) : `npm run fetch-data -- <lieu> --offline` reconvertit cette réponse sans réseau, après un changement de la conversion (`scripts/osm.ts`) ou un simple renommage du lieu. Si le centre ou la taille du lieu a changé, il faut retélécharger.
 3. Ajouter une ligne dans `src/registry.ts` :
 
    ```ts
-   { id: 'lisbonne-riso', place: 'lisbonne-alfama', style: 'riso', options: { inkA: '#00A95C' } },
+   { id: 'lisbonne-riso', place: 'lisbonne-alfama', style: 'riso', topic: 'steps', options: { inkA: '#00A95C' } },
    ```
 
 4. Prendre ses images pour la galerie, serveur de développement lancé : `npm run vignettes -- <id>`. Le script ouvre chaque version dans Chrome headless (variable `CHROME` si Chrome n'est pas trouvé) et écrit `public/vignettes/<langue>/<id>.webp`, à commiter. `--locale es` limite la capture à une langue. Sans image, la bande de la galerie garde le papier du style ; le build le signale. À refaire quand le style, ses textes ou les données changent.
 
 Les options possibles d'un style sont dans son fichier `defaults.ts` ; le type-checking refuse une option inconnue ou un style inexistant. Pour créer un style, voir [`src/styles/README.md`](src/styles/README.md) : contrat, format des données, boîte à outils.
+
+Le [module d’analyse des sujets](src/topics.ts) sélectionne les géométries, les découpe au carré du relevé et calcule leurs longueurs et leur répartition. Le dessin et le texte partagent ce résultat ; ils ne recalculent pas les mesures selon le zoom. Les longueurs décrivent les tronçons OSM et peuvent inclure des voies parallèles. Elles ne donnent ni un nombre de ponts physiques, ni un nombre de marches, ni un dénivelé. Les secteurs divisent le carré du relevé ; ils ne désignent pas des quartiers administratifs.
 
 ## Traductions
 

@@ -1,6 +1,6 @@
 ---
 name: new-map
-description: Ajoute une nouvelle carte au site de cartes illustrées à partir d'un lieu (ville, quartier ou coordonnées) et d'un style (style déjà codé, preset du catalogue, ou description libre). Ajoute le lieu à `places/index.ts`, télécharge les données OpenStreetMap, ajoute la carte au registre, code le style s'il n'existe pas encore, vérifie le rendu par captures et commite. À utiliser dès que l'utilisateur veut une nouvelle carte, un nouveau quartier ou une nouvelle ville, un nouveau style graphique ou une variante de couleurs, même s'il ne nomme pas le skill (« fais-moi Lisbonne en gravure », « ajoute Kyoto », « je veux un style néon »).
+description: Ajoute une carte qui explique une particularité d'un lieu, après validation de son sujet par l'utilisateur. Examine les données, recommande un sujet, puis réalise la carte dans le style demandé et vérifie son rendu. À utiliser pour une nouvelle carte, un quartier, une ville, un style ou une variante de couleurs (« fais-moi Lisbonne en gravure », « ajoute Kyoto », « je veux un style néon »).
 argument-hint: "<lieu> <style ou description du style>"
 ---
 
@@ -8,7 +8,9 @@ argument-hint: "<lieu> <style ou description du style>"
 
 Demande : $ARGUMENTS
 
-Une carte = un **lieu** (une entrée de `places/index.ts` + `public/data/<lieu>.json`) × un **style** (`src/styles/<style>/`), déclarée dans `src/registry.ts`. Avant toute chose, lis `src/styles/README.md` (contrat d'un style, format des données, boîte à outils), `src/registry.ts` et `src/styles/index.ts` : ils décrivent l'état réel du projet, qui a pu évoluer depuis l'écriture de ce skill.
+Une carte associe un **lieu**, un **sujet validé** et un **style**, déclarés dans `src/registry.ts`. Avant toute chose, lis `src/styles/README.md` (contrat d'un style, format des données, boîte à outils), `src/registry.ts` et `src/styles/index.ts` : ils décrivent l'état réel du projet, qui a pu évoluer depuis l'écriture de ce skill.
+
+Chaque carte doit expliquer une particularité du lieu à travers un **sujet validé par l'utilisateur**. Le lieu et le style seuls ne suffisent pas à lancer sa réalisation.
 
 ## 1. Comprendre la demande
 
@@ -21,7 +23,23 @@ Extrais le lieu et le style. Le style tombe dans l'un de ces cas :
 | **Preset non codé** | fichier dans `presets/` (dossier de ce skill) sans dossier `src/styles/<clé>/` | coder le style (étape 4) |
 | **Description libre** | l'utilisateur décrit un style | l'enregistrer comme preset `presets/<clé>.md` (même en-tête que les autres), puis coder le style |
 
-Pose une question seulement si le choix change vraiment le résultat : quartier ambigu (deux quartiers du même nom), description à mi-chemin entre une variante et un nouveau style, clé de style à nommer. Sinon, applique les valeurs par défaut (zone de 2 km, titre = nom de la ville) et dis-le dans ton compte rendu.
+Hors validation du sujet, pose une question seulement si le choix change vraiment le résultat : quartier ambigu (deux quartiers du même nom), description à mi-chemin entre une variante et un nouveau style, clé de style à nommer. Sinon, applique les valeurs par défaut (zone de 2 km, titre du lieu et question du sujet validé dans l’en-tête) et dis-le dans ton compte rendu.
+
+### Recommander le sujet et attendre sa validation
+
+Avant de réaliser la carte :
+
+1. Examine le lieu et les données disponibles. L'investigation peut consulter des sources et récupérer des données pour vérifier la faisabilité ; elle ne modifie pas encore le registre, le rendu ou les presets. Distingue les observations vérifiées, les hypothèses et les données à acquérir.
+2. Présente un sujet recommandé sous forme de question précise, son intérêt pour comprendre le lieu, les données qui l'étayent, les éléments à mettre en évidence et ses limites. Signale ce qui demande des données supplémentaires. N'annonce pas de conclusion que les données ne démontrent pas.
+3. Demande la validation du sujet et attends une réponse explicite avant de passer aux étapes de réalisation ci-dessous. L'accord sur un lieu, un style ou l'objectif « comprendre le lieu » ne valide pas un sujet précis. Un sujet demandé explicitement ou déjà validé dans la conversation ne demande pas de nouvelle confirmation.
+
+Si l'utilisateur refuse le sujet, adapte la proposition. Si l'examen approfondi des données impose de changer de sujet, explique pourquoi et fais valider la nouvelle proposition avant de poursuivre.
+
+### Réaliser le sujet validé
+
+Le titre, la hiérarchie visuelle et les annotations doivent répondre à la question validée. Mets les éléments pertinents en évidence dès la vue générale et atténue les éléments de contexte. Explique les symboles dans la légende et fournis une description textuelle accessible du sujet et des observations, dans les langues du site.
+
+Pour toute mesure, précise l'unité, le périmètre, la source, la date et la méthode. Ne confonds pas un nombre de segments OSM avec un nombre de rues, de ponts ou d'escaliers. Un signe graphique qui évoque une mesure, comme des courbes de niveau ou de profondeur, doit correspondre à des données réelles ; choisis autrement un traitement sans ambiguïté.
 
 ## 2. Le lieu
 
@@ -48,8 +66,10 @@ Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.or
 Ajoute l'entrée dans `src/registry.ts` :
 
 ```ts
-{ id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', options: { /* si variante */ } },
+{ id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', topic: 'steps', options: { /* si variante */ } },
 ```
+
+Réutilise un sujet de `src/topics.ts` seulement s’il correspond à la question validée. Sinon, ajoute sa sélection et ses mesures dans ce module, ses traductions dans les dictionnaires et ses vérifications. Le build refuse une carte sans sujet ou avec un sujet inconnu.
 
 L'`id` donne l'URL de la page (`/cartes/<id>/`) : court et lisible. Par défaut `<ville>-<style>`. Si la ville a déjà une carte dans ce style, prends `<ville>-<quartier>-<style>`, et pour une variante ajoute un mot qui la distingue (`amsterdam-riso-vert`). Une demande explicite de l'utilisateur l'emporte.
 
@@ -74,6 +94,8 @@ Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n
 3. Prends des captures à **trois niveaux de zoom** : vue d'ensemble, environ 1 px/m, environ 4 px/m. En développement, `window.__map` expose la poignée renvoyée par `mount` : pour un style construit sur le viewport, fixe la vue avec `Object.assign(window.__map.viewport.view, { x: 0, y: 0, s: 1 })` puis force le rendu net avec `window.__map.full()` (ou zoome comme les boutons avec `window.__map.viewport.zoom(1.5)`).
 4. Teste aussi la largeur téléphone (`resize_window` avec le preset `mobile`), une vraie molette et un vrai glisser.
 5. Contrôle :
+   - question validée compréhensible dès la vue générale ; annotations et mesures justifiées par les données, sources et limites consultables ;
+   - sujet et observations disponibles en texte ; information compréhensible sans dépendre de la couleur seule ;
    - console sans erreur ;
    - aucune requête externe : `performance.getEntriesByType('resource')` ne doit contenir que l'origine locale ;
    - lien retour et attribution OSM visibles et lisibles ;
@@ -102,6 +124,7 @@ Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n
 ## Compte rendu
 
 Termine par quelques lignes :
+- sujet validé et ce que la carte permet de comprendre ;
 - URL locale de la carte ;
 - ce qui a été créé (lieu, données, style, registre) ;
 - écarts par rapport au preset et leur raison ;

@@ -15,7 +15,7 @@ function readPublic(path: string): unknown {
 }
 
 const AMSTERDAM_META = (readPublic('data/amsterdam-centre.json') as { meta: Record<string, unknown> }).meta;
-const entry = (id: string, extra: Partial<MapEntry> = {}): MapEntry => ({ id, place: 'amsterdam-centre', style: 'riso', ...extra } as MapEntry);
+const entry = (id: string, extra: Partial<MapEntry> = {}): MapEntry => ({ id, place: 'amsterdam-centre', style: 'riso', topic: 'canal-crossings', ...extra } as MapEntry);
 
 test('a map is titled after its place unless the registry gives a title', () => {
   const [plain, titled] = catalogueOf([entry('plain'), entry('titled', { title: 'Mon quartier' })]);
@@ -100,4 +100,16 @@ test('an entry naming an unknown place or style is a problem, and is left out of
   assert.match(problems[0]?.message ?? '', /unknown place "kyoto-gion"/);
   assert.match(problems[1]?.message ?? '', /unknown style "neon"/);
   assert.deepEqual(catalogueOf([...broken, entry('fine')]).map((m) => m.id), ['fine']);
+});
+
+test('an unknown subject is reported and left out of the catalogue before page generation', () => {
+  const broken = entry('bad-topic', { topic: 'unknown' as never });
+  assert.match(problemsOf([broken], () => ({ meta: AMSTERDAM_META }))[0]?.message ?? '', /unknown topic/);
+  assert.deepEqual(catalogueOf([broken, entry('fine')]).map((m) => m.id), ['fine']);
+});
+
+test('a map without a subject is refused before page generation', () => {
+  const missing = entry('no-topic', { topic: undefined as never });
+  assert.match(problemsOf([missing], () => ({ meta: AMSTERDAM_META }))[0]?.message ?? '', /missing topic/);
+  assert.deepEqual(catalogueOf([missing]), []);
 });

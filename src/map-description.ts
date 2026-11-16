@@ -1,5 +1,7 @@
 import type { Line, MapData } from './data.ts';
 import { featureCount, formatDate, formatNumber, messages, type Locale } from './i18n/index.ts';
+import type { TopicAnalysis } from './topics.ts';
+import { topicContent } from './topic-content.ts';
 
 type Feature = readonly [name: string | undefined, paths: readonly Line[]];
 interface Bounds { left: number; right: number; bottom: number; top: number }
@@ -29,7 +31,7 @@ function namedFeatures(features: readonly Feature[], half: number, locale: Local
 }
 
 /** Whole-survey description, independent of the visual zoom and the drawing technique. */
-export function describeMap(container: HTMLElement, summary: HTMLElement, data: MapData, display: { title: string; district: string }, legend: readonly string[], locale: Locale): void {
+export function describeMap(container: HTMLElement, summary: HTMLElement, data: MapData, display: { title: string; district: string }, legend: readonly string[], locale: Locale, topic?: TopicAnalysis): void {
   const { meta } = data;
   const copy = messages(locale).description;
   const fmt = (n: number): string => formatNumber(locale, n);
@@ -42,6 +44,12 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, data: 
     container.append(p);
   };
   paragraph(overview);
+  if (topic) {
+    const content = topicContent(data, topic, locale);
+    summary.textContent = `${content.subject.question} ${content.value} ${content.subject.metric}. ${content.concentration} ${overview} ${copy.help}`;
+    for (const text of [content.subject.question, content.subject.intro, `${content.value} ${content.subject.metric}.`, content.concentration,
+      ...content.references.map((ref) => `${ref.number}. ${ref.name} : ${ref.detail}`), content.subject.legend, content.source, content.subject.method, content.subject.limits]) paragraph(text);
+  }
   paragraph(copy.centre(fmt(meta.lat), fmt(meta.lon), formatDate(locale, meta.fetchedAt)));
   paragraph(copy.counts(featureCount(locale, 0, data.buildings.length), featureCount(locale, 1, data.roads.length), featureCount(locale, 2, data.parks.length), featureCount(locale, 3, data.water.length)));
   const heading = document.createElement('h2');

@@ -9,6 +9,8 @@ import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
 import { ZOOM_STEP } from './toolkit/viewport.ts';
 import { DEFAULT_LOCALE, isLocale, messages } from './i18n/index.ts';
+import { analyseTopic } from './topics.ts';
+import { mountTopicPanel } from './topic-panel.ts';
 
 const lang = document.documentElement.lang;
 const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
@@ -39,7 +41,8 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   ]);
 
   const meta = { ...withoutName(data.meta), title, district: map.place.district };
-  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, meta, style.legend, locale);
+  const topic = map.topic ? analyseTopic(data, map.topic) : undefined;
+  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), data, meta, style.legend, locale, topic);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
   description.disabled = false;
@@ -57,7 +60,9 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
     locale,
     options,
     shell,
+    ...(topic ? { topic } : {}),
   });
+  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), data, topic, locale, handle, url);
   if (handle.viewport) {
     const viewport = handle.viewport;
     for (const [selector, factor] of [['.zoom-in', ZOOM_STEP], ['.zoom-out', 1 / ZOOM_STEP]] as const) {

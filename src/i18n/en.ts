@@ -56,6 +56,39 @@ export const en: Messages = {
     survey: (date) => `OSM SURVEY ${date}`,
     north: 'N', south: 'S', east: 'E', west: 'W',
   },
+  topic: {
+    eyebrow: 'Understand the place',
+    references: 'Named reference points',
+    referenceHelp: 'Numbers match the reference points on the map. Select a name to locate it.',
+    distribution: 'Distribution across the area',
+    distributionHelp: 'Length by sector, in metres. North is at the top; all nine sectors have the same area.',
+    methodology: 'Sources and method',
+    empty: 'The survey contains no features matching this subject in this area.',
+    overview: 'Return to the overview',
+    focus: (name) => `Centre the map on ${name}`,
+    source: (date, size) => `OpenStreetMap extract downloaded on ${date}. A square with sides of ${size} km centred on the place; it may extend beyond the neighbourhood boundary.`,
+    dataFile: 'View the survey data (JSON)',
+    concentration: (position, share) => `The sector ${position} contains ${share}% of the length shown.`,
+    waterCrossed: (names) => `Canals crossed by segments with this name: ${names}.`,
+  },
+  topics: {
+    'canal-crossings': {
+      question: 'Where can you cross the canals in the historic centre?',
+      intro: 'Follow the canals and locate the roads and paths crossing them on bridges. Crossings stand out from the surrounding buildings and streets.',
+      metric: 'of mapped bridge segments crossing canals',
+      legend: 'Thick lines with a paper border: bridge segments crossing a canal. Numbered circles: named reference points. Hatching: water. Other streets and buildings appear faintly.',
+      method: 'Select roads and paths tagged as bridges that intersect a surface canal axis in OSM within the square. Lengths add the selected segments, clipped to the square. Reference points group segments by name; one name may cover several crossings. The reference identifies a point on the longest segment in the group. A leader connects the number to this point if the badge needs to move.',
+      limits: 'This survey does not count physical bridges. It may miss crossings when a bridge or canal axis is absent from OSM. Parallel paths each contribute to the length. The drawing does not guarantee pedestrian or cycling access.',
+    },
+    steps: {
+      question: 'Where are the stairs concentrated in the neighbourhood?',
+      intro: 'Locate passages with stairs and examine their distribution in and around the neighbourhood. Lines with crossbars remain visible in the overview.',
+      metric: 'of mapped stair segments in the area',
+      legend: 'Thick lines with crossbars: stair segments. Numbered circles: named reference points. Crossbars are a symbol and do not show the number of steps. Water and buildings provide context.',
+      method: 'Select OSM ways classified as steps, excluding tunnels. Plan lengths are clipped to the square and distributed across nine equal sectors. Reference points group segments by name; the reference identifies a point on the longest segment in the group. A leader connects the number to this point if the badge needs to move.',
+      limits: 'These lengths measure neither elevation gain nor the number of steps or staircases. OSM coverage may be incomplete. A way without a stairs symbol does not guarantee an accessible route.',
+    },
+  },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Historic centre' },
     'lisbonne-alfama': { name: 'Lisbon', district: 'Alfama' },
@@ -67,7 +100,7 @@ export const en: Messages = {
     },
     cyanotype: {
       label: 'Architect’s cyanotype',
-      legend: ['Buildings: outlines.', 'Streets: single or double lines depending on zoom.', 'Water: lines parallel to the shore.', 'Parks and gardens: cross-hatching.'],
+      legend: ['Buildings: outlines.', 'Streets: single or double lines depending on zoom.', 'Water: flat tint and shoreline, without depth information.', 'Parks and gardens: cross-hatching.'],
     },
   },
 };

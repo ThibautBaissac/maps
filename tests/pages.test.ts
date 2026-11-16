@@ -50,3 +50,12 @@ test('each static gallery contains translated map names and links before JavaScr
     assert.ok(html.includes(`lang="${locale}" hreflang="${locale}" aria-current="page"`));
   }
 });
+
+test('the validated subjects appear in map headings and gallery cards before JavaScript runs', () => {
+  const map = findMap('lisbonne-cyanotype', 'fr')!;
+  const html = pageHtml(map, 'fr', '/maps/');
+  assert.match(html, /<h1[^>]*>Où se concentrent les escaliers/);
+  assert.match(html, /id="topic-panel"/);
+  assert.match(galleryHtml('fr', '/maps/'), /Où franchit-on les canaux/);
+  assert.match(pageHtml(findMap('amsterdam-riso', 'en')!, 'en', '/maps/'), /Where can you cross the canals/);
+});

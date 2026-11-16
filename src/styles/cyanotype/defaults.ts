@@ -14,8 +14,6 @@ export interface CyanotypeOptions {
   building: number;
   /** Road casing lines, CSS px. */
   road: number;
-  /** Number of depth lines along each shore. */
-  contours: number;
   /** Park cross-hatching pitch, CSS px. */
   hatch: number;
   /** CSS font-family list. */
@@ -30,7 +28,6 @@ export const DEFAULTS: CyanotypeOptions = {
   grid: 0.15,
   building: 0.75,
   road: 0.8,
-  contours: 10,
   hatch: 6,
   font: '"Space Mono", ui-monospace, monospace',
 };

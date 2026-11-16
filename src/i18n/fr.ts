@@ -56,6 +56,39 @@ export const fr: Messages = {
     survey: (date) => `RELEVÉ OSM ${date}`,
     north: 'N', south: 'S', east: 'E', west: 'O',
   },
+  topic: {
+    eyebrow: 'Comprendre le lieu',
+    references: 'Repères nommés',
+    referenceHelp: 'Les numéros correspondent aux repères sur la carte. Sélectionnez un nom pour le retrouver.',
+    distribution: 'Répartition dans la zone',
+    distributionHelp: 'Longueur par secteur, en mètres. Le nord se trouve en haut ; les neuf secteurs ont la même surface.',
+    methodology: 'Sources et méthode',
+    empty: 'Le relevé ne contient aucun élément correspondant à ce sujet dans cette zone.',
+    overview: 'Revenir à la vue générale',
+    focus: (name) => `Centrer la carte sur ${name}`,
+    source: (date, size) => `Extrait OpenStreetMap téléchargé le ${date}. Carré de ${size} km de côté, centré sur le lieu ; il dépasse parfois les limites du quartier.`,
+    dataFile: 'Consulter les données du relevé (JSON)',
+    concentration: (position, share) => `Le secteur ${position} rassemble ${share} % de la longueur représentée.`,
+    waterCrossed: (names) => `Canaux croisés par les tronçons portant ce nom : ${names}.`,
+  },
+  topics: {
+    'canal-crossings': {
+      question: 'Où franchit-on les canaux du centre historique ?',
+      intro: 'Suivez les canaux et repérez les voies qui les franchissent sur un pont. Les passages ressortent du bâti et des rues de contexte.',
+      metric: 'de voies sur pont repérées au croisement des canaux',
+      legend: 'Traits épais bordés de papier : voies sur pont croisant un canal. Cercles numérotés : repères nommés. Hachures : eau. Les autres voies et le bâti restent en retrait.',
+      method: 'Sélection des voies marquées comme pont qui croisent l’axe d’un canal de surface OSM dans le carré. Les longueurs additionnent les tronçons retenus, coupés aux limites du carré. Les repères regroupent les tronçons par nom ; un nom peut désigner plusieurs passages. Le repère désigne un point sur le plus long tronçon du groupe. Un trait le relie au numéro si celui-ci doit se décaler.',
+      limits: 'Ce relevé ne compte pas les ponts physiques. Il peut omettre un passage si le pont ou l’axe du canal manque dans OSM. Les voies parallèles comptent chacune dans la longueur. Le dessin ne garantit pas l’accès à pied ou à vélo.',
+    },
+    steps: {
+      question: 'Où se concentrent les escaliers du quartier ?',
+      intro: 'Repérez les passages avec escaliers et observez leur répartition dans le quartier et ses alentours. Les traits à barreaux restent visibles dès la vue générale.',
+      metric: 'de tronçons d’escaliers cartographiés dans la zone',
+      legend: 'Traits épais à barreaux : tronçons d’escaliers. Cercles numérotés : repères nommés. Les barreaux sont un symbole et ne représentent pas le nombre de marches. L’eau et le bâti servent de contexte.',
+      method: 'Sélection des voies OSM de catégorie escalier, hors tunnels. Longueurs en plan, coupées aux limites du carré, puis réparties en neuf secteurs égaux. Les repères regroupent les tronçons par nom ; le repère désigne un point sur le plus long tronçon du groupe. Un trait le relie au numéro si celui-ci doit se décaler.',
+      limits: 'Ces longueurs ne mesurent ni le dénivelé ni le nombre de marches ou d’escaliers. La couverture OSM peut être incomplète. Une voie sans symbole d’escalier ne garantit pas un parcours accessible.',
+    },
+  },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Centre historique' },
     'lisbonne-alfama': { name: 'Lisbonne', district: 'Alfama' },
@@ -67,7 +100,7 @@ export const fr: Messages = {
     },
     cyanotype: {
       label: 'Cyanotype d’architecte',
-      legend: ['Bâtiments : contours.', 'Rues : traits simples ou doubles selon le zoom.', 'Eau : lignes parallèles au rivage.', 'Parcs et jardins : hachures croisées.'],
+      legend: ['Bâtiments : contours.', 'Rues : traits simples ou doubles selon le zoom.', 'Eau : teinte uniforme et trait de rive, sans indication de profondeur.', 'Parcs et jardins : hachures croisées.'],
     },
   },
 };

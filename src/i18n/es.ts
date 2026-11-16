@@ -56,6 +56,39 @@ export const es: Messages = {
     survey: (date) => `DATOS OSM ${date}`,
     north: 'N', south: 'S', east: 'E', west: 'O',
   },
+  topic: {
+    eyebrow: 'Comprender el lugar',
+    references: 'Referencias con nombre',
+    referenceHelp: 'Los números corresponden a las referencias del mapa. Selecciona un nombre para localizarlo.',
+    distribution: 'Distribución en la zona',
+    distributionHelp: 'Longitud por sector, en metros. El norte está arriba; los nueve sectores tienen la misma superficie.',
+    methodology: 'Fuentes y método',
+    empty: 'El registro no contiene elementos correspondientes a este tema en esta zona.',
+    overview: 'Volver a la vista general',
+    focus: (name) => `Centrar el mapa en ${name}`,
+    source: (date, size) => `Extracto de OpenStreetMap descargado el ${date}. Cuadrado de ${size} km de lado centrado en el lugar; puede superar los límites del barrio.`,
+    dataFile: 'Consultar los datos del registro (JSON)',
+    concentration: (position, share) => `El sector ${position} reúne el ${share} % de la longitud representada.`,
+    waterCrossed: (names) => `Canales cruzados por los tramos con este nombre: ${names}.`,
+  },
+  topics: {
+    'canal-crossings': {
+      question: '¿Dónde se cruzan los canales del centro histórico?',
+      intro: 'Sigue los canales y localiza las vías que los cruzan por un puente. Los pasos destacan sobre los edificios y las calles del entorno.',
+      metric: 'de tramos sobre puentes que cruzan canales',
+      legend: 'Líneas gruesas con borde de papel: vías sobre puentes que cruzan un canal. Círculos numerados: referencias con nombre. Rayado: agua. Las demás vías y edificios aparecen atenuados.',
+      method: 'Selección de vías marcadas como puentes que cruzan el eje de un canal de superficie OSM dentro del cuadrado. Las longitudes suman los tramos seleccionados, recortados al cuadrado. Las referencias agrupan los tramos por nombre; un nombre puede abarcar varios pasos. La referencia identifica un punto del tramo más largo del grupo. Una línea une el número a este punto si el círculo debe desplazarse.',
+      limits: 'Este registro no cuenta puentes físicos. Puede omitir pasos si falta el puente o el eje del canal en OSM. Las vías paralelas contribuyen por separado a la longitud. El dibujo no garantiza el acceso peatonal o ciclista.',
+    },
+    steps: {
+      question: '¿Dónde se concentran las escaleras del barrio?',
+      intro: 'Localiza los pasos con escaleras y observa su distribución en el barrio y sus alrededores. Las líneas con travesaños permanecen visibles en la vista general.',
+      metric: 'de tramos de escaleras cartografiados en la zona',
+      legend: 'Líneas gruesas con travesaños: tramos de escaleras. Círculos numerados: referencias con nombre. Los travesaños son un símbolo y no representan el número de peldaños. El agua y los edificios sirven de contexto.',
+      method: 'Selección de vías OSM de categoría escalera, salvo túneles. Las longitudes en planta se recortan al cuadrado y se distribuyen en nueve sectores iguales. Las referencias agrupan los tramos por nombre; la referencia identifica un punto del tramo más largo del grupo. Una línea une el número a este punto si el círculo debe desplazarse.',
+      limits: 'Estas longitudes no miden el desnivel ni el número de peldaños o escaleras. La cobertura OSM puede ser incompleta. Una vía sin símbolo de escalera no garantiza un recorrido accesible.',
+    },
+  },
   places: {
     'amsterdam-centre': { name: 'Ámsterdam', district: 'Centro histórico' },
     'lisbonne-alfama': { name: 'Lisboa', district: 'Alfama' },
@@ -67,7 +100,7 @@ export const es: Messages = {
     },
     cyanotype: {
       label: 'Cianotipo de arquitecto',
-      legend: ['Edificios: contornos.', 'Calles: líneas simples o dobles según el zoom.', 'Agua: líneas paralelas a la orilla.', 'Parques y jardines: rayado cruzado.'],
+      legend: ['Edificios: contornos.', 'Calles: líneas simples o dobles según el zoom.', 'Agua: tono uniforme y línea de orilla, sin información de profundidad.', 'Parques y jardines: rayado cruzado.'],
     },
   },
 };

@@ -8,6 +8,7 @@ import { growRect, scaleRect, type Rect } from './geometry.ts';
 import { placeLabels, prepareLabels, type LabelGroup, type LabelJob, type Labels } from './labels.ts';
 import { fadePlate, makeProjector, type Projector } from './projection.ts';
 import { createViewport, reprojection, type ElementSize, type View } from './viewport.ts';
+import { placeTopicMarkers } from './topic.ts';
 
 /** Metres of feathered margin around the surveyed square, faded by frame.fade(). */
 const PLATE_MARGIN = 40;
@@ -70,7 +71,7 @@ export interface CanvasStyle<E extends CanvasEnv, K extends string> {
  * if the container has a size (otherwise on its first resize): vignette capture relies on it.
  */
 export function mountCanvasMap<E extends CanvasEnv, K extends string>(
-  { container, data, shell }: Pick<MountArgs<unknown>, 'container' | 'data' | 'shell'>,
+  { container, data, shell, topic }: Pick<MountArgs<unknown>, 'container' | 'data' | 'shell' | 'topic'>,
   style: CanvasStyle<E, K>,
 ): MapHandle {
   const half = data.meta.half + PLATE_MARGIN;
@@ -95,7 +96,10 @@ export function mountCanvasMap<E extends CanvasEnv, K extends string>(
     const P = makeProjector(view, W, H, dpr);
     const labels = placeLabels({
       groups: style.labels(view, names), P, font: style.font, measureCtx: env.map.x,
-      mapRect: scaleRect(layout.map, dpr), avoid,
+      mapRect: scaleRect(layout.map, dpr), avoid: [...avoid, ...(topic ? placeTopicMarkers(topic, P, layout).map(({ x, y }): Rect => {
+        const radius = 16 * dpr;
+        return [x - radius, y - radius, x + radius, y + radius];
+      }) : [])],
     });
     style.render(env, { view, P, dpr, labels, fade: (c) => fadePlate(c, P, half) });
     snap = { ...view };

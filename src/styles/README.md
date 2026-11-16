@@ -25,6 +25,7 @@ export async function mount({ container, data, meta, locale, options, shell }: M
 | `locale` | langue de la page ; utiliser `messages(locale)` et les fonctions de formatage de `src/i18n/index.ts` pour les textes dessinés |
 | `options` | les `options` de la carte dans `src/registry.ts`, à fusionner avec le `defaults.ts` du style |
 | `shell` | le cadre de page commun (plus bas) |
+| `topic` | analyse du sujet validé, si présent : géométries retenues, longueurs, secteurs et repères. La page utilise la même analyse pour le texte ; le style l’utilise pour mettre le sujet en évidence. |
 
 `defaults.ts` exporte l'interface des options du style (`NomOptions`, chaque champ documenté) et `DEFAULTS`, ses valeurs par défaut.
 
@@ -33,6 +34,8 @@ Le style se déclare ensuite dans `src/styles/index.ts` : son interface d'option
 `mount` ne se termine qu'une fois la carte dessinée : la capture de vignette lit le canvas de `#stage` dès que la promesse est résolue (`mountCanvasMap()` le garantit si la scène a une taille).
 
 La page branche ses boutons de zoom sur le champ facultatif `viewport` de `MapHandle`. Un style qui utilise le viewport de la boîte à outils le renvoie pour activer ces boutons ; sinon il fournit ses propres commandes. En développement, la valeur renvoyée par `mount` est exposée dans `window.__map`, avec `full()` pour les vérifications de rendu.
+
+Les styles Canvas existants utilisent `drawTopic()` pour les tronçons et `drawTopicMarkers()` pour les repères numérotés après le fondu. Ils transmettent aussi `topic` à `mountCanvasMap()` pour que les noms évitent les numéros. Les commandes des repères utilisent `viewport.goTo()` ; une échelle de zéro restaure la vue générale en respectant la taille actuelle du plan.
 
 ### Ce que tout style doit respecter
 

@@ -9,6 +9,7 @@ import type { Rect } from '../src/toolkit/geometry.ts';
 import { computeLayout } from '../src/toolkit/layout.ts';
 import { installPage, nameGlyphs, type FakeCanvas } from './dom.ts';
 import type { Locale } from '../src/i18n/index.ts';
+import { analyseTopic } from '../src/topics.ts';
 
 const data = parseMapData(JSON.parse(readFileSync(new URL('../public/data/amsterdam-centre.json', import.meta.url), 'utf8')), 'fixture');
 const SIZE = { width: 800, height: 600 };
@@ -41,6 +42,32 @@ for (const style of ['riso', 'cyanotype'] as const) {
     const map = calls.findIndex((k, i) => k.method === 'drawImage' && k.args[0] !== paperImage
       && calls[i - 1]?.method === 'setTransform' && calls[i - 2]?.method === 'clip');
     assert.ok(map > paper, 'The stage must show the map buffer over the paper once mount resolves');
+  });
+}
+
+test('a reference can centre the real viewport, render immediately and return to the overview', async (t) => {
+  const page = await mountStyle(t, 'riso');
+  const viewport = page.handle.viewport!;
+  assert.equal(typeof viewport.goTo, 'function');
+  const overview = { ...viewport.view };
+  viewport.goTo({ x: 200, y: -100, s: 2 });
+  assert.deepEqual(viewport.view, { x: 200, y: -100, s: 2 });
+  viewport.goTo({ x: 0, y: 0, s: 0 });
+  assert.deepEqual(viewport.view, overview);
+});
+
+for (const style of ['riso', 'cyanotype'] as const) {
+  test(`${style} shows the subject's stairs even at the overview zoom`, async (t) => {
+    const page = installPage(t, SIZE);
+    const map = { ...data, roads: [{ k: 'steps' as const, n: 'Escadinhas', p: [-20, 0, 20, 0] }], buildings: [], parks: [], waterways: [], water: [] };
+    const { name: _, ...meta } = map.meta;
+    const { mount } = await STYLES[style]();
+    const handle = await mount({ container: page.container, shell: page.shell, data: map, meta: { ...meta, title: 'Test' }, options: {}, locale: 'fr', topic: analyseTopic(map, 'steps') });
+    page.cleanup(() => handle.destroy());
+    for (const c of page.canvases) c.calls.length = 0;
+    Object.assign(handle.viewport!.view, { x: 0, y: 0, s: 0.1 });
+    handle.full!();
+    assert.ok(page.canvases.some((c) => c.calls.some((call) => call.method === 'lineTo' && call.args[0] === 402 && call.args[1] === 300)), 'The selected stairs must remain visible below the base style’s minimum zoom');
   });
 }
 

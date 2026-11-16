@@ -51,6 +51,8 @@ export interface Viewport {
   start(): void;
   /** Animated zoom around the centre, shared by buttons and keyboard navigation. */
   zoom(factor: number): void;
+  /** Centres a reference or restores the overview; clamps and renders synchronously. */
+  goTo(view: View): void;
   destroy(): void;
 }
 
@@ -180,6 +182,16 @@ export function createViewport({ element, half, maxScale = 10, onResize, onFrame
     view,
     start() { onElementResize(); ro.observe(element); },
     zoom: zoomCentre,
+    goTo(next) {
+      if (!size) return;
+      anchor = null; drag = null;
+      element.classList.remove('dragging');
+      cancelAnimationFrame(raf); raf = 0;
+      window.clearTimeout(idleTimer);
+      Object.assign(view, clampView({ ...next }, size));
+      target.s = view.s;
+      onSettle(view);
+    },
     destroy() {
       abort.abort();
       ro.disconnect();

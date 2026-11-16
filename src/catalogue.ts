@@ -7,6 +7,7 @@ import { MAPS, type MapEntry, type MapEntryOf } from './registry.ts';
 import type { StyleDef } from './styles/contract.ts';
 import { isStyleKey, STYLES, type StyleKey, type StyleOptions } from './styles/index.ts';
 import { DEFAULT_LOCALE, LOCALES, messages, type Locale } from './i18n/index.ts';
+import { isTopicId, type TopicId } from './topics.ts';
 
 export interface CatalogueMapOf<K extends StyleKey> {
   id: string;
@@ -15,6 +16,7 @@ export interface CatalogueMapOf<K extends StyleKey> {
   placeId: PlaceId;
   place: Place;
   style: K;
+  topic: TopicId;
   styleDef: StyleDef<StyleOptions[K]>;
   options: Partial<StyleOptions[K]>;
   /** Relative to the site root, no leading slash: prefix BASE_URL, or public/ on disk. */
@@ -35,6 +37,7 @@ function resolve<K extends StyleKey>(m: MapEntryOf<K>, locale: Locale): Catalogu
     placeId: m.place,
     place,
     style: m.style,
+    topic: m.topic,
     styleDef: { ...STYLES[m.style], ...messages(locale).styles[m.style] },
     options: m.options ?? {},
     paths: { page: `${locale}/${PAGES_DIR}/${m.id}/`, data: dataPath(m.place), vignette: `vignettes/${locale}/${m.id}.webp` },
@@ -42,7 +45,8 @@ function resolve<K extends StyleKey>(m: MapEntryOf<K>, locale: Locale): Catalogu
 }
 
 // Types are stripped at run time: an entry the type-checker refuses can still get here.
-const resolvable = (m: MapEntry): boolean => isPlaceId(m.place) && isStyleKey(m.style);
+const resolvable = (m: MapEntry): boolean => isPlaceId(m.place) && isStyleKey(m.style)
+  && isTopicId(m.topic);
 
 /** For tests: resolves any registry, leaving out entries with an unknown place or style (problemsOf reports them). */
 export function catalogueOf(maps: readonly MapEntry[], locale: Locale = DEFAULT_LOCALE): CatalogueMap[] {
@@ -73,6 +77,7 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
     seen.add(entry.id);
     if (!isPlaceId(entry.place)) return `unknown place "${entry.place}" (${entry.id}); known: ${Object.keys(PLACES).join(', ')}`;
     if (!isStyleKey(entry.style)) return `unknown style "${entry.style}" (${entry.id}); known: ${Object.keys(STYLES).join(', ')}`;
+    if (!isTopicId(entry.topic)) return entry.topic === undefined ? `missing topic (${entry.id})` : `unknown topic "${entry.topic}" (${entry.id})`;
     const m = resolve(entry, DEFAULT_LOCALE) as CatalogueMap;
     const place = PLACES[entry.place]; // Display translations never invalidate geographic data.
     const refetch = `npm run fetch-data -- ${m.placeId}`;

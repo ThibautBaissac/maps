@@ -4,6 +4,7 @@ import { buffer, clear, type CanvasBuffer } from '../../toolkit/canvas.ts';
 import { loadFont } from '../../toolkit/fonts.ts';
 import { fillLabels, knockOutLabels } from '../../toolkit/labels.ts';
 import { mountCanvasMap } from '../../toolkit/stage.ts';
+import { drawTopic, drawTopicMarkers } from '../../toolkit/topic.ts';
 import type { MapHandle, MountArgs } from '../contract.ts';
 import { DEFAULTS, type CyanotypeOptions } from './defaults.ts';
 import { makeHatch, prepareMap, renderMap } from './map.ts';
@@ -22,7 +23,7 @@ interface Env {
   hatch: CanvasPattern;
 }
 
-export async function mount({ container, data, meta, locale, options, shell }: MountArgs<CyanotypeOptions>): Promise<MapHandle> {
+export async function mount({ container, data, meta, locale, options, shell, topic }: MountArgs<CyanotypeOptions>): Promise<MapHandle> {
   const o: CyanotypeOptions = { ...DEFAULTS, ...options };
   await Promise.all([
     loadFont('Space Mono', 'spacemono/SpaceMono-Regular.ttf', { weight: '400' }),
@@ -33,7 +34,7 @@ export async function mount({ container, data, meta, locale, options, shell }: M
   const M = prepareMap(data);
   const half = data.meta.half;
 
-  return mountCanvasMap<Env, NameKind>({ container, data, shell }, {
+  return mountCanvasMap<Env, NameKind>({ container, data, shell, ...(topic ? { topic } : {}) }, {
     font: o.font,
 
     labels(view, names) {
@@ -64,11 +65,18 @@ export async function mount({ container, data, meta, locale, options, shell }: M
       const c = e.map.x;
       clear(c);
       renderMap(c, e.tmp.x, M, P, o, e.hatch);
+      if (topic) {
+        c.globalCompositeOperation = 'destination-in';
+        c.fillStyle = 'rgba(0,0,0,0.35)'; c.fillRect(0, 0, c.canvas.width, c.canvas.height);
+        c.globalCompositeOperation = 'source-over';
+        drawTopic(c, topic, P, o.line, o.paper);
+      }
 
       // Names: blue gap knocked out of the linework, then white capitals.
       knockOutLabels(c, labels, 4 * dpr);
       fillLabels(c, labels, o.line);
       fade(c);
+      if (topic) drawTopicMarkers(c, topic, P, o.line, o.paper, e.L);
     },
 
     // Grid, border and title block, in CSS px.

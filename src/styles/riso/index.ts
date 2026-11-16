@@ -7,6 +7,7 @@ import { fillLabels, knockOutLabels, type LabelGroup } from '../../toolkit/label
 import { computeLayout, knockouts, scaleBar, type Layout } from '../../toolkit/layout.ts';
 import { pixelCanvas } from '../../toolkit/noise.ts';
 import { mountCanvasMap } from '../../toolkit/stage.ts';
+import { drawTopic, drawTopicMarkers } from '../../toolkit/topic.ts';
 import type { View } from '../../toolkit/viewport.ts';
 import type { MapHandle, MountArgs } from '../contract.ts';
 import { DEFAULTS, type RisoOptions } from './defaults.ts';
@@ -38,7 +39,7 @@ interface Env {
   uiKey: string;
 }
 
-export async function mount({ container, data, meta, locale, options, shell }: MountArgs<RisoOptions>): Promise<MapHandle> {
+export async function mount({ container, data, meta, locale, options, shell, topic }: MountArgs<RisoOptions>): Promise<MapHandle> {
   const o: RisoOptions = { ...DEFAULTS, ...options };
   const ink: Inks = { a: o.inkA, b: o.inkB };
   await loadFont('Bebas Neue', 'bebasneue/BebasNeue-Regular.ttf');
@@ -69,7 +70,7 @@ export async function mount({ container, data, meta, locale, options, shell }: M
     compose(e.ui.x, a.c, b.c, dpr);
   }
 
-  return mountCanvasMap<Env, Plate>({ container, data, shell }, {
+  return mountCanvasMap<Env, Plate>({ container, data, shell, ...(topic ? { topic } : {}) }, {
     font: FONT,
     blend: 'multiply',
 
@@ -107,8 +108,13 @@ export async function mount({ container, data, meta, locale, options, shell }: M
     render(e, { P, dpr, labels, fade }) {
       const { a, b } = e;
       clear(a.x); clear(b.x);
+      a.x.globalAlpha = topic ? 0.22 : 1;
       renderPlateA(a.x, plates, P, ink.a);
+      a.x.globalAlpha = 1;
+      b.x.globalAlpha = topic ? 0.45 : 1;
       renderPlateB(b.x, plates, P, ink.b, e.patterns);
+      b.x.globalAlpha = 1;
+      if (topic) drawTopic(b.x, topic, P, ink.b, '#FFFFFF');
 
       // Names: paper halo knocked out of both plates, letters in their own ink.
       for (const c of [a.x, b.x]) knockOutLabels(c, labels, 4.2 * dpr);
@@ -117,6 +123,7 @@ export async function mount({ container, data, meta, locale, options, shell }: M
 
       fade(a.x);
       fade(b.x);
+      if (topic) drawTopicMarkers(b.x, topic, P, ink.b, '#FFFFFF', e.layout);
       applyInkTexture(a.x, e.texA);
       applyInkTexture(b.x, e.texB);
       compose(e.map.x, a.c, b.c, dpr);

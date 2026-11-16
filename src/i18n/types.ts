@@ -1,5 +1,6 @@
 import type { PlaceId } from '../../places/index.ts';
 import type { StyleKey } from '../styles/index.ts';
+import type { TopicId } from '../topics.ts';
 
 export const LOCALES = ['fr', 'en', 'es'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -66,5 +67,28 @@ export interface Messages {
     west: string;
   };
   places: Record<PlaceId, { name: string; district: string }>;
+  topic: {
+    eyebrow: string;
+    references: string;
+    referenceHelp: string;
+    distribution: string;
+    distributionHelp: string;
+    methodology: string;
+    empty: string;
+    overview: string;
+    focus: (name: string) => string;
+    source: (date: string, size: string) => string;
+    dataFile: string;
+    concentration: (position: string, share: string) => string;
+    waterCrossed: (names: string) => string;
+  };
+  topics: Record<TopicId, {
+    question: string;
+    intro: string;
+    metric: string;
+    legend: string;
+    method: string;
+    limits: string;
+  }>;
   styles: Record<StyleKey, { label: string; legend: Four<string> }>;
 }

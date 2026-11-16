@@ -4,6 +4,7 @@
 import type { PlaceId } from '../places/index.ts';
 import type { StyleKey, StyleOptions } from './styles/index.ts';
 import type { LocalizedText } from './i18n/index.ts';
+import type { TopicId } from './topics.ts';
 
 export interface MapEntryOf<K extends StyleKey> {
   /** URL slug, unique, [a-z0-9-]. */
@@ -12,6 +13,8 @@ export interface MapEntryOf<K extends StyleKey> {
   place: PlaceId;
   /** Key of src/styles/index.ts. */
   style: K;
+  /** Subject explicitly approved by the author before the map is made. */
+  topic: TopicId;
   /** Defaults to the place name. */
   title?: LocalizedText;
   /** Style settings (see the style's defaults.ts). */
@@ -22,6 +25,6 @@ export interface MapEntryOf<K extends StyleKey> {
 export type MapEntry = { [K in StyleKey]: MapEntryOf<K> }[StyleKey];
 
 export const MAPS: readonly MapEntry[] = [
-  { id: 'amsterdam-riso', place: 'amsterdam-centre', style: 'riso' },
-  { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype' },
+  { id: 'amsterdam-riso', place: 'amsterdam-centre', style: 'riso', topic: 'canal-crossings' },
+  { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', topic: 'steps' },
 ];

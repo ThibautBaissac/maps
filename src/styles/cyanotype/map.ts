@@ -1,5 +1,5 @@
 // The drawing itself: white linework on transparent, rendered once per settled view.
-// Buildings in outline, parks cross-hatched, water as depth lines along the shore,
+// Buildings in outline, parks cross-hatched, water as a flat tint with a shoreline,
 // streets as double lines (single at small scale), stairs as ladders.
 import type { Line, MapData, Park, Ring, Road, RoadKind, Water, Waterway } from '../../data.ts';
 import { context2d, makeCanvas, pattern } from '../../toolkit/canvas.ts';
@@ -79,7 +79,7 @@ export function makeHatch(ctx: CanvasRenderingContext2D, dpr: number, pitch: num
 
 const streetGap = (k: StreetKind, s: number): number => Math.max(STREETS[k].min, STREETS[k].m * s);
 
-// Depth lines along the shore: concentric rings cut from wide strokes, kept inside the water.
+// A flat water tint and the shoreline; no depth information is implied.
 function drawWater(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingContext2D, M: PreparedMap, P: Projector, o: CyanotypeOptions): void {
   const { dpr } = P;
   const water = M.water.filter((w) => P.visible(w.bb));
@@ -107,22 +107,10 @@ function drawWater(ctx: CanvasRenderingContext2D, tmp: CanvasRenderingContext2D,
   t.clearRect(0, 0, t.canvas.width, t.canvas.height);
   t.lineJoin = 'round';
   t.strokeStyle = o.line;
-  const lw = 0.6 * dpr;
-  for (let i = o.contours; i >= 1; i--) {
-    const d = 2.6 * Math.pow(i, 1.35) * dpr;
-    t.globalCompositeOperation = 'source-over';
-    t.globalAlpha = Math.max(0.3, 0.95 - i * 0.065);
-    t.lineWidth = 2 * d + lw;
-    t.stroke(shore);
-    t.globalAlpha = 1;
-    t.globalCompositeOperation = 'destination-out';
-    t.lineWidth = 2 * d - lw;
-    t.stroke(shore);
-  }
-  t.globalCompositeOperation = 'destination-in';
-  t.fillStyle = '#000';
+  t.globalAlpha = 0.12;
+  t.fillStyle = o.line;
   t.fill(fill, 'evenodd');
-  t.globalCompositeOperation = 'source-over';
+  t.globalAlpha = 1;
   t.lineWidth = 1.1 * dpr;
   t.stroke(shore);
   ctx.drawImage(t.canvas, 0, 0);

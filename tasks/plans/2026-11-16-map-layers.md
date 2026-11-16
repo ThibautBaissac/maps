@@ -74,7 +74,7 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
   Couche valide de référence `FOUNTAINS` : `{ id: 'fontaines', kind: 'points', role: 'overlay', attribution: '© Ville de Lisbonne (CC BY 4.0)', source: 'layers/lisbonne-alfama/fontaines.geojson', features: [{ g: [10, 20], n: 'Chafariz d’El-Rei', k: 'fontaine', p: { eau: true, annee: 1220 } }] }`.
   - `parseLayer(FOUNTAINS, 'f')` → valeur égale (`deepEqual`).
@@ -93,21 +93,21 @@ Phase 2 :
   - `parseLayerFile` avec deux couches d'id `fontaines` → lève `file: duplicate layer "fontaines"`.
   - `featuresOf([FOUNTAINS, lignesOverlay], 'overlay', 'points')` → seulement l'objet de `FOUNTAINS`.
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/layers.test.ts`
   Expected: FAIL, module `../src/layers.ts` introuvable.
 
-- [ ] **Step 3: Implement `src/layers.ts`**
+- [x] **Step 3: Implement `src/layers.ts`**
 
   Validation complète de chaque objet (contrairement à `parseMapData`) : les fichiers sont versionnés et peuvent être édités à la main. Chaque coordonnée doit être un nombre fini, sinon `feature <i>: coordinates must be finite numbers`. Commentaire d'en-tête dans le style des autres modules : rôle du fichier, « Runs in the browser and in Node ».
 
-- [ ] **Step 4: Run the tests and watch them pass**
+- [x] **Step 4: Run the tests and watch them pass**
 
   Run: `node --test tests/layers.test.ts && npm run typecheck`
   Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add src/layers.ts tests/layers.test.ts
@@ -131,7 +131,7 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
   Avec `PLACES['amsterdam-centre']` et `KX = 67889.41512315086`, `KY = 111195.0802335329` :
   - `localProjection(place)(52.3712, 4.8936)` → `[0, 0]`.
@@ -139,21 +139,21 @@ Phase 2 :
   - `localProjection(place)(52.3712 + 0.04 / KY, 4.8936)` → `[0, 0]` (arrondi à 0,1 m).
   - `survey(place).half` → `1000`.
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/geo.test.ts`
   Expected: FAIL, module introuvable.
 
-- [ ] **Step 3: Move the projection**
+- [x] **Step 3: Move the projection**
 
   `convertOsm` projette avec `localProjection(place)` ; plus aucune constante de projection dans `scripts/osm.ts`. `tests/osm.test.ts` ne change pas.
 
-- [ ] **Step 4: Run the tests and watch them pass**
+- [x] **Step 4: Run the tests and watch them pass**
 
   Run: `npm test && npm run typecheck`
   Expected: PASS, dont `tests/osm.test.ts` inchangé.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add src/geo.ts scripts/osm.ts scripts/coastline.ts tests/geo.test.ts
@@ -177,7 +177,7 @@ Phase 2 :
 
 **Risk:** normal
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
   Place `amsterdam-centre`, helper `ll(x, y)` → `[lon, lat]` (ordre GeoJSON) construit avec `KX`/`KY` de la tâche 2. Spec de base : `{ title: 'Ponts', file: 'x.geojson', kind: 'points', role: 'overlay', attribution: '© Test', nameField: 'nom', categoryField: 'type' }`.
   - FeatureCollection d'un `Point` en `ll(10, 20)` avec `properties { nom: 'Magere Brug', type: 'pont', annee: 1934, ouvert: true, meta: { a: 1 } }` → `features` = `[{ g: [10, 20], n: 'Magere Brug', k: 'pont', p: { annee: 1934, ouvert: true } }]` ; `id`, `kind`, `role`, `attribution` copiés de la spec, `source` = `'x.geojson'`.
@@ -191,21 +191,21 @@ Phase 2 :
   - Propriété `nom` vide ou absente → pas de `n` ; aucune propriété restante → pas de `p`.
   - Le résultat passe `parseLayer` sans erreur.
 
-- [ ] **Step 2: Run the tests and watch them fail**
+- [x] **Step 2: Run the tests and watch them fail**
 
   Run: `node --test tests/geojson.test.ts`
   Expected: FAIL, module introuvable.
 
-- [ ] **Step 3: Implement the conversion and the command**
+- [x] **Step 3: Implement the conversion and the command**
 
   `scripts/build-layers.ts` suit `scripts/fetch-osm.ts` : en-tête d'usage, `fail` pour une place inconnue (`No such place: <id>. Known: …`) ou sans couche (`No layers for <id> (places/layers.ts)`), lecture de `spec.file` relatif à la racine du dépôt, écriture, puis `console.table` id → nombre d'objets. Fichiers source rangés par convention dans `layers/<place>/<id>.geojson`. `AGENTS.md` : ajouter `places/layers.ts`, `layers/`, et la commande.
 
-- [ ] **Step 4: Run the tests and watch them pass**
+- [x] **Step 4: Run the tests and watch them pass**
 
   Run: `npm test && npm run typecheck`
   Expected: PASS. Vérification manuelle : déclarer temporairement une couche pour `lisbonne-alfama` avec un GeoJSON de deux points dans le scratchpad, lancer `npm run layers -- lisbonne-alfama`, lire le fichier écrit, puis tout retirer (registre vide, aucun fichier dans `public/data/lisbonne-alfama/`).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
   ```bash
   git add scripts/geojson.ts scripts/build-layers.ts places/layers.ts package.json AGENTS.md tests/geojson.test.ts

@@ -33,7 +33,7 @@ export interface MountArgs<O> {
   /** The map's options in src/registry.ts, to merge over the style's defaults. */
   options: Partial<O>;
   shell: Shell;
-  /** The map's layers: the OpenStreetMap ones (osmLayers), then the external ones in the registry order. */
+  /** The map's layers: the OpenStreetMap ones, then the external ones in the registry order. */
   layers: readonly Layer[];
   /** Geographic evidence used by both the thematic drawing and its text. */
   topic?: TopicAnalysis;

@@ -2,7 +2,7 @@
 // conversion to local metres. Pure: no network, no file, no process, no console.
 // scripts/fetch-osm.ts downloads and writes; this module decides what the data holds.
 import { PLACES, type PlaceId } from '../places/index.ts';
-import { isRoadKind, type Feature, type Layer, type Line, type Ring } from '../src/layers.ts';
+import { isRoadKind, type Feature, type Layer, type LayerFile, type Line, type Ring } from '../src/layers.ts';
 import { isRecord, parsePlace, type Place } from '../src/place.ts';
 import { localProjection, survey } from '../src/geo.ts';
 import { endpointKey as key, seaPolygons } from './coastline.ts';
@@ -129,7 +129,7 @@ const isPark = (t: OsmTags): boolean =>
   /^(wood|scrub|grassland)$/.test(t.natural ?? '');
 
 /** The OpenStreetMap layers of a place from its Overpass answer: local metres, x east, y north, 0.1 m. */
-export function convertOsm(answer: OverpassAnswer, placeId: PlaceId, _source: { server: string; fetchedAt: string }): Layer[] {
+export function convertOsm(answer: OverpassAnswer, placeId: PlaceId): Layer[] {
   const place = PLACES[placeId];
   const { half } = survey(place);
 
@@ -183,4 +183,17 @@ export function convertOsm(answer: OverpassAnswer, placeId: PlaceId, _source: { 
     { ...base, id: 'water', role: 'water', kind: 'areas', features: water },
     { ...base, id: 'parks', role: 'parks', kind: 'areas', features: parks },
   ];
+}
+
+/** The file written to public/data/<place>/osm.json: the layers of the answer, the square and where they came from. */
+export function osmLayerFile(answer: OverpassAnswer, placeId: PlaceId, source: { server: string; fetchedAt: string }): LayerFile {
+  const { lat, lon, sizeKm } = PLACES[placeId];
+  const osmTimestamp = answer.osm3s?.timestamp_osm_base;
+  return {
+    square: { lat, lon, sizeKm },
+    fetchedAt: source.fetchedAt,
+    server: source.server,
+    ...(osmTimestamp && { osmTimestamp }),
+    layers: convertOsm(answer, placeId),
+  };
 }

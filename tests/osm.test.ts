@@ -3,13 +3,14 @@
 // The fixture's elements are known to exist, hence the `!` on array reads below.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { convertOsm, overpassQuery, parseCachedAnswer, parseOverpassAnswer } from '../scripts/osm.ts';
-import { featureCounts, featuresOf, isBridge, isTunnel, parseLayer, type Ring } from '../src/layers.ts';
+import { convertOsm, osmLayerFile, overpassQuery, parseCachedAnswer, parseOverpassAnswer } from '../scripts/osm.ts';
+import { featureCounts, featuresOf, isBridge, isTunnel, parseLayer, parseLayerFile, type Ring } from '../src/layers.ts';
+import { PLACES } from '../places/index.ts';
 import { ANSWER, PLACE, SOURCE } from './fixtures/overpass.ts';
 
 const HALF = 1000;
 
-const layers = convertOsm(ANSWER, 'amsterdam-centre', SOURCE);
+const layers = convertOsm(ANSWER, 'amsterdam-centre');
 const buildings = featuresOf(layers, 'buildings', 'areas');
 const roads = featuresOf(layers, 'roads', 'lines');
 const waterways = featuresOf(layers, 'waterways', 'lines');
@@ -108,6 +109,24 @@ test('the feature counts name each collection in French', () => {
     'plans d’eau': water.length,
     'parcs / espaces verts': 4,
   });
+});
+
+test('the layer file records the square, where the data came from and the OSM timestamp, in file order', () => {
+  const { lat, lon, sizeKm } = PLACES['amsterdam-centre'];
+  const file = osmLayerFile(ANSWER, 'amsterdam-centre', SOURCE);
+  assert.deepEqual(Object.keys(file), ['square', 'fetchedAt', 'server', 'osmTimestamp', 'layers']);
+  assert.deepEqual(file.square, { lat, lon, sizeKm });
+  assert.equal(file.fetchedAt, SOURCE.fetchedAt);
+  assert.equal(file.server, SOURCE.server);
+  assert.equal(file.osmTimestamp, '2026-11-01T00:00:00Z');
+  assert.deepEqual(file.layers, layers);
+  assert.deepEqual(parseLayerFile(JSON.parse(JSON.stringify(file)), 'osm.json'), file);
+});
+
+test('the layer file has no osmTimestamp key when the answer carries none', () => {
+  const { osm3s: _dropped, ...bare } = ANSWER;
+  const file = osmLayerFile(bare, 'amsterdam-centre', SOURCE);
+  assert.deepEqual(Object.keys(file), ['square', 'fetchedAt', 'server', 'layers']);
 });
 
 test('the query asks Overpass for everything a map draws in the place square', () => {

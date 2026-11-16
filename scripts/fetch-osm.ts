@@ -5,9 +5,9 @@
 // Usage: npm run fetch-data -- <place-id> [--offline]     (e.g. amsterdam-centre)
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dataPath, isPlaceId, PLACES } from '../places/index.ts';
-import { featureCounts, featuresOf, type LayerFile } from '../src/layers.ts';
+import { featureCounts, featuresOf } from '../src/layers.ts';
 import { fail, message } from './cli.ts';
-import { convertOsm, overpassQuery, parseCachedAnswer, parseOverpassAnswer, QUERY_TIMEOUT_S, type CachedAnswer, type OverpassAnswer } from './osm.ts';
+import { osmLayerFile, overpassQuery, parseCachedAnswer, parseOverpassAnswer, QUERY_TIMEOUT_S, type CachedAnswer, type OverpassAnswer } from './osm.ts';
 
 const args = process.argv.slice(2);
 const OFFLINE = args.includes('--offline');
@@ -81,19 +81,11 @@ async function source(): Promise<CachedAnswer> {
 
 const { server, fetchedAt, answer } = await source();
 if (OFFLINE) console.log(`Converting the answer cached on ${fetchedAt} (${server})`);
-const layers = convertOsm(answer, PLACE, { server, fetchedAt });
+const file = osmLayerFile(answer, PLACE, { server, fetchedAt });
+const layers = file.layers;
 
 const out = new URL(`../public/${dataPath(PLACE)}`, import.meta.url);
 await mkdir(new URL('.', out), { recursive: true });
-const { lat, lon, sizeKm } = CITY;
-const osmTimestamp = answer.osm3s?.timestamp_osm_base;
-const file: LayerFile = {
-  square: { lat, lon, sizeKm },
-  fetchedAt,
-  server,
-  ...(osmTimestamp && { osmTimestamp }),
-  layers,
-};
 await writeFile(out, JSON.stringify(file));
 
 console.log(`\n${CITY.name} — ${CITY.district} (${CITY.sizeKm} km × ${CITY.sizeKm} km)`);

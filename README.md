@@ -17,7 +17,7 @@ Node 24 ou plus récent : les scripts `.ts` tournent directement avec `node`, qu
 
 ```
 places/index.ts           les lieux : nom, quartier, latitude, longitude, taille de la zone
-public/data/<lieu>.json   ses données OpenStreetMap, téléchargées une fois
+public/data/<lieu>/osm.json  ses couches OpenStreetMap, téléchargées une fois
 public/vignettes/<langue>/<id>.webp  image traduite de la carte dans la galerie
 src/registry.ts           la liste des cartes : un lieu × un style (+ options)
 src/catalogue.ts          chaque carte résolue par langue : titre, lieu, style, chemins
@@ -25,10 +25,10 @@ src/i18n/                 dictionnaires typés, formats et contrôle des traduct
 src/styles/<style>/       un style : il dessine toute la page ; src/styles/index.ts les déclare
 src/toolkit/              boîte à outils facultative : navigation, projection, noms, mise en page type…
 src/map-page.ts, shell.ts page commune : charge les données et le style, lien retour, attribution
-src/data.ts, place.ts     types des données et des lieux, partagés avec les scripts Node
+src/layers.ts, place.ts   types des couches et des lieux, partagés avec les scripts Node
 src/gallery/              la page d'accueil : une bande verticale par carte
 scripts/fetch-osm.ts      téléchargement des données d'un lieu
-scripts/osm.ts            conversion d'une réponse Overpass en données de carte (pure, testée)
+scripts/osm.ts            conversion d'une réponse Overpass en couches de carte (pure, testée)
 scripts/vignettes.ts      image de chaque carte pour la galerie (Chrome headless)
 scripts/pages.ts          HTML traduit des galeries et des cartes
 ```

@@ -8,7 +8,7 @@ import { MAPS, type MapEntry, type MapEntryOf } from './registry.ts';
 import type { StyleDef } from './styles/contract.ts';
 import { isStyleKey, STYLES, type StyleKey, type StyleOptions } from './styles/index.ts';
 import { DEFAULT_LOCALE, LOCALES, messages, type Locale } from './i18n/index.ts';
-import { parseLayerFile, type Square } from './layers.ts';
+import { OSM_ROLES, parseLayerFile, type LayerFile, type Square } from './layers.ts';
 import { isTopicId, type TopicId } from './topics.ts';
 
 export interface CatalogueMapOf<K extends StyleKey> {
@@ -111,7 +111,15 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
     const refetch = `npm run fetch-data -- ${m.placeId}`;
     const data = readData(m.paths.data);
     if (data === undefined) return `no data for ${m.placeId} (${m.id}); run ${refetch}`;
-    const osm = parseLayerFile(data, m.paths.data); // Throws a message naming the file.
+    let osm: LayerFile;
+    try {
+      osm = parseLayerFile(data, m.paths.data);
+    } catch (err) {
+      throw new Error(`${err instanceof Error ? err.message : String(err)}; run ${refetch}`); // The message names the file.
+    }
+    if (osm.layers.length !== OSM_ROLES.length || !osm.layers.every((l, i) => l.role === OSM_ROLES[i] && l.id === l.role)) {
+      return `${m.paths.data} must hold the layers ${OSM_ROLES.join(', ')} (${m.id}); run ${refetch}`;
+    }
     const stale = staleSquare(osm.square, place);
     if (stale) return `data for ${m.placeId} is out of date (${m.id}): ${stale}; run ${refetch}`;
     if (osm.fetchedAt === undefined) return `${m.paths.data} has no fetchedAt (${m.id}); run ${refetch}`;
@@ -120,10 +128,11 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
       const file = readData(path);
       if (file === undefined) return `no data for layer "${id}" of ${m.placeId} (${m.id}); run ${relayer}`;
       const { square, layers: parsed } = parseLayerFile(file, path);
+      if (parsed.length !== 1) return `layer "${id}" of ${m.placeId} must hold exactly one layer (${m.id}); run ${relayer}`;
       const declared = layers[m.placeId]?.[id];
       const found = parsed[0];
       if (declared && found) {
-        for (const k of ['id', 'kind', 'attribution'] as const) {
+        for (const k of ['id', 'kind', 'role', 'attribution'] as const) {
           const want = k === 'id' ? id : declared[k];
           if (found[k] !== want) return `layer "${id}" of ${m.placeId} does not match places/layers.ts (${m.id}): ${k} differs; run ${relayer}`;
         }

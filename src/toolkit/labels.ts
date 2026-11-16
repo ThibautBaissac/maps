@@ -1,6 +1,6 @@
 // Street and waterway name placement along their lines (style-independent).
 // Styles decide which names, sizes and inks; they also draw the returned glyphs.
-import { featuresOf, isTunnel, type Layer, type Line, type RoadKind } from '../layers.ts';
+import { featuresOf, isRoadKind, isTunnel, type Layer, type Line, type RoadKind } from '../layers.ts';
 import type { Point, Rect } from './geometry.ts';
 import type { Projector } from './projection.ts';
 
@@ -103,7 +103,7 @@ function group<T extends Named>(items: readonly T[], weightOf: (it: T) => number
 }
 
 export function prepareLabels(layers: readonly Layer[]): Labels {
-  const streets = group(featuresOf(layers, 'roads', 'lines').filter((r) => !isTunnel(r)), (r) => STREET_WEIGHT[r.k as RoadKind] ?? 0).slice(0, 90);
+  const streets = group(featuresOf(layers, 'roads', 'lines').filter((r) => !isTunnel(r)), (r) => (r.k && isRoadKind(r.k) ? STREET_WEIGHT[r.k] ?? 0 : 0)).slice(0, 90);
   const canals = group(featuresOf(layers, 'waterways', 'lines').filter((w) => !isTunnel(w)), (w) => (/^(canal|river|fairway)$/.test(w.k ?? '') ? 1 : 0)).slice(0, 40);
   return { streets, canals };
 }

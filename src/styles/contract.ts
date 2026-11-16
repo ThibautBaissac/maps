@@ -2,25 +2,18 @@
 import type { Shell } from '../shell.ts';
 import type { Viewport } from '../toolkit/viewport.ts';
 import type { Locale } from '../i18n/index.ts';
-import type { BBox, Layer } from '../layers.ts';
+import type { BBox, Layer, Survey } from '../layers.ts';
 import type { TopicAnalysis } from '../topics.ts';
 
 /** What a style prints about its map. */
-export interface MountMeta {
+export interface MountMeta extends Survey {
   /** The registry title, or the place name (src/catalogue.ts). */
   title: string;
   /** The district, in the language of the page. */
   district: string;
   /** Key of places/index.ts. */
   place: string;
-  lat: number;
-  lon: number;
-  sizeKm: number;
-  /** Metres from the centre to the edge of the square. */
-  half: number;
   bbox: BBox;
-  /** ISO date of the OpenStreetMap download. */
-  fetchedAt: string;
   /** Credit of the OpenStreetMap layers. */
   attribution: string;
 }

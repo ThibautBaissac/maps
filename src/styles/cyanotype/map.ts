@@ -7,12 +7,12 @@ import { isKeyOf, recordOf, typedKeys, type Point } from '../../toolkit/geometry
 import { addLine, addRings, withBox, type Projector, type WithBox } from '../../toolkit/projection.ts';
 import type { CyanotypeOptions } from './defaults.ts';
 
-/** A road as the map draws it: highway kind, polyline, name, bridge and tunnel flags. */
-interface Road { k: RoadKind; p: Line; n?: string; b?: 1; u?: 1 }
+/** A road as the map draws it: highway kind, polyline, bridge and tunnel flags. */
+interface Road { k: RoadKind; p: Line; b?: 1; u?: 1 }
 /** A stream, canal or other waterway; `u` marks a tunnel or culvert. */
-interface Waterway { k: string; p: Line; n?: string; u?: 1 }
+interface Waterway { k: string; p: Line; u?: 1 }
 /** A water area: rings, outer ones first, then holes. */
-interface Water { r: Ring[]; n?: string }
+interface Water { r: Ring[] }
 interface Park { k: string; r: Ring[] }
 
 // Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)
@@ -57,7 +57,7 @@ export function prepareMap(layers: readonly Layer[], half: number): PreparedMap 
   const steps: WithBox<Road>[] = [];
   for (const f of featuresOf(layers, 'roads', 'lines')) {
     if (!f.k || !isRoadKind(f.k)) continue;
-    const r: Road = { k: f.k, p: f.g, ...(f.n !== undefined && { n: f.n }), ...(isBridge(f) && { b: 1 as const }), ...(isTunnel(f) && { u: 1 as const }) };
+    const r: Road = { k: f.k, p: f.g, ...(isBridge(f) && { b: 1 as const }), ...(isTunnel(f) && { u: 1 as const }) };
     const it = withBox(r, [r.p]);
     if (isKeyOf(streets, r.k)) streets[r.k].push(it);
     else if (isKeyOf(paths, r.k)) paths[r.k].push(it);
@@ -65,10 +65,10 @@ export function prepareMap(layers: readonly Layer[], half: number): PreparedMap 
   }
   return {
     buildings: featuresOf(layers, 'buildings', 'areas').map((f) => withBox({ r: f.g }, f.g)),
-    water: featuresOf(layers, 'water', 'areas').map((f) => withBox({ r: f.g, ...(f.n !== undefined && { n: f.n }) }, f.g)),
+    water: featuresOf(layers, 'water', 'areas').map((f) => withBox({ r: f.g }, f.g)),
     parks: featuresOf(layers, 'parks', 'areas').map((f) => withBox({ k: f.k ?? '', r: f.g }, f.g)),
     streams: featuresOf(layers, 'waterways', 'lines').filter((f) => !isTunnel(f))
-      .map((f) => withBox({ k: f.k ?? '', p: f.g, ...(f.n !== undefined && { n: f.n }) }, [f.g])),
+      .map((f) => withBox({ k: f.k ?? '', p: f.g }, [f.g])),
     streets, paths, steps,
     half,
   };

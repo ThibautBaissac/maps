@@ -3,9 +3,8 @@
 import { bodyData, element } from './dom.ts';
 import { describeMap } from './map-description.ts';
 import { findMap, type CatalogueMapOf } from './catalogue.ts';
-import { survey as surveyOf } from './geo.ts';
-import { parseLayerFile, type Layer, type Survey } from './layers.ts';
-import type { MountMeta } from './styles/contract.ts';
+import { parseLayerFile, type Layer } from './layers.ts';
+import { mountMetaOf } from './map-meta.ts';
 import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
@@ -26,7 +25,7 @@ declare global {
 }
 
 async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHandle> {
-  const { styleDef: style, options, title } = map;
+  const { styleDef: style, options } = map;
 
   const shell = createShell({
     label: bodyData('label'),
@@ -50,12 +49,7 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   const layers: Layer[] = [...osm.layers, ...layerSets.flatMap((set) => set.layers)];
   const overlays = layerSets.flatMap((set, i) => set.layers.map((layer) => ({ title: map.layers[i]?.title ?? set.id, layer })));
 
-  const { half, bbox } = surveyOf(map.place);
-  const { lat, lon, sizeKm } = map.place;
-  const fetchedAt = osm.fetchedAt ?? '';
-  const survey: Survey = { half, lat, lon, sizeKm, fetchedAt };
-  const attribution = osm.layers[0]?.attribution ?? '';
-  const meta: MountMeta = { title, district: map.place.district, place: map.placeId, lat, lon, sizeKm, half, bbox, fetchedAt, attribution };
+  const { survey, meta } = mountMetaOf(map, osm);
   const topic = map.topic ? analyseTopic(survey, layers, map.topic) : undefined;
   describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), survey, layers, meta, style.legend, locale, topic, overlays);
   const dialog = element('#map-description', HTMLDialogElement);

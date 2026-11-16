@@ -1,20 +1,16 @@
 // The committed OpenStreetMap layer files (public/data/<place>/osm.json), as the tests read them.
 import { readFileSync } from 'node:fs';
-import { survey } from '../src/geo.ts';
-import { parseLayerFile, type Feature, type Layer, type Line, type Ring, type Survey } from '../src/layers.ts';
+import { parseLayerFile, type Feature, type Layer, type Line, type Ring } from '../src/layers.ts';
+import { mountMetaOf } from '../src/map-meta.ts';
 import type { MountMeta } from '../src/styles/contract.ts';
 import { PLACES, type PlaceId } from '../places/index.ts';
 
 export function readOsm(id: PlaceId) {
   const file = parseLayerFile(JSON.parse(readFileSync(new URL(`../public/data/${id}/osm.json`, import.meta.url), 'utf8')), `${id}/osm.json`);
-  const fetchedAt = file.fetchedAt ?? '';
-  const { half, bbox } = survey(file.square);
-  const attribution = file.layers[0]?.attribution ?? '';
-  const surveyed: Survey = { half, ...file.square, fetchedAt };
   const place = PLACES[id];
   /** What a style prints about the map, as src/map-page.ts builds it. */
-  const mountMeta = (title: string): MountMeta => ({ title, district: place.district, place: id, ...file.square, half, bbox, fetchedAt, attribution });
-  return { file, layers: file.layers as Layer[], place, survey: surveyed, mountMeta };
+  const mountMeta = (title: string): MountMeta => mountMetaOf({ title, placeId: id, place }, file).meta;
+  return { file, layers: file.layers as Layer[], place, survey: mountMetaOf({ title: '', placeId: id, place }, file).survey, mountMeta };
 }
 
 /** The five OpenStreetMap layers, in the order the styles draw them, from the objects a test needs. */

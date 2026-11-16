@@ -32,10 +32,10 @@ export type LayerKind = (typeof LAYER_KINDS)[number];
  * What a layer is for: an overlay is drawn on top of the base map; the other roles are the
  * OpenStreetMap layers, whose id is their role.
  */
-export const LAYER_ROLES = ['buildings', 'roads', 'waterways', 'water', 'parks', 'overlay'] as const;
-export type LayerRole = (typeof LAYER_ROLES)[number];
 export const OSM_ROLES = ['buildings', 'roads', 'waterways', 'water', 'parks'] as const;
 export type OsmRole = (typeof OSM_ROLES)[number];
+export const LAYER_ROLES = [...OSM_ROLES, 'overlay'] as const;
+export type LayerRole = (typeof LAYER_ROLES)[number];
 const isOsmRole = (v: unknown): v is OsmRole => (OSM_ROLES as readonly unknown[]).includes(v);
 
 /** The geometry of one object: a point, a flat polyline, or rings (outer one first, then holes). */

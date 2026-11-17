@@ -19,6 +19,7 @@ Node 24 ou plus récent : les scripts `.ts` tournent directement avec `node`, qu
 places/index.ts           les lieux : nom, quartier, latitude, longitude, taille de la zone
 public/data/<lieu>/osm.json  ses couches OpenStreetMap, téléchargées une fois
 public/vignettes/<langue>/<id>.webp  image traduite de la carte dans la galerie
+public/vignettes/<langue>/<id>.jpg   image 1200×630 d'un lien partagé (Open Graph)
 src/registry.ts           la liste des cartes : un lieu × un style (+ options)
 src/catalogue.ts          chaque carte résolue par langue : titre, lieu, style, chemins
 src/i18n/                 dictionnaires typés, formats et contrôle des traductions
@@ -29,7 +30,7 @@ src/layers.ts, place.ts   types des couches et des lieux, partagés avec les scr
 src/gallery/              la page d'accueil : une bande verticale par carte
 scripts/fetch-osm.ts      téléchargement des données d'un lieu
 scripts/osm.ts            conversion d'une réponse Overpass en couches de carte (pure, testée)
-scripts/vignettes.ts      image de chaque carte pour la galerie (Chrome headless)
+scripts/vignettes.ts      images de chaque carte, galerie et partage (Chrome headless)
 scripts/pages.ts          HTML traduit des galeries et des cartes
 ```
 
@@ -47,7 +48,7 @@ Avant de réaliser la carte, l’agent examine les données, recommande un sujet
    { id: 'lisbonne-riso', place: 'lisbonne-alfama', style: 'riso', topic: 'steps', options: { inkA: '#00A95C' } },
    ```
 
-4. Prendre ses images pour la galerie, serveur de développement lancé : `npm run vignettes -- <id>`. Le script ouvre chaque version dans Chrome headless (variable `CHROME` si Chrome n'est pas trouvé) et écrit `public/vignettes/<langue>/<id>.webp`, à commiter. `--locale es` limite la capture à une langue. Sans image, la bande de la galerie garde le papier du style ; le build le signale. À refaire quand le style, ses textes ou les données changent.
+4. Prendre ses images pour la galerie, serveur de développement lancé : `npm run vignettes -- <id>`. Le script ouvre chaque version dans Chrome headless (variable `CHROME` si Chrome n'est pas trouvé) et écrit `public/vignettes/<langue>/<id>.webp` (galerie) et `<id>.jpg` (aperçu d'un lien partagé), à commiter. `--locale es` limite la capture à une langue. Sans image, la bande de la galerie garde le papier du style ; le build le signale. À refaire quand le style, ses textes ou les données changent.
 
 Les options possibles d'un style sont dans son fichier `defaults.ts` ; le type-checking refuse une option inconnue ou un style inexistant. Pour créer un style, voir [`src/styles/README.md`](src/styles/README.md) : contrat, format des données, boîte à outils.
 
@@ -65,7 +66,7 @@ Pour ajouter une langue, compléter [`src/i18n/types.ts`](src/i18n/types.ts) et 
 
 Le workflow `.github/workflows/deploy.yml` construit et publie le site à chaque push sur `main`. Dans le dépôt GitHub : Settings → Pages → Source : « GitHub Actions ». Le chemin de base (`/<nom-du-dépôt>/`) est fixé automatiquement ; en local il vaut `/maps/` (variable `BASE_PATH`).
 
-La construction sur GitHub Actions déduit l’adresse publique du dépôt pour les liens canoniques et `hreflang`. Pour un domaine personnalisé, fournir `SITE_URL` avec l’adresse complète du site, chemin inclus, par exemple `https://exemple.fr/maps/`. La prévisualisation locale omet ces liens tant qu’aucune adresse publique ne figure dans la configuration de [`vite.config.ts`](vite.config.ts).
+La construction sur GitHub Actions déduit l’adresse publique du dépôt pour les liens canoniques, `hreflang`, les balises Open Graph et `sitemap.xml`. GitHub Pages ne lit pas de `robots.txt` sous `/maps/` : soumettre `sitemap.xml` dans Google Search Console. Pour un domaine personnalisé, fournir `SITE_URL` avec l’adresse complète du site, chemin inclus, par exemple `https://exemple.fr/maps/`. La prévisualisation locale omet ces liens et le sitemap tant qu’aucune adresse publique ne figure dans la configuration de [`vite.config.ts`](vite.config.ts).
 
 ## Données et licences
 

@@ -4,7 +4,7 @@
 
 The application is a static TypeScript 7 site built with Vite. Browser code lives in `src/`. Shared map rendering helpers belong in `src/toolkit/`; visual implementations belong in `src/styles/<style>/`; translations belong in `src/i18n/`, where `topics.<subject>` holds a subject's facts and method and `maps.<map-id>` holds the question and intro written in that map's voice. Each map's voice is defined in `voices/<map-id>.md`. Keep place metadata in `places/index.ts`, the external layers of each place in `places/layers.ts`, and map registrations in `src/registry.ts`.
 
-Node scripts live in `scripts/`. Tests live in `tests/` and mirror the domain they cover, such as `tests/catalogue.test.ts`. Store committed OpenStreetMap extracts and converted layer files in `public/data/`, GeoJSON layer sources in `layers/<place>/<id>.geojson`, local fonts in `public/fonts/`, and gallery images in `public/vignettes/<locale>/`. Vite generates localized page directories during development and build; do not commit them.
+Node scripts live in `scripts/`. Tests live in `tests/` and mirror the domain they cover, such as `tests/catalogue.test.ts`. Store committed OpenStreetMap extracts and converted layer files in `public/data/`, GeoJSON layer sources in `layers/<place>/<id>.geojson`, local fonts in `public/fonts/`, and gallery and link-preview images in `public/vignettes/<locale>/`. Vite generates localized page directories during development and build; do not commit them.
 
 ## Build, Test, and Development Commands
 
@@ -15,7 +15,7 @@ Node scripts live in `scripts/`. Tests live in `tests/` and mirror the domain th
 - `npm run build`: type-check, validate translations and map data, then create `dist/`.
 - `npm run fetch-data -- <place-id>`: download OpenStreetMap data for a registered place and write its layer file, `public/data/<place-id>/osm.json`.
 - `npm run layers -- <place-id>`: convert the GeoJSON sources declared in `places/layers.ts` into layer files in `public/data/<place-id>/`.
-- `npm run vignettes -- <map-id>`: regenerate localized gallery images while the development server runs.
+- `npm run vignettes -- <map-id>`: regenerate localized gallery and link-preview images while the development server runs.
 
 ## Coding Style & Naming Conventions
 

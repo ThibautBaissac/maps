@@ -8,7 +8,7 @@ export const es: Messages = {
   gallery: {
     title: 'Mapas ilustrados',
     heading: ['Elige un barrio.', 'Piérdete en él.'],
-    description: 'Planos de barrios dibujados con código en distintos estilos gráficos.',
+    description: (places) => `Planos de barrios dibujados con código, cada uno con su estilo gráfico: ${places}.`,
     maps: 'Mapas',
     open: 'Abrir el mapa',
     filters: 'Filtrar los mapas',

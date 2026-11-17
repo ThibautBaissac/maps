@@ -130,7 +130,7 @@ Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n
    - chaque ligne du preset respectée, ou l'écart justifié ;
    - rendu net assez rapide : voir les budgets et la façon de mesurer dans `references/new-style.md`. Un chronomètre autour du seul appel de rendu ne mesure pas le dessin réel.
 6. Corrige, puis reprends des captures. Recommence jusqu'à un résultat dont tu serais fier en affiche.
-7. Prends l'image de la galerie : `npm run vignettes -- <id>` (le serveur de développement doit tourner ; ajoute `--base http://localhost:<port>/maps/` s'il n'est pas sur 5173). Ouvre `public/vignettes/<id>.webp` : le cadrage doit montrer le cœur du quartier. Refais-la après toute retouche du style.
+7. Prends l'image de la galerie : `npm run vignettes -- <id>` (le serveur de développement doit tourner ; ajoute `--base http://localhost:<port>/maps/` s'il n'est pas sur 5173). Ouvre `public/vignettes/<langue>/<id>.webp` et `<id>.jpg` (l'aperçu d'un lien partagé) : les deux cadrages doivent montrer le cœur du quartier. Refais-la après toute retouche du style.
 8. `npm run build` (types compris) doit passer, sans avertissement d'image manquante. Vérifie aussi la bande de la carte dans la galerie (`/maps/`), au survol et en largeur téléphone.
 
 À la fin, rends au viewport sa taille normale (`resize_window` avec le preset `desktop`).

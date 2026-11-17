@@ -22,7 +22,7 @@ test('Vite adds the deployment base to gallery images exactly once in developmen
 test('a static map page carries its language, translated controls, language links and canonical URL under the deployment base', () => {
   const html = pageHtml(findMap('lisbonne-cyanotype', 'es')!, 'es', '/atlas/', 'https://example.test/atlas/');
   assert.match(html, /<html lang="es">/);
-  assert.match(html, /<title>Lisboa · Alfama/);
+  assert.match(html, /<title>[^<]* — Lisboa, Alfama<\/title>/);
   assert.match(html, /aria-label="Ampliar el plano \(\+\)"/);
   assert.match(html, /href="\/atlas\/es\/">← Todos los mapas/);
   assert.match(html, /href="\/atlas\/en\/cartes\/lisbonne-cyanotype\/" lang="en" hreflang="en"/);

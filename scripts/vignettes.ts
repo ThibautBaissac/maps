@@ -1,5 +1,5 @@
-// Takes each localized map's gallery picture: public/vignettes/<locale>/<id>.webp.
-// A portrait crop
+// Takes each localized map's pictures: public/vignettes/<locale>/<id>.webp, the gallery's
+// portrait crop, and <id>.jpg, the 1200×630 picture of a shared link. Both are
 // drawn by the map page itself (src/vignette.ts) in headless Chrome. Needs a running
 // server: `npm run dev` (default address below) or `npm run preview -- --port 5173`.
 // Usage: npm run vignettes [-- <map-id>…] [--locale fr|en|es] [--base http://localhost:5173/maps/]
@@ -58,11 +58,14 @@ for (const locale of locales) for (const map of maps) {
     '--window-size=1600,1000', '--force-device-scale-factor=2',
     '--virtual-time-budget=30000', '--dump-dom', url,
   ], { maxBuffer: 256 * 1024 * 1024 });
-  const src = /<output[^>]*id="vignette"[^>]*data-src="data:image\/webp;base64,([^"]+)"/.exec(stdout)?.[1];
-  if (!src) fail(`${id}: no picture in the page (${url}); open it in a browser and read the console.`);
-  const file = new URL(paths.vignette, publicDir);
-  const bytes = Buffer.from(src, 'base64');
-  await mkdir(new URL('.', file), { recursive: true });
-  await writeFile(file, bytes);
-  console.log(`public/${paths.vignette}  ${(bytes.length / 1024).toFixed(0)} Ko`);
+  const output = /<output[^>]*id="vignette"[^>]*>/.exec(stdout)?.[0] ?? '';
+  for (const [attr, type, path] of [['data-src', 'webp', paths.vignette], ['data-share', 'jpeg', paths.share]] as const) {
+    const src = new RegExp(`${attr}="data:image/${type};base64,([^"]+)"`).exec(output)?.[1];
+    if (!src) fail(`${id}: no ${attr} picture in the page (${url}); open it in a browser and read the console.`);
+    const file = new URL(path, publicDir);
+    const bytes = Buffer.from(src, 'base64');
+    await mkdir(new URL('.', file), { recursive: true });
+    await writeFile(file, bytes);
+    console.log(`public/${path}  ${(bytes.length / 1024).toFixed(0)} Ko`);
+  }
 }

@@ -22,6 +22,13 @@ export const localized = (text: LocalizedText, locale: Locale): string => typeof
 export const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
 const TAGS: Record<Locale, string> = { fr: 'fr-FR', en: 'en-GB', es: 'es-ES' };
 
+/** Open Graph locale, as fr_FR. */
+export const ogLocale = (locale: Locale): string => TAGS[locale].replace('-', '_');
+
+/** "a, b and c" in the language. */
+export const formatList = (locale: Locale, items: readonly string[]): string =>
+  new Intl.ListFormat(TAGS[locale], { type: 'conjunction' }).format(items);
+
 export function formatNumber(locale: Locale, value: number, options: Intl.NumberFormatOptions = {}): string {
   return new Intl.NumberFormat(TAGS[locale], { maximumFractionDigits: 4, ...options }).format(value);
 }

@@ -26,7 +26,8 @@ export interface CatalogueMapOf<K extends StyleKey> {
   /** Credits of the external layers, without duplicates, in the registry order. */
   attributions: readonly string[];
   /** Relative to the site root, no leading slash: prefix BASE_URL, or public/ on disk. */
-  paths: { page: string; data: string; vignette: string };
+  /** vignette: the gallery's portrait picture; share: the 1200×630 picture of a shared link. */
+  paths: { page: string; data: string; vignette: string; share: string };
 }
 
 /** A resolved map, its options typed by its style. */
@@ -55,7 +56,7 @@ function resolve<K extends StyleKey>(m: MapEntryOf<K>, locale: Locale, registry:
     options: m.options ?? {},
     layers: sources.map(({ id, source }) => ({ id, title: typeof source.title === 'string' ? source.title : source.title[locale], path: layerPath(m.place, id) })),
     attributions: [...new Set(sources.map(({ source }) => localized(source.attribution, locale)))],
-    paths: { page: `${locale}/${PAGES_DIR}/${m.id}/`, data: dataPath(m.place), vignette: `vignettes/${locale}/${m.id}.webp` },
+    paths: { page: `${locale}/${PAGES_DIR}/${m.id}/`, data: dataPath(m.place), vignette: `vignettes/${locale}/${m.id}.webp`, share: `vignettes/${locale}/${m.id}.jpg` },
   };
 }
 

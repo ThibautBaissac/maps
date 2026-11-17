@@ -8,7 +8,7 @@ export const en: Messages = {
   gallery: {
     title: 'Illustrated maps',
     heading: ['Choose a neighbourhood.', 'Get lost in it.'],
-    description: 'Neighbourhood maps drawn with code in different graphic styles.',
+    description: (places) => `Neighbourhood maps drawn with code, each in its own graphic style: ${places}.`,
     maps: 'Maps',
     open: 'Open map',
     filters: 'Filter the maps',

@@ -28,12 +28,13 @@ test('a map is titled after its place unless the registry gives a title', () => 
   assert.equal(titled?.title, 'Mon quartier');
 });
 
-test('a map knows its page, data and vignette paths', () => {
+test('a map knows its page, data, gallery and share picture paths', () => {
   const [m] = catalogueOf([entry('amsterdam-test')]);
   assert.deepEqual(m?.paths, {
     page: 'fr/cartes/amsterdam-test/',
     data: 'data/amsterdam-centre/osm.json',
     vignette: 'vignettes/fr/amsterdam-test.webp',
+    share: 'vignettes/fr/amsterdam-test.jpg',
   });
 });
 

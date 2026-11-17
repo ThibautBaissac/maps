@@ -4,7 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { CATALOGUE, catalogueProblems, mapsForLocale, PAGES_DIR } from './src/catalogue.ts';
 import { DEFAULT_LOCALE, LOCALES, translationProblems } from './src/i18n/index.ts';
 
-import { galleryHtml, pageHtml } from './scripts/pages.ts';
+import { galleryHtml, pageHtml, sitemapXml } from './scripts/pages.ts';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 const configuredBase = process.env['BASE_PATH'] ?? '/maps/';
@@ -24,6 +24,9 @@ function writePage(path: string, html: string): string {
 // The registry is type-checked; whether each map's data exists and matches its place
 // is only known here (src/catalogue.ts). A problem stops the build; in development the
 // map is skipped with a warning so the others keep working while data downloads.
+/** Maps whose pages were written by the last generatePages: the sitemap lists them. */
+let published: string[] = [];
+
 function generatePages(strict: boolean): Record<string, string> {
   const problems = translationProblems();
   if (problems.length) throw new Error(`translations:\n${problems.join('\n')}`);
@@ -40,12 +43,13 @@ function generatePages(strict: boolean): Record<string, string> {
     input[locale] = writePage(`${locale}/`, galleryHtml(locale, base, siteUrl));
     for (const m of mapsForLocale(locale)) {
       if (skipped.has(m.id)) continue;
-      if (!existsSync(`${root}public/${m.paths.vignette}`)) {
-        console.warn(`\x1b[33m[registry] ${m.id} (${locale}): no gallery picture; run npm run vignettes -- ${m.id} with the dev server up\x1b[0m`);
+      if (!existsSync(`${root}public/${m.paths.vignette}`) || !existsSync(`${root}public/${m.paths.share}`)) {
+        console.warn(`\x1b[33m[registry] ${m.id} (${locale}): no gallery or share picture; run npm run vignettes -- ${m.id} with the dev server up\x1b[0m`);
       }
       input[`${locale}-${m.id}`] = writePage(m.paths.page, pageHtml(m, locale, base, siteUrl));
     }
   }
+  published = CATALOGUE.map((m) => m.id).filter((id) => !skipped.has(id));
   // Keep existing French URLs usable; their canonical URLs point to /fr/.
   for (const m of CATALOGUE) {
     if (!skipped.has(m.id)) input[m.id] = writePage(`${PAGES_DIR}/${m.id}/`, pageHtml(m, DEFAULT_LOCALE, base, siteUrl));
@@ -73,6 +77,15 @@ const watchData = (): Plugin => ({
   },
 });
 
+// The sitemap needs absolute URLs: without a public origin (local build) there is none.
+const sitemap = (): Plugin => ({
+  name: 'sitemap',
+  apply: 'build',
+  generateBundle() {
+    if (siteUrl) this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemapXml(siteUrl, published) });
+  },
+});
+
 const rootGallery = (): Plugin => ({
   name: 'root-gallery',
   transformIndexHtml: {
@@ -84,6 +97,6 @@ const rootGallery = (): Plugin => ({
 export default defineConfig(({ command }) => ({
   // GitHub Pages serves the site under /<repository>/.
   base,
-  plugins: [watchData(), rootGallery()],
+  plugins: [watchData(), rootGallery(), sitemap()],
   build: { rolldownOptions: { input: generatePages(command === 'build') } },
 }));

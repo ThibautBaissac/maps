@@ -29,7 +29,8 @@ export interface Messages {
   gallery: {
     title: string;
     heading: readonly [string, string];
-    description: string;
+    /** The gallery's meta description; `places` lists its districts and cities. */
+    description: (places: string) => string;
     maps: string;
     open: string;
     /** Name of the group of filter buttons. */

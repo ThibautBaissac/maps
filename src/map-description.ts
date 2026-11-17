@@ -1,5 +1,5 @@
-import { featureCount, formatDate, formatNumber, messages, type Locale } from './i18n/index.ts';
-import { featuresOf, isTunnel, type Layer, type Line, type Survey } from './layers.ts';
+import { featureCount, formatDate, formatNumber, messages, pluralText, type Locale } from './i18n/index.ts';
+import { featuresOf, isTunnel, type Feature as LayerFeature, type Layer, type Line, type Survey } from './layers.ts';
 import type { TopicAnalysis } from './topics.ts';
 import { topicContent } from './topic-content.ts';
 
@@ -30,6 +30,14 @@ function namedFeatures(features: readonly Feature[], half: number, locale: Local
   return list;
 }
 
+/** The name of an overlay object, translated for the places of the cholera subject. */
+function overlayName(f: LayerFeature<unknown>, locale: Locale): string | undefined {
+  const c = messages(locale).topic.cholera;
+  if (f.k === 'workhouse' || f.k === 'brewery') return c[f.k];
+  if (f.k === 'broad-street') return c.broadPump;
+  return f.n;
+}
+
 /** Whole-survey description, independent of the visual zoom and the drawing technique. */
 export function describeMap(container: HTMLElement, summary: HTMLElement, survey: Survey, layers: readonly Layer[], display: { title: string; district: string }, legend: readonly string[], locale: Locale, topic?: TopicAnalysis, overlays: readonly { title: string; layer: Layer }[] = []): void {
   const copy = messages(locale).description;
@@ -47,9 +55,9 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, survey
     const content = topicContent(survey, topic, locale);
     summary.textContent = `${content.subject.question} ${content.value} ${content.subject.metric}. ${content.concentration} ${overview} ${copy.help}`;
     for (const text of [content.subject.question, content.subject.intro, `${content.value} ${content.subject.metric}.`, content.concentration,
-      ...content.references.map((ref) => `${ref.number}. ${ref.name} : ${ref.detail}`), content.subject.legend, content.source, content.subject.method, content.subject.limits]) paragraph(text);
+      ...content.references.map((ref) => content.copy.referenceLine(String(ref.number), ref.name, ref.detail)), content.subject.legend, content.source, content.subject.method, content.subject.limits]) paragraph(text);
   }
-  paragraph(copy.centre(fmt(survey.lat), fmt(survey.lon), formatDate(locale, survey.fetchedAt)));
+  paragraph(copy.centre(fmt(survey.lat), fmt(survey.lon), formatDate(locale, survey.osmDate)));
   paragraph(copy.counts(featureCount(locale, 0, featuresOf(layers, 'buildings', 'areas').length), featureCount(locale, 1, featuresOf(layers, 'roads', 'lines').length), featureCount(locale, 2, featuresOf(layers, 'parks', 'areas').length), featureCount(locale, 3, featuresOf(layers, 'water', 'areas').length)));
   const heading = document.createElement('h2');
   heading.textContent = copy.legend;
@@ -68,19 +76,23 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, survey
       ...featuresOf(layers, 'water', 'areas').map((w): Feature => [w.n, w.g]),
     ]],
   ];
+  // Overlays whose objects carry no names are counted rather than reported as empty.
+  const unnamed = new Map<string, number>();
   for (const { title, layer } of overlays) {
-    sections.push([title, layer.features.map((f): Feature => [f.n, layer.kind === 'areas' ? f.g as Line[] : [f.g as Line]])]);
+    sections.push([title, layer.features.map((f): Feature => [overlayName(f, locale), layer.kind === 'areas' ? f.g as Line[] : [f.g as Line]])]);
+    if (layer.features.length && layer.features.every((f) => !f.n)) unnamed.set(title, layer.features.length);
   }
   for (const [title, features] of sections) {
     const list = namedFeatures(features, survey.half, locale);
+    const count = unnamed.get(title);
     const details = document.createElement('details');
     const caption = document.createElement('summary');
-    caption.textContent = `${title} (${fmt(list.childElementCount)})`;
+    caption.textContent = `${title} (${fmt(count ?? list.childElementCount)})`;
     details.append(caption);
     if (list.childElementCount) details.append(list);
     else {
       const empty = document.createElement('p');
-      empty.textContent = copy.empty;
+      empty.textContent = count === undefined ? copy.empty : pluralText(locale, copy.unnamed, count);
       details.append(empty);
     }
     container.append(details);

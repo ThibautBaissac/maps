@@ -122,7 +122,7 @@ function digest(calls: readonly Call[]): string {
   for (const c of calls) h.update(JSON.stringify([c.method, c.args.map((a) => (typeof a === 'number' ? Math.round(a * 1000) / 1000 : typeof a === 'string' || typeof a === 'boolean' ? a : typeof a))]));
   return h.digest('hex');
 }
-const BASELINE: Record<string, string> = { riso: 'f1a8f0d3496041c637eda0df71ba456e9995700a', cyanotype: 'ea2d3b2cb02d86018a0c78f264101679623d8402' };
+const BASELINE: Record<string, string> = { riso: 'f1a8f0d3496041c637eda0df71ba456e9995700a', cyanotype: '9ddf477e620ced5c529b0ab1edd6c19c82fd54b4' };
 for (const style of ['riso', 'cyanotype'] as const) {
   test(`${style} makes the same canvas calls as before layers existed when the map has no external layer`, async (t) => {
     const page = installPage(t, { width: 800, height: 600 });

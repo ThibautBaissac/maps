@@ -51,6 +51,8 @@ export interface Messages {
     roads: string;
     water: string;
     empty: string;
+    /** Overlay layer whose features carry no names. */
+    unnamed: PluralMessage;
   };
   canvas: {
     legend: string;
@@ -76,6 +78,8 @@ export interface Messages {
     empty: string;
     overview: string;
     focus: (name: string) => string;
+    /** A numbered reference in the text description. */
+    referenceLine: (number: string, name: string, detail: string) => string;
     source: (date: string, size: string) => string;
     dataFile: string;
     concentration: (position: string, share: string) => string;

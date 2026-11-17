@@ -119,7 +119,7 @@ function cartouche(ctx: Ctx, L: Layout, view: View, meta: MountMeta, o: GravureS
     () => {
       y += cs * 1.4;
       ctx.font = `italic ${cs}px ${o.font}`;
-      ctx.fillText(text.canvas.survey(formatDate(locale, meta.fetchedAt)).toLocaleLowerCase(locale), mx, y);
+      ctx.fillText(text.canvas.survey(formatDate(locale, meta.osmDate)).toLocaleLowerCase(locale).replace(/\bosm\b/, 'OSM'), mx, y);
     },
   ];
   const steps = [ss * 0.7 + 3, cs * 1.8, cs * 1.4];

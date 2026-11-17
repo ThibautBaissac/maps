@@ -20,7 +20,7 @@ export async function mount({ container, meta, locale, options, shell, layers }:
 | Argument | Contenu |
 |---|---|
 | `container` | `<div id="stage">` vide qui remplit la fenêtre |
-| `meta` | `title` et `district` dans la langue de la page, résolus par `src/catalogue.ts` (imprimer ces valeurs), `place`, `lat`, `lon`, `sizeKm`, `half`, `bbox`, `fetchedAt` et `attribution` |
+| `meta` | `title` et `district` dans la langue de la page, résolus par `src/catalogue.ts` (imprimer ces valeurs), `place`, `lat`, `lon`, `sizeKm`, `half`, `bbox`, `osmDate` (date des données OSM) et `attribution` |
 | `locale` | langue de la page ; utiliser `messages(locale)` et les fonctions de formatage de `src/i18n/index.ts` pour les textes dessinés |
 | `options` | les `options` de la carte dans `src/registry.ts`, à fusionner avec le `defaults.ts` du style |
 | `shell` | le cadre de page commun (plus bas) |

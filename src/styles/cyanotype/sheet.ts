@@ -298,7 +298,7 @@ export function drawTitleBlock(c: Ctx, L: SheetLayout, view: View, meta: MountMe
 
   // Coordinates and survey source.
   const lat = formatCoordinate(locale, meta.lat, 'lat', 4), lon = formatCoordinate(locale, meta.lon, 'lon', 4);
-  const date = formatDate(locale, meta.fetchedAt);
+  const date = formatDate(locale, meta.osmDate);
   const bs = Math.min(small, fit(c, o.font, `${lat} ${lon}`, mid - x0 - 2 * p, small));
   text(`${lat} ${lon}`, x0 + p, rowMid(r3, y1), bs);
   text(copy.survey(date), x1 - p, rowMid(r3, y1), Math.min(small, fit(c, o.font, copy.survey(date), x1 - mid - 2 * p, small)), { align: 'right' });

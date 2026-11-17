@@ -66,7 +66,7 @@ test('the cholera subject numbers the Broad Street pump, then the brewery and th
 
 test('the cholera panel lists pumps by deaths, Broad Street highlighted, and states the measured share', () => {
   const topic = analyseTopic({ half: 100 }, layers([{ g: [2, 40], p: { deaths: 3 } }, { g: [70, 1], p: { deaths: 1 } }]), 'cholera-pump');
-  const survey = { half: 100, sizeKm: 0.2, lat: 51.5, lon: -0.13, fetchedAt: '2026-11-17T12:00:00Z' };
+  const survey = { half: 100, sizeKm: 0.2, lat: 51.5, lon: -0.13, osmDate: '2026-11-17T12:00:00Z' };
   const content = topicContent(survey, topic, 'en');
   assert.equal(content.value, '3 / 4');
   assert.equal(content.distribution.layout, 'list');

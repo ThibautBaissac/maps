@@ -1,7 +1,7 @@
 import { fr } from './fr.ts';
 import { en } from './en.ts';
 import { es } from './es.ts';
-import { LOCALES, type Locale, type Messages } from './types.ts';
+import { LOCALES, type Locale, type Messages, type PluralMessage } from './types.ts';
 import { isRecord } from '../place.ts';
 
 export { DEFAULT_LOCALE, LOCALES, type Locale, type LocalizedText } from './types.ts';
@@ -27,10 +27,13 @@ export function formatDate(locale: Locale, iso: string): string {
   return new Intl.DateTimeFormat(TAGS[locale], { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' }).format(new Date(iso));
 }
 
-export function featureCount(locale: Locale, feature: 0 | 1 | 2 | 3, count: number): string {
-  const forms = messages(locale).description.features[feature];
+export function pluralText(locale: Locale, forms: PluralMessage, count: number): string {
   const form = new Intl.PluralRules(TAGS[locale]).select(count);
   return (forms[form] ?? forms.other).replaceAll('{count}', formatNumber(locale, count));
+}
+
+export function featureCount(locale: Locale, feature: 0 | 1 | 2 | 3, count: number): string {
+  return pluralText(locale, messages(locale).description.features[feature], count);
 }
 
 /** Also checked at build time: Node strips types, and empty strings still type-check. */

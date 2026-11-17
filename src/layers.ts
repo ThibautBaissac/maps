@@ -89,8 +89,8 @@ export interface Survey {
   sizeKm: number;
   lat: number;
   lon: number;
-  /** ISO date of the download. */
-  fetchedAt: string;
+  /** ISO date of the OpenStreetMap data: the database timestamp, else the download date. */
+  osmDate: string;
 }
 
 /** The declaration of an external layer in places/layers.ts. */

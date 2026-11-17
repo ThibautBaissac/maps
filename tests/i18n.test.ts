@@ -33,3 +33,8 @@ test('translation validation names missing and empty messages instead of hiding 
   assert.ok(problems.includes('en.map.loading: missing or invalid translation'));
   assert.deepEqual(i18n.translationProblems(), []);
 });
+
+test('numbered references follow the punctuation of each language in the text description', () => {
+  assert.equal(i18n.messages('en').topic.referenceLine('1', 'Broad Street pump', '3 deaths'), '1. Broad Street pump: 3 deaths');
+  assert.equal(i18n.messages('fr').topic.referenceLine('1', 'Pompe de Broad Street', '3 décès'), '1. Pompe de Broad Street : 3 décès');
+});

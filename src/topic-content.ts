@@ -30,7 +30,7 @@ function linearContent(survey: Survey, topic: LinearTopic, locale: Locale): Topi
     copy, subject,
     value: `≈ ${metres(topic.length >= 100 ? Math.round(topic.length / 10) * 10 : topic.length)} m`,
     concentration: topic.length ? copy.concentration(positions[strongest]!, String(share)) : copy.empty,
-    source: copy.source(formatDate(locale, survey.fetchedAt), formatNumber(locale, survey.sizeKm)),
+    source: copy.source(formatDate(locale, survey.osmDate), formatNumber(locale, survey.sizeKm)),
     references: topic.places.map((p, index) => ({
       number: index + 1, name: p.name, point: p.point,
       detail: `${positions[p.sector]} · ≈ ${metres(p.length)} m${p.waters.length ? `. ${copy.waterCrossed(p.waters.join(', '))}` : ''}`,
@@ -56,7 +56,7 @@ function choleraContent(survey: Survey, topic: CholeraTopic, locale: Locale): To
     copy, subject,
     value: `${n(topic.broad)} / ${n(topic.total)}`,
     concentration: topic.total ? c.concentration(String(share), n(topic.within100)) : copy.empty,
-    source: `${c.source} ${copy.source(formatDate(locale, survey.fetchedAt), formatNumber(locale, survey.sizeKm))}`,
+    source: `${c.source} ${copy.source(formatDate(locale, survey.osmDate), formatNumber(locale, survey.sizeKm))}`,
     references: topic.places.map((p, index) => ({
       number: index + 1,
       name: p.kind === 'pump' ? c.broadPump : c[p.kind],

@@ -20,7 +20,6 @@ export interface Messages {
   gallery: {
     title: string;
     heading: readonly [string, string];
-    intro: string;
     description: string;
     maps: string;
     open: string;

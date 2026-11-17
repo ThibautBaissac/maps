@@ -14,7 +14,6 @@
   --night: #0F1115;
   --text: #EDE8DD;
   --muted: #9AA0AD;
-  --soft: #CFCBC2;
   --display: 'Bebas Neue', 'Arial Narrow', sans-serif;
   --mono: 'Space Mono', ui-monospace, monospace;
   --gutter: 48px;
@@ -52,7 +51,6 @@ h1 {
   letter-spacing: 0.01em;
 }
 h1 span { display: block; color: var(--muted); }
-.intro { margin: 0; max-width: 36ch; font-size: 17px; color: var(--soft); }
 
 /* The strips share the width; the one pointed at or focused opens wider. */
 .strips {
@@ -152,7 +150,6 @@ footer {
   .gallery-heading { grid-row: 2; }
   .gallery-context { display: contents; }
   .gallery-context .languages { grid-row: 1; }
-  .gallery-context .intro { grid-row: 3; }
   .strips { flex-direction: column; height: auto; }
   .strip { flex: none; height: 440px; }
 }

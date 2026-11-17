@@ -8,7 +8,6 @@ export const en: Messages = {
   gallery: {
     title: 'Illustrated maps',
     heading: ['Choose a neighbourhood.', 'Get lost in it.'],
-    intro: 'Maps drawn with code using OpenStreetMap data, each in a different graphic style.',
     description: 'Neighbourhood maps drawn with code in different graphic styles.',
     maps: 'Maps',
     open: 'Open map',

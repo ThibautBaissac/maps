@@ -8,7 +8,6 @@ export const fr: Messages = {
   gallery: {
     title: 'Cartes illustrées',
     heading: ['Choisissez un quartier.', 'Perdez-vous dedans.'],
-    intro: 'Des plans dessinés avec du code à partir d’OpenStreetMap, chacun dans un style graphique différent.',
     description: 'Plans de quartiers dessinés avec du code, dans des styles graphiques différents.',
     maps: 'Cartes',
     open: 'Ouvrir la carte',

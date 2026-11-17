@@ -77,7 +77,7 @@ OSM ne contient pas tout. Si le sujet validé repose sur des objets qu'OSM n'a p
 
 1. **Ranger la source** dans `layers/<lieu>/<id>.geojson` (versionnée, en WGS84). `<id>` est un identifiant `a-z0-9-` ; `osm` est réservé.
 2. **La déclarer** dans `places/layers.ts`, sous l'id du lieu : `title` (texte ou `{ fr, en, es }`, affiché dans la description), `file`, `kind` (`points`, `lines` ou `areas`), `role` (`overlay`, dessinée par-dessus la carte), `nameField` et `categoryField` si la source en a.
-3. **Créditer** dans `attribution` (obligatoire, non vide) : l'auteur et la licence de la source, par exemple `© Ville d’Amsterdam, CC BY 4.0`. La page l'affiche à la suite du crédit OSM (ODbL, déjà présent) ; ne l'invente pas, relève-la sur la page du jeu de données. Sans licence claire, n'utilise pas la source.
+3. **Créditer** dans `attribution` (obligatoire, non vide) : l'auteur et la licence de la source, par exemple `© Ville d’Amsterdam, CC BY 4.0`. La page l'affiche à la suite du crédit OSM (ODbL, déjà présent) ; ne l'invente pas, relève-la sur la page du jeu de données. Sans licence claire, n'utilise pas la source. Un crédit qui contient des mots à traduire (« numérisé pour ce site ») s'écrit `{ fr, en, es }` ; le fichier converti garde le texte français.
 4. **Convertir** : `npm run layers -- <lieu>` écrit `public/data/<lieu>/<id>.json` en mètres locaux ; committe ce fichier avec la source.
 5. **L'attacher à la carte** : `layers: ['<id>']` dans l'entrée de `src/registry.ts`. Le build refuse un id inconnu, un fichier absent ou converti pour un autre carré.
 

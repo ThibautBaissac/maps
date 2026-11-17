@@ -1,7 +1,7 @@
 import { fr } from './fr.ts';
 import { en } from './en.ts';
 import { es } from './es.ts';
-import { LOCALES, type Locale, type MapStory, type Messages, type PluralMessage } from './types.ts';
+import { LOCALES, type Locale, type LocalizedText, type MapStory, type Messages, type PluralMessage } from './types.ts';
 import type { MapId } from '../registry.ts';
 import { isRecord } from '../place.ts';
 
@@ -15,6 +15,9 @@ export function mapStory(locale: Locale, id: string): MapStory | undefined {
   const maps = messages(locale).maps;
   return Object.hasOwn(maps, id) ? maps[id as MapId] : undefined;
 }
+
+/** A text given once for every language, or per language. */
+export const localized = (text: LocalizedText, locale: Locale): string => typeof text === 'string' ? text : text[locale];
 
 export const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
 const TAGS: Record<Locale, string> = { fr: 'fr-FR', en: 'en-GB', es: 'es-ES' };

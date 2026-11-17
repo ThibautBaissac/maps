@@ -208,6 +208,15 @@ test('a valid layer file is no problem, and the catalogue lists the layer and it
   assert.equal(catalogueOf([layered()], 'en', LAYER_REGISTRY)[0]?.layers[0]?.title, 'Bridges');
 });
 
+test('a translated credit is shown in the page language and checked against the file in the default language', () => {
+  const credit = { fr: 'Numérisé pour ce site', en: 'Digitised for this site', es: 'Digitalizado para este sitio' };
+  const registry = { 'amsterdam-centre': { ponts: { ...SPEC, attribution: credit } } } as const;
+  const file = layerFile() as { layers: object[] };
+  const translated = { ...file, layers: [{ ...file.layers[0], attribution: credit.fr }] };
+  assert.deepEqual(problemsOf([layered()], withLayer(translated), registry), []);
+  assert.deepEqual(catalogueOf([layered()], 'es', registry)[0]?.attributions, ['Digitalizado para este sitio']);
+});
+
 test('a map without layers has none and no extra attribution', () => {
   const [m] = catalogueOf([entry('plain')]);
   assert.deepEqual(m?.layers, []);

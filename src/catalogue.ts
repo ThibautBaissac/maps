@@ -7,7 +7,7 @@ import { isSlug, type Place } from './place.ts';
 import { MAPS, type MapEntry, type MapEntryOf } from './registry.ts';
 import type { StyleDef } from './styles/contract.ts';
 import { isStyleKey, STYLES, type StyleKey, type StyleOptions } from './styles/index.ts';
-import { DEFAULT_LOCALE, LOCALES, messages, type Locale } from './i18n/index.ts';
+import { DEFAULT_LOCALE, LOCALES, localized, messages, type Locale } from './i18n/index.ts';
 import { OSM_ROLES, parseLayerFile, type LayerFile, type Square } from './layers.ts';
 import { isTopicId, type TopicId } from './topics.ts';
 
@@ -54,7 +54,7 @@ function resolve<K extends StyleKey>(m: MapEntryOf<K>, locale: Locale, registry:
     styleDef: { ...STYLES[m.style], ...messages(locale).styles[m.style] },
     options: m.options ?? {},
     layers: sources.map(({ id, source }) => ({ id, title: typeof source.title === 'string' ? source.title : source.title[locale], path: layerPath(m.place, id) })),
-    attributions: [...new Set(sources.map(({ source }) => source.attribution))],
+    attributions: [...new Set(sources.map(({ source }) => localized(source.attribution, locale)))],
     paths: { page: `${locale}/${PAGES_DIR}/${m.id}/`, data: dataPath(m.place), vignette: `vignettes/${locale}/${m.id}.webp` },
   };
 }
@@ -133,7 +133,7 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
       const found = parsed[0];
       if (declared && found) {
         for (const k of ['id', 'kind', 'role', 'attribution'] as const) {
-          const want = k === 'id' ? id : declared[k];
+          const want = k === 'id' ? id : k === 'attribution' ? localized(declared.attribution, DEFAULT_LOCALE) : declared[k];
           if (found[k] !== want) return `layer "${id}" of ${m.placeId} does not match places/layers.ts (${m.id}): ${k} differs; run ${relayer}`;
         }
       }

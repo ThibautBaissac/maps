@@ -100,7 +100,8 @@ export interface LayerSource {
   file: string;
   kind: LayerKind;
   role: 'overlay';
-  attribution: string;
+  /** Credit shown after the OSM one. The layer file keeps its text in the default language. */
+  attribution: LocalizedText;
   /** Property holding the name of an object. */
   nameField?: string;
   /** Property holding the category of an object. */

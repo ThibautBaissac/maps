@@ -4,6 +4,7 @@
 import { localProjection, survey } from '../src/geo.ts';
 import { isScalar, parseLayer, type Feature, type Layer, type LayerKind, type LayerSource, type Scalar } from '../src/layers.ts';
 import { isRecord, type Place } from '../src/place.ts';
+import { DEFAULT_LOCALE, localized } from '../src/i18n/index.ts';
 import type { Point } from '../src/toolkit/geometry.ts';
 
 // The geometry of one GeoJSON feature, as local points, flat lines or rings.
@@ -69,7 +70,7 @@ export function geojsonLayer(json: unknown, place: Place, id: string, spec: Laye
     id,
     kind: spec.kind,
     role: spec.role,
-    attribution: spec.attribution,
+    attribution: localized(spec.attribution, DEFAULT_LOCALE),
     source: spec.file,
     features,
   }, spec.file);

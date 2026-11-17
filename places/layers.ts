@@ -4,6 +4,13 @@
 import type { LayerSource } from '../src/layers.ts';
 import type { PlaceId } from './index.ts';
 
+// Credit of the three layers digitised from John Snow's map.
+const SNOW_CREDIT = {
+  fr: 'John Snow, 1855 (domaine public), numérisé pour ce site',
+  en: 'John Snow, 1855 (public domain), digitised for this site',
+  es: 'John Snow, 1855 (dominio público), digitalizado para este sitio',
+};
+
 export const LAYERS: { readonly [P in PlaceId]?: Readonly<Record<string, LayerSource>> } = {
   'lisbonne-alfama': {
     // Elementos de Água, Município de Lisboa (CC0), TIPOLOGIA = Chafariz inside the square:
@@ -26,7 +33,7 @@ export const LAYERS: { readonly [P in PlaceId]?: Readonly<Record<string, LayerSo
       file: 'layers/londres-soho/pompes.geojson',
       kind: 'points',
       role: 'overlay',
-      attribution: 'John Snow, 1855 (public domain), digitised for this site',
+      attribution: SNOW_CREDIT,
       nameField: 'name',
       categoryField: 'kind',
     },
@@ -35,14 +42,14 @@ export const LAYERS: { readonly [P in PlaceId]?: Readonly<Record<string, LayerSo
       file: 'layers/londres-soho/deces.geojson',
       kind: 'points',
       role: 'overlay',
-      attribution: 'John Snow, 1855 (public domain), digitised for this site',
+      attribution: SNOW_CREDIT,
     },
     reperes: {
       title: { fr: 'Lieux cités par Snow', en: 'Places Snow wrote about', es: 'Lugares citados por Snow' },
       file: 'layers/londres-soho/reperes.geojson',
       kind: 'points',
       role: 'overlay',
-      attribution: 'John Snow, 1855 (public domain), digitised for this site',
+      attribution: SNOW_CREDIT,
       nameField: 'name',
       categoryField: 'kind',
     },

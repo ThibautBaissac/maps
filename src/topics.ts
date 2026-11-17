@@ -10,6 +10,16 @@ export type TopicId = (typeof TOPIC_IDS)[number];
 export type LinearTopicId = Exclude<TopicId, 'cholera-pump'>;
 export const isTopicId = (value: string): value is TopicId => (TOPIC_IDS as readonly string[]).includes(value);
 
+/** Themes the gallery filters by; their labels are under themes.<id> in the dictionaries. */
+export const THEME_IDS = ['water', 'relief', 'history', 'health'] as const;
+export type ThemeId = (typeof THEME_IDS)[number];
+/** The themes of each subject, most specific first: every map of the subject shares them. */
+export const TOPIC_THEMES: Record<TopicId, readonly ThemeId[]> = {
+  'canal-crossings': ['water'],
+  steps: ['relief'],
+  'cholera-pump': ['history', 'health', 'water'],
+};
+
 /** A numbered reference on the map and in the panel. */
 export interface TopicMark {
   name: string;

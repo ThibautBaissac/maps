@@ -11,6 +11,10 @@ export const en: Messages = {
     description: 'Neighbourhood maps drawn with code in different graphic styles.',
     maps: 'Maps',
     open: 'Open map',
+    filters: 'Filter the maps',
+    all: 'All',
+    facets: { place: 'City', style: 'Style', theme: 'Theme' },
+    shown: { one: '{count} map shown', other: '{count} maps shown' },
   },
   map: {
     description: (title, district, style) => `Illustrated map of ${title} (${district}), ${style} style.`,
@@ -126,6 +130,12 @@ export const en: Messages = {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Historic centre' },
     'lisbonne-alfama': { name: 'Lisbon', district: 'Alfama' },
     'londres-soho': { name: 'London', district: 'Soho' },
+  },
+  themes: {
+    water: 'Water',
+    relief: 'Relief',
+    history: 'History',
+    health: 'Health',
   },
   styles: {
     'gravure-sepia': {

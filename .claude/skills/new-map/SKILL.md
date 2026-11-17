@@ -91,7 +91,7 @@ Ajoute l'entrée dans `src/registry.ts` :
 { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', topic: 'steps', options: { /* si variante */ } },
 ```
 
-Réutilise un sujet de `src/topics.ts` seulement s’il correspond à la question validée. Sinon, ajoute sa sélection et ses mesures dans ce module, ses traductions dans les dictionnaires et ses vérifications. Le build refuse une carte sans sujet ou avec un sujet inconnu.
+Réutilise un sujet de `src/topics.ts` seulement s’il correspond à la question validée. Sinon, ajoute sa sélection et ses mesures dans ce module, ses thèmes dans `TOPIC_THEMES` (les filtres de la galerie ; un nouveau thème va dans `THEME_IDS` et dans `themes.<thème>` des dictionnaires), ses traductions dans les dictionnaires et ses vérifications. Le build refuse une carte sans sujet ou avec un sujet inconnu.
 
 Les dictionnaires (`src/i18n/fr.ts`, `en.ts`, `es.ts`) séparent deux sortes de textes :
 - `topics.<sujet>` : `metric`, `legend`, `method`, `limits`, les faits et la méthode du sujet, au ton neutre, partagés par toutes les cartes de ce sujet ;

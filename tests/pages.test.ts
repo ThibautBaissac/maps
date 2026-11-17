@@ -97,3 +97,12 @@ test('a map without its question and intro in the dictionaries fails page genera
   const map = { ...findMap('amsterdam-riso', 'fr')!, id: 'sans-texte' };
   assert.throws(() => pageHtml(map, 'fr', '/maps/'), /No question and intro for map "sans-texte" in fr/);
 });
+
+test('the static gallery tags each strip and offers its filters hidden until the script runs', () => {
+  const html = galleryHtml('en', '/maps/');
+  assert.match(html, /<li class="strip[^"]*" data-tags="place:londres-soho style:gravure-sepia theme:history theme:health theme:water"/);
+  assert.match(html, /<div class="filters" role="group" aria-label="Filter the maps" hidden>/);
+  assert.match(html, /<button type="button" data-tag="" aria-pressed="true">All<\/button>/);
+  assert.match(html, /<button type="button" data-tag="theme:water" aria-pressed="false">Water<\/button>/);
+  assert.match(html, /<p class="filter-count" role="status" data-forms="\{&quot;one&quot;:&quot;\{count\} map shown&quot;,&quot;other&quot;:&quot;\{count\} maps shown&quot;\}"><\/p>/);
+});

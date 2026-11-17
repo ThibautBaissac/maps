@@ -52,6 +52,46 @@ h1 {
 }
 h1 span { display: block; color: var(--muted); }
 
+/* One filter at a time: the pressed one is filled. */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  padding: 0 var(--gutter) 20px;
+}
+.filters[hidden] { display: none; }
+.facet { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.facet-label {
+  font: 12px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.filters button {
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 1px solid #6B7180;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: 14px/1 var(--mono);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.filters button:hover { border-color: var(--text); }
+.filters button:focus-visible { outline: 3px solid var(--text); outline-offset: 2px; }
+.filters button[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--night); }
+.filter-count {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* The strips share the width; the one pointed at or focused opens wider. */
 .strips {
   display: flex;
@@ -70,8 +110,11 @@ h1 span { display: block; color: var(--muted); }
   background:
     radial-gradient(circle, var(--accent) 1.1px, transparent 1.3px) 0 0 / 7px 7px,
     var(--bg);
+  /* A strip left alone by a filter does not fill the whole screen. */
+  max-width: 760px;
   transition: flex-grow 0.7s var(--ease);
 }
+.strip[hidden] { display: none; }
 .strips .strip:hover, .strips .strip:focus-within { flex-grow: 1.9; }
 /* The name fills the strip's height: --len is its number of letters (set by main.ts). */
 .strip a {
@@ -151,9 +194,23 @@ footer {
   .gallery-context { display: contents; }
   .gallery-context .languages { grid-row: 1; }
   .strips { flex-direction: column; height: auto; }
-  .strip { flex: none; height: 440px; }
+  .strip { flex: none; height: 440px; max-width: none; }
+  /* One row that scrolls sideways: the chip cut at the edge shows there is more. */
+  .filters {
+    flex-wrap: nowrap;
+    gap: 8px 14px;
+    margin-bottom: 16px;
+    padding: 2px var(--gutter) 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .facet { flex-wrap: nowrap; gap: 6px; }
+  .filters button { flex: none; min-height: 32px; padding: 4px 11px; font-size: 12px; white-space: nowrap; }
+  .facet-label { font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .strip, .strip img, .info, .go { transition: none; }
+  .strip, .strip img, .info, .go, .filters button { transition: none; }
   .strip:hover img { transform: none; }
 }

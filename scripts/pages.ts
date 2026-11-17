@@ -1,5 +1,6 @@
 // Static HTML shared by development and production builds.
 import { mapsForLocale, PAGES_DIR, type CatalogueMap } from '../src/catalogue.ts';
+import { galleryFilters, mapTags } from '../src/gallery/filters.ts';
 import { formatCoordinate, LOCALES, mapStory, messages, type Locale, type MapStory } from '../src/i18n/index.ts';
 
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
@@ -83,7 +84,7 @@ function strip(map: CatalogueMap, locale: Locale, base: string): string {
   const colors = styleDef.card(options);
   const coords = `${formatCoordinate(locale, place.lat, 'lat', 2)} ${formatCoordinate(locale, place.lon, 'lon', 2)}`;
   // Vite prefixes public asset URLs in both dev and build; page links use base directly.
-  return `<li class="strip${colors.dark ? ' dark' : ''}" style="--bg:${esc(colors.bg)};--fg:${esc(colors.fg)};--accent:${esc(colors.accent)};--len:${title.length}">
+  return `<li class="strip${colors.dark ? ' dark' : ''}" data-tags="${esc(mapTags(map).join(' '))}" style="--bg:${esc(colors.bg)};--fg:${esc(colors.fg)};--accent:${esc(colors.accent)};--len:${title.length}">
         <a href="${esc(base + map.paths.page)}">
           <img src="/${esc(map.paths.vignette)}" alt="" decoding="async" />
           <span class="shade" aria-hidden="true"></span>
@@ -91,6 +92,20 @@ function strip(map: CatalogueMap, locale: Locale, base: string): string {
           <span class="info"><span class="district">${esc(place.district)}</span>${map.topic ? `<span class="subject">${esc(storyOf(map, locale).question)}</span>` : ''}<span class="meta">${esc(styleDef.label)} · ${esc(coords)}</span><span class="go">${esc(messages(locale).gallery.open)}${ARROW}</span></span>
         </a>
       </li>`;
+}
+
+/** The filter buttons, revealed by src/gallery/main.ts: without JavaScript every map stays shown. */
+function filtersHtml(locale: Locale): string {
+  const facets = galleryFilters(mapsForLocale(locale), locale);
+  if (!facets.length) return '';
+  const copy = messages(locale).gallery;
+  const button = (tag: string, label: string, pressed: boolean): string =>
+    `<button type="button" data-tag="${esc(tag)}" aria-pressed="${pressed}">${esc(label)}</button>`;
+  return `<div class="filters" role="group" aria-label="${esc(copy.filters)}" hidden>
+      ${button('', copy.all, true)}
+      ${facets.map((f) => `<span class="facet" role="group" aria-label="${esc(f.label)}"><span class="facet-label" aria-hidden="true">${esc(f.label)}</span>${f.filters.map((filter) => button(filter.tag, filter.label, false)).join('')}</span>`).join('\n      ')}
+      <p class="filter-count" role="status" data-forms="${esc(JSON.stringify(copy.shown))}"></p>
+    </div>`;
 }
 
 export function galleryHtml(locale: Locale, base: string, siteUrl?: string): string {
@@ -114,6 +129,7 @@ export function galleryHtml(locale: Locale, base: string, siteUrl?: string): str
         ${languageNav(locale, base)}
       </div>
     </header>
+    ${filtersHtml(locale)}
     <main><ul class="strips" aria-label="${esc(copy.maps)}">
       ${mapsForLocale(locale).map((map) => strip(map, locale, base)).join('\n      ')}
     </ul></main>

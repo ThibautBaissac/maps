@@ -11,6 +11,10 @@ export const fr: Messages = {
     description: 'Plans de quartiers dessinés avec du code, dans des styles graphiques différents.',
     maps: 'Cartes',
     open: 'Ouvrir la carte',
+    filters: 'Filtrer les cartes',
+    all: 'Toutes',
+    facets: { place: 'Ville', style: 'Style', theme: 'Thème' },
+    shown: { one: '{count} carte affichée', other: '{count} cartes affichées' },
   },
   map: {
     description: (title, district, style) => `Plan illustré de ${title} (${district}), style ${style}.`,
@@ -126,6 +130,12 @@ export const fr: Messages = {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Centre historique' },
     'lisbonne-alfama': { name: 'Lisbonne', district: 'Alfama' },
     'londres-soho': { name: 'Londres', district: 'Soho' },
+  },
+  themes: {
+    water: 'Eau',
+    relief: 'Relief',
+    history: 'Histoire',
+    health: 'Santé',
   },
   styles: {
     'gravure-sepia': {

@@ -1,7 +1,7 @@
 import type { PlaceId } from '../../places/index.ts';
 import type { MapId } from '../registry.ts';
 import type { StyleKey } from '../styles/index.ts';
-import type { TopicId } from '../topics.ts';
+import type { ThemeId, TopicId } from '../topics.ts';
 
 export const LOCALES = ['fr', 'en', 'es'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -32,6 +32,13 @@ export interface Messages {
     description: string;
     maps: string;
     open: string;
+    /** Name of the group of filter buttons. */
+    filters: string;
+    /** The button that shows every map again. */
+    all: string;
+    facets: Record<'place' | 'style' | 'theme', string>;
+    /** Announced after a filter changes. */
+    shown: PluralMessage;
   };
   map: {
     description: (title: string, district: string, style: string) => string;
@@ -121,5 +128,7 @@ export interface Messages {
   }>;
   /** The texts of a map written in its own voice: see voices/<map-id>.md. */
   maps: Record<MapId, MapStory>;
+  /** Gallery filter labels of the subjects' themes (src/topics.ts). */
+  themes: Record<ThemeId, string>;
   styles: Record<StyleKey, { label: string; legend: Four<string> }>;
 }

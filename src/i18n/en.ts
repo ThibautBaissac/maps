@@ -118,6 +118,10 @@ export const en: Messages = {
     'lisbonne-alfama': { name: 'Lisbon', district: 'Alfama' },
   },
   styles: {
+    'gravure-sepia': {
+      label: 'Antique sepia engraving',
+      legend: ['Buildings: oblique hatching, denser on the shaded side.', 'Streets: fine double line for main streets, single line for the others.', 'Water: wavy lines.', 'Parks and gardens: stipple and small trees.'],
+    },
     riso: {
       label: 'Two-ink risograph',
       legend: ['Buildings: solid areas.', 'Streets and quays: lines.', 'Water: horizontal hatching.', 'Parks and gardens: dot patterns.'],

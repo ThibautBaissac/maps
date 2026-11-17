@@ -1,4 +1,4 @@
-// Both styles driven through their real mount(), on a fake page (tests/dom.ts).
+// Every style driven through its real mount(), on a fake page (tests/dom.ts).
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { MapHandle, MountArgs } from '../src/styles/contract.ts';
@@ -19,7 +19,9 @@ const DPR = 2;
 const STYLES = {
   riso: () => import('../src/styles/riso/index.ts'),
   cyanotype: () => import('../src/styles/cyanotype/index.ts'),
+  'gravure-sepia': () => import('../src/styles/gravure-sepia/index.ts'),
 } as const;
+const ALL = ['riso', 'cyanotype', 'gravure-sepia'] as const;
 
 async function mountStyle(t: Parameters<typeof installPage>[0], style: keyof typeof STYLES, { title = 'Mon quartier', dpr = 1, locale = 'fr' as Locale, width = SIZE.width, height = SIZE.height } = {}) {
   const page = installPage(t, { width, height, dpr });
@@ -32,7 +34,7 @@ async function mountStyle(t: Parameters<typeof installPage>[0], style: keyof typ
 
 // The stage's own sequence: clear, paper, then the map buffer clipped to the map window
 // and re-projected (clip, setTransform, drawImage).
-for (const style of ['riso', 'cyanotype'] as const) {
+for (const style of ALL) {
   test(`${style}: mount resolves with a crisp render already on the stage canvas`, async (t) => {
     const calls = (await mountStyle(t, style)).stage().calls;
     const paper = calls.findIndex((k, i) => k.method === 'drawImage' && calls[i - 1]?.method === 'clearRect');
@@ -55,7 +57,7 @@ test('a reference can centre the real viewport, render immediately and return to
   assert.deepEqual(viewport.view, overview);
 });
 
-for (const style of ['riso', 'cyanotype'] as const) {
+for (const style of ALL) {
   test(`${style} shows the subject's stairs even at the overview zoom`, async (t) => {
     const page = installPage(t, SIZE);
     const layers = osmLayersOf({ roads: [{ g: [-20, 0, 20, 0], k: 'steps', n: 'Escadinhas' }] });
@@ -92,10 +94,23 @@ for (const style of ['riso', 'cyanotype'] as const) {
   });
 }
 
+test('gravure-sepia letters its compass in the page language and prints the registry title as written', async (t) => {
+  // Street names are drawn glyph by glyph, so single letters also come from them: compare
+  // the same map in two languages.
+  let en: unknown[] = [], es: unknown[] = [];
+  await t.test('en', async (st) => { en = texts(await mountStyle(st, 'gravure-sepia', { locale: 'en', title: 'Mon quartier' })); });
+  await t.test('es', async (st) => { es = texts(await mountStyle(st, 'gravure-sepia', { locale: 'es', title: 'Mon quartier' })); });
+  const count = (all: unknown[], letter: string): number => all.filter((v) => v === letter).length;
+  assert.equal(count(en, 'W') - count(es, 'W'), 1, 'The west point is lettered W in English');
+  assert.equal(count(es, 'O') - count(en, 'O'), 1, 'The west point is lettered O in Spanish');
+  assert.ok(en.includes('Mon quartier'), 'The cartouche must print the registry title');
+});
+
 /** Where each style puts the navigation group and the attribution, for the page size. */
 const LAYOUTS = {
   riso: () => computeLayout(SIZE.width, SIZE.height),
   cyanotype: () => sheetLayout(SIZE.width, SIZE.height),
+  'gravure-sepia': () => computeLayout(SIZE.width, SIZE.height),
 } satisfies Record<keyof typeof STYLES, () => { nav: Rect; attr: Rect }>;
 
 const inside = (r: Rect, x: number, y: number): boolean => x >= r[0] && x <= r[2] && y >= r[1] && y <= r[3];
@@ -106,7 +121,7 @@ const keepOut = (r: Rect): Rect => [(r[0] - 4) * DPR, (r[1] - 4) * DPR, (r[2] + 
 // top-left (navigation) and bottom-right (attribution) corners of an 800 × 600 page.
 const VIEWS: [number, number, number][] = [[0, 0, 1], [0.3, -0.3, 1], [-0.3, 0.3, 1], [0.2, 0, 1], [0, 0, 2]];
 
-for (const style of ['riso', 'cyanotype'] as const) {
+for (const style of ALL) {
   test(`${style} places the HTML overlays on its layout's navigation and attribution slots`, async (t) => {
     const page = await mountStyle(t, style, { dpr: DPR });
     const { nav, attr } = LAYOUTS[style]();

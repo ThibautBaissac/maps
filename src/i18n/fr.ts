@@ -118,6 +118,10 @@ export const fr: Messages = {
     'lisbonne-alfama': { name: 'Lisbonne', district: 'Alfama' },
   },
   styles: {
+    'gravure-sepia': {
+      label: 'Gravure ancienne sépia',
+      legend: ['Bâtiments : hachures obliques, plus serrées du côté de l’ombre.', 'Rues : double trait fin pour les grandes artères, trait simple pour les autres.', 'Eau : lignes ondulées.', 'Parcs et jardins : pointillé et petits arbres.'],
+    },
     riso: {
       label: 'Risographie deux encres',
       legend: ['Bâtiments : surfaces pleines.', 'Rues et quais : traits.', 'Eau : hachures horizontales.', 'Parcs et jardins : trame de points.'],

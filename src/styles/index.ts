@@ -6,11 +6,13 @@ import type { StyleDef } from './contract.ts';
 import { messages } from '../i18n/index.ts';
 import { DEFAULTS as RISO, type RisoOptions } from './riso/defaults.ts';
 import { DEFAULTS as CYANOTYPE, type CyanotypeOptions } from './cyanotype/defaults.ts';
+import { DEFAULTS as GRAVURE_SEPIA, type GravureSepiaOptions } from './gravure-sepia/defaults.ts';
 
 /** Options of each style, by key: adding a style starts here. */
 export interface StyleOptions {
   riso: RisoOptions;
   cyanotype: CyanotypeOptions;
+  'gravure-sepia': GravureSepiaOptions;
 }
 export type StyleKey = keyof StyleOptions;
 
@@ -29,6 +31,14 @@ export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
     card: (o = {}) => {
       const v = { ...CYANOTYPE, ...o };
       return { bg: v.paper, fg: v.line, accent: v.accent, dark: true };
+    },
+  },
+  'gravure-sepia': {
+    ...messages('fr').styles['gravure-sepia'],
+    load: () => import('./gravure-sepia/index.ts'),
+    card: (o = {}) => {
+      const v = { ...GRAVURE_SEPIA, ...o };
+      return { bg: v.paper, fg: v.ink, accent: v.accent };
     },
   },
 };

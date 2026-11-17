@@ -1,0 +1,33 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.137594,
+     51.5141449
+    ]
+   },
+   "properties": {
+    "name": "Workhouse, Poland Street",
+    "kind": "workhouse"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1356214,
+     51.5134111
+    ]
+   },
+   "properties": {
+    "name": "Brewery, Broad Street",
+    "kind": "brewery"
+   }
+  }
+ ]
+}

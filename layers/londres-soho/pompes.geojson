@@ -1,0 +1,187 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1377336,
+     51.5166362
+    ]
+   },
+   "properties": {
+    "name": "Eastcastle Street",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1396097,
+     51.5163513
+    ]
+   },
+   "properties": {
+    "name": "Great Titchfield Street",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1346684,
+     51.5162774
+    ]
+   },
+   "properties": {
+    "name": "Newman Street",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1358626,
+     51.5160843
+    ]
+   },
+   "properties": {
+    "name": "Berners Street",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1396446,
+     51.5148982
+    ]
+   },
+   "properties": {
+    "name": "Ramillies Place",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1395582,
+     51.5138644
+    ]
+   },
+   "properties": {
+    "name": "Little Marlborough Street",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1366274,
+     51.5133437
+    ]
+   },
+   "properties": {
+    "name": "Broad Street",
+    "kind": "broad-street"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1336022,
+     51.5121257
+    ]
+   },
+   "properties": {
+    "name": "Rupert Street",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1316223,
+     51.5123455
+    ]
+   },
+   "properties": {
+    "name": "Dean Street",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1359694,
+     51.5115318
+    ]
+   },
+   "properties": {
+    "name": "Bridle Lane",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1382537,
+     51.5112985
+    ]
+   },
+   "properties": {
+    "name": "Warwick Street",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1397365,
+     51.5101737
+    ]
+   },
+   "properties": {
+    "name": "Savile Row",
+    "kind": "pump"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1340491,
+     51.5100991
+    ]
+   },
+   "properties": {
+    "name": "Coventry Street",
+    "kind": "pump"
+   }
+  }
+ ]
+}

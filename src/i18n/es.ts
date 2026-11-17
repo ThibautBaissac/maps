@@ -116,6 +116,7 @@ export const es: Messages = {
   places: {
     'amsterdam-centre': { name: 'Ámsterdam', district: 'Centro histórico' },
     'lisbonne-alfama': { name: 'Lisboa', district: 'Alfama' },
+    'londres-soho': { name: 'Londres', district: 'Soho' },
   },
   styles: {
     'gravure-sepia': {

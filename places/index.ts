@@ -22,6 +22,15 @@ export const PLACES = {
     lon: -9.1284,
     sizeKm: 2,
   },
+  // npm run fetch-data -- londres-soho
+  // Located from: coordinates given
+  'londres-soho': {
+    name: 'Londres',
+    district: 'Soho',
+    lat: 51.5132,
+    lon: -0.1367,
+    sizeKm: 1.2,
+  },
 } as const satisfies Record<string, Place>;
 
 export type PlaceId = keyof typeof PLACES;

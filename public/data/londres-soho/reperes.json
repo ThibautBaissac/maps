@@ -1,0 +1,1 @@
+{"square":{"lat":51.5132,"lon":-0.1367,"sizeKm":1.2},"layers":[{"id":"reperes","kind":"points","role":"overlay","attribution":"John Snow, 1855 (public domain), digitised for this site","source":"layers/londres-soho/reperes.geojson","features":[{"g":[-61.9,105.1],"k":"workhouse","n":"Workhouse, Poland Street"},{"g":[74.6,23.5],"k":"brewery","n":"Brewery, Broad Street"}]}]}

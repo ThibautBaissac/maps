@@ -90,28 +90,36 @@ export const en: Messages = {
   },
   topics: {
     'canal-crossings': {
-      question: 'Where can you cross the canals in the historic centre?',
-      intro: 'Follow the canals and locate the roads and paths crossing them on bridges. Crossings stand out from the surrounding buildings and streets.',
       metric: 'of mapped bridge segments crossing canals',
       legend: 'Thick lines with a paper border: bridge segments crossing a canal. Numbered circles: named reference points. Hatching: water. Other streets and buildings appear faintly.',
       method: 'Select roads and paths tagged as bridges that intersect a surface canal axis in OSM within the square. Lengths add the selected segments, clipped to the square. Reference points group segments by name; one name may cover several crossings. The reference identifies a point on the longest segment in the group. A leader connects the number to this point if the badge needs to move.',
       limits: 'The figure measures a length of roads and paths, not a number of bridges. It may miss crossings when a bridge or canal axis is absent from OSM. Parallel paths each contribute to the length. A canal here is any waterway tagged “canal” in OSM, which includes some basins. The drawing does not guarantee pedestrian or cycling access.',
     },
     steps: {
-      question: 'Where are the stairs concentrated in the neighbourhood?',
-      intro: 'Locate passages with stairs and examine their distribution in and around the neighbourhood. Lines with crossbars remain visible in the overview.',
       metric: 'of mapped stair segments in the area',
       legend: 'Thick lines with crossbars: stair segments. Numbered circles: named reference points. Crossbars are a symbol and do not show the number of steps. Water and buildings provide context.',
       method: 'Select OSM ways classified as steps, excluding tunnels. Plan lengths are clipped to the square and distributed across nine equal sectors. Reference points group segments by name; the reference identifies a point on the longest segment in the group. A leader connects the number to this point if the badge needs to move.',
       limits: 'These lengths measure neither elevation gain nor the number of steps or staircases. OSM coverage may be incomplete. A way without a stairs symbol does not guarantee an accessible route.',
     },
     'cholera-pump': {
-      question: 'Why do the 1854 cholera deaths cluster around one pump?',
-      intro: 'In late August 1854, cholera killed hundreds of Soho residents in ten days. The physician John Snow plotted the deaths on a plan and showed that they surround the Broad Street pump, on a street renamed Broadwick Street in 1936.',
       metric: 'deaths closer on foot to the Broad Street pump than to any other pump',
       legend: 'Proportional discs: deaths per location, in red ink when the closest pump on foot is Broad Street. Circles with a cross: pumps of 1854, the largest for Broad Street. Numbered circles: references. Today’s streets and buildings give context.',
       method: 'The black bars of Snow’s map were detected by image processing (ink thickness), then counted by area. Each group of bars is placed at the closest point on an OSM street, which approximates its address. The 13 pumps were read by hand. The map is fitted on four references (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street) with a root-mean-square error of 1.7 m on these references. Distances follow today’s OSM walking network.',
       limits: 'This digitisation counts 556 deaths, against 578 bars in Tobler’s 1992 digitisation: a few merged or faded bars remain miscounted. One location may combine two neighbouring addresses. Streets have changed since 1854 (Regent Street, Shaftesbury Avenue, modern passages): the walking distance is an approximation. The map only shows the deaths Snow recorded, not the sick.',
+    },
+  },
+  maps: {
+    'amsterdam-riso': {
+      question: 'Where can you get from one bank to the other in central Amsterdam?',
+      intro: 'Here the canals draw the city in rings. To cross, you need a bridge: the map brings them out and lets the rest fade.',
+    },
+    'lisbonne-cyanotype': {
+      question: 'Where do the streets of Alfama turn into stairs?',
+      intro: 'Survey of stepped passages, in the neighbourhood and around it. Each barred line marks one mapped stretch of stairs; its length is read on the plan, not in height.',
+    },
+    'londres-gravure-sepia': {
+      question: 'Why do the 1854 cholera deaths in Soho gather around a single pump?',
+      intro: 'In ten days at the end of the summer of 1854, more than five hundred people died of cholera around Broad Street. The physician John Snow marked the deaths on a street plan: they crowd around the neighbourhood pump.',
     },
   },
   places: {

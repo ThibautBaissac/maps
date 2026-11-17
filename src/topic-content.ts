@@ -1,4 +1,4 @@
-import { formatDate, formatNumber, messages, type Locale } from './i18n/index.ts';
+import { formatDate, formatNumber, messages, type Locale, type MapStory } from './i18n/index.ts';
 import type { Survey } from './layers.ts';
 import type { Point } from './toolkit/geometry.ts';
 import type { CholeraTopic, LinearTopic, TopicAnalysis } from './topics.ts';
@@ -9,6 +9,8 @@ export interface TopicRow { name: string; value: string; strongest: boolean }
 export interface TopicContent {
   copy: ReturnType<typeof messages>['topic'];
   subject: ReturnType<typeof messages>['topics'][TopicAnalysis['id']];
+  /** The map's question and intro, in its own voice. */
+  story: MapStory;
   value: string;
   concentration: string;
   source: string;
@@ -16,11 +18,11 @@ export interface TopicContent {
   distribution: { title: string; help: string; layout: 'grid' | 'list'; rows: TopicRow[] };
 }
 
-export function topicContent(survey: Survey, topic: TopicAnalysis, locale: Locale): TopicContent {
-  return topic.id === 'cholera-pump' ? choleraContent(survey, topic, locale) : linearContent(survey, topic, locale);
+export function topicContent(survey: Survey, topic: TopicAnalysis, story: MapStory, locale: Locale): TopicContent {
+  return { story, ...(topic.id === 'cholera-pump' ? choleraContent(survey, topic, locale) : linearContent(survey, topic, locale)) };
 }
 
-function linearContent(survey: Survey, topic: LinearTopic, locale: Locale): TopicContent {
+function linearContent(survey: Survey, topic: LinearTopic, locale: Locale): Omit<TopicContent, 'story'> {
   const text = messages(locale), copy = text.topic, subject = text.topics[topic.id];
   const positions = text.description.positions.flat();
   const metres = (n: number): string => formatNumber(locale, Math.round(n), { maximumFractionDigits: 0 });
@@ -45,7 +47,7 @@ function linearContent(survey: Survey, topic: LinearTopic, locale: Locale): Topi
   };
 }
 
-function choleraContent(survey: Survey, topic: CholeraTopic, locale: Locale): TopicContent {
+function choleraContent(survey: Survey, topic: CholeraTopic, locale: Locale): Omit<TopicContent, 'story'> {
   const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = copy.cholera;
   const n = (v: number): string => formatNumber(locale, v);
   const share = topic.total ? Math.round(topic.broad / topic.total * 100) : 0;

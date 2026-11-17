@@ -1,13 +1,20 @@
 import { fr } from './fr.ts';
 import { en } from './en.ts';
 import { es } from './es.ts';
-import { LOCALES, type Locale, type Messages, type PluralMessage } from './types.ts';
+import { LOCALES, type Locale, type MapStory, type Messages, type PluralMessage } from './types.ts';
+import type { MapId } from '../registry.ts';
 import { isRecord } from '../place.ts';
 
-export { DEFAULT_LOCALE, LOCALES, type Locale, type LocalizedText } from './types.ts';
+export { DEFAULT_LOCALE, LOCALES, type Locale, type LocalizedText, type MapStory } from './types.ts';
 const MESSAGES: Record<Locale, Messages> = { fr, en, es };
 
 export const messages = (locale: Locale): Messages => MESSAGES[locale];
+
+/** The question and intro of a registered map; undefined for an id the dictionaries do not know. */
+export function mapStory(locale: Locale, id: string): MapStory | undefined {
+  const maps = messages(locale).maps;
+  return Object.hasOwn(maps, id) ? maps[id as MapId] : undefined;
+}
 
 export const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
 const TAGS: Record<Locale, string> = { fr: 'fr-FR', en: 'en-GB', es: 'es-ES' };

@@ -26,8 +26,11 @@ export interface MapEntryOf<K extends StyleKey> {
 /** A map entry, its options checked against its style. */
 export type MapEntry = { [K in StyleKey]: MapEntryOf<K> }[StyleKey];
 
-export const MAPS: readonly MapEntry[] = [
+export const MAPS = [
   { id: 'amsterdam-riso', place: 'amsterdam-centre', style: 'riso', topic: 'canal-crossings' },
   { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', topic: 'steps', layers: ['chafarizes'], options: { layerRadius: 6, layerWidth: 2 } },
   { id: 'londres-gravure-sepia', place: 'londres-soho', style: 'gravure-sepia', topic: 'cholera-pump', layers: ['pompes', 'deces', 'reperes'] },
-];
+] as const satisfies readonly MapEntry[];
+
+/** Id of a registered map: the dictionaries hold its question and intro under this key. */
+export type MapId = (typeof MAPS)[number]['id'];

@@ -1,11 +1,11 @@
 import type { Survey } from './layers.ts';
 import type { MapHandle } from './styles/contract.ts';
-import type { Locale } from './i18n/index.ts';
+import type { Locale, MapStory } from './i18n/index.ts';
 import type { TopicAnalysis } from './topics.ts';
 import { topicContent } from './topic-content.ts';
 
-export function mountTopicPanel(container: HTMLElement, survey: Survey, topic: TopicAnalysis, locale: Locale, handle: MapHandle, dataUrl: string): void {
-  const content = topicContent(survey, topic, locale);
+export function mountTopicPanel(container: HTMLElement, survey: Survey, topic: TopicAnalysis, story: MapStory, locale: Locale, handle: MapHandle, dataUrl: string): void {
+  const content = topicContent(survey, topic, story, locale);
   const { copy, subject } = content;
   const el = <K extends keyof HTMLElementTagNameMap>(tag: K, text?: string, className?: string): HTMLElementTagNameMap[K] => {
     const node = document.createElement(tag);
@@ -55,5 +55,5 @@ export function mountTopicPanel(container: HTMLElement, survey: Survey, topic: T
   const method = el('details', undefined, 'topic-method');
   const link = el('a', copy.dataFile); link.href = dataUrl;
   method.append(el('summary', copy.methodology), el('p', content.source), el('p', subject.method), el('p', subject.limits), link);
-  container.replaceChildren(el('p', subject.intro, 'topic-intro'), metric, legend, distribution, references, overview, method, status);
+  container.replaceChildren(el('p', story.intro, 'topic-intro'), metric, legend, distribution, references, overview, method, status);
 }

@@ -1,4 +1,5 @@
 import type { PlaceId } from '../../places/index.ts';
+import type { MapId } from '../registry.ts';
 import type { StyleKey } from '../styles/index.ts';
 import type { TopicId } from '../topics.ts';
 
@@ -10,6 +11,14 @@ export type LocalizedText = string | Record<Locale, string>;
 export type PluralMessage = Partial<Record<Intl.LDMLPluralRule, string>> & { other: string };
 type Four<T> = readonly [T, T, T, T];
 type Positions = readonly [readonly [string, string, string], readonly [string, string, string], readonly [string, string, string]];
+
+/** The opening of a map, told in the map's voice. */
+export interface MapStory {
+  /** The validated subject, as the page heading and gallery card ask it. */
+  question: string;
+  /** Two or three sentences that set the scene before the measurements. */
+  intro: string;
+}
 
 /** Every supported language supplies the same messages, including accessible text. */
 export interface Messages {
@@ -103,13 +112,14 @@ export interface Messages {
       legendPump: string;
     };
   };
+  /** The facts and method of a subject, in the plain house style, shared by every map of it. */
   topics: Record<TopicId, {
-    question: string;
-    intro: string;
     metric: string;
     legend: string;
     method: string;
     limits: string;
   }>;
+  /** The texts of a map written in its own voice: see voices/<map-id>.md. */
+  maps: Record<MapId, MapStory>;
   styles: Record<StyleKey, { label: string; legend: Four<string> }>;
 }

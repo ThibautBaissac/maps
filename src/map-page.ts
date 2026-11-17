@@ -9,7 +9,7 @@ import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
 import { ZOOM_STEP } from './toolkit/viewport.ts';
-import { DEFAULT_LOCALE, isLocale, messages } from './i18n/index.ts';
+import { DEFAULT_LOCALE, isLocale, mapStory, messages } from './i18n/index.ts';
 import { analyseTopic } from './topics.ts';
 import { mountTopicPanel } from './topic-panel.ts';
 
@@ -50,8 +50,10 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   const overlays = layerSets.flatMap((set, i) => set.layers.map((layer) => ({ title: map.layers[i]?.title ?? set.id, layer })));
 
   const { survey, meta } = mountMetaOf(map, osm);
+  const story = mapStory(locale, map.id);
+  if (!story) throw new Error(`No question and intro for map "${map.id}" (maps in src/i18n)`);
   const topic = map.topic ? analyseTopic(survey, layers, map.topic) : undefined;
-  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), survey, layers, meta, style.legend, locale, topic, overlays);
+  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), survey, layers, meta, style.legend, locale, topic && { analysis: topic, story }, overlays);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
   description.disabled = false;
@@ -71,7 +73,7 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
     layers,
     ...(topic ? { topic } : {}),
   });
-  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), survey, topic, locale, handle, url);
+  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), survey, topic, story, locale, handle, url);
   if (handle.viewport) {
     const viewport = handle.viewport;
     for (const [selector, factor] of [['.zoom-in', ZOOM_STEP], ['.zoom-out', 1 / ZOOM_STEP]] as const) {

@@ -1,4 +1,4 @@
-import { featureCount, formatDate, formatNumber, messages, pluralText, type Locale } from './i18n/index.ts';
+import { featureCount, formatDate, formatNumber, messages, pluralText, type Locale, type MapStory } from './i18n/index.ts';
 import { featuresOf, isTunnel, type Feature as LayerFeature, type Layer, type Line, type Survey } from './layers.ts';
 import type { TopicAnalysis } from './topics.ts';
 import { topicContent } from './topic-content.ts';
@@ -39,7 +39,7 @@ function overlayName(f: LayerFeature<unknown>, locale: Locale): string | undefin
 }
 
 /** Whole-survey description, independent of the visual zoom and the drawing technique. */
-export function describeMap(container: HTMLElement, summary: HTMLElement, survey: Survey, layers: readonly Layer[], display: { title: string; district: string }, legend: readonly string[], locale: Locale, topic?: TopicAnalysis, overlays: readonly { title: string; layer: Layer }[] = []): void {
+export function describeMap(container: HTMLElement, summary: HTMLElement, survey: Survey, layers: readonly Layer[], display: { title: string; district: string }, legend: readonly string[], locale: Locale, topic?: { analysis: TopicAnalysis; story: MapStory }, overlays: readonly { title: string; layer: Layer }[] = []): void {
   const copy = messages(locale).description;
   const fmt = (n: number): string => formatNumber(locale, n);
   const overview = copy.overview(display.title, display.district, fmt(survey.sizeKm));
@@ -52,9 +52,9 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, survey
   };
   paragraph(overview);
   if (topic) {
-    const content = topicContent(survey, topic, locale);
-    summary.textContent = `${content.subject.question} ${content.value} ${content.subject.metric}. ${content.concentration} ${overview} ${copy.help}`;
-    for (const text of [content.subject.question, content.subject.intro, `${content.value} ${content.subject.metric}.`, content.concentration,
+    const content = topicContent(survey, topic.analysis, topic.story, locale);
+    summary.textContent = `${content.story.question} ${content.value} ${content.subject.metric}. ${content.concentration} ${overview} ${copy.help}`;
+    for (const text of [content.story.question, content.story.intro, `${content.value} ${content.subject.metric}.`, content.concentration,
       ...content.references.map((ref) => content.copy.referenceLine(String(ref.number), ref.name, ref.detail)), content.subject.legend, content.source, content.subject.method, content.subject.limits]) paragraph(text);
   }
   paragraph(copy.centre(fmt(survey.lat), fmt(survey.lon), formatDate(locale, survey.osmDate)));

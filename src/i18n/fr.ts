@@ -90,28 +90,36 @@ export const fr: Messages = {
   },
   topics: {
     'canal-crossings': {
-      question: 'Où franchit-on les canaux du centre historique ?',
-      intro: 'Suivez les canaux et repérez les voies qui les franchissent sur un pont. Les passages ressortent du bâti et des rues de contexte.',
       metric: 'de voies sur pont repérées au croisement des canaux',
       legend: 'Traits épais bordés de papier : voies sur pont croisant un canal. Cercles numérotés : repères nommés. Hachures : eau. Les autres voies et le bâti restent en retrait.',
       method: 'Sélection des voies marquées comme pont qui croisent l’axe d’un canal de surface OSM dans le carré. Les longueurs additionnent les tronçons retenus, coupés aux limites du carré. Les repères regroupent les tronçons par nom ; un nom peut désigner plusieurs passages. Le repère désigne un point sur le plus long tronçon du groupe. Un trait le relie au numéro si celui-ci doit se décaler.',
       limits: 'Le chiffre mesure une longueur de voies, pas un nombre de ponts. Il peut omettre un passage si le pont ou l’axe du canal manque dans OSM. Les voies parallèles comptent chacune dans la longueur. Un canal est ici toute voie d’eau classée « canal » dans OSM, ce qui inclut certains bassins. Le dessin ne garantit pas l’accès à pied ou à vélo.',
     },
     steps: {
-      question: 'Où se concentrent les escaliers du quartier ?',
-      intro: 'Repérez les passages avec escaliers et observez leur répartition dans le quartier et ses alentours. Les traits à barreaux restent visibles dès la vue générale.',
       metric: 'de tronçons d’escaliers cartographiés dans la zone',
       legend: 'Traits épais à barreaux : tronçons d’escaliers. Cercles numérotés : repères nommés. Les barreaux sont un symbole et ne représentent pas le nombre de marches. L’eau et le bâti servent de contexte.',
       method: 'Sélection des voies OSM de catégorie escalier, hors tunnels. Longueurs en plan, coupées aux limites du carré, puis réparties en neuf secteurs égaux. Les repères regroupent les tronçons par nom ; le repère désigne un point sur le plus long tronçon du groupe. Un trait le relie au numéro si celui-ci doit se décaler.',
       limits: 'Ces longueurs ne mesurent ni le dénivelé ni le nombre de marches ou d’escaliers. La couverture OSM peut être incomplète. Une voie sans symbole d’escalier ne garantit pas un parcours accessible.',
     },
     'cholera-pump': {
-      question: 'Pourquoi les morts du choléra de 1854 se groupent-elles autour d’une pompe ?',
-      intro: 'Fin août 1854, le choléra tue des centaines d’habitants de Soho en dix jours. Le médecin John Snow reporte les décès sur un plan et montre qu’ils entourent la pompe de Broad Street, rue renommée Broadwick Street en 1936.',
       metric: 'décès plus proches à pied de la pompe de Broad Street que de toute autre pompe',
       legend: 'Disques proportionnels : décès par lieu, en encre rouge quand la pompe la plus proche à pied est celle de Broad Street. Cercles à croix : pompes de 1854, la plus grande pour Broad Street. Cercles numérotés : repères. Les rues et le bâti actuels servent de contexte.',
       method: 'Les barres noires de la carte de Snow ont été détectées par traitement d’image (épaisseur d’encre), puis comptées par surface. Chaque groupe de barres est placé au point de rue OSM le plus proche, qui approche son adresse. Les 13 pompes sont relevées à la main. La carte est calée sur quatre repères (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street), avec un écart quadratique moyen de 1,7 m sur ces repères. Les distances suivent le réseau piéton OSM actuel.',
       limits: 'Cette numérisation compte 556 décès, contre 578 barres dans celle de Tobler (1992) : quelques barres fusionnées ou effacées restent mal comptées. Un point peut réunir deux adresses voisines. Les rues ont changé depuis 1854 (Regent Street, Shaftesbury Avenue, passages modernes) : la distance à pied est une approximation. La carte ne montre que les décès recensés par Snow, pas les malades.',
+    },
+  },
+  maps: {
+    'amsterdam-riso': {
+      question: 'Où passer d’une rive à l’autre dans le centre d’Amsterdam ?',
+      intro: 'Ici, les canaux tracent la ville en anneaux. Pour traverser, il te faut un pont : la carte les fait ressortir, le reste s’efface.',
+    },
+    'lisbonne-cyanotype': {
+      question: 'Où les rues de l’Alfama deviennent-elles des escaliers ?',
+      intro: 'Relevé des passages en escalier, quartier et abords. Chaque trait à barreaux marque un tronçon cartographié ; sa longueur se lit en plan, pas en hauteur.',
+    },
+    'londres-gravure-sepia': {
+      question: 'Pourquoi les morts du choléra de 1854, à Soho, entourent-elles une seule pompe ?',
+      intro: 'En dix jours, à la fin de l’été 1854, plus de cinq cents personnes meurent du choléra autour de Broad Street. Le médecin John Snow porte les décès sur un plan de rue : ils se serrent autour de la pompe du quartier.',
     },
   },
   places: {

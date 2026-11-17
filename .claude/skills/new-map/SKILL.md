@@ -8,7 +8,7 @@ argument-hint: "<lieu> <style ou description du style>"
 
 Demande : $ARGUMENTS
 
-Une carte associe un **lieu**, un **sujet validé** et un **style**, déclarés dans `src/registry.ts`. Avant toute chose, lis `src/styles/README.md` (contrat d'un style, format des données, boîte à outils), `src/registry.ts` et `src/styles/index.ts` : ils décrivent l'état réel du projet, qui a pu évoluer depuis l'écriture de ce skill.
+Une carte associe un **lieu**, un **sujet validé**, une **voix** et un **style**, déclarés dans `src/registry.ts` et `voices/<id>.md`. Avant toute chose, lis `src/styles/README.md` (contrat d'un style, format des données, boîte à outils), `src/registry.ts` et `src/styles/index.ts` : ils décrivent l'état réel du projet, qui a pu évoluer depuis l'écriture de ce skill.
 
 Chaque carte doit expliquer une particularité du lieu à travers un **sujet validé par l'utilisateur**. Le lieu et le style seuls ne suffisent pas à lancer sa réalisation.
 
@@ -34,6 +34,16 @@ Avant de réaliser la carte :
 3. Demande la validation du sujet et attends une réponse explicite avant de passer aux étapes de réalisation ci-dessous. L'accord sur un lieu, un style ou l'objectif « comprendre le lieu » ne valide pas un sujet précis. Un sujet demandé explicitement ou déjà validé dans la conversation ne demande pas de nouvelle confirmation.
 
 Si l'utilisateur refuse le sujet, adapte la proposition. Si l'examen approfondi des données impose de changer de sujet, explique pourquoi et fais valider la nouvelle proposition avant de poursuivre.
+
+### Définir la voix et attendre sa validation
+
+Chaque carte raconte son sujet avec sa propre voix : un narrateur précis, accordé au sujet et au style. Une fois le sujet validé, et avant d'écrire le moindre texte :
+
+1. Lis `references/voice.md` (dans ce skill) : ce que la voix couvre, le modèle de fiche, les interdits.
+2. Rédige la fiche `voices/<id>.md` (`<id>` : l'id de la carte dans le registre) et présente-la avec deux ou trois phrases d'essai, en français, en anglais et en espagnol.
+3. Attends une validation explicite. Une voix demandée explicitement ou déjà validée dans la conversation ne demande pas de nouvelle confirmation.
+
+La voix ne s'applique qu'à la question et à l'introduction de la carte. Mesures, légende, méthode, limites et textes d'interface gardent le ton neutre du site.
 
 ### Réaliser le sujet validé
 
@@ -83,6 +93,10 @@ Ajoute l'entrée dans `src/registry.ts` :
 
 Réutilise un sujet de `src/topics.ts` seulement s’il correspond à la question validée. Sinon, ajoute sa sélection et ses mesures dans ce module, ses traductions dans les dictionnaires et ses vérifications. Le build refuse une carte sans sujet ou avec un sujet inconnu.
 
+Les dictionnaires (`src/i18n/fr.ts`, `en.ts`, `es.ts`) séparent deux sortes de textes :
+- `topics.<sujet>` : `metric`, `legend`, `method`, `limits`, les faits et la méthode du sujet, au ton neutre, partagés par toutes les cartes de ce sujet ;
+- `maps.<id>` : `question` et `intro`, écrites dans la voix de la carte selon `voices/<id>.md`. Chaque carte du registre doit avoir les siennes dans les trois langues : `tsc -b` refuse une entrée manquante ou en trop.
+
 L'`id` donne l'URL de la page (`/cartes/<id>/`) : court et lisible. Par défaut `<ville>-<style>`. Si la ville a déjà une carte dans ce style, prends `<ville>-<quartier>-<style>`, et pour une variante ajoute un mot qui la distingue (`amsterdam-riso-vert`). Une demande explicite de l'utilisateur l'emporte.
 
 `npm run build` vérifie strictement le registre : d'abord les types (`tsc -b` : lieu présent dans `places/index.ts`, clé de style connue, `options` conformes au `defaults.ts` du style), puis les données (`src/catalogue.ts`) : présentes, et toujours d'accord avec le lieu (nom, quartier, coordonnées, taille). Si tu modifies un lieu, relance `npm run fetch-data -- <lieu>` ; pour un simple changement de nom ou de quartier, `npm run fetch-data -- <lieu> --offline` suffit (il reconvertit la réponse gardée en cache, sans réseau). En développement, une entrée en défaut est seulement ignorée avec un avertissement dans la console du serveur, et sa page apparaît d'elle-même dès que les données sont là.
@@ -108,6 +122,7 @@ Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n
 5. Contrôle :
    - question validée compréhensible dès la vue générale ; annotations et mesures justifiées par les données, sources et limites consultables ;
    - sujet et observations disponibles en texte ; information compréhensible sans dépendre de la couleur seule ;
+   - question et introduction fidèles à `voices/<id>.md` dans les trois langues, sans fait ni chiffre absent des données, de la méthode ou des sources citées ;
    - console sans erreur ;
    - aucune requête externe : `performance.getEntriesByType('resource')` ne doit contenir que l'origine locale ;
    - lien retour et attribution OSM visibles et lisibles ;
@@ -137,6 +152,7 @@ Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n
 
 Termine par quelques lignes :
 - sujet validé et ce que la carte permet de comprendre ;
+- voix retenue, en une phrase ;
 - URL locale de la carte ;
 - ce qui a été créé (lieu, données, style, registre) ;
 - écarts par rapport au preset et leur raison ;

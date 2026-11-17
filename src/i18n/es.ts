@@ -90,28 +90,36 @@ export const es: Messages = {
   },
   topics: {
     'canal-crossings': {
-      question: '¿Dónde se cruzan los canales del centro histórico?',
-      intro: 'Sigue los canales y localiza las vías que los cruzan por un puente. Los pasos destacan sobre los edificios y las calles del entorno.',
       metric: 'de tramos sobre puentes que cruzan canales',
       legend: 'Líneas gruesas con borde de papel: vías sobre puentes que cruzan un canal. Círculos numerados: referencias con nombre. Rayado: agua. Las demás vías y edificios aparecen atenuados.',
       method: 'Selección de vías marcadas como puentes que cruzan el eje de un canal de superficie OSM dentro del cuadrado. Las longitudes suman los tramos seleccionados, recortados al cuadrado. Las referencias agrupan los tramos por nombre; un nombre puede abarcar varios pasos. La referencia identifica un punto del tramo más largo del grupo. Una línea une el número a este punto si el círculo debe desplazarse.',
       limits: 'La cifra mide una longitud de vías, no un número de puentes. Puede omitir pasos si falta el puente o el eje del canal en OSM. Las vías paralelas contribuyen por separado a la longitud. Aquí un canal es cualquier curso de agua clasificado como «canal» en OSM, lo que incluye algunas dársenas. El dibujo no garantiza el acceso peatonal o ciclista.',
     },
     steps: {
-      question: '¿Dónde se concentran las escaleras del barrio?',
-      intro: 'Localiza los pasos con escaleras y observa su distribución en el barrio y sus alrededores. Las líneas con travesaños permanecen visibles en la vista general.',
       metric: 'de tramos de escaleras cartografiados en la zona',
       legend: 'Líneas gruesas con travesaños: tramos de escaleras. Círculos numerados: referencias con nombre. Los travesaños son un símbolo y no representan el número de peldaños. El agua y los edificios sirven de contexto.',
       method: 'Selección de vías OSM de categoría escalera, salvo túneles. Las longitudes en planta se recortan al cuadrado y se distribuyen en nueve sectores iguales. Las referencias agrupan los tramos por nombre; la referencia identifica un punto del tramo más largo del grupo. Una línea une el número a este punto si el círculo debe desplazarse.',
       limits: 'Estas longitudes no miden el desnivel ni el número de peldaños o escaleras. La cobertura OSM puede ser incompleta. Una vía sin símbolo de escalera no garantiza un recorrido accesible.',
     },
     'cholera-pump': {
-      question: '¿Por qué las muertes del cólera de 1854 se agrupan alrededor de una bomba?',
-      intro: 'A finales de agosto de 1854, el cólera mató a cientos de vecinos del Soho en diez días. El médico John Snow situó las muertes en un plano y mostró que rodean la bomba de Broad Street, calle rebautizada Broadwick Street en 1936.',
       metric: 'muertes más cerca a pie de la bomba de Broad Street que de cualquier otra bomba',
       legend: 'Discos proporcionales: muertes por lugar, en tinta roja cuando la bomba más cercana a pie es la de Broad Street. Círculos con cruz: bombas de 1854, la mayor para Broad Street. Círculos numerados: referencias. Las calles y edificios actuales sirven de contexto.',
       method: 'Las barras negras del mapa de Snow se detectaron por tratamiento de imagen (grosor de tinta) y se contaron por superficie. Cada grupo de barras se sitúa en el punto más cercano de una calle OSM, que se aproxima a su dirección. Las 13 bombas se leyeron a mano. El mapa se ajusta con cuatro referencias (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street), con un error cuadrático medio de 1,7 m en estas referencias. Las distancias siguen la red peatonal actual de OSM.',
       limits: 'Esta digitalización cuenta 556 muertes, frente a 578 barras en la de Tobler (1992): algunas barras fusionadas o borrosas siguen mal contadas. Un punto puede reunir dos direcciones vecinas. Las calles han cambiado desde 1854 (Regent Street, Shaftesbury Avenue, pasajes modernos): la distancia a pie es una aproximación. El mapa solo muestra las muertes registradas por Snow, no los enfermos.',
+    },
+  },
+  maps: {
+    'amsterdam-riso': {
+      question: '¿Por dónde pasar de una orilla a otra en el centro de Ámsterdam?',
+      intro: 'Aquí los canales dibujan la ciudad en anillos. Para cruzar necesitas un puente: el mapa los resalta y deja que el resto se desvanezca.',
+    },
+    'lisbonne-cyanotype': {
+      question: '¿Dónde se vuelven escaleras las calles de Alfama?',
+      intro: 'Levantamiento de los pasos con escaleras, en el barrio y sus alrededores. Cada trazo con travesaños marca un tramo cartografiado; su longitud se lee en planta, no en altura.',
+    },
+    'londres-gravure-sepia': {
+      question: '¿Por qué las muertes del cólera de 1854, en el Soho, rodean una sola bomba?',
+      intro: 'En diez días, a finales del verano de 1854, más de quinientas personas murieron de cólera en torno a Broad Street. El médico John Snow marcó las muertes en un plano de calles: se agolpan alrededor de la bomba del barrio.',
     },
   },
   places: {

@@ -54,10 +54,10 @@ test('each static gallery contains translated map names and links before JavaScr
 test('the validated subjects appear in map headings and gallery cards before JavaScript runs', () => {
   const map = findMap('lisbonne-cyanotype', 'fr')!;
   const html = pageHtml(map, 'fr', '/maps/');
-  assert.match(html, /<h1[^>]*>Où se concentrent les escaliers/);
+  assert.match(html, /<h1[^>]*>Où les rues de l’Alfama deviennent-elles des escaliers/);
   assert.match(html, /id="topic-panel"/);
-  assert.match(galleryHtml('fr', '/maps/'), /Où franchit-on les canaux/);
-  assert.match(pageHtml(findMap('amsterdam-riso', 'en')!, 'en', '/maps/'), /Where can you cross the canals/);
+  assert.match(galleryHtml('fr', '/maps/'), /Où passer d’une rive à l’autre/);
+  assert.match(pageHtml(findMap('amsterdam-riso', 'en')!, 'en', '/maps/'), /Where can you get from one bank to the other/);
 });
 
 test('map navigation precedes the drawing while zoom and description stay with the map', () => {
@@ -83,4 +83,17 @@ test('the attribution line adds the credits of the external layers after the Ope
 test('without layers the attribution line is the OpenStreetMap link alone', () => {
   const html = pageHtml(findMap('amsterdam-riso', 'fr')!, 'fr', '/maps/');
   assert.ok(html.includes('<small class="attribution"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© contributeurs OpenStreetMap</a></small>'));
+});
+
+test('the question and intro belong to the map, while the legend comes from its subject', () => {
+  // Same subject as amsterdam-riso, published under another registered id.
+  const map = { ...findMap('amsterdam-riso', 'en')!, id: 'lisbonne-cyanotype' };
+  const html = pageHtml(map, 'en', '/maps/');
+  assert.match(html, /<h1>Where do the streets of Alfama turn into stairs/);
+  assert.match(html, /Thick lines with a paper border: bridge segments crossing a canal/);
+});
+
+test('a map without its question and intro in the dictionaries fails page generation and names the map', () => {
+  const map = { ...findMap('amsterdam-riso', 'fr')!, id: 'sans-texte' };
+  assert.throws(() => pageHtml(map, 'fr', '/maps/'), /No question and intro for map "sans-texte" in fr/);
 });

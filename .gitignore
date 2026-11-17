@@ -6,5 +6,7 @@ dist
 /fr/
 /en/
 /es/
+/pt/
+/de/
 # raw Overpass answers kept by scripts/fetch-osm.ts for --offline
 .cache/

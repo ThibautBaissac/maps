@@ -141,7 +141,7 @@ test('a map without a subject is refused before page generation', () => {
 });
 
 // External layers: the registry injected into problemsOf and catalogueOf stands for places/layers.ts.
-const SPEC = { title: { fr: 'Ponts', en: 'Bridges', es: 'Puentes' }, file: 'layers/amsterdam-centre/ponts.geojson', kind: 'points', role: 'overlay', attribution: '© Ville d’Amsterdam' } as const;
+const SPEC = { title: { fr: 'Ponts', en: 'Bridges', es: 'Puentes', pt: 'Pontes', de: 'Brücken' }, file: 'layers/amsterdam-centre/ponts.geojson', kind: 'points', role: 'overlay', attribution: '© Ville d’Amsterdam' } as const;
 const LAYER_REGISTRY = { 'amsterdam-centre': { ponts: SPEC } } as const;
 const layerFile = (sizeKm = 2): unknown => ({
   square: { lat: 52.3712, lon: 4.8936, sizeKm },
@@ -210,7 +210,7 @@ test('a valid layer file is no problem, and the catalogue lists the layer and it
 });
 
 test('a translated credit is shown in the page language and checked against the file in the default language', () => {
-  const credit = { fr: 'Numérisé pour ce site', en: 'Digitised for this site', es: 'Digitalizado para este sitio' };
+  const credit = { fr: 'Numérisé pour ce site', en: 'Digitised for this site', es: 'Digitalizado para este sitio', pt: 'Digitalizado para este site', de: 'Für diese Website digitalisiert' };
   const registry = { 'amsterdam-centre': { ponts: { ...SPEC, attribution: credit } } } as const;
   const file = layerFile() as { layers: object[] };
   const translated = { ...file, layers: [{ ...file.layers[0], attribution: credit.fr }] };

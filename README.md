@@ -58,7 +58,7 @@ Le [module d’analyse des sujets](src/topics.ts) sélectionne les géométries,
 
 Les dictionnaires de [`src/i18n/`](src/i18n/) fournissent les textes du HTML, des descriptions accessibles et des dessins Canvas. Le catalogue combine leurs noms de villes et de quartiers avec les données géographiques communes. Traduire un nom dans ces dictionnaires ne modifie ni l’identifiant du lieu ni le fichier OSM ; aucun téléchargement supplémentaire n’est nécessaire. Les rues et cours d’eau gardent leurs noms locaux.
 
-Le champ `title` du registre accepte un nom commun aux langues ou un objet `{ fr: '…', en: '…', es: '…' }`. Les pages d’une même carte partagent son identifiant. Changer de langue ouvre la même carte et réinitialise sa vue.
+Le champ `title` du registre accepte un nom commun aux langues ou un objet `{ fr: '…', en: '…', es: '…', pt: '…', de: '…' }`. Les pages d’une même carte partagent son identifiant. Changer de langue ouvre la même carte et réinitialise sa vue.
 
 Pour ajouter une langue, compléter [`src/i18n/types.ts`](src/i18n/types.ts) et enregistrer son dictionnaire dans [`src/i18n/index.ts`](src/i18n/index.ts), y compris son format régional. Ajouter son dossier HTML généré à `.gitignore`, puis générer ses vignettes. Le contrôle TypeScript exige les messages, lieux et styles ; le contrôle de construction refuse aussi les textes vides. Les écritures de droite à gauche nécessitent une adaptation du placement des noms dans le Canvas.
 

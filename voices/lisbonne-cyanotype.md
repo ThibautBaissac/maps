@@ -12,3 +12,5 @@
 - fr : Où les rues de l'Alfama deviennent-elles des escaliers ? — Relevé des passages en escalier, quartier et abords. Chaque trait à barreaux marque un tronçon cartographié ; sa longueur se lit en plan, pas en hauteur.
 - en : Where do the streets of Alfama turn into stairs? — Survey of stepped passages, in the neighbourhood and around it. Each barred line marks one mapped stretch of stairs; its length is read on the plan, not in height.
 - es : ¿Dónde se vuelven escaleras las calles de Alfama? — Levantamiento de los pasos con escaleras, en el barrio y sus alrededores. Cada trazo con travesaños marca un tramo cartografiado; su longitud se lee en planta, no en altura.
+- pt : Onde é que as ruas de Alfama se tornam escadas? — Levantamento das passagens em escada, no bairro e arredores. Cada traço com travessas marca um troço cartografado; o comprimento lê-se em planta, não em altura.
+- de : Wo werden die Straßen der Alfama zu Treppen? — Aufnahme der Treppenwege, im Viertel und seiner Umgebung. Jede Linie mit Querstrichen markiert einen kartierten Abschnitt; ihre Länge gilt im Grundriss, nicht in der Höhe.

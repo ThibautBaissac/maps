@@ -3,7 +3,7 @@ import type { MapId } from '../registry.ts';
 import type { StyleKey } from '../styles/index.ts';
 import type { ThemeId, TopicId } from '../topics.ts';
 
-export const LOCALES = ['fr', 'en', 'es'] as const;
+export const LOCALES = ['fr', 'en', 'es', 'pt', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = 'fr';
 

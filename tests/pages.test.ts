@@ -106,3 +106,14 @@ test('the static gallery tags each strip and offers its filters hidden until the
   assert.match(html, /<button type="button" data-tag="theme:water" aria-pressed="false">Water<\/button>/);
   assert.match(html, /<p class="filter-count" role="status" data-forms="\{&quot;one&quot;:&quot;\{count\} map shown&quot;,&quot;other&quot;:&quot;\{count\} maps shown&quot;\}"><\/p>/);
 });
+
+test('the language menu is a disclosure that names the current language and links every other one', () => {
+  const html = galleryHtml('pt', '/atlas/');
+  const nav = /<nav class="languages"[^>]*>([\s\S]*?)<\/nav>/.exec(html)?.[0] ?? '';
+  assert.match(nav, /^<nav class="languages" aria-label="Idioma">/);
+  assert.match(nav, /<details><summary><span lang="pt">Português<\/span>/);
+  for (const [locale, name] of [['fr', 'Français'], ['en', 'English'], ['es', 'Español'], ['de', 'Deutsch']] as const) {
+    assert.ok(nav.includes(`<a href="/atlas/${locale}/" lang="${locale}" hreflang="${locale}">${name}</a>`), locale);
+  }
+  assert.ok(nav.includes('<a href="/atlas/pt/" lang="pt" hreflang="pt" aria-current="page">Português</a>'));
+});

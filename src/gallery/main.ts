@@ -1,4 +1,7 @@
 import { isShown, parseTag } from './selection.ts';
+import { enhanceLanguageMenu } from '../languages.ts';
+
+enhanceLanguageMenu();
 
 // The gallery content is rendered in its language at build time. A missing picture
 // leaves the style's paper and dot pattern visible, as it did before localization.

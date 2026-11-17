@@ -76,8 +76,8 @@ Vérifie ensuite que les données contiennent ce qu'on voit sur openstreetmap.or
 OSM ne contient pas tout. Si le sujet validé repose sur des objets qu'OSM n'a pas (équipements recensés par une ville, tracé historique, relevé d'une association), propose une **couche extérieure** : un fichier GeoJSON ajouté à la carte, sans toucher aux données OSM. Ne la propose que si la source est ouverte et son usage libre, et dis à l'utilisateur d'où elle vient avant de l'utiliser.
 
 1. **Ranger la source** dans `layers/<lieu>/<id>.geojson` (versionnée, en WGS84). `<id>` est un identifiant `a-z0-9-` ; `osm` est réservé.
-2. **La déclarer** dans `places/layers.ts`, sous l'id du lieu : `title` (texte ou `{ fr, en, es }`, affiché dans la description), `file`, `kind` (`points`, `lines` ou `areas`), `role` (`overlay`, dessinée par-dessus la carte), `nameField` et `categoryField` si la source en a.
-3. **Créditer** dans `attribution` (obligatoire, non vide) : l'auteur et la licence de la source, par exemple `© Ville d’Amsterdam, CC BY 4.0`. La page l'affiche à la suite du crédit OSM (ODbL, déjà présent) ; ne l'invente pas, relève-la sur la page du jeu de données. Sans licence claire, n'utilise pas la source. Un crédit qui contient des mots à traduire (« numérisé pour ce site ») s'écrit `{ fr, en, es }` ; le fichier converti garde le texte français.
+2. **La déclarer** dans `places/layers.ts`, sous l'id du lieu : `title` (texte ou `{ fr, en, es, pt, de }`, affiché dans la description), `file`, `kind` (`points`, `lines` ou `areas`), `role` (`overlay`, dessinée par-dessus la carte), `nameField` et `categoryField` si la source en a.
+3. **Créditer** dans `attribution` (obligatoire, non vide) : l'auteur et la licence de la source, par exemple `© Ville d’Amsterdam, CC BY 4.0`. La page l'affiche à la suite du crédit OSM (ODbL, déjà présent) ; ne l'invente pas, relève-la sur la page du jeu de données. Sans licence claire, n'utilise pas la source. Un crédit qui contient des mots à traduire (« numérisé pour ce site ») s'écrit `{ fr, en, es, pt, de }` ; le fichier converti garde le texte français.
 4. **Convertir** : `npm run layers -- <lieu>` écrit `public/data/<lieu>/<id>.json` en mètres locaux ; committe ce fichier avec la source.
 5. **L'attacher à la carte** : `layers: ['<id>']` dans l'entrée de `src/registry.ts`. Le build refuse un id inconnu, un fichier absent ou converti pour un autre carré.
 
@@ -93,9 +93,9 @@ Ajoute l'entrée dans `src/registry.ts` :
 
 Réutilise un sujet de `src/topics.ts` seulement s’il correspond à la question validée. Sinon, ajoute sa sélection et ses mesures dans ce module, ses thèmes dans `TOPIC_THEMES` (les filtres de la galerie ; un nouveau thème va dans `THEME_IDS` et dans `themes.<thème>` des dictionnaires), ses traductions dans les dictionnaires et ses vérifications. Le build refuse une carte sans sujet ou avec un sujet inconnu.
 
-Les dictionnaires (`src/i18n/fr.ts`, `en.ts`, `es.ts`) séparent deux sortes de textes :
+Les dictionnaires (`src/i18n/fr.ts`, `en.ts`, `es.ts`, `pt.ts`, `de.ts`) séparent deux sortes de textes :
 - `topics.<sujet>` : `metric`, `legend`, `method`, `limits`, les faits et la méthode du sujet, au ton neutre, partagés par toutes les cartes de ce sujet ;
-- `maps.<id>` : `question` et `intro`, écrites dans la voix de la carte selon `voices/<id>.md`. Chaque carte du registre doit avoir les siennes dans les trois langues : `tsc -b` refuse une entrée manquante ou en trop.
+- `maps.<id>` : `question` et `intro`, écrites dans la voix de la carte selon `voices/<id>.md`. Chaque carte du registre doit avoir les siennes dans les cinq langues : `tsc -b` refuse une entrée manquante ou en trop.
 
 L'`id` donne l'URL de la page (`/cartes/<id>/`) : court et lisible. Par défaut `<ville>-<style>`. Si la ville a déjà une carte dans ce style, prends `<ville>-<quartier>-<style>`, et pour une variante ajoute un mot qui la distingue (`amsterdam-riso-vert`). Une demande explicite de l'utilisateur l'emporte.
 
@@ -122,7 +122,7 @@ Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n
 5. Contrôle :
    - question validée compréhensible dès la vue générale ; annotations et mesures justifiées par les données, sources et limites consultables ;
    - sujet et observations disponibles en texte ; information compréhensible sans dépendre de la couleur seule ;
-   - question et introduction fidèles à `voices/<id>.md` dans les trois langues, sans fait ni chiffre absent des données, de la méthode ou des sources citées ;
+   - question et introduction fidèles à `voices/<id>.md` dans les cinq langues, sans fait ni chiffre absent des données, de la méthode ou des sources citées ;
    - console sans erreur ;
    - aucune requête externe : `performance.getEntriesByType('resource')` ne doit contenir que l'origine locale ;
    - lien retour et attribution OSM visibles et lisibles ;

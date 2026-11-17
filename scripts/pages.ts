@@ -7,9 +7,13 @@ const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;'
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ESCAPES[c] ?? c);
 const pathFor = (locale: Locale, map?: CatalogueMap): string => map ? `${locale}/${PAGES_DIR}/${map.id}/` : `${locale}/`;
 
+const CHEVRON = '<svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+
+/** A disclosure: the current language shows, the others open below it. Works without JavaScript; src/languages.ts adds Escape and outside clicks. */
 function languageNav(locale: Locale, base: string, map?: CatalogueMap): string {
-  return `<nav class="languages" aria-label="${esc(messages(locale).languageNav)}">${LOCALES.map((target) =>
-    `<a href="${esc(base + pathFor(target, map))}" lang="${target}" hreflang="${target}"${target === locale ? ' aria-current="page"' : ''}>${esc(messages(target).languageName)}</a>`).join('')}</nav>`;
+  const links = LOCALES.map((target) =>
+    `<li><a href="${esc(base + pathFor(target, map))}" lang="${target}" hreflang="${target}"${target === locale ? ' aria-current="page"' : ''}>${esc(messages(target).languageName)}</a></li>`).join('');
+  return `<nav class="languages" aria-label="${esc(messages(locale).languageNav)}"><details><summary><span lang="${locale}">${esc(messages(locale).languageName)}</span>${CHEVRON}</summary><ul>${links}</ul></details></nav>`;
 }
 
 /** Longest meta description search engines show in full. */

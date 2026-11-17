@@ -1,17 +1,57 @@
-.languages { display: flex; flex-wrap: wrap; gap: 4px; }
-.languages a {
+/* The language menu: a disclosure showing the current language, the others listed below
+   it. Colours follow the surrounding text; --language-bg paints the button and the list. */
+.languages { position: relative; display: flex; }
+.languages details { position: relative; }
+.languages summary {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
   min-height: 44px;
-  padding: 4px 8px;
+  padding: 4px 12px;
   box-sizing: border-box;
   font: 12px/1.2 system-ui, sans-serif;
+  font-weight: 700;
   color: inherit;
   background: var(--language-bg, transparent);
   border: 1px solid currentColor;
-  text-decoration: none;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
 }
-.languages a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; font-weight: 700; }
-.languages a:hover { text-decoration: underline; }
-.languages a:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
+.languages summary::-webkit-details-marker { display: none; }
+.languages summary:hover { text-decoration: underline; text-underline-offset: 4px; }
+.languages summary:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
+.languages .chevron { flex: none; transition: transform 0.2s ease; }
+.languages details[open] .chevron { transform: rotate(180deg); }
+.languages ul {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--language-bg, #0F1115);
+  border: 1px solid currentColor;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
+}
+.languages a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 4px 12px;
+  box-sizing: border-box;
+  font: 13px/1.2 system-ui, sans-serif;
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.languages a[aria-current="page"] { font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.languages a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.languages a:focus-visible { outline: 3px solid currentColor; outline-offset: -3px; }
+@media (prefers-reduced-motion: reduce) {
+  .languages .chevron { transition: none; }
+}

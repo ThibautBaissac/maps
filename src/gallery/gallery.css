@@ -37,7 +37,7 @@ header {
 }
 .gallery-heading { min-width: 0; }
 .gallery-context { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
-.gallery-context .languages { justify-content: flex-end; }
+.gallery-context .languages { justify-content: flex-end; --language-bg: var(--night); }
 .kicker {
   margin: 0 0 14px;
   font: 14px/1 var(--mono);

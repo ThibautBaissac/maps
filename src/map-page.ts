@@ -12,6 +12,9 @@ import { ZOOM_STEP } from './toolkit/viewport.ts';
 import { DEFAULT_LOCALE, isLocale, mapStory, messages } from './i18n/index.ts';
 import { analyseTopic } from './topics.ts';
 import { mountTopicPanel } from './topic-panel.ts';
+import { enhanceLanguageMenu } from './languages.ts';
+
+enhanceLanguageMenu();
 
 const lang = document.documentElement.lang;
 const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;

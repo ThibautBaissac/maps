@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { findMap } from '../src/catalogue.ts';
+import { LOCALES } from '../src/i18n/index.ts';
 import { galleryHtml, metaDescription, pageHtml, sitemapXml } from '../scripts/pages.ts';
 
 const SITE = 'https://example.test/atlas/';
@@ -75,12 +76,9 @@ test('the sitemap lists every gallery and map page once, each with its language 
   assert.match(xml, /^<\?xml version="1.0" encoding="UTF-8"\?>/);
   assert.match(xml, /xmlns:xhtml="http:\/\/www.w3.org\/1999\/xhtml"/);
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-  assert.deepEqual(locs, [
-    `${SITE}fr/`, `${SITE}en/`, `${SITE}es/`,
-    `${SITE}fr/cartes/amsterdam-riso/`, `${SITE}en/cartes/amsterdam-riso/`, `${SITE}es/cartes/amsterdam-riso/`,
-    `${SITE}fr/cartes/lisbonne-cyanotype/`, `${SITE}en/cartes/lisbonne-cyanotype/`, `${SITE}es/cartes/lisbonne-cyanotype/`,
-  ]);
-  // Each URL lists fr, en, es and x-default.
-  assert.equal([...xml.matchAll(/<xhtml:link rel="alternate"/g)].length, 9 * 4);
+  const pages = ['', 'cartes/amsterdam-riso/', 'cartes/lisbonne-cyanotype/'];
+  assert.deepEqual(locs, pages.flatMap((page) => LOCALES.map((locale) => `${SITE}${locale}/${page}`)));
+  // Each URL lists every language and x-default.
+  assert.equal([...xml.matchAll(/<xhtml:link rel="alternate"/g)].length, locs.length * (LOCALES.length + 1));
   assert.match(xml, /<xhtml:link rel="alternate" hreflang="x-default" href="https:\/\/example.test\/atlas\/fr\/cartes\/amsterdam-riso\/" \/>/);
 });

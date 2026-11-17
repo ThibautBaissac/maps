@@ -1,12 +1,14 @@
 import { fr } from './fr.ts';
 import { en } from './en.ts';
 import { es } from './es.ts';
+import { pt } from './pt.ts';
+import { de } from './de.ts';
 import { LOCALES, type Locale, type LocalizedText, type MapStory, type Messages, type PluralMessage } from './types.ts';
 import type { MapId } from '../registry.ts';
 import { isRecord } from '../place.ts';
 
 export { DEFAULT_LOCALE, LOCALES, type Locale, type LocalizedText, type MapStory } from './types.ts';
-const MESSAGES: Record<Locale, Messages> = { fr, en, es };
+const MESSAGES: Record<Locale, Messages> = { fr, en, es, pt, de };
 
 export const messages = (locale: Locale): Messages => MESSAGES[locale];
 
@@ -20,7 +22,7 @@ export function mapStory(locale: Locale, id: string): MapStory | undefined {
 export const localized = (text: LocalizedText, locale: Locale): string => typeof text === 'string' ? text : text[locale];
 
 export const isLocale = (value: string): value is Locale => (LOCALES as readonly string[]).includes(value);
-const TAGS: Record<Locale, string> = { fr: 'fr-FR', en: 'en-GB', es: 'es-ES' };
+const TAGS: Record<Locale, string> = { fr: 'fr-FR', en: 'en-GB', es: 'es-ES', pt: 'pt-PT', de: 'de-DE' };
 
 /** Open Graph locale, as fr_FR. */
 export const ogLocale = (locale: Locale): string => TAGS[locale].replace('-', '_');

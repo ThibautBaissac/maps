@@ -17,14 +17,15 @@ export function mountTopicPanel(container: HTMLElement, survey: Survey, topic: T
   metric.append(el('strong', content.value), el('span', subject.metric));
   const legend = el('p', subject.legend, 'topic-legend');
   const distribution = el('section');
-  distribution.append(el('h2', copy.distribution), el('p', content.concentration));
-  const grid = el('ul', undefined, 'sector-grid');
-  grid.setAttribute('aria-label', copy.distribution);
-  for (const s of content.sectors) {
+  const { title, help, layout, rows } = content.distribution;
+  distribution.append(el('h2', title), el('p', content.concentration));
+  const grid = el('ul', undefined, layout === 'grid' ? 'sector-grid' : 'topic-rows');
+  grid.setAttribute('aria-label', title);
+  for (const s of rows) {
     const cell = el('li', undefined, s.strongest ? 'strongest' : '');
     cell.append(el('span', s.name), el('strong', s.value)); grid.append(cell);
   }
-  distribution.append(grid, el('p', copy.distributionHelp, 'topic-small'));
+  distribution.append(grid, el('p', help, 'topic-small'));
   const references = el('section');
   references.append(el('h2', copy.references), el('p', copy.referenceHelp, 'topic-small'));
   const list = el('ol', undefined, 'topic-references');

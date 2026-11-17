@@ -70,6 +70,22 @@ export const es: Messages = {
     dataFile: 'Consultar los datos del registro (JSON)',
     concentration: (position, share) => `El sector ${position} reúne el ${share} % de la longitud representada.`,
     waterCrossed: (names) => `Canales cruzados por los tramos con este nombre: ${names}.`,
+    cholera: {
+      broadPump: 'Bomba de Broad Street',
+      deaths: (count) => `${count} ${count === 1 ? 'muerte' : 'muertes'}`,
+      concentration: (share, within100) => `El ${share} % de las muertes registradas está más cerca a pie de la bomba de Broad Street que de cualquier otra; ${within100} están a menos de 100 m andando.`,
+      distribution: 'Muertes por bomba más cercana a pie',
+      distributionHelp: 'Cada dirección se asigna a la bomba a la que se llega por el trayecto a pie más corto en las calles actuales.',
+      pumpDetail: (broad, within100) => `${broad} muertes más cerca de esta bomba que de cualquier otra; ${within100} a menos de 100 m andando. Su manivela se retiró el 8 de septiembre de 1854.`,
+      workhouse: 'Asilo de Poland Street',
+      workhouseDetail: 'Snow contó 5 muertes entre 535 internos, mientras las casas vecinas sufrían la epidemia: el asilo tenía su propio pozo.',
+      brewery: 'Cervecería de Broad Street',
+      breweryDetail: 'Según Snow, ninguno de sus unos 70 obreros murió: bebían cerveza o agua del pozo de la cervecería, nunca de la bomba.',
+      source: 'Muertes y bombas digitalizadas para este sitio a partir del mapa de John Snow (On the Mode of Communication of Cholera, 1855, dominio público) y ajustadas a las calles de OSM.',
+      legendDeaths: 'Muertes por dirección',
+      legendBroad: 'Más cerca de Broad Street',
+      legendPump: 'Bomba de 1854',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -87,6 +103,14 @@ export const es: Messages = {
       legend: 'Líneas gruesas con travesaños: tramos de escaleras. Círculos numerados: referencias con nombre. Los travesaños son un símbolo y no representan el número de peldaños. El agua y los edificios sirven de contexto.',
       method: 'Selección de vías OSM de categoría escalera, salvo túneles. Las longitudes en planta se recortan al cuadrado y se distribuyen en nueve sectores iguales. Las referencias agrupan los tramos por nombre; la referencia identifica un punto del tramo más largo del grupo. Una línea une el número a este punto si el círculo debe desplazarse.',
       limits: 'Estas longitudes no miden el desnivel ni el número de peldaños o escaleras. La cobertura OSM puede ser incompleta. Una vía sin símbolo de escalera no garantiza un recorrido accesible.',
+    },
+    'cholera-pump': {
+      question: '¿Por qué las muertes del cólera de 1854 se agrupan alrededor de una bomba?',
+      intro: 'A finales de agosto de 1854, el cólera mató a cientos de vecinos del Soho en diez días. El médico John Snow situó cada muerte en un plano y mostró que rodean la bomba de Broad Street, hoy Broadwick Street.',
+      metric: 'muertes más cerca a pie de la bomba de Broad Street que de cualquier otra bomba',
+      legend: 'Discos proporcionales: muertes por dirección, en tinta roja cuando la bomba más cercana a pie es la de Broad Street. Círculos con cruz: bombas de 1854, la mayor para Broad Street. Círculos numerados: referencias. Las calles y edificios actuales sirven de contexto.',
+      method: 'Las barras negras del mapa de Snow se detectaron por tratamiento de imagen (grosor de tinta), se contaron por superficie y se situaron en la dirección más cercana a una calle; las 13 bombas se leyeron a mano. El mapa se ajusta con cuatro referencias (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street), con un error medio de 1,7 m. Las distancias siguen la red peatonal actual de OSM.',
+      limits: 'El registro cuenta 556 muertes, frente a 578 barras en la digitalización de Tobler (1992): algunas barras fusionadas o borrosas siguen mal contadas. Las calles han cambiado desde 1854 (Regent Street, Shaftesbury Avenue, pasajes modernos): la distancia a pie es una aproximación. El mapa solo muestra las muertes registradas por Snow, no los enfermos.',
     },
   },
   places: {

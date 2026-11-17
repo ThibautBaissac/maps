@@ -70,6 +70,22 @@ export const fr: Messages = {
     dataFile: 'Consulter les données du relevé (JSON)',
     concentration: (position, share) => `Le secteur ${position} rassemble ${share} % de la longueur représentée.`,
     waterCrossed: (names) => `Canaux croisés par les tronçons portant ce nom : ${names}.`,
+    cholera: {
+      broadPump: 'Pompe de Broad Street',
+      deaths: (count) => `${count} décès`,
+      concentration: (share, within100) => `${share} % des décès relevés sont plus proches à pied de la pompe de Broad Street que de toute autre pompe ; ${within100} sont à moins de 100 m de marche.`,
+      distribution: 'Décès par pompe la plus proche à pied',
+      distributionHelp: 'Chaque adresse est rattachée à la pompe qu’on atteint par le plus court trajet à pied dans les rues actuelles.',
+      pumpDetail: (broad, within100) => `${broad} décès plus proches de cette pompe que de toute autre ; ${within100} à moins de 100 m de marche. La poignée est retirée le 8 septembre 1854.`,
+      workhouse: 'Workhouse de Poland Street',
+      workhouseDetail: 'Snow y compte 5 décès pour 535 pensionnaires, alors que les maisons voisines sont touchées : l’établissement avait son propre puits.',
+      brewery: 'Brasserie de Broad Street',
+      breweryDetail: 'Selon Snow, aucun des quelque 70 ouvriers n’est mort : ils buvaient de la bière ou l’eau du puits de la brasserie, jamais celle de la pompe.',
+      source: 'Décès et pompes numérisés pour ce site sur la carte de John Snow (On the Mode of Communication of Cholera, 1855, domaine public), puis recalés sur les rues OSM.',
+      legendDeaths: 'Décès par adresse',
+      legendBroad: 'Plus proche de Broad Street',
+      legendPump: 'Pompe de 1854',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -87,6 +103,14 @@ export const fr: Messages = {
       legend: 'Traits épais à barreaux : tronçons d’escaliers. Cercles numérotés : repères nommés. Les barreaux sont un symbole et ne représentent pas le nombre de marches. L’eau et le bâti servent de contexte.',
       method: 'Sélection des voies OSM de catégorie escalier, hors tunnels. Longueurs en plan, coupées aux limites du carré, puis réparties en neuf secteurs égaux. Les repères regroupent les tronçons par nom ; le repère désigne un point sur le plus long tronçon du groupe. Un trait le relie au numéro si celui-ci doit se décaler.',
       limits: 'Ces longueurs ne mesurent ni le dénivelé ni le nombre de marches ou d’escaliers. La couverture OSM peut être incomplète. Une voie sans symbole d’escalier ne garantit pas un parcours accessible.',
+    },
+    'cholera-pump': {
+      question: 'Pourquoi les morts du choléra de 1854 se groupent-elles autour d’une pompe ?',
+      intro: 'Fin août 1854, le choléra tue des centaines d’habitants de Soho en dix jours. Le médecin John Snow reporte chaque décès sur un plan et montre qu’ils entourent la pompe de Broad Street, aujourd’hui Broadwick Street.',
+      metric: 'décès plus proches à pied de la pompe de Broad Street que de toute autre pompe',
+      legend: 'Disques proportionnels : décès par adresse, en encre rouge quand la pompe la plus proche à pied est celle de Broad Street. Cercles à croix : pompes de 1854, la plus grande pour Broad Street. Cercles numérotés : repères. Les rues et le bâti actuels servent de contexte.',
+      method: 'Les barres noires de la carte de Snow ont été détectées par traitement d’image (épaisseur d’encre), comptées par surface puis rattachées à l’adresse la plus proche d’une rue ; les 13 pompes sont relevées à la main. La carte est calée sur quatre repères (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street), avec un écart moyen de 1,7 m. Les distances suivent le réseau piéton OSM actuel.',
+      limits: 'Le relevé compte 556 décès, contre 578 barres selon la numérisation de Tobler (1992) : quelques barres fusionnées ou effacées restent mal comptées. Les rues ont changé depuis 1854 (Regent Street, Shaftesbury Avenue, passages modernes) : la distance à pied est une approximation. La carte ne montre que les décès relevés par Snow, pas les malades.',
     },
   },
   places: {

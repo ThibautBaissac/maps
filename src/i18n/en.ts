@@ -70,6 +70,22 @@ export const en: Messages = {
     dataFile: 'View the survey data (JSON)',
     concentration: (position, share) => `The sector ${position} contains ${share}% of the length shown.`,
     waterCrossed: (names) => `Canals crossed by segments with this name: ${names}.`,
+    cholera: {
+      broadPump: 'Broad Street pump',
+      deaths: (count) => `${count} ${count === 1 ? 'death' : 'deaths'}`,
+      concentration: (share, within100) => `${share}% of the recorded deaths are closer on foot to the Broad Street pump than to any other pump; ${within100} lie within a 100 m walk.`,
+      distribution: 'Deaths by closest pump on foot',
+      distributionHelp: 'Each address goes to the pump reached by the shortest walk along today’s streets.',
+      pumpDetail: (broad, within100) => `${broad} deaths closer to this pump than to any other; ${within100} within a 100 m walk. Its handle was removed on 8 September 1854.`,
+      workhouse: 'Poland Street workhouse',
+      workhouseDetail: 'Snow counted 5 deaths among 535 inmates while the surrounding houses were struck: the workhouse had its own well.',
+      brewery: 'Broad Street brewery',
+      breweryDetail: 'According to Snow, none of its 70 or so workmen died: they drank beer or water from the brewery’s own well, never from the pump.',
+      source: 'Deaths and pumps digitised for this site from John Snow’s map (On the Mode of Communication of Cholera, 1855, public domain), then fitted to the OSM streets.',
+      legendDeaths: 'Deaths per address',
+      legendBroad: 'Closest to Broad Street',
+      legendPump: 'Pump of 1854',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -87,6 +103,14 @@ export const en: Messages = {
       legend: 'Thick lines with crossbars: stair segments. Numbered circles: named reference points. Crossbars are a symbol and do not show the number of steps. Water and buildings provide context.',
       method: 'Select OSM ways classified as steps, excluding tunnels. Plan lengths are clipped to the square and distributed across nine equal sectors. Reference points group segments by name; the reference identifies a point on the longest segment in the group. A leader connects the number to this point if the badge needs to move.',
       limits: 'These lengths measure neither elevation gain nor the number of steps or staircases. OSM coverage may be incomplete. A way without a stairs symbol does not guarantee an accessible route.',
+    },
+    'cholera-pump': {
+      question: 'Why do the 1854 cholera deaths cluster around one pump?',
+      intro: 'In late August 1854, cholera killed hundreds of Soho residents in ten days. The physician John Snow plotted every death on a plan and showed that they surround the Broad Street pump, now Broadwick Street.',
+      metric: 'deaths closer on foot to the Broad Street pump than to any other pump',
+      legend: 'Proportional discs: deaths per address, in red ink when the closest pump on foot is Broad Street. Circles with a cross: pumps of 1854, the largest for Broad Street. Numbered circles: references. Today’s streets and buildings give context.',
+      method: 'The black bars of Snow’s map were detected by image processing (ink thickness), counted by area, then placed at the address nearest a street; the 13 pumps were read by hand. The map is fitted on four references (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street) with a mean error of 1.7 m. Distances follow today’s OSM walking network.',
+      limits: 'The survey counts 556 deaths, against 578 bars in Tobler’s 1992 digitisation: a few merged or faded bars remain miscounted. Streets have changed since 1854 (Regent Street, Shaftesbury Avenue, modern passages): the walking distance is an approximation. The map only shows the deaths Snow recorded, not the sick.',
     },
   },
   places: {

@@ -81,6 +81,24 @@ export interface Messages {
     dataFile: string;
     concentration: (position: string, share: string) => string;
     waterCrossed: (names: string) => string;
+    /** Strings of the 1854 cholera subject (topic cholera-pump). */
+    cholera: {
+      broadPump: string;
+      deaths: (count: number) => string;
+      concentration: (share: string, within100: string) => string;
+      distribution: string;
+      distributionHelp: string;
+      pumpDetail: (broad: string, within100: string) => string;
+      workhouse: string;
+      workhouseDetail: string;
+      brewery: string;
+      breweryDetail: string;
+      source: string;
+      /** Short legend labels drawn on the map. */
+      legendDeaths: string;
+      legendBroad: string;
+      legendPump: string;
+    };
   };
   topics: Record<TopicId, {
     question: string;

@@ -2,28 +2,43 @@
 // local metres; nothing here depends on the browser or on a language.
 import { featuresOf, isBridge, isTunnel, type Feature, type Layer, type Line, type Survey } from './layers.ts';
 import type { Point, Rect } from './toolkit/geometry.ts';
+import { analyseCholera, type CholeraEvidence } from './cholera.ts';
 
-export const TOPIC_IDS = ['canal-crossings', 'steps'] as const;
+export const TOPIC_IDS = ['canal-crossings', 'steps', 'cholera-pump'] as const;
 export type TopicId = (typeof TOPIC_IDS)[number];
+/** Subjects measured as lengths of selected street geometry. */
+export type LinearTopicId = Exclude<TopicId, 'cholera-pump'>;
 export const isTopicId = (value: string): value is TopicId => (TOPIC_IDS as readonly string[]).includes(value);
 
-export interface TopicPlace {
+/** A numbered reference on the map and in the panel. */
+export interface TopicMark {
   name: string;
   point: Point;
+}
+
+export interface TopicPlace extends TopicMark {
   length: number;
   /** Index into the south-to-north, west-to-east nine-sector grid. */
   sector: number;
   waters: string[];
 }
 
-export interface TopicAnalysis {
-  id: TopicId;
+export interface LinearTopic {
+  id: LinearTopicId;
   segments: Feature<Line>[];
   length: number;
   sectors: { length: number }[];
   places: TopicPlace[];
   canals: string[];
 }
+
+export interface CholeraTopic extends CholeraEvidence {
+  id: 'cholera-pump';
+  /** The Broad Street pump, then Snow's landmarks. */
+  places: (TopicMark & { kind: 'pump' | 'workhouse' | 'brewery' })[];
+}
+
+export type TopicAnalysis = LinearTopic | CholeraTopic;
 
 const EPS = 1e-8;
 const lengthOf = (p: Line): number => {
@@ -59,7 +74,7 @@ function sectorOf([x, y]: Point, half: number): number {
   return band(y) * 3 + band(x);
 }
 
-function distribute(p: Line, half: number, sectors: TopicAnalysis['sectors']): void {
+function distribute(p: Line, half: number, sectors: LinearTopic['sectors']): void {
   for (let i = 2; i < p.length; i += 2) {
     const x = p[i - 2]!, y = p[i - 1]!, dx = p[i]! - x, dy = p[i + 1]! - y;
     const cuts = [0, 1];
@@ -100,7 +115,21 @@ function crosses(a: Line, b: Line): boolean {
 }
 
 /** Analyse only geometry inside the surveyed square, independently of the current zoom. */
+export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: LinearTopicId): LinearTopic;
+export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: 'cholera-pump'): CholeraTopic;
+export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: TopicId): TopicAnalysis;
 export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: TopicId): TopicAnalysis {
+  if (id === 'cholera-pump') {
+    const evidence = analyseCholera(layers);
+    const broad = evidence.pumps.find((p) => p.broad);
+    return {
+      id, ...evidence,
+      places: [
+        ...(broad ? [{ name: broad.name, point: broad.point, kind: 'pump' as const }] : []),
+        ...[...evidence.landmarks].sort((a, b) => a.kind.localeCompare(b.kind)),
+      ],
+    };
+  }
   const { half } = survey;
   const square: Rect = [-half, -half, half, half];
   const canals = id === 'canal-crossings' ? featuresOf(layers, 'waterways', 'lines').filter((w) => w.k === 'canal' && !isTunnel(w))

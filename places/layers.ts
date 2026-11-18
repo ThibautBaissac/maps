@@ -13,13 +13,13 @@ const SNOW_CREDIT = {
   de: 'John Snow, 1855 (gemeinfrei), für diese Website digitalisiert',
 };
 
-// Credit of the investigations register, compiled for this site from L214's public pages.
+// Credit of the investigations: L214's own database of its investigations.
 const L214_CREDIT = {
-  fr: 'Enquêtes : relevé pour ce site d’après l214.com/enquetes',
-  en: 'Investigations: compiled for this site from l214.com/enquetes',
-  es: 'Investigaciones: recopiladas para este sitio a partir de l214.com/enquetes',
-  pt: 'Investigações: compiladas para este site a partir de l214.com/enquetes',
-  de: 'Recherchen: für diese Website zusammengestellt nach l214.com/enquetes',
+  fr: 'Enquêtes : L214',
+  en: 'Investigations: L214',
+  es: 'Investigaciones: L214',
+  pt: 'Investigações: L214',
+  de: 'Recherchen: L214',
 };
 
 export const LAYERS: { readonly [P in PlaceId]?: Readonly<Record<string, LayerSource>> } = {
@@ -56,9 +56,8 @@ export const LAYERS: { readonly [P in PlaceId]?: Readonly<Record<string, LayerSo
       attribution: { fr: 'geo.api.gouv.fr (Licence Ouverte)', en: 'geo.api.gouv.fr (Licence Ouverte)', es: 'geo.api.gouv.fr (Licence Ouverte)', pt: 'geo.api.gouv.fr (Licence Ouverte)', de: 'geo.api.gouv.fr (Licence Ouverte)' },
       nameField: 'nom',
     },
-    // Investigations published on https://www.l214.com/enquetes/, located from their own pages
-    // and geocoded with https://geo.api.gouv.fr (Licence Ouverte), 2026-11-18. Method in
-    // layers/france/README.md.
+    // L214's database of its investigations (2026-11-18), located from each record and
+    // geocoded with https://geo.api.gouv.fr (Licence Ouverte). Method in layers/france/README.md.
     enquetes: {
       title: { fr: 'Enquêtes de L214', en: 'L214 investigations', es: 'Investigaciones de L214', pt: 'Investigações da L214', de: 'Recherchen von L214' },
       file: 'layers/france/enquetes.geojson',

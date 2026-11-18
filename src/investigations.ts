@@ -12,7 +12,7 @@ const isSiteKind = (v: unknown): v is SiteKind => (SITE_KINDS as readonly unknow
 /** Animals an investigation shows, as the register names them. */
 export const SPECIES = [
   'bovins', 'veaux', 'cochons', 'poulets', 'poules', 'dindes', 'canards', 'cailles', 'pintades', 'lapins',
-  'moutons', 'chevres', 'chevaux', 'poissons', 'visons', 'cerfs', 'faisans', 'poussins', 'autres',
+  'moutons', 'chevres', 'chevaux', 'poissons', 'visons', 'cerfs', 'faisans', 'poussins', 'oies', 'chiens', 'autres',
 ] as const;
 export type Species = (typeof SPECIES)[number];
 const isSpecies = (v: string): v is Species => (SPECIES as readonly string[]).includes(v);

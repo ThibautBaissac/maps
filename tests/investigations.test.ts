@@ -63,7 +63,7 @@ test('the panel states placed over total, the leading region, and cites the inve
   assert.equal(content.concentration, 'Région Bretagne : 80 % des enquêtes situées sur la carte.');
   assert.deepEqual(content.notes?.items, ['2019 · Transport · Transport de veaux']);
   assert.equal(content.references[0]?.detail, '2 enquêtes · 2019–2021');
-  assert.equal(content.dataFile, 'Consulter le relevé des enquêtes (JSON)');
+  assert.equal(content.dataFile, 'Consulter les enquêtes situées (JSON)');
   // The map draws its own legend: the panel leaves the text one to the description.
   assert.equal(content.panelLegend, false);
   assert.equal(topicContent(survey, topic, { question: 'Q', intro: 'I' }, 'en').references[2]?.detail, '1 investigation · 2014');

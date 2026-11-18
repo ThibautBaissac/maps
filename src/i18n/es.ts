@@ -118,6 +118,8 @@ export const es: Messages = {
       dataFile: 'Consultar el registro de investigaciones (JSON)',
       legendDepartement: 'Solo se conoce el departamento',
       legendRegion: 'Solo se conoce la región',
+      species: { bovins: 'Bovinos', veaux: 'Terneros', cochons: 'Cerdos', poulets: 'Pollos', poules: 'Gallinas', dindes: 'Pavos', canards: 'Patos', cailles: 'Codornices', pintades: 'Pintadas', lapins: 'Conejos', moutons: 'Ovejas', chevres: 'Cabras', chevaux: 'Caballos', poissons: 'Peces', visons: 'Visones', cerfs: 'Ciervos', faisans: 'Faisanes', poussins: 'Pollitos', autres: 'Otros animales' },
+      card: { close: 'Cerrar', open: 'Ver la investigación en l214.com', commune: (commune, departement) => `${commune} (${departement})`, departement: (departement) => `Departamento: ${departement} (municipio no indicado)`, region: (region) => `Región: ${region} (lugar no indicado)`, area: (name) => `${name}: investigaciones sin municipio indicado` },
       legendReferences: 'Departamentos con más investigaciones',
       legendContext: 'Departamentos, ríos principales',
       margin: 'SIN LUGAR EN EL MAPA',

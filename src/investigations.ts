@@ -9,6 +9,14 @@ export const SITE_KINDS = ['abattoir', 'elevage', 'couvoir', 'transport', 'autre
 export type SiteKind = (typeof SITE_KINDS)[number];
 const isSiteKind = (v: unknown): v is SiteKind => (SITE_KINDS as readonly unknown[]).includes(v);
 
+/** Animals an investigation shows, as the register names them. */
+export const SPECIES = [
+  'bovins', 'veaux', 'cochons', 'poulets', 'poules', 'dindes', 'canards', 'cailles', 'pintades', 'lapins',
+  'moutons', 'chevres', 'chevaux', 'poissons', 'visons', 'cerfs', 'faisans', 'poussins', 'autres',
+] as const;
+export type Species = (typeof SPECIES)[number];
+const isSpecies = (v: string): v is Species => (SPECIES as readonly string[]).includes(v);
+
 /** How precisely an investigation is located: its town, or only its département or region. */
 export const PRECISIONS = ['commune', 'departement', 'region'] as const;
 export type Precision = (typeof PRECISIONS)[number];
@@ -43,6 +51,8 @@ export interface Investigation {
   commune?: string;
   departement?: string;
   region: string;
+  /** Animals shown, in the register's order. */
+  species: Species[];
   url?: string;
 }
 
@@ -91,8 +101,9 @@ function investigationOf(f: Feature<Point>): Investigation | null {
   const year = p['year'], precision = p['precision'], region = text(p['region']);
   if (!f.n || !isSiteKind(f.k) || typeof year !== 'number' || !isPrecision(precision) || !region) return null;
   const commune = text(p['commune']), departement = text(p['departement']), url = text(p['url']);
+  const species = (text(p['species']) ?? '').split(',').filter(isSpecies);
   return {
-    name: f.n, point: f.g, year, site: f.k, precision, region,
+    name: f.n, point: f.g, year, site: f.k, precision, region, species,
     ...(commune ? { commune } : {}), ...(departement ? { departement } : {}), ...(url ? { url } : {}),
   };
 }

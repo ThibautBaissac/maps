@@ -118,6 +118,8 @@ export const de: Messages = {
       dataFile: 'Verzeichnis der Recherchen ansehen (JSON)',
       legendDepartement: 'Nur das Département ist bekannt',
       legendRegion: 'Nur die Region ist bekannt',
+      species: { bovins: 'Rinder', veaux: 'Kälber', cochons: 'Schweine', poulets: 'Masthühner', poules: 'Legehennen', dindes: 'Puten', canards: 'Enten', cailles: 'Wachteln', pintades: 'Perlhühner', lapins: 'Kaninchen', moutons: 'Schafe', chevres: 'Ziegen', chevaux: 'Pferde', poissons: 'Fische', visons: 'Nerze', cerfs: 'Hirsche', faisans: 'Fasane', poussins: 'Küken', autres: 'Andere Tiere' },
+      card: { close: 'Schließen', open: 'Recherche auf l214.com ansehen', commune: (commune, departement) => `${commune} (${departement})`, departement: (departement) => `Département: ${departement} (Gemeinde nicht genannt)`, region: (region) => `Region: ${region} (Ort nicht genannt)`, area: (name) => `${name}: Recherchen ohne genannte Gemeinde` },
       legendReferences: 'Départements mit den meisten Recherchen',
       legendContext: 'Départements, große Flüsse',
       margin: 'OHNE ORT AUF DER KARTE',

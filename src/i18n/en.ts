@@ -118,6 +118,8 @@ export const en: Messages = {
       dataFile: 'View the investigations register (JSON)',
       legendDepartement: 'Only the department is known',
       legendRegion: 'Only the region is known',
+      species: { bovins: 'Cattle', veaux: 'Calves', cochons: 'Pigs', poulets: 'Chickens', poules: 'Hens', dindes: 'Turkeys', canards: 'Ducks', cailles: 'Quails', pintades: 'Guinea fowl', lapins: 'Rabbits', moutons: 'Sheep', chevres: 'Goats', chevaux: 'Horses', poissons: 'Fish', visons: 'Mink', cerfs: 'Deer', faisans: 'Pheasants', poussins: 'Chicks', autres: 'Other animals' },
+      card: { close: 'Close', open: 'See the investigation on l214.com', commune: (commune, departement) => `${commune} (${departement})`, departement: (departement) => `Department: ${departement} (town not given)`, region: (region) => `Region: ${region} (place not given)`, area: (name) => `${name}: investigations with no town given` },
       legendReferences: 'Departments with most investigations',
       legendContext: 'Departments, main rivers',
       margin: 'NO PLACE ON THE MAP',

@@ -118,6 +118,8 @@ export const fr: Messages = {
       dataFile: 'Consulter le relevé des enquêtes (JSON)',
       legendDepartement: 'Seul le département est connu',
       legendRegion: 'Seule la région est connue',
+      species: { bovins: 'Bovins', veaux: 'Veaux', cochons: 'Cochons', poulets: 'Poulets', poules: 'Poules', dindes: 'Dindes', canards: 'Canards', cailles: 'Cailles', pintades: 'Pintades', lapins: 'Lapins', moutons: 'Moutons', chevres: 'Chèvres', chevaux: 'Chevaux', poissons: 'Poissons', visons: 'Visons', cerfs: 'Cerfs', faisans: 'Faisans', poussins: 'Poussins', autres: 'Autres animaux' },
+      card: { close: 'Fermer', open: 'Voir l’enquête sur l214.com', commune: (commune, departement) => `${commune} (${departement})`, departement: (departement) => `Département : ${departement} (commune non précisée)`, region: (region) => `Région : ${region} (lieu non précisé)`, area: (name) => `${name} : enquêtes sans commune précisée` },
       legendReferences: 'Départements aux plus d’enquêtes',
       legendContext: 'Départements, grands cours d’eau',
       margin: 'SANS LIEU SUR LA CARTE',

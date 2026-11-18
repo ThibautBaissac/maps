@@ -119,6 +119,8 @@ export const pt: Messages = {
       dataFile: 'Consultar o registo das investigações (JSON)',
       legendDepartement: 'Só se conhece o departamento',
       legendRegion: 'Só se conhece a região',
+      species: { bovins: 'Bovinos', veaux: 'Vitelos', cochons: 'Porcos', poulets: 'Frangos', poules: 'Galinhas', dindes: 'Perus', canards: 'Patos', cailles: 'Codornizes', pintades: 'Galinhas-d’angola', lapins: 'Coelhos', moutons: 'Ovelhas', chevres: 'Cabras', chevaux: 'Cavalos', poissons: 'Peixes', visons: 'Visons', cerfs: 'Veados', faisans: 'Faisões', poussins: 'Pintos', autres: 'Outros animais' },
+      card: { close: 'Fechar', open: 'Ver a investigação em l214.com', commune: (commune, departement) => `${commune} (${departement})`, departement: (departement) => `Departamento: ${departement} (município não indicado)`, region: (region) => `Região: ${region} (local não indicado)`, area: (name) => `${name}: investigações sem município indicado` },
       legendReferences: 'Departamentos com mais investigações',
       legendContext: 'Departamentos, rios principais',
       margin: 'SEM LOCAL NO MAPA',

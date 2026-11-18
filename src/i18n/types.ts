@@ -3,7 +3,7 @@ import type { MapId } from '../registry.ts';
 import type { StyleKey } from '../styles/index.ts';
 import type { ThemeId, TopicId } from '../topics.ts';
 import type { PeriodId } from '../setbacks.ts';
-import type { SiteKind } from '../investigations.ts';
+import type { SiteKind, Species } from '../investigations.ts';
 
 export const LOCALES = ['fr', 'en', 'es', 'pt', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -158,6 +158,20 @@ export interface Messages {
       /** Hatching: only the département, or only the region, is known. */
       legendDepartement: string;
       legendRegion: string;
+      /** Animal labels of the detail card. */
+      species: Record<Species, string>;
+      /** The detail card opened on a mark or a hatched area. */
+      card: {
+        close: string;
+        /** Link to the investigation's page on l214.com. */
+        open: string;
+        /** Where: town and département, département only, or region only. */
+        commune: (commune: string, departement: string) => string;
+        departement: (departement: string) => string;
+        region: (region: string) => string;
+        /** Heading of the list in a hatched area. */
+        area: (name: string) => string;
+      };
       /** The numbered circles: départements with the most investigations. */
       legendReferences: string;
       /** The grey context of the base map. */

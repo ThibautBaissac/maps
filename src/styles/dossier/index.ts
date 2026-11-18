@@ -15,6 +15,7 @@ import { featuresOf, type Ring } from '../../layers.ts';
 import { formatNumber, messages, pluralText } from '../../i18n/index.ts';
 import type { MapHandle, MountArgs } from '../contract.ts';
 import { DEFAULTS, type DossierOptions } from './defaults.ts';
+import { areaInvestigations, createCard, departementAt, markAt, type PlacedMark } from './card.ts';
 
 const FONT = '"Courier Prime", "Courier New", monospace';
 /** Scale bar lengths, km. */
@@ -193,6 +194,8 @@ export async function mount({ container, meta, locale, options, shell, layers, t
   const hasHatched = hatchedDepartements.size + hatchedRegions.size > 0;
   // Town marks only: an investigation known to its département or region is hatching, not a point.
   const marks = (subject?.investigations ?? []).filter((i) => i.precision === 'commune');
+  // What the last crisp render drew, for the detail card's hit tests.
+  let drawn: { placed: PlacedMark[]; P: Projector; W: number; H: number; mark: number } | null = null;
 
   function renderSheet(e: Env): void {
     const { x } = e.sheet, { dpr, layout } = e;
@@ -305,7 +308,7 @@ export async function mount({ container, meta, locale, options, shell, layers, t
     x.restore();
   }
 
-  return mountCanvasMap<Env, never>({ container, layers, meta, shell, ...(topic ? { topic } : {}) }, {
+  const handle = mountCanvasMap<Env, never>({ container, layers, meta, shell, ...(topic ? { topic } : {}) }, {
     font: FONT,
     // A département at most fills the window: beyond, the base map has no more detail.
     maxScale: 0.005,
@@ -386,6 +389,7 @@ export async function mount({ container, meta, locale, options, shell, layers, t
       // Marks, oldest first, each kept clear of the others; a thin lead to the town when moved.
       const s = o.mark * dpr;
       const placed = placeMarks(marks, P, s);
+      drawn = { placed, P, W: e.W, H: e.H, mark: s };
       x.save();
       for (const p of placed) {
         if (Math.hypot(p.x - p.ax, p.y - p.ay) < 0.5) continue;
@@ -423,4 +427,42 @@ export async function mount({ container, meta, locale, options, shell, layers, t
       ctx.restore();
     },
   });
+  return subject ? withCard(handle, subject.investigations) : handle;
+
+  // A click on a mark opens its detail card; on a hatched area, the card lists the
+  // investigations located no closer than that area. Dragging or zooming closes it.
+  function withCard(map: MapHandle, investigations: readonly Investigation[]): MapHandle {
+    const canvas = container.querySelector('canvas');
+    if (!canvas) return map;
+    const names = new Map(departements.map((d) => [d.code, d.name]));
+    const card = createCard(container, locale, (code) => names.get(code) ?? code);
+    const abort = new AbortController();
+    const on = <K extends keyof HTMLElementEventMap>(type: K, fn: (e: HTMLElementEventMap[K]) => void): void =>
+      canvas.addEventListener(type, fn, { signal: abort.signal });
+    const at = (e: MouseEvent): { x: number; y: number; dpr: number } => {
+      const r = canvas.getBoundingClientRect(), dpr = canvas.width / Math.max(1, r.width);
+      return { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr, dpr };
+    };
+    let down: [number, number] | null = null;
+    on('pointerdown', (e) => { down = [e.clientX, e.clientY]; if (card.open) card.hide(); });
+    on('wheel', () => { if (card.open) card.hide(); });
+    on('pointermove', (e) => {
+      if (!drawn || e.buttons) return;
+      const { x, y } = at(e);
+      canvas.style.cursor = markAt(drawn.placed, x, y, drawn.mark * 0.75) ? 'pointer' : '';
+    });
+    on('click', (e) => {
+      // A drag ends with a click too: only a still pointer opens the card.
+      if (!drawn || !down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 4) return;
+      const { x, y, dpr } = at(e);
+      const css: [number, number] = [x / dpr, y / dpr];
+      const hit = markAt(drawn.placed, x, y, drawn.mark * 0.75);
+      if (hit) { card.show(...css, [hit.item]); return; }
+      const { P, W, H } = drawn;
+      const d = departementAt(departements, [P.view.x + (x - W / 2) / P.S, P.view.y - (y - H / 2) / P.S]);
+      const listed = d ? areaInvestigations(investigations, d) : [];
+      if (d && listed.length) card.show(...css, listed, c.card.area(d.name));
+    });
+    return { ...map, destroy() { abort.abort(); card.destroy(); map.destroy(); } };
+  }
 }

@@ -3,10 +3,10 @@
 // The fixture's elements are known to exist, hence the `!` on array reads below.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { convertOsm, osmLayerFile, overpassQuery, parseCachedAnswer, parseOverpassAnswer } from '../scripts/osm.ts';
-import { featureCounts, featuresOf, isBridge, isTunnel, parseLayer, parseLayerFile, type Ring } from '../src/layers.ts';
+import { convertOsm, metres, osmLayerFile, overpassQuery, parseCachedAnswer, parseOverpassAnswer, volumeProps } from '../scripts/osm.ts';
+import { baseOf, featureCounts, featuresOf, hasParts, heightOf, isBridge, isTunnel, parseLayer, parseLayerFile, yearOf, type Ring } from '../src/layers.ts';
 import { PLACES } from '../places/index.ts';
-import { ANSWER, PLACE, SOURCE } from './fixtures/overpass.ts';
+import { ANSWER, PLACE, SOURCE, square } from './fixtures/overpass.ts';
 
 const HALF = 1000;
 
@@ -24,13 +24,14 @@ const area = (r: Ring): number => {
   return Math.abs(s) / 2;
 };
 
-test('the layers come in the order buildings, roads, waterways, water, parks, each with the id of its role', () => {
+test('the layers come in the order buildings, roads, waterways, water, parks, building parts, each with the id of its role', () => {
   assert.deepEqual(layers.map((l) => [l.id, l.role, l.kind]), [
     ['buildings', 'buildings', 'areas'],
     ['roads', 'roads', 'lines'],
     ['waterways', 'waterways', 'lines'],
     ['water', 'water', 'areas'],
     ['parks', 'parks', 'areas'],
+    ['building-parts', 'building-parts', 'areas'],
   ]);
 });
 
@@ -136,6 +137,8 @@ test('the query asks Overpass for everything a map draws in the place square', (
 (
   way["building"](${bb});
   relation["building"]["type"="multipolygon"](${bb});
+  way["building:part"](${bb});
+  relation["building:part"]["type"="multipolygon"](${bb});
   way["highway"](${bb});
   way["waterway"](${bb});
   way["natural"="water"](${bb});
@@ -183,4 +186,51 @@ test('a damaged cache is refused', () => {
   assert.throws(() => parseCachedAnswer({ place: PLACE }, PLACE), /cache/);
   assert.throws(() => parseCachedAnswer({ ...cached(), answer: { elements: [] } }, PLACE), /no elements/);
   assert.throws(() => parseCachedAnswer(null, PLACE), /cache/);
+});
+
+test('a height tag is read in metres, from metres or feet', () => {
+  assert.equal(metres('52'), 52);
+  assert.equal(metres('52.5 m'), 52.5);
+  assert.equal(metres('12,5'), 12.5);
+  assert.equal(metres("100'"), 30.5);
+  assert.equal(metres('100 ft'), 30.5);
+  assert.equal(metres('tall'), undefined);
+  assert.equal(metres(undefined), undefined);
+});
+
+test('a building keeps its height, from height first, else from its storeys, and its start year', () => {
+  assert.deepEqual(volumeProps({ height: '120', 'building:levels': '10', start_date: '1931-05-01' }), { h: 120, year: 1931 });
+  assert.deepEqual(volumeProps({ 'building:levels': '10', start_date: 'C19' }), { h: 32 });
+  assert.deepEqual(volumeProps({ height: '200', min_height: '150' }), { h: 200, base: 150 });
+  assert.deepEqual(volumeProps({ 'building:levels': '30', 'building:min_level': '20' }), { h: 96, base: 64 });
+  assert.deepEqual(volumeProps({ start_date: '~1929' }), { year: 1929 });
+  assert.deepEqual(volumeProps({}), {});
+});
+
+test('a building part goes to the building-parts layer with its heights, never to the buildings', () => {
+  const parts = featuresOf(layers, 'building-parts', 'areas');
+  assert.equal(parts.length, 1);
+  assert.equal(buildings.length, 2);
+});
+
+test('a building whose outline holds a part is marked, so maps draw its parts instead', () => {
+  const answer = {
+    elements: [
+      { type: 'way' as const, tags: { building: 'yes', height: '100', name: 'Tower', start_date: '1930' }, geometry: square(400, 400, 40) },
+      { type: 'way' as const, tags: { 'building:part': 'yes', height: '100' }, geometry: square(410, 410, 20) },
+      { type: 'way' as const, tags: { 'building:part': 'yes', height: '40', min_height: '10' }, geometry: square(400, 400, 8) },
+      { type: 'way' as const, tags: { building: 'yes' }, geometry: square(500, 500, 10) },
+    ],
+  };
+  const converted = convertOsm(answer, 'amsterdam-centre');
+  const [tower, plain] = featuresOf(converted, 'buildings', 'areas');
+  assert.ok(tower && plain);
+  assert.equal(tower.n, 'Tower');
+  assert.equal(heightOf(tower), 100);
+  assert.equal(yearOf(tower), 1930);
+  assert.ok(hasParts(tower));
+  assert.ok(!hasParts(plain));
+  assert.equal(heightOf(plain), undefined);
+  const parts = featuresOf(converted, 'building-parts', 'areas');
+  assert.deepEqual(parts.map((p) => [heightOf(p), baseOf(p)]), [[100, 0], [40, 10]]);
 });

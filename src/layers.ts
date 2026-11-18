@@ -32,7 +32,7 @@ export type LayerKind = (typeof LAYER_KINDS)[number];
  * What a layer is for: an overlay is drawn on top of the base map; the other roles are the
  * OpenStreetMap layers, whose id is their role.
  */
-export const OSM_ROLES = ['buildings', 'roads', 'waterways', 'water', 'parks'] as const;
+export const OSM_ROLES = ['buildings', 'roads', 'waterways', 'water', 'parks', 'building-parts'] as const;
 export type OsmRole = (typeof OSM_ROLES)[number];
 export const LAYER_ROLES = [...OSM_ROLES, 'overlay'] as const;
 export type LayerRole = (typeof LAYER_ROLES)[number];
@@ -170,6 +170,24 @@ export function parseLayerFile(v: unknown, source: string): LayerFile {
 
 export const isBridge = (f: Feature<unknown>): boolean => f.p?.['bridge'] === true;
 export const isTunnel = (f: Feature<unknown>): boolean => f.p?.['tunnel'] === true;
+
+/** Height in metres of a building or building part, when OSM gives it (scripts/osm.ts). */
+export const heightOf = (f: Feature<unknown>): number | undefined => {
+  const h = f.p?.['h'];
+  return typeof h === 'number' ? h : undefined;
+};
+/** Height in metres where a building part starts (0 on the ground). */
+export const baseOf = (f: Feature<unknown>): number => {
+  const b = f.p?.['base'];
+  return typeof b === 'number' ? b : 0;
+};
+/** Year construction started, when OSM gives it. */
+export const yearOf = (f: Feature<unknown>): number | undefined => {
+  const y = f.p?.['year'];
+  return typeof y === 'number' ? y : undefined;
+};
+/** Whether OSM details the building's volumes as building parts. */
+export const hasParts = (f: Feature<unknown>): boolean => f.p?.['parts'] === true;
 
 /** The objects of the layers of a role and kind, in the order of the layers. */
 export function featuresOf<K extends LayerKind>(layers: readonly Layer[], role: LayerRole, kind: K): Feature<Geometry<K>>[] {

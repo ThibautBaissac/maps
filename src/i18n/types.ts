@@ -2,6 +2,7 @@ import type { PlaceId } from '../../places/index.ts';
 import type { MapId } from '../registry.ts';
 import type { StyleKey } from '../styles/index.ts';
 import type { ThemeId, TopicId } from '../topics.ts';
+import type { PeriodId } from '../setbacks.ts';
 
 export const LOCALES = ['fr', 'en', 'es', 'pt', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -118,6 +119,25 @@ export interface Messages {
       legendDeaths: string;
       legendBroad: string;
       legendPump: string;
+    };
+    /** Strings of the stepped towers subject (topic setbacks). */
+    setbacks: {
+      /** Building periods (src/setbacks.ts). */
+      periods: Record<PeriodId, string>;
+      /** Row value: stepped towers among the detailed ones. */
+      count: (stepped: string, detailed: string) => string;
+      concentration: (share1916: string, share1961: string) => string;
+      distribution: string;
+      distributionHelp: (unknown: string) => string;
+      steppedDetail: (year: string, height: string, levels: string) => string;
+      blockDetail: (year: string, height: string) => string;
+      /** Placeholder for a tower without start date. */
+      noDate: string;
+      source: string;
+      /** Short legend labels drawn on the map. */
+      legendStepped: string;
+      legendBlock: string;
+      legendOther: string;
     };
   };
   /** The facts and method of a subject, in the plain house style, shared by every map of it. */

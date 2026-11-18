@@ -13,13 +13,14 @@ export function readOsm(id: PlaceId) {
   return { file, layers: file.layers as Layer[], place, survey: mountMetaOf({ title: '', placeId: id, place }, file).survey, mountMeta };
 }
 
-/** The five OpenStreetMap layers, in the order the styles draw them, from the objects a test needs. */
+/** The OpenStreetMap layers, in the order the styles draw them, from the objects a test needs. */
 export function osmLayersOf(parts: {
   buildings?: Feature<Ring[]>[];
   roads?: Feature<Line>[];
   waterways?: Feature<Line>[];
   water?: Feature<Ring[]>[];
   parks?: Feature<Ring[]>[];
+  buildingParts?: Feature<Ring[]>[];
 }): Layer[] {
   const base = { source: 'openstreetmap', attribution: '© contributeurs OpenStreetMap (ODbL)' } as const;
   return [
@@ -28,5 +29,6 @@ export function osmLayersOf(parts: {
     { ...base, id: 'waterways', role: 'waterways', kind: 'lines', features: parts.waterways ?? [] },
     { ...base, id: 'water', role: 'water', kind: 'areas', features: parts.water ?? [] },
     { ...base, id: 'parks', role: 'parks', kind: 'areas', features: parts.parks ?? [] },
+    { ...base, id: 'building-parts', role: 'building-parts', kind: 'areas', features: parts.buildingParts ?? [] },
   ];
 }

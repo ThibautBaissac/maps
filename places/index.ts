@@ -31,6 +31,15 @@ export const PLACES = {
     lon: -0.1367,
     sizeKm: 1.2,
   },
+  // npm run fetch-data -- new-york-midtown
+  // Located from: coordinates given
+  'new-york-midtown': {
+    name: 'New York',
+    district: 'Midtown',
+    lat: 40.753,
+    lon: -73.981,
+    sizeKm: 1.6,
+  },
 } as const satisfies Record<string, Place>;
 
 export type PlaceId = keyof typeof PLACES;

@@ -15,7 +15,7 @@ export function placeTopicMarkers(topic: TopicAnalysis, P: Projector, layout: Ma
     const anchor: [number, number] = [P.sx(place.point[0]), P.sy(place.point[1])];
     if (anchor[0] < left || anchor[0] > right || anchor[1] < top || anchor[1] > bottom) return;
     // A point subject keeps its symbol visible: its badge starts beside it, never on it.
-    for (const distance of topic.id === 'cholera-pump' ? [24, 48, 72, 96, 120, 144] : [0, 28, 56, 84, 112, 140, 168]) {
+    for (const distance of topic.id === 'cholera-pump' || topic.id === 'setbacks' ? [24, 48, 72, 96, 120, 144] : [0, 28, 56, 84, 112, 140, 168]) {
       for (const [dx, dy] of [[1, 0], [0, 1], [-1, 0], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]]) {
         const x = anchor[0] + dx! * distance * P.dpr, y = anchor[1] + dy! * distance * P.dpr;
         if (x - margin < left || x + margin > right || y - margin < top || y + margin > bottom) continue;
@@ -35,7 +35,8 @@ export function placeTopicMarkers(topic: TopicAnalysis, P: Projector, layout: Ma
  */
 export function drawTopic(ctx: CanvasRenderingContext2D, topic: TopicAnalysis, P: Projector, color: string, background: string, accent = color): void {
   if (topic.id === 'cholera-pump') drawCholera(ctx, topic, P, color, background, accent);
-  else drawLinear(ctx, topic, P, color, background);
+  // Stepped towers are volumes: the style that shows them draws them with the buildings.
+  else if (topic.id !== 'setbacks') drawLinear(ctx, topic, P, color, background);
 }
 
 /** Death disc radius, device px: area proportional to the deaths, readable at every zoom. */

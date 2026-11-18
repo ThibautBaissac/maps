@@ -58,15 +58,18 @@ Les coordonnées sont en mètres locaux, x vers l'est, y vers le nord, origine a
 
 Une couche porte un `id`, un `kind` (`points`, `lines` ou `areas`), un `role`, une `attribution` non vide, une `source` et ses `features`. Chaque objet est `{ g, k?, n?, p? }` : `g` la géométrie (un point `[x, y]`, une ligne, ou des anneaux dont le premier est extérieur et les suivants des trous), `k` la catégorie, `n` le nom, `p` des propriétés scalaires.
 
-Les couches OpenStreetMap (`public/data/<lieu>/osm.json`, écrites par `npm run fetch-data`) sont cinq, dans l'ordre où les styles les dessinent. Leur `id` est leur rôle ; `osm` est réservé :
+Les couches OpenStreetMap (`public/data/<lieu>/osm.json`, écrites par `npm run fetch-data`) sont six, dans l'ordre où les styles les dessinent. Un fichier converti avant l'ajout des parties de bâtiment s'arrête à `parks` et reste valide. Leur `id` est leur rôle ; `osm` est réservé :
 
 | Rôle (`id`) | Genre | Objets |
 |---|---|---|
-| `buildings` | `areas` | `{ g: anneaux }` (le premier extérieur, les suivants des trous) |
+| `buildings` | `areas` | `{ g: anneaux, n?, p?: { h?, base?, year?, parts? } }` (le premier anneau extérieur, les suivants des trous) |
 | `roads` | `lines` | `{ g: ligne, k: type highway, n?: nom, p?: { bridge?, tunnel? } }` |
 | `waterways` | `lines` | `{ g: ligne, k: type waterway, n?, p?: { tunnel? } }` |
 | `water` | `areas` | `{ g: anneaux, n? }` : plans d'eau, plus la mer ou l'estuaire reconstitués à partir du littoral OSM (`natural=coastline`), découpés au carré du lieu |
 | `parks` | `areas` | `{ g: anneaux, k: valeur leisure/landuse/natural }` |
+| `building-parts` | `areas` | `{ g: anneaux, p?: { h?, base?, year? } }` : parties de bâtiment (`building:part`), qui détaillent les volumes |
+
+Hauteurs des bâtiments et des parties, en mètres : `h` le sommet (tag `height`, sinon `building:levels` × 3,2 m), `base` le bas d'une partie posée en hauteur (`min_height`, sinon `building:min_level` × 3,2 m), `year` l'année de début de construction (`start_date`). `parts: true` marque un bâtiment dont le contour contient le centre d'au moins une partie : un style en relief dessine alors les parties à la place du contour. Lire ces valeurs avec `heightOf()`, `baseOf()`, `yearOf()` et `hasParts()` de `src/layers.ts`. Les styles à plat les ignorent.
 
 Les couches extérieures ont le rôle `overlay` et se dessinent par-dessus la carte (`drawLayers()`).
 

@@ -7,12 +7,14 @@ import { messages } from '../i18n/index.ts';
 import { DEFAULTS as RISO, type RisoOptions } from './riso/defaults.ts';
 import { DEFAULTS as CYANOTYPE, type CyanotypeOptions } from './cyanotype/defaults.ts';
 import { DEFAULTS as GRAVURE_SEPIA, type GravureSepiaOptions } from './gravure-sepia/defaults.ts';
+import { DEFAULTS as ART_DECO, type ArtDecoOptions } from './art-deco/defaults.ts';
 
 /** Options of each style, by key: adding a style starts here. */
 export interface StyleOptions {
   riso: RisoOptions;
   cyanotype: CyanotypeOptions;
   'gravure-sepia': GravureSepiaOptions;
+  'art-deco': ArtDecoOptions;
 }
 export type StyleKey = keyof StyleOptions;
 
@@ -39,6 +41,14 @@ export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
     card: (o = {}) => {
       const v = { ...GRAVURE_SEPIA, ...o };
       return { bg: v.paper, fg: v.ink, accent: v.accent };
+    },
+  },
+  'art-deco': {
+    ...messages('fr').styles['art-deco'],
+    load: () => import('./art-deco/index.ts'),
+    card: (o = {}) => {
+      const v = { ...ART_DECO, ...o };
+      return { bg: v.cream, fg: v.navy, accent: v.red };
     },
   },
 };

@@ -57,9 +57,9 @@ test('a shared map link shows its question, its description and its landscape pi
 
 test('a gallery is titled and described by the places it holds', () => {
   const html = galleryHtml('fr', '/atlas/', SITE);
-  assert.match(html, /<title>Cartes illustrées — Amsterdam, Lisbonne et Londres<\/title>/);
+  assert.match(html, /<title>Cartes illustrées — Amsterdam, Lisbonne, Londres et New York<\/title>/);
   const description = contentOf(html, 'name', 'description') ?? '';
-  assert.match(description, /Centre historique \(Amsterdam\), Alfama \(Lisbonne\) et Soho \(Londres\)/);
+  assert.match(description, /Centre historique \(Amsterdam\), Alfama \(Lisbonne\), Soho \(Londres\)/);
   assert.ok(description.length <= 160);
   assert.equal(contentOf(html, 'property', 'og:type'), 'website');
   assert.equal(contentOf(html, 'property', 'og:image'), `${SITE}vignettes/fr/amsterdam-riso.jpg`);

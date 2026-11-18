@@ -33,7 +33,7 @@ test('a layer with an unknown kind is rejected', () => {
 });
 
 test('a layer with an unknown role is rejected', () => {
-  assert.throws(() => parseLayer(broken({ role: 'ground' }), 'f'), { message: 'f: role must be one of buildings, roads, waterways, water, parks, overlay' });
+  assert.throws(() => parseLayer(broken({ role: 'ground' }), 'f'), { message: 'f: role must be one of buildings, roads, waterways, water, parks, building-parts, overlay' });
 });
 
 test('a layer id that is not a slug is rejected', () => {

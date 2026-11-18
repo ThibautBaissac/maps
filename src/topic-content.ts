@@ -1,7 +1,7 @@
 import { formatDate, formatNumber, messages, type Locale, type MapStory } from './i18n/index.ts';
 import type { Survey } from './layers.ts';
 import type { Point } from './toolkit/geometry.ts';
-import type { CholeraTopic, LinearTopic, TopicAnalysis } from './topics.ts';
+import type { CholeraTopic, LinearTopic, SetbackTopic, TopicAnalysis } from './topics.ts';
 
 export interface TopicRow { name: string; value: string; strongest: boolean }
 
@@ -19,7 +19,9 @@ export interface TopicContent {
 }
 
 export function topicContent(survey: Survey, topic: TopicAnalysis, story: MapStory, locale: Locale): TopicContent {
-  return { story, ...(topic.id === 'cholera-pump' ? choleraContent(survey, topic, locale) : linearContent(survey, topic, locale)) };
+  const content = topic.id === 'cholera-pump' ? choleraContent(survey, topic, locale)
+    : topic.id === 'setbacks' ? setbackContent(survey, topic, locale) : linearContent(survey, topic, locale);
+  return { story, ...content };
 }
 
 function linearContent(survey: Survey, topic: LinearTopic, locale: Locale): Omit<TopicContent, 'story'> {
@@ -66,5 +68,31 @@ function choleraContent(survey: Survey, topic: CholeraTopic, locale: Locale): Om
       detail: p.kind === 'pump' ? c.pumpDetail(n(topic.broad), n(topic.within100)) : c[`${p.kind}Detail`],
     })),
     distribution: { title: c.distribution, help: c.distributionHelp, layout: 'list', rows },
+  };
+}
+
+function setbackContent(survey: Survey, topic: SetbackTopic, locale: Locale): Omit<TopicContent, 'story'> {
+  const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = copy.setbacks;
+  const n = (v: number): string => formatNumber(locale, v);
+  const period = (id: SetbackTopic['periods'][number]['id']) => topic.periods.find((p) => p.id === id)!;
+  const share = (p: SetbackTopic['periods'][number]): number => p.detailed ? Math.round(p.stepped / p.detailed * 100) : 0;
+  const z1916 = period('zoning-1916'), z1961 = period('zoning-1961');
+  const unknown = topic.towers.filter((t) => t.form === 'unknown').length;
+  return {
+    copy, subject,
+    value: `${n(z1916.stepped)} / ${n(z1916.detailed)}`,
+    concentration: z1916.detailed && z1961.detailed ? c.concentration(n(share(z1916)), n(share(z1961))) : copy.empty,
+    source: `${c.source} ${copy.source(formatDate(locale, survey.osmDate), formatNumber(locale, survey.sizeKm))}`,
+    references: topic.places.map(({ tower }, index) => {
+      const year = tower.year === undefined ? c.noDate : String(tower.year), height = n(Math.round(tower.top));
+      return {
+        number: index + 1, name: tower.name ?? '', point: tower.point,
+        detail: tower.form === 'stepped' ? c.steppedDetail(year, height, n(tower.levels)) : c.blockDetail(year, height),
+      };
+    }),
+    distribution: {
+      title: c.distribution, help: c.distributionHelp(n(unknown)), layout: 'list',
+      rows: topic.periods.map((p) => ({ name: c.periods[p.id], value: c.count(n(p.stepped), n(p.detailed)), strongest: p.id === 'zoning-1916' })),
+    },
   };
 }

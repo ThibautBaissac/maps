@@ -91,6 +91,20 @@ export const fr: Messages = {
       legendBroad: 'Plus proche de Broad Street',
       legendPump: 'Pompe de 1854',
     },
+    setbacks: {
+      periods: { 'before-1916': 'Avant 1916', 'zoning-1916': 'De 1916 à 1960', 'zoning-1961': 'À partir de 1961', undated: 'Date inconnue' },
+      count: (stepped, detailed) => `${stepped} sur ${detailed}`,
+      concentration: (share1916, share1961) => `${share1916} % des tours de 1916 à 1960 dont OSM détaille les volumes montent en gradins, contre ${share1961} % de celles commencées à partir de 1961.`,
+      distribution: 'Tours à gradins par période de construction',
+      distributionHelp: (unknown) => `Tours de 80 m ou plus dont le centre est dans le carré : tours à gradins sur tours dont OSM détaille les volumes. ${unknown} tours sans volumes détaillés ne sont pas classées.`,
+      steppedDetail: (year, height, levels) => `${year} · ${height} m · ${levels} paliers de hauteur`,
+      blockDetail: (year, height) => `${year} · ${height} m · un seul volume`,
+      noDate: 'date inconnue',
+      source: 'Hauteurs, volumes et dates de construction : OpenStreetMap (height, building:levels, building:part, start_date).',
+      legendStepped: 'Tour à gradins',
+      legendBlock: 'Tour d’un seul bloc',
+      legendOther: 'Autres bâtiments',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -111,6 +125,12 @@ export const fr: Messages = {
       method: 'Les barres noires de la carte de Snow ont été détectées par traitement d’image (épaisseur d’encre), puis comptées par surface. Chaque groupe de barres est placé au point de rue OSM le plus proche, qui approche son adresse. Les 13 pompes sont relevées à la main. La carte est calée sur quatre repères (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street), avec un écart quadratique moyen de 1,7 m sur ces repères. Les distances suivent le réseau piéton OSM actuel.',
       limits: 'Cette numérisation compte 556 décès, contre 578 barres dans celle de Tobler (1992) : quelques barres fusionnées ou effacées restent mal comptées. Un point peut réunir deux adresses voisines. Les rues ont changé depuis 1854 (Regent Street, Shaftesbury Avenue, passages modernes) : la distance à pied est une approximation. La carte ne montre que les décès recensés par Snow, pas les malades.',
     },
+    setbacks: {
+      metric: 'tours de 1916 à 1960 montent en gradins, parmi celles dont OSM détaille les volumes',
+      legend: 'Volumes en relief à la hauteur OSM, sans exagération. Rouge et or : tours de 80 m ou plus qui montent en gradins. Bleu nuit : tours de 80 m ou plus d’un seul bloc. Crème : autres bâtiments, et tours dont OSM ne détaille pas les volumes. Cercles numérotés : repères.',
+      method: 'Une tour est un bâtiment OSM d’au moins 80 m, parties comprises, dont le centre se trouve dans le carré. Hauteur : tag height, sinon building:levels × 3,2 m. Chaque partie de bâtiment (building:part) est rattachée au contour qui contient son centre. Une tour monte en gradins quand ses parties forment au moins trois paliers (hauteurs arrondies à 6 m) et que son palier supérieur couvre moins de 60 % de son emprise. La période suit la date de début des travaux (start_date) : avant 1916, de 1916 à 1960 sous le règlement de zonage de 1916, à partir de 1961 sous celui de 1961.',
+      limits: 'La détection est automatique : une flèche cartographiée comme partie compte comme un palier, et un retrait dessiné d’un seul tenant peut passer inaperçu. Les tours sans parties dans OSM ou sans date ne sont pas classées. Le règlement de 1916 fixait une enveloppe, pas une forme : un gradin peut aussi être un choix d’architecte, et une tour autorisée avant 1961 a pu être commencée après. Le relief est schématique : vue oblique sans perspective, ombres symboliques.',
+    },
   },
   maps: {
     'amsterdam-riso': {
@@ -125,19 +145,29 @@ export const fr: Messages = {
       question: 'Pourquoi les morts du choléra de 1854, à Soho, entourent-elles une seule pompe ?',
       intro: 'En dix jours, à la fin de l’été 1854, plus de cinq cents personnes meurent du choléra autour de Broad Street. Le médecin John Snow porte les décès sur un plan de rue : ils se serrent autour de la pompe du quartier.',
     },
+    'new-york-art-deco': {
+      question: 'Pourquoi les tours de Midtown construites entre 1916 et 1961 montent-elles en gradins ?',
+      intro: 'Regardez la maquette d’en haut : les tours de cette époque reculent par marches à mesure qu’elles montent. Le règlement de 1916 l’exigeait, pour que la lumière descende encore jusqu’à la rue. En 1961, une autre loi l’abandonne, et dans les années 1970 la plupart des tours se dressent d’un seul bloc.',
+    },
   },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Centre historique' },
     'lisbonne-alfama': { name: 'Lisbonne', district: 'Alfama' },
     'londres-soho': { name: 'Londres', district: 'Soho' },
+    'new-york-midtown': { name: 'New York', district: 'Midtown' },
   },
   themes: {
     water: 'Eau',
     relief: 'Relief',
     history: 'Histoire',
     health: 'Santé',
+    architecture: 'Architecture',
   },
   styles: {
+    'art-deco': {
+      label: 'Affiche art déco en relief',
+      legend: ['Bâtiments : volumes en relief à la hauteur OSM.', 'Rues : bandes claires entre les volumes.', 'Eau : aplat bleu nuit.', 'Parcs et jardins : aplat vert.'],
+    },
     'gravure-sepia': {
       label: 'Gravure ancienne sépia',
       legend: ['Bâtiments : hachures obliques, plus serrées du côté de l’ombre.', 'Rues : double trait fin pour les grandes artères, trait simple pour les autres.', 'Eau : lignes ondulées.', 'Parcs et jardins : pointillé et petits arbres.'],

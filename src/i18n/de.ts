@@ -91,6 +91,20 @@ export const de: Messages = {
       legendBroad: 'Näher an der Broad Street',
       legendPump: 'Pumpe von 1854',
     },
+    setbacks: {
+      periods: { 'before-1916': 'Vor 1916', 'zoning-1916': '1916 bis 1960', 'zoning-1961': 'Ab 1961', undated: 'Datum unbekannt' },
+      count: (stepped, detailed) => `${stepped} von ${detailed}`,
+      concentration: (share1916, share1961) => `${share1916} % der Türme von 1916 bis 1960, deren Baukörper OSM erfasst, steigen in Stufen an, gegenüber ${share1961} % der ab 1961 begonnenen.`,
+      distribution: 'Gestufte Türme nach Bauzeit',
+      distributionHelp: (unknown) => `Türme ab 80 m, deren Mitte im Quadrat liegt: gestufte Türme unter den Türmen, deren Baukörper OSM erfasst. ${unknown} Türme ohne erfasste Baukörper werden nicht eingeordnet.`,
+      steppedDetail: (year, height, levels) => `${year} · ${height} m · ${levels} Höhenstufen`,
+      blockDetail: (year, height) => `${year} · ${height} m · ein einziger Baukörper`,
+      noDate: 'Datum unbekannt',
+      source: 'Höhen, Baukörper und Baudaten: OpenStreetMap (height, building:levels, building:part, start_date).',
+      legendStepped: 'Gestufter Turm',
+      legendBlock: 'Turm aus einem Block',
+      legendOther: 'Andere Gebäude',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -111,6 +125,12 @@ export const de: Messages = {
       method: 'Die schwarzen Balken auf Snows Karte wurden per Bildverarbeitung (Tintenstärke) erkannt und nach Fläche gezählt. Jede Balkengruppe sitzt am nächsten Punkt einer OSM-Straße, der ihrer Adresse nahekommt. Die 13 Pumpen wurden von Hand abgelesen. Die Karte ist an vier Passpunkten ausgerichtet (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street), mit einem mittleren quadratischen Fehler von 1,7 m an diesen Punkten. Die Entfernungen folgen dem heutigen OSM-Fußwegnetz.',
       limits: 'Diese Digitalisierung zählt 556 Todesfälle, gegenüber 578 Balken bei Tobler (1992): Einige verschmolzene oder unscharfe Balken bleiben falsch gezählt. Ein Punkt kann zwei benachbarte Adressen vereinen. Die Straßen haben sich seit 1854 verändert (Regent Street, Shaftesbury Avenue, moderne Passagen): Der Fußweg ist eine Annäherung. Die Karte zeigt nur die von Snow verzeichneten Todesfälle, nicht die Erkrankten.',
     },
+    setbacks: {
+      metric: 'Türme von 1916 bis 1960 steigen in Stufen an, unter denen, deren Baukörper OSM erfasst',
+      legend: 'Baukörper in ihrer OSM-Höhe, ohne Überhöhung. Rot und Gold: Türme ab 80 m, die in Stufen ansteigen. Nachtblau: Türme ab 80 m aus einem Block. Creme: andere Gebäude und Türme, deren Baukörper OSM nicht erfasst. Nummerierte Kreise: Bezugspunkte.',
+      method: 'Ein Turm ist ein OSM-Gebäude von mindestens 80 m Höhe, Gebäudeteile eingeschlossen, dessen Mitte im Quadrat liegt. Höhe: Tag height, sonst building:levels × 3,2 m. Jeder Gebäudeteil (building:part) gehört zu dem Umriss, der seine Mitte enthält. Ein Turm steigt in Stufen an, wenn seine Teile mindestens drei Höhenstufen bilden (Höhen auf 6 m gerundet) und seine oberste Stufe weniger als 60 % seiner Grundfläche bedeckt. Die Bauzeit folgt dem Baubeginn (start_date): vor 1916, 1916 bis 1960 unter der Bauordnung von 1916, ab 1961 unter der von 1961.',
+      limits: 'Die Erkennung ist automatisch: Eine als Gebäudeteil kartierte Turmspitze zählt als Stufe, und ein in einem Stück gezeichneter Rücksprung kann unbemerkt bleiben. Türme ohne Gebäudeteile in OSM oder ohne Datum werden nicht eingeordnet. Die Bauordnung von 1916 legte eine Hüllform fest, keine Gestalt: Eine Stufe kann auch eine Entscheidung des Architekten sein, und ein vor 1961 genehmigter Turm kann später begonnen worden sein. Das Relief ist schematisch: Schrägansicht ohne Perspektive, symbolische Schatten.',
+    },
   },
   maps: {
     'amsterdam-riso': {
@@ -125,19 +145,29 @@ export const de: Messages = {
       question: 'Warum sammeln sich die Cholera-Toten von 1854 in Soho um eine einzige Pumpe?',
       intro: 'In zehn Tagen, am Ende des Sommers 1854, starben rund um die Broad Street mehr als fünfhundert Menschen an Cholera. Der Arzt John Snow trug die Todesfälle in einen Straßenplan ein: Sie drängen sich um die Pumpe des Viertels.',
     },
+    'new-york-art-deco': {
+      question: 'Warum steigen die zwischen 1916 und 1961 gebauten Türme von Midtown in Stufen an?',
+      intro: 'Schauen Sie von oben auf das Modell: Die Türme dieser Zeit treten nach oben hin stufenweise zurück. Die Bauordnung von 1916 verlangte es, damit das Licht noch bis auf die Straße fiel. 1961 gab ein neues Gesetz diese Regel auf, und die meisten Türme der 1970er-Jahre wachsen als ein einziger Block.',
+    },
   },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Historisches Zentrum' },
     'lisbonne-alfama': { name: 'Lissabon', district: 'Alfama' },
     'londres-soho': { name: 'London', district: 'Soho' },
+    'new-york-midtown': { name: 'New York', district: 'Midtown' },
   },
   themes: {
     water: 'Wasser',
     relief: 'Gelände',
     history: 'Geschichte',
     health: 'Gesundheit',
+    architecture: 'Architektur',
   },
   styles: {
+    'art-deco': {
+      label: 'Art-déco-Plakat im Relief',
+      legend: ['Gebäude: Baukörper in ihrer OSM-Höhe.', 'Straßen: helle Bänder zwischen den Baukörpern.', 'Wasser: flaches Nachtblau.', 'Parks und Gärten: flaches Grün.'],
+    },
     'gravure-sepia': {
       label: 'Alter Sepia-Stich',
       legend: ['Gebäude: schräge Schraffur, dichter auf der Schattenseite.', 'Straßen: feine Doppellinie für Hauptstraßen, einfache Linie für die übrigen.', 'Wasser: Wellenlinien.', 'Parks und Gärten: Punktierung und kleine Bäume.'],

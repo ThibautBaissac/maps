@@ -118,7 +118,9 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
     } catch (err) {
       throw new Error(`${err instanceof Error ? err.message : String(err)}; run ${refetch}`); // The message names the file.
     }
-    if (osm.layers.length !== OSM_ROLES.length || !osm.layers.every((l, i) => l.role === OSM_ROLES[i] && l.id === l.role)) {
+    // Files converted before building parts were kept end at parks: still valid.
+    const roles = osm.layers.length === OSM_ROLES.length - 1 ? OSM_ROLES.slice(0, -1) : OSM_ROLES;
+    if (osm.layers.length !== roles.length || !osm.layers.every((l, i) => l.role === roles[i] && l.id === l.role)) {
       return `${m.paths.data} must hold the layers ${OSM_ROLES.join(', ')} (${m.id}); run ${refetch}`;
     }
     const stale = staleSquare(osm.square, place);

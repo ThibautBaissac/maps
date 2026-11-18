@@ -10,3 +10,5 @@ Style : affiche de voyage années 1930, aplats géométriques.
 - Bâtiments : #D4572F et #E8B04A en alternance. Parcs : #3E7C6B. Eau : #0F2C4A. Fond : #F2E6CC.
 - Titre en grandes capitales avec Poiret One, bandeau doré en haut, motif en éventail dans les coins.
 - Ombres portées décalées de 3 px, sans flou.
+- Relief 2.5D : bâtiments élevés à leur hauteur OSM en vue oblique, sans perspective ni contour ; toits, murs éclairés et murs à l'ombre en trois aplats d'une même famille de couleurs.
+- Ombres portées au sol en aplat, sans flou, dans le prolongement des volumes.

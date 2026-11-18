@@ -91,6 +91,20 @@ export const en: Messages = {
       legendBroad: 'Closest to Broad Street',
       legendPump: 'Pump of 1854',
     },
+    setbacks: {
+      periods: { 'before-1916': 'Before 1916', 'zoning-1916': '1916 to 1960', 'zoning-1961': '1961 onwards', undated: 'Unknown date' },
+      count: (stepped, detailed) => `${stepped} of ${detailed}`,
+      concentration: (share1916, share1961) => `${share1916}% of the 1916–1960 towers whose volumes OSM details rise in steps, against ${share1961}% of those begun from 1961 onwards.`,
+      distribution: 'Stepped towers by building period',
+      distributionHelp: (unknown) => `Towers of 80 m or more whose centre lies in the square: stepped towers out of towers whose volumes OSM details. ${unknown} towers without detailed volumes are not classified.`,
+      steppedDetail: (year, height, levels) => `${year} · ${height} m · ${levels} height levels`,
+      blockDetail: (year, height) => `${year} · ${height} m · a single volume`,
+      noDate: 'unknown date',
+      source: 'Heights, volumes and construction dates: OpenStreetMap (height, building:levels, building:part, start_date).',
+      legendStepped: 'Stepped tower',
+      legendBlock: 'Single-block tower',
+      legendOther: 'Other buildings',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -111,6 +125,12 @@ export const en: Messages = {
       method: 'The black bars of Snow’s map were detected by image processing (ink thickness), then counted by area. Each group of bars is placed at the closest point on an OSM street, which approximates its address. The 13 pumps were read by hand. The map is fitted on four references (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street) with a root-mean-square error of 1.7 m on these references. Distances follow today’s OSM walking network.',
       limits: 'This digitisation counts 556 deaths, against 578 bars in Tobler’s 1992 digitisation: a few merged or faded bars remain miscounted. One location may combine two neighbouring addresses. Streets have changed since 1854 (Regent Street, Shaftesbury Avenue, modern passages): the walking distance is an approximation. The map only shows the deaths Snow recorded, not the sick.',
     },
+    setbacks: {
+      metric: 'towers of 1916–1960 rise in steps, among those whose volumes OSM details',
+      legend: 'Volumes raised to their OSM height, without exaggeration. Red and gold: towers of 80 m or more that rise in steps. Midnight blue: towers of 80 m or more in a single block. Cream: other buildings, and towers whose volumes OSM does not detail. Numbered circles: references.',
+      method: 'A tower is an OSM building at least 80 m tall, parts included, whose centre lies in the square. Height: the height tag, otherwise building:levels × 3.2 m. Each building part (building:part) belongs to the outline that holds its centre. A tower rises in steps when its parts form at least three levels (heights rounded to 6 m) and its top level covers less than 60% of its footprint. The period follows the start of works (start_date): before 1916, 1916 to 1960 under the 1916 zoning resolution, from 1961 under the 1961 one.',
+      limits: 'Detection is automatic: a spire mapped as a part counts as a level, and a setback drawn as one piece can go unnoticed. Towers without parts in OSM or without a date are not classified. The 1916 rules set an envelope, not a shape: a step can also be an architect’s choice, and a tower approved before 1961 may have been begun later. The relief is schematic: oblique view without perspective, symbolic shadows.',
+    },
   },
   maps: {
     'amsterdam-riso': {
@@ -125,19 +145,29 @@ export const en: Messages = {
       question: 'Why do the 1854 cholera deaths in Soho gather around a single pump?',
       intro: 'In ten days at the end of the summer of 1854, more than five hundred people died of cholera around Broad Street. The physician John Snow marked the deaths on a street plan: they crowd around the neighbourhood pump.',
     },
+    'new-york-art-deco': {
+      question: 'Why do the Midtown towers built between 1916 and 1961 rise in steps?',
+      intro: 'Look down on the model: the towers of that era step back as they climb. The 1916 rules required it, so that light could still reach the street. In 1961 a new law dropped the requirement, and most towers of the 1970s went up in a single block.',
+    },
   },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Historic centre' },
     'lisbonne-alfama': { name: 'Lisbon', district: 'Alfama' },
     'londres-soho': { name: 'London', district: 'Soho' },
+    'new-york-midtown': { name: 'New York', district: 'Midtown' },
   },
   themes: {
     water: 'Water',
     relief: 'Relief',
     history: 'History',
     health: 'Health',
+    architecture: 'Architecture',
   },
   styles: {
+    'art-deco': {
+      label: 'Art deco poster in relief',
+      legend: ['Buildings: volumes raised to their OSM height.', 'Streets: light bands between the volumes.', 'Water: flat midnight blue.', 'Parks and gardens: flat green.'],
+    },
     'gravure-sepia': {
       label: 'Antique sepia engraving',
       legend: ['Buildings: oblique hatching, denser on the shaded side.', 'Streets: fine double line for main streets, single line for the others.', 'Water: wavy lines.', 'Parks and gardens: stipple and small trees.'],

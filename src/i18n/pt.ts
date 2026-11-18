@@ -92,6 +92,20 @@ export const pt: Messages = {
       legendBroad: 'Mais perto de Broad Street',
       legendPump: 'Bomba de 1854',
     },
+    setbacks: {
+      periods: { 'before-1916': 'Antes de 1916', 'zoning-1916': 'De 1916 a 1960', 'zoning-1961': 'A partir de 1961', undated: 'Data desconhecida' },
+      count: (stepped, detailed) => `${stepped} em ${detailed}`,
+      concentration: (share1916, share1961) => `${share1916} % das torres de 1916 a 1960 cujos volumes o OSM detalha sobem em degraus, contra ${share1961} % das iniciadas a partir de 1961.`,
+      distribution: 'Torres em degraus por período de construção',
+      distributionHelp: (unknown) => `Torres de 80 m ou mais cujo centro fica no quadrado: torres em degraus sobre torres cujos volumes o OSM detalha. ${unknown} torres sem volumes detalhados não são classificadas.`,
+      steppedDetail: (year, height, levels) => `${year} · ${height} m · ${levels} patamares de altura`,
+      blockDetail: (year, height) => `${year} · ${height} m · um só volume`,
+      noDate: 'data desconhecida',
+      source: 'Alturas, volumes e datas de construção: OpenStreetMap (height, building:levels, building:part, start_date).',
+      legendStepped: 'Torre em degraus',
+      legendBlock: 'Torre de um só bloco',
+      legendOther: 'Outros edifícios',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -112,6 +126,12 @@ export const pt: Messages = {
       method: 'As barras pretas do mapa de Snow foram detetadas por tratamento de imagem (espessura da tinta) e contadas por superfície. Cada grupo de barras é colocado no ponto mais próximo de uma rua OSM, que se aproxima da sua morada. As 13 bombas foram lidas à mão. O mapa é ajustado com quatro referências (Golden Square, Soho Square, Oxford Circus, Broadwick × Lexington Street), com um erro quadrático médio de 1,7 m nessas referências. As distâncias seguem a rede pedonal atual do OSM.',
       limits: 'Esta digitalização conta 556 mortes, contra 578 barras na de Tobler (1992): algumas barras fundidas ou desfocadas continuam mal contadas. Um ponto pode reunir duas moradas vizinhas. As ruas mudaram desde 1854 (Regent Street, Shaftesbury Avenue, passagens modernas): a distância a pé é uma aproximação. O mapa mostra apenas as mortes registadas por Snow, não os doentes.',
     },
+    setbacks: {
+      metric: 'torres de 1916 a 1960 sobem em degraus, entre as que o OSM detalha em volumes',
+      legend: 'Volumes em relevo à altura do OSM, sem exagero. Vermelho e dourado: torres de 80 m ou mais que sobem em degraus. Azul-noite: torres de 80 m ou mais de um só bloco. Creme: outros edifícios, e torres cujos volumes o OSM não detalha. Círculos numerados: referências.',
+      method: 'Uma torre é um edifício do OSM com pelo menos 80 m, partes incluídas, cujo centro fica no quadrado. Altura: etiqueta height, senão building:levels × 3,2 m. Cada parte de edifício (building:part) é atribuída ao contorno que contém o seu centro. Uma torre sobe em degraus quando as suas partes formam pelo menos três patamares (alturas arredondadas a 6 m) e o patamar superior cobre menos de 60 % da sua implantação. O período segue a data de início da obra (start_date): antes de 1916, de 1916 a 1960 ao abrigo do regulamento de zonamento de 1916, a partir de 1961 ao abrigo do de 1961.',
+      limits: 'A deteção é automática: uma flecha cartografada como parte conta como patamar, e um recuo desenhado numa só peça pode passar despercebido. As torres sem partes no OSM ou sem data não são classificadas. O regulamento de 1916 fixava um envelope, não uma forma: um degrau também pode ser escolha do arquiteto, e uma torre autorizada antes de 1961 pode ter sido iniciada depois. O relevo é esquemático: vista oblíqua sem perspetiva, sombras simbólicas.',
+    },
   },
   maps: {
     'amsterdam-riso': {
@@ -126,19 +146,29 @@ export const pt: Messages = {
       question: 'Porque é que as mortes de cólera de 1854, no Soho, rodeiam uma única bomba?',
       intro: 'Em dez dias, no fim do verão de 1854, mais de quinhentas pessoas morreram de cólera em torno de Broad Street. O médico John Snow marcou as mortes numa planta das ruas: concentram-se à volta da bomba do bairro.',
     },
+    'new-york-art-deco': {
+      question: 'Porque é que as torres de Midtown construídas entre 1916 e 1961 sobem em degraus?',
+      intro: 'Olhe para a maqueta de cima: as torres dessa época recuam em degraus à medida que sobem. O regulamento de 1916 exigia-o, para que a luz continuasse a chegar à rua. Em 1961, outra lei abandona a regra, e nos anos 1970 a maioria das torres ergue-se num só bloco.',
+    },
   },
   places: {
     'amsterdam-centre': { name: 'Amesterdão', district: 'Centro histórico' },
     'lisbonne-alfama': { name: 'Lisboa', district: 'Alfama' },
     'londres-soho': { name: 'Londres', district: 'Soho' },
+    'new-york-midtown': { name: 'Nova Iorque', district: 'Midtown' },
   },
   themes: {
     water: 'Água',
     relief: 'Relevo',
     history: 'História',
     health: 'Saúde',
+    architecture: 'Arquitetura',
   },
   styles: {
+    'art-deco': {
+      label: 'Cartaz art déco em relevo',
+      legend: ['Edifícios: volumes em relevo à altura do OSM.', 'Ruas: faixas claras entre os volumes.', 'Água: cor lisa azul-noite.', 'Parques e jardins: cor lisa verde.'],
+    },
     'gravure-sepia': {
       label: 'Gravura antiga sépia',
       legend: ['Edifícios: tracejado oblíquo, mais denso do lado da sombra.', 'Ruas: traço duplo fino para as grandes vias, traço simples para as restantes.', 'Água: linhas onduladas.', 'Parques e jardins: pontilhado e pequenas árvores.'],

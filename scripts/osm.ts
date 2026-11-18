@@ -6,6 +6,7 @@ import { isRoadKind, type Feature, type Layer, type LayerFile, type Line, type R
 import { isRecord, parsePlace, type Place } from '../src/place.ts';
 import { localProjection, survey } from '../src/geo.ts';
 import { endpointKey as key, seaPolygons } from './coastline.ts';
+import { owners } from '../src/rings.ts';
 
 // Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)
 // is always defined, hence the `!` in the loops below.
@@ -40,6 +41,8 @@ export function overpassQuery(place: Place): string {
 (
   way["building"](${bb});
   relation["building"]["type"="multipolygon"](${bb});
+  way["building:part"](${bb});
+  relation["building:part"]["type"="multipolygon"](${bb});
   way["highway"](${bb});
   way["waterway"](${bb});
   way["natural"="water"](${bb});
@@ -128,6 +131,44 @@ const isPark = (t: OsmTags): boolean =>
   /^(grass|recreation_ground|village_green|forest|meadow|cemetery|allotments)$/.test(t.landuse ?? '') ||
   /^(wood|scrub|grassland)$/.test(t.natural ?? '');
 
+/** Metres per storey when OSM gives building:levels but no height. */
+export const STOREY_M = 3.2;
+
+/** A length tag in metres: "52", "52 m", "170'" or "170 ft"; undefined when unreadable. */
+export function metres(v: string | undefined): number | undefined {
+  const m = /^\s*(\d+(?:[.,]\d+)?)\s*(m|ft|'|)?\s*$/i.exec(v ?? '');
+  if (!m) return undefined;
+  const n = Number(m[1]!.replace(',', '.'));
+  return Math.round((m[2] === 'ft' || m[2] === "'" ? n * 0.3048 : n) * 10) / 10;
+}
+
+/**
+ * Height properties of a building or a part: `h` (top, m) from height or building:levels,
+ * `base` (m) from min_height or building:min_level, `year` from start_date.
+ */
+export function volumeProps(t: OsmTags): Record<string, number> {
+  const levels = (v: string | undefined): number | undefined => {
+    const n = metres(v);
+    return n === undefined ? undefined : Math.round(n * STOREY_M * 10) / 10;
+  };
+  const h = metres(t['height']) ?? levels(t['building:levels']);
+  const base = metres(t['min_height']) ?? levels(t['building:min_level']);
+  const year = /(?:^|\D)(1[6-9]\d\d|20\d\d)(?:\D|$)/.exec(t['start_date'] ?? '')?.[1];
+  return {
+    ...(h !== undefined && h > 0 && { h }),
+    ...(base !== undefined && base > 0 && { base }),
+    ...(year !== undefined && { year: Number(year) }),
+  };
+}
+
+/** Marks the buildings whose outline holds the centre of a building part: a map draws their parts instead. */
+function markParts(buildings: Feature<Ring[]>[], parts: readonly Feature<Ring[]>[]): void {
+  for (const i of owners(buildings, parts)) {
+    const b = buildings[i];
+    if (b) buildings[i] = { ...b, p: { ...b.p, parts: true } };
+  }
+}
+
 /** The OpenStreetMap layers of a place from its Overpass answer: local metres, x east, y north, 0.1 m. */
 export function convertOsm(answer: OverpassAnswer, placeId: PlaceId): Layer[] {
   const place = PLACES[placeId];
@@ -144,6 +185,7 @@ export function convertOsm(answer: OverpassAnswer, placeId: PlaceId): Layer[] {
   };
 
   const buildings: Feature<Ring[]>[] = [];
+  const buildingParts: Feature<Ring[]>[] = [];
   const roads: Feature<Line>[] = [];
   const waterways: Feature<Line>[] = [];
   const water: Feature<Ring[]>[] = [];
@@ -154,9 +196,14 @@ export function convertOsm(answer: OverpassAnswer, placeId: PlaceId): Layer[] {
     const t = el.tags ?? {};
     if (el.type === 'way' && t.natural === 'coastline') {
       if (el.geometry) coast.push(project(el.geometry));
-    } else if (isSet(t.building) && !t['building:part']) {
+    } else if (isSet(t['building:part'])) {
       const g = polygonRings(el);
-      if (g.length) buildings.push({ g });
+      const p = volumeProps(t);
+      if (g.length) buildingParts.push({ g, ...(Object.keys(p).length && { p }) });
+    } else if (isSet(t.building)) {
+      const g = polygonRings(el);
+      const p = volumeProps(t);
+      if (g.length) buildings.push({ g, ...(t.name && { n: t.name }), ...(Object.keys(p).length && { p }) });
     } else if (el.type === 'way' && t.highway && isRoadKind(t.highway) && t.area !== 'yes') {
       if (!el.geometry) continue;
       const p = { ...(isSet(t.bridge) && { bridge: true }), ...(isSet(t.tunnel) && { tunnel: true }) };
@@ -175,6 +222,7 @@ export function convertOsm(answer: OverpassAnswer, placeId: PlaceId): Layer[] {
   }
 
   water.push(...seaPolygons(coast, half));
+  markParts(buildings, buildingParts);
   const base = { source: 'openstreetmap', attribution: '© contributeurs OpenStreetMap (ODbL)' } as const;
   return [
     { ...base, id: 'buildings', role: 'buildings', kind: 'areas', features: buildings },
@@ -182,6 +230,7 @@ export function convertOsm(answer: OverpassAnswer, placeId: PlaceId): Layer[] {
     { ...base, id: 'waterways', role: 'waterways', kind: 'lines', features: waterways },
     { ...base, id: 'water', role: 'water', kind: 'areas', features: water },
     { ...base, id: 'parks', role: 'parks', kind: 'areas', features: parks },
+    { ...base, id: 'building-parts', role: 'building-parts', kind: 'areas', features: buildingParts },
   ];
 }
 

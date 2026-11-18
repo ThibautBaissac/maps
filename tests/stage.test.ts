@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { MapHandle, MountArgs } from '../src/styles/contract.ts';
 import { sheetLayout } from '../src/styles/cyanotype/sheet.ts';
+import { decoLayout } from '../src/styles/art-deco/sheet.ts';
 import type { Rect } from '../src/toolkit/geometry.ts';
 import { computeLayout } from '../src/toolkit/layout.ts';
 import { installPage, nameGlyphs, type FakeCanvas } from './dom.ts';
@@ -20,8 +21,9 @@ const STYLES = {
   riso: () => import('../src/styles/riso/index.ts'),
   cyanotype: () => import('../src/styles/cyanotype/index.ts'),
   'gravure-sepia': () => import('../src/styles/gravure-sepia/index.ts'),
+  'art-deco': () => import('../src/styles/art-deco/index.ts'),
 } as const;
-const ALL = ['riso', 'cyanotype', 'gravure-sepia'] as const;
+const ALL = ['riso', 'cyanotype', 'gravure-sepia', 'art-deco'] as const;
 
 async function mountStyle(t: Parameters<typeof installPage>[0], style: keyof typeof STYLES, { title = 'Mon quartier', dpr = 1, locale = 'fr' as Locale, width = SIZE.width, height = SIZE.height } = {}) {
   const page = installPage(t, { width, height, dpr });
@@ -111,6 +113,8 @@ const LAYOUTS = {
   riso: () => computeLayout(SIZE.width, SIZE.height),
   cyanotype: () => sheetLayout(SIZE.width, SIZE.height),
   'gravure-sepia': () => computeLayout(SIZE.width, SIZE.height),
+  // Without subject the art deco legend has three rows: buildings, parks, water.
+  'art-deco': () => decoLayout(SIZE.width, SIZE.height, 3),
 } satisfies Record<keyof typeof STYLES, () => { nav: Rect; attr: Rect }>;
 
 const inside = (r: Rect, x: number, y: number): boolean => x >= r[0] && x <= r[2] && y >= r[1] && y <= r[3];

@@ -16,8 +16,8 @@ function readPublic(path: string): unknown {
   }
 }
 
-// A current osm.json, reduced to what the catalogue checks: the square, the download date and the five OpenStreetMap layers (empty).
-const OSM_KINDS = { buildings: 'areas', roads: 'lines', waterways: 'lines', water: 'areas', parks: 'areas' } as const;
+// A current osm.json, reduced to what the catalogue checks: the square, the download date and the OpenStreetMap layers (empty).
+const OSM_KINDS = { buildings: 'areas', roads: 'lines', waterways: 'lines', water: 'areas', parks: 'areas', 'building-parts': 'areas' } as const;
 const osmLayer = (role: keyof typeof OSM_KINDS) => ({ id: role, kind: OSM_KINDS[role], role, attribution: '© contributeurs OpenStreetMap (ODbL)', source: 'openstreetmap', features: [] });
 const OSM_FILE = { square: { lat: 52.3712, lon: 4.8936, sizeKm: 2 }, fetchedAt: '2026-11-15T12:59:00.000Z', layers: OSM_ROLES.map(osmLayer) };
 const entry = (id: string, extra: Partial<MapEntry> = {}): MapEntry => ({ id, place: 'amsterdam-centre', style: 'riso', topic: 'canal-crossings', ...extra } as MapEntry);
@@ -97,8 +97,8 @@ test('unreadable data names the file and says how to download it again', () => {
   assert.match(problems[0]?.message ?? '', /^data\/amsterdam-centre\/osm\.json: square must hold.*; run npm run fetch-data -- amsterdam-centre$/);
 });
 
-test('osm.json must hold the five OpenStreetMap layers, each once, in order', () => {
-  const message = 'data/amsterdam-centre/osm.json must hold the layers buildings, roads, waterways, water, parks (amsterdam-test); run npm run fetch-data -- amsterdam-centre';
+test('osm.json must hold the OpenStreetMap layers, each once, in order', () => {
+  const message = 'data/amsterdam-centre/osm.json must hold the layers buildings, roads, waterways, water, parks, building-parts (amsterdam-test); run npm run fetch-data -- amsterdam-centre';
   const [first, second, ...rest] = OSM_FILE.layers;
   const files = [
     { ...OSM_FILE, layers: [] },
@@ -107,6 +107,11 @@ test('osm.json must hold the five OpenStreetMap layers, each once, in order', ()
     { ...OSM_FILE, layers: [...OSM_FILE.layers, { ...osmLayer('roads'), id: 'extra', role: 'overlay' }] },
   ];
   for (const file of files) assert.equal(problemsOf([entry('amsterdam-test')], () => file)[0]?.message, message);
+});
+
+test('an osm.json converted before building parts were kept is still valid', () => {
+  const legacy = { ...OSM_FILE, layers: OSM_FILE.layers.filter((l) => l.role !== 'building-parts') };
+  assert.deepEqual(problemsOf([entry('amsterdam-test')], () => legacy), []);
 });
 
 test('invalid and duplicate map ids are problems', () => {

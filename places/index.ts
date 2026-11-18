@@ -40,6 +40,16 @@ export const PLACES = {
     lon: -73.981,
     sizeKm: 1.6,
   },
+  // No OpenStreetMap file: the base map is the external layers of places/layers.ts, built with
+  // npm run layers -- france. The square covers metropolitan France and Corsica.
+  france: {
+    name: 'France',
+    district: 'Métropole',
+    lat: 46.2,
+    lon: 2.2,
+    sizeKm: 1180,
+    basemap: { date: '2026-11-18' },
+  },
 } as const satisfies Record<string, Place>;
 
 export type PlaceId = keyof typeof PLACES;
@@ -48,3 +58,9 @@ export const isPlaceId = (id: string): id is PlaceId => Object.hasOwn(PLACES, id
 
 /** Where a place's downloaded data lives, relative to the site root (public/ on disk). */
 export const dataPath = (id: PlaceId): string => `data/${id}/osm.json`;
+
+/** The base map of a place drawn from its external layers only, without OpenStreetMap data. */
+export const basemapOf = (id: PlaceId): { date: string } | undefined => {
+  const place: Place = PLACES[id];
+  return place.basemap;
+};

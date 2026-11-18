@@ -29,12 +29,13 @@ export const isRoadKind = (k: string): k is RoadKind => (ROAD_KINDS as readonly 
 export const LAYER_KINDS = ['points', 'lines', 'areas'] as const;
 export type LayerKind = (typeof LAYER_KINDS)[number];
 /**
- * What a layer is for: an overlay is drawn on top of the base map; the other roles are the
- * OpenStreetMap layers, whose id is their role.
+ * What a layer is for: an overlay is drawn on top of the base map; a base layer is part of
+ * the base map of a place drawn without OpenStreetMap (Place.basemap); the other roles are
+ * the OpenStreetMap layers, whose id is their role.
  */
 export const OSM_ROLES = ['buildings', 'roads', 'waterways', 'water', 'parks', 'building-parts'] as const;
 export type OsmRole = (typeof OSM_ROLES)[number];
-export const LAYER_ROLES = [...OSM_ROLES, 'overlay'] as const;
+export const LAYER_ROLES = [...OSM_ROLES, 'base', 'overlay'] as const;
 export type LayerRole = (typeof LAYER_ROLES)[number];
 const isOsmRole = (v: unknown): v is OsmRole => (OSM_ROLES as readonly unknown[]).includes(v);
 
@@ -99,7 +100,8 @@ export interface LayerSource {
   /** GeoJSON file, relative to the repository root. */
   file: string;
   kind: LayerKind;
-  role: 'overlay';
+  /** overlay: drawn over the map; base: the base map of a place without OpenStreetMap data. */
+  role: 'overlay' | 'base';
   /** Credit shown after the OSM one. The layer file keeps its text in the default language. */
   attribution: LocalizedText;
   /** Property holding the name of an object. */

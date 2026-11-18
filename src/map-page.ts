@@ -35,10 +35,11 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
     colors: style.card(options),
   });
 
-  const url = `${import.meta.env.BASE_URL}${map.paths.data}`;
+  const dataPath = map.paths.data;
+  const url = dataPath === null ? null : `${import.meta.env.BASE_URL}${dataPath}`;
   const [styleModule, osm, layerSets] = await Promise.all([
     style.load(),
-    fetch(url).then(async (r) => {
+    url === null ? null : fetch(url).then(async (r) => {
       if (!r.ok) throw new Error(`Missing data for ${map.placeId}: HTTP ${r.status}`);
       return parseLayerFile(await r.json(), url);
     }),
@@ -49,14 +50,17 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
       return { id, layers: parseLayerFile(await r.json(), layerUrl).layers };
     })),
   ]);
-  const layers: Layer[] = [...osm.layers, ...layerSets.flatMap((set) => set.layers)];
+  const layers: Layer[] = [...osm?.layers ?? [], ...layerSets.flatMap((set) => set.layers)];
   const overlays = layerSets.flatMap((set, i) => set.layers.map((layer) => ({ title: map.layers[i]?.title ?? set.id, layer })));
+  // The panel links to the data the subject is measured on: the OSM file, else the first overlay.
+  const firstOverlay = map.layers.find((l) => l.role === 'overlay');
+  const subjectData = url ?? `${import.meta.env.BASE_URL}${firstOverlay?.path ?? map.layers[0]?.path ?? ''}`;
 
   const { survey, meta } = mountMetaOf(map, osm);
   const story = mapStory(locale, map.id);
   if (!story) throw new Error(`No question and intro for map "${map.id}" (maps in src/i18n)`);
   const topic = map.topic ? analyseTopic(survey, layers, map.topic) : undefined;
-  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), survey, layers, meta, style.legend, locale, topic && { analysis: topic, story }, overlays);
+  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), survey, layers, { ...meta, osm: osm !== null }, style.legend, locale, topic && { analysis: topic, story }, overlays);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
   description.disabled = false;
@@ -64,7 +68,7 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
 
   if (import.meta.env.DEV) {
     console.log(`${map.place.name} — ${map.place.district} : éléments par couche`);
-    console.table(Object.fromEntries(osm.layers.map((l) => [l.id, l.features.length])));
+    console.table(Object.fromEntries(layers.map((l) => [l.id, l.features.length])));
   }
 
   const handle = await styleModule.mount({
@@ -76,7 +80,7 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
     layers,
     ...(topic ? { topic } : {}),
   });
-  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), survey, topic, story, locale, handle, url);
+  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), survey, topic, story, locale, handle, subjectData);
   if (handle.viewport) {
     const viewport = handle.viewport;
     for (const [selector, factor] of [['.zoom-in', ZOOM_STEP], ['.zoom-out', 1 / ZOOM_STEP]] as const) {

@@ -1,7 +1,7 @@
 // Every map of src/registry.ts, resolved once: title, place, style and paths. The
 // generated pages, the gallery, the map pages and the scripts all read maps from here.
 // Runs in the browser and in Node: no DOM, no Node API, no import.meta.env.
-import { dataPath, isPlaceId, PLACES, type PlaceId } from '../places/index.ts';
+import { basemapOf, dataPath, isPlaceId, PLACES, type PlaceId } from '../places/index.ts';
 import { LAYERS, layerPath } from '../places/layers.ts';
 import { isSlug, type Place } from './place.ts';
 import { MAPS, type MapEntry, type MapEntryOf } from './registry.ts';
@@ -22,12 +22,13 @@ export interface CatalogueMapOf<K extends StyleKey> {
   styleDef: StyleDef<StyleOptions[K]>;
   options: Partial<StyleOptions[K]>;
   /** The external layers of the map, in the registry order. */
-  layers: readonly { id: string; title: string; path: string }[];
+  layers: readonly { id: string; title: string; path: string; role: 'overlay' | 'base' }[];
   /** Credits of the external layers, without duplicates, in the registry order. */
   attributions: readonly string[];
   /** Relative to the site root, no leading slash: prefix BASE_URL, or public/ on disk. */
   /** vignette: the gallery's portrait picture; share: the 1200×630 picture of a shared link. */
-  paths: { page: string; data: string; vignette: string; share: string };
+  /** data: the OpenStreetMap file, null for a place drawn from its own base layers (Place.basemap). */
+  paths: { page: string; data: string | null; vignette: string; share: string };
 }
 
 /** A resolved map, its options typed by its style. */
@@ -54,9 +55,9 @@ function resolve<K extends StyleKey>(m: MapEntryOf<K>, locale: Locale, registry:
     topic: m.topic,
     styleDef: { ...STYLES[m.style], ...messages(locale).styles[m.style] },
     options: m.options ?? {},
-    layers: sources.map(({ id, source }) => ({ id, title: typeof source.title === 'string' ? source.title : source.title[locale], path: layerPath(m.place, id) })),
+    layers: sources.map(({ id, source }) => ({ id, title: typeof source.title === 'string' ? source.title : source.title[locale], path: layerPath(m.place, id), role: source.role })),
     attributions: [...new Set(sources.map(({ source }) => localized(source.attribution, locale)))],
-    paths: { page: `${locale}/${PAGES_DIR}/${m.id}/`, data: dataPath(m.place), vignette: `vignettes/${locale}/${m.id}.webp`, share: `vignettes/${locale}/${m.id}.jpg` },
+    paths: { page: `${locale}/${PAGES_DIR}/${m.id}/`, data: basemapOf(m.place) ? null : dataPath(m.place), vignette: `vignettes/${locale}/${m.id}.webp`, share: `vignettes/${locale}/${m.id}.jpg` },
   };
 }
 
@@ -109,23 +110,27 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
     }
     const m = resolve(entry, DEFAULT_LOCALE, layers) as CatalogueMap;
     const place = PLACES[entry.place]; // Display translations never invalidate geographic data.
-    const refetch = `npm run fetch-data -- ${m.placeId}`;
-    const data = readData(m.paths.data);
-    if (data === undefined) return `no data for ${m.placeId} (${m.id}); run ${refetch}`;
-    let osm: LayerFile;
-    try {
-      osm = parseLayerFile(data, m.paths.data);
-    } catch (err) {
-      throw new Error(`${err instanceof Error ? err.message : String(err)}; run ${refetch}`); // The message names the file.
+    if (m.paths.data === null) {
+      if (!m.layers.some((l) => l.role === 'base')) return `${m.placeId} has no OpenStreetMap data: the map needs at least one of its base layers (${m.id})`;
+    } else {
+      const refetch = `npm run fetch-data -- ${m.placeId}`;
+      const data = readData(m.paths.data);
+      if (data === undefined) return `no data for ${m.placeId} (${m.id}); run ${refetch}`;
+      let osm: LayerFile;
+      try {
+        osm = parseLayerFile(data, m.paths.data);
+      } catch (err) {
+        throw new Error(`${err instanceof Error ? err.message : String(err)}; run ${refetch}`); // The message names the file.
+      }
+      // Files converted before building parts were kept end at parks: still valid.
+      const roles = osm.layers.length === OSM_ROLES.length - 1 ? OSM_ROLES.slice(0, -1) : OSM_ROLES;
+      if (osm.layers.length !== roles.length || !osm.layers.every((l, i) => l.role === roles[i] && l.id === l.role)) {
+        return `${m.paths.data} must hold the layers ${OSM_ROLES.join(', ')} (${m.id}); run ${refetch}`;
+      }
+      const stale = staleSquare(osm.square, place);
+      if (stale) return `data for ${m.placeId} is out of date (${m.id}): ${stale}; run ${refetch}`;
+      if (osm.fetchedAt === undefined) return `${m.paths.data} has no fetchedAt (${m.id}); run ${refetch}`;
     }
-    // Files converted before building parts were kept end at parks: still valid.
-    const roles = osm.layers.length === OSM_ROLES.length - 1 ? OSM_ROLES.slice(0, -1) : OSM_ROLES;
-    if (osm.layers.length !== roles.length || !osm.layers.every((l, i) => l.role === roles[i] && l.id === l.role)) {
-      return `${m.paths.data} must hold the layers ${OSM_ROLES.join(', ')} (${m.id}); run ${refetch}`;
-    }
-    const stale = staleSquare(osm.square, place);
-    if (stale) return `data for ${m.placeId} is out of date (${m.id}): ${stale}; run ${refetch}`;
-    if (osm.fetchedAt === undefined) return `${m.paths.data} has no fetchedAt (${m.id}); run ${refetch}`;
     const relayer = `npm run layers -- ${m.placeId}`;
     for (const { id, path } of m.layers) {
       const file = readData(path);

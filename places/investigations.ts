@@ -1,0 +1,40 @@
+// L214 investigations published without a place in metropolitan France (transport, sea,
+// sites not named, several sites at once): the investigations subject cites them beside the
+// map. The located ones are the enquetes layer of the france place (places/layers.ts).
+// Compiled from https://www.l214.com/enquetes/ on 2026-11-18; method in layers/france/README.md.
+import type { UnlocatedInvestigation } from '../src/investigations.ts';
+
+export const UNLOCATED_INVESTIGATIONS: readonly UnlocatedInvestigation[] = [
+  { year: 2008, site: 'elevage', name: 'Cages individuelles pour les canards : c\'est ça la gastronomie…', url: 'https://www.l214.com/animaux/canards/canards-2008/' },
+  { year: 2008, site: 'elevage', name: 'Enquête dans des élevages de lapins (images 2008)', url: 'https://www.l214.com/animaux/lapins/elevage-lapins-2008/' },
+  { year: 2008, site: 'elevage', name: 'Foie gras : la cruauté made in France (élevages Euralis)', url: 'https://www.l214.com/stop-foie-gras/foie-gras-euralis-2008/' },
+  { year: 2009, site: 'elevage', name: 'Enquête dans des élevages de lapins en France', url: 'https://www.l214.com/animaux/lapins/elevage-lapins-2009/' },
+  { year: 2010, site: 'elevage', name: 'Chargement de poulets : images inédites', url: 'https://www.l214.com/enquetes/2010/chargement-poulets/' },
+  { year: 2010, site: 'elevage', name: 'Enquête dans un élevage de cailles en France', url: 'https://www.l214.com/d/elevage-cailles-2010/' },
+  { year: 2010, site: 'elevage', name: 'Enquêtes dans des élevages de cochons', url: 'https://www.l214.com/enquetes/2010/3-elevages-de-cochons-2007-2008-2010/' },
+  { year: 2010, site: 'elevage', name: 'La dure réalité de l\'élevage de lapins', url: 'https://www.l214.com/enquetes/2010/elevage-lapins-2010-2/' },
+  { year: 2010, site: 'elevage', name: 'Le ramassage des dindes en élevage intensif', url: 'https://www.l214.com/enquetes/2010/ramassage-dindes-2010/' },
+  { year: 2010, site: 'elevage', name: 'Poules pondeuses : images inédites', url: 'https://www.l214.com/enquetes/2010/poules-pondeuses-3/' },
+  { year: 2011, site: 'elevage', name: 'Enquête dans 8 élevages de poules pondeuses', url: 'https://www.l214.com/enquetes/2011/poules-pondeuses-2/' },
+  { year: 2012, site: 'elevage', name: 'Enquête dans 4 élevages de poules pondeuses', url: 'https://www.l214.com/enquetes/2012/poules-pondeuses/' },
+  { year: 2012, site: 'elevage', name: 'Foie gras du Sud-Ouest : enquête dans des salles de gavage', url: 'https://stop-foie-gras.com/foie-gras-sud-ouest/video-enquete-2012' },
+  { year: 2013, site: 'elevage', name: 'Foie gras : scandale dans les palaces parisiens (Ernest Soulard)', url: 'https://stop-foie-gras.com/foie-gras-grands-chefs' },
+  { year: 2014, site: 'elevage', name: 'Foie gras de l\'Élysée : torture 3 étoiles', url: 'https://www.l214.com/enquetes/2014/foie-gras-elysee-perigord/' },
+  { year: 2014, site: 'transport', name: 'Le calvaire des chevaux en Amérique', url: 'https://www.l214.com/animaux/chevaux/le-calvaire-des-chevaux-en-amerique/' },
+  { year: 2014, site: 'elevage', name: 'Plongée dans l\'enfer d\'un élevage de lapins (Matthieu Ricard)', url: 'https://www.l214.com/enquetes/2014/message-matthieu-ricard-lapins/' },
+  { year: 2014, site: 'elevage', name: 'Œufs de la marque U : derrière les portes des élevages', url: 'https://www.l214.com/enquetes/2014/super-u-maltraite-les-poules-pondeuses-2/' },
+  { year: 2015, site: 'elevage', name: 'Broyé petit ou gavé plus tard : insémination des canes', url: 'https://www.l214.com/enquetes/2015/broye-petit-ou-gave-plus-tard/' },
+  { year: 2017, site: 'abattoir', name: 'L\'enfer des transports longs : abattoirs au Liban et en Turquie', url: 'https://www.l214.com/enquetes/2017/transports-longs/' },
+  { year: 2017, site: 'elevage', name: 'Lapins Orylag : dites non à la fourrure', url: 'https://www.l214.com/enquetes/2017/fourrure-lapin-orylag/' },
+  { year: 2017, site: 'elevage', name: 'Vie de misère pour les poulets Doux : l\'élevage', url: 'https://www.l214.com/enquetes/2017/elevage-made-in-france-poulets-doux/' },
+  { year: 2018, site: 'elevage', name: '800 millions : enquête dans un élevage Maître Coq', url: 'https://www.l214.com/enquetes/2018/poulets-800-millions/' },
+  { year: 2018, site: 'autre', name: 'Enquête dans des piscicultures et un abattoir de truites Aqualande', url: 'https://www.l214.com/enquetes/2018/poisson-truite-aqualande/' },
+  { year: 2019, site: 'transport', name: 'Stop au transport des veaux nourrissons', url: 'https://www.l214.com/enquetes/2019/transport-veaux-nourrissons/' },
+  { year: 2020, site: 'elevage', name: '9 faisans sur 10 tués à la chasse proviennent d\'élevages (Gibovendée)', url: 'https://www.l214.com/enquetes/2020/industrie-de-la-chasse/' },
+  { year: 2020, site: 'elevage', name: 'Enquête sur des approvisionnements pour Domino\'s Pizza', url: 'https://www.l214.com/stop-cruaute/dominos/' },
+  { year: 2020, site: 'transport', name: 'Longs transports des veaux : Irlande, France, Pays-Bas', url: 'https://www.l214.com/enquetes/2020/transport-veaux-irlande-pays-bas/' },
+  { year: 2022, site: 'autre', name: 'Pêche au chalut, le grand massacre', url: 'https://www.l214.com/enquetes/2022/animaux-et-presidentielle/poissons-peche-chalut/' },
+  { year: 2022, site: 'transport', name: 'Ramassage et transport des dindes et dindons (Petit Biscuit)', url: 'https://www.l214.com/enquetes/2022/ramassage-dindons/' },
+  { year: 2025, site: 'autre', name: 'France, terre d\'élevages intensifs : images et chiffres irréfutables', url: 'https://www.l214.com/enquetes/france-terre-elevages-intensifs/' },
+  { year: 2026, site: 'abattoir', name: 'Cumul d\'infractions à l\'abattoir du Lamentin (Martinique)', url: 'https://www.l214.com/enquetes/2026/abattoir-martinique/' },
+];

@@ -39,7 +39,7 @@ function overlayName(f: LayerFeature<unknown>, locale: Locale): string | undefin
 }
 
 /** Whole-survey description, independent of the visual zoom and the drawing technique. */
-export function describeMap(container: HTMLElement, summary: HTMLElement, survey: Survey, layers: readonly Layer[], display: { title: string; district: string }, legend: readonly string[], locale: Locale, topic?: { analysis: TopicAnalysis; story: MapStory }, overlays: readonly { title: string; layer: Layer }[] = []): void {
+export function describeMap(container: HTMLElement, summary: HTMLElement, survey: Survey, layers: readonly Layer[], display: { title: string; district: string; osm?: boolean }, legend: readonly string[], locale: Locale, topic?: { analysis: TopicAnalysis; story: MapStory }, overlays: readonly { title: string; layer: Layer }[] = []): void {
   const copy = messages(locale).description;
   const fmt = (n: number): string => formatNumber(locale, n);
   const overview = copy.overview(display.title, display.district, fmt(survey.sizeKm));
@@ -55,10 +55,25 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, survey
     const content = topicContent(survey, topic.analysis, topic.story, locale);
     summary.textContent = `${content.story.question} ${content.value} ${content.subject.metric}. ${content.concentration} ${overview} ${copy.help}`;
     for (const text of [content.story.question, content.story.intro, `${content.value} ${content.subject.metric}.`, content.concentration,
-      ...content.references.map((ref) => content.copy.referenceLine(String(ref.number), ref.name, ref.detail)), content.subject.legend, content.source, content.subject.method, content.subject.limits]) paragraph(text);
+      ...content.references.map((ref) => content.copy.referenceLine(String(ref.number), ref.name, ref.detail)),
+      content.subject.legend, content.source, content.subject.method, content.subject.limits]) paragraph(text);
+    if (content.notes?.items.length) {
+      const heading = document.createElement('h2');
+      heading.textContent = content.notes.title;
+      const list = document.createElement('ul');
+      for (const text of content.notes.items) {
+        const item = document.createElement('li');
+        item.textContent = text;
+        list.append(item);
+      }
+      container.append(heading);
+      paragraph(content.notes.help);
+      container.append(list);
+    }
   }
-  paragraph(copy.centre(fmt(survey.lat), fmt(survey.lon), formatDate(locale, survey.osmDate)));
-  paragraph(copy.counts(featureCount(locale, 0, featuresOf(layers, 'buildings', 'areas').length), featureCount(locale, 1, featuresOf(layers, 'roads', 'lines').length), featureCount(locale, 2, featuresOf(layers, 'parks', 'areas').length), featureCount(locale, 3, featuresOf(layers, 'water', 'areas').length)));
+  // A place without OpenStreetMap data (Place.basemap) has no extract to describe.
+  if (display.osm !== false) paragraph(copy.centre(fmt(survey.lat), fmt(survey.lon), formatDate(locale, survey.osmDate)));
+  if (display.osm !== false) paragraph(copy.counts(featureCount(locale, 0, featuresOf(layers, 'buildings', 'areas').length), featureCount(locale, 1, featuresOf(layers, 'roads', 'lines').length), featureCount(locale, 2, featuresOf(layers, 'parks', 'areas').length), featureCount(locale, 3, featuresOf(layers, 'water', 'areas').length)));
   const heading = document.createElement('h2');
   heading.textContent = copy.legend;
   const key = document.createElement('ul');
@@ -69,7 +84,7 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, survey
   }
   container.append(heading, key);
   paragraph(copy.positionsHelp);
-  const sections: [string, Feature[]][] = [
+  const sections: [string, Feature[]][] = display.osm === false ? [] : [
     [copy.roads, featuresOf(layers, 'roads', 'lines').map((r): Feature => [r.n, [r.g]])],
     [copy.water, [
       ...featuresOf(layers, 'waterways', 'lines').filter((w) => !isTunnel(w)).map((w): Feature => [w.n, [w.g]]),

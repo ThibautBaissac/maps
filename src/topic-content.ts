@@ -1,7 +1,7 @@
-import { formatDate, formatNumber, messages, type Locale, type MapStory } from './i18n/index.ts';
+import { formatDate, formatNumber, messages, pluralText, type Locale, type MapStory } from './i18n/index.ts';
 import type { Survey } from './layers.ts';
 import type { Point } from './toolkit/geometry.ts';
-import type { CholeraTopic, LinearTopic, SetbackTopic, TopicAnalysis } from './topics.ts';
+import type { CholeraTopic, InvestigationTopic, LinearTopic, SetbackTopic, TopicAnalysis } from './topics.ts';
 
 export interface TopicRow { name: string; value: string; strongest: boolean }
 
@@ -16,11 +16,18 @@ export interface TopicContent {
   source: string;
   references: { number: number; name: string; point: Point; detail: string }[];
   distribution: { title: string; help: string; layout: 'grid' | 'list'; rows: TopicRow[] };
+  /** A list cited beside the measurements (investigations without a place). */
+  notes?: { title: string; help: string; items: string[] };
+  /** Label of the link to the data file, when it is not OpenStreetMap's. */
+  dataFile?: string;
+  /** False when the map draws its own legend: the panel leaves the text legend to the description. */
+  panelLegend?: false;
 }
 
 export function topicContent(survey: Survey, topic: TopicAnalysis, story: MapStory, locale: Locale): TopicContent {
   const content = topic.id === 'cholera-pump' ? choleraContent(survey, topic, locale)
-    : topic.id === 'setbacks' ? setbackContent(survey, topic, locale) : linearContent(survey, topic, locale);
+    : topic.id === 'setbacks' ? setbackContent(survey, topic, locale)
+    : topic.id === 'investigations' ? investigationContent(survey, topic, locale) : linearContent(survey, topic, locale);
   return { story, ...content };
 }
 
@@ -94,5 +101,33 @@ function setbackContent(survey: Survey, topic: SetbackTopic, locale: Locale): Om
       title: c.distribution, help: c.distributionHelp(n(unknown)), layout: 'list',
       rows: topic.periods.map((p) => ({ name: c.periods[p.id], value: c.count(n(p.stepped), n(p.detailed)), strongest: p.id === 'zoning-1916' })),
     },
+  };
+}
+
+function investigationContent(survey: Survey, topic: InvestigationTopic, locale: Locale): Omit<TopicContent, 'story'> {
+  const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = copy.investigations;
+  const n = (v: number): string => formatNumber(locale, v);
+  const located = topic.investigations.length, total = located + topic.unlocated.length;
+  const top = topic.regions[0];
+  return {
+    copy, subject,
+    value: `${n(located)} / ${n(total)}`,
+    concentration: top && located ? c.concentration(top.name, n(Math.round(top.count / located * 100))) : c.empty,
+    source: c.source(formatDate(locale, survey.osmDate)),
+    references: topic.places.map((p, index) => {
+      const years = topic.investigations.filter((i) => i.departement === p.code).map((i) => i.year);
+      const span = Math.min(...years) === Math.max(...years) ? String(Math.min(...years)) : `${Math.min(...years)}–${Math.max(...years)}`;
+      return { number: index + 1, name: p.name, point: p.point, detail: `${pluralText(locale, c.count, p.count)} · ${span}` };
+    }),
+    distribution: {
+      title: c.distribution, help: c.distributionHelp, layout: 'list',
+      rows: topic.regions.map((r, i) => ({ name: r.name, value: pluralText(locale, c.count, r.count), strongest: i === 0 })),
+    },
+    notes: {
+      title: c.unlocated, help: c.unlocatedHelp,
+      items: topic.unlocated.map((u) => `${u.year} · ${c.sites[u.site]} · ${u.name}`),
+    },
+    dataFile: c.dataFile,
+    panelLegend: false,
   };
 }

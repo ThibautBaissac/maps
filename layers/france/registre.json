@@ -1,0 +1,3872 @@
+{
+  "source": "https://www.l214.com/enquetes/",
+  "collectedAt": "2026-11-18",
+  "investigations": [
+    {
+      "id": "gavage-en-question-2004-gers",
+      "title": "Le gavage en question",
+      "year": 2004,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "departement",
+      "departement": "32",
+      "region": "76",
+      "evidence": "du couvoir à l'abattoir, dans le gers et dans les Landes.",
+      "notes": "Page sur stop-foie-gras.com (campagne de L214), liée depuis la liste. Filière IGP Sud-Ouest suivie du couvoir à l'abattoir ; sites non nommés.",
+      "group": "gavage-en-question-2004",
+      "urls": [
+        "https://stop-foie-gras.com/campagnes/enquetes"
+      ]
+    },
+    {
+      "id": "gavage-en-question-2004-landes",
+      "title": "Le gavage en question",
+      "year": 2004,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "departement",
+      "departement": "40",
+      "region": "75",
+      "evidence": "du couvoir à l'abattoir, dans le gers et dans les Landes.",
+      "notes": "Voir l'enregistrement Gers du même groupe.",
+      "group": "gavage-en-question-2004",
+      "urls": [
+        "https://stop-foie-gras.com/campagnes/enquetes"
+      ]
+    },
+    {
+      "id": "abattage-chevreaux-2007",
+      "title": "Abattage de chevreaux",
+      "year": 2007,
+      "site": "abattoir",
+      "species": [
+        "chevres"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "« Images 2007, France » ; page trouvée via le sitemap (absente de la liste), publiée en 2009, contenu réduit à une vidéo.",
+      "urls": [
+        "https://www.l214.com/animaux/chevaux/abattage-chevreaux/"
+      ]
+    },
+    {
+      "id": "abattage-poulets-halal-2007",
+      "title": "Abattage avec / sans étourdissement de poulets",
+      "year": 2007,
+      "site": "abattoir",
+      "species": [
+        "poulets"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Liste : « Abattage halal / Abattage non halal de poulets, France, 2007 » ; la page (septembre 2010) présente deux scènes d'abattage sans lieu.",
+      "urls": [
+        "https://www.l214.com/revue-de-presse/abattage-halal-non-halal/"
+      ]
+    },
+    {
+      "id": "abattoir-lapins-2007",
+      "title": "Abattoir de lapins (lapins Orylag)",
+      "year": 2007,
+      "site": "abattoir",
+      "species": [
+        "lapins"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "La page migrée s'intitule « Les élevages de lapin Orylag » mais décrit des images filmées dans un abattoir ; la liste indique « Abattoir de lapins, France, 2007 ». Rapprochement par année et contenu.",
+      "urls": [
+        "https://www.l214.com/enquetes/2007/abattoir-lapins-orylag/",
+        "https://www.l214.com/animaux/lapins/abattoir-lapins-2007/"
+      ]
+    },
+    {
+      "id": "elevage-poulets-2007",
+      "title": "Poulets poids lourds : enquête",
+      "year": 2007,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Rapprochement de l'ancienne page « Elevage de poulets en France, Images 2007 » et de la page migrée par année et sujet.",
+      "urls": [
+        "https://www.l214.com/enquetes/2007/poulets-poids-lourds/",
+        "https://www.l214.com/animaux/poulets/elevage-poulets-2007/"
+      ]
+    },
+    {
+      "id": "poules-pondeuses-cage-2007",
+      "title": "Élevage de poules pondeuses en batterie de cages normes 2012",
+      "year": 2007,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Entrée de la liste (« France, 2007 ») ; l'URL mène aujourd'hui à un article explicatif sans trace de l'enquête.",
+      "urls": [
+        "https://www.l214.com/animaux/poules-pondeuses/elevage-en-cage/"
+      ]
+    },
+    {
+      "id": "abattoir-charal-metz",
+      "title": "Pratiques de mises à mort à l'abattoir Charal – Metz",
+      "year": 2008,
+      "month": 9,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "veaux",
+        "moutons",
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Metz",
+      "insee": "57463",
+      "lon": 6.1962,
+      "lat": 49.1048,
+      "departement": "57",
+      "region": "44",
+      "evidence": "menée du 8 au 26 septembre 2008 à l'abattoir Charal de Metz",
+      "notes": "Mois de tournage (septembre 2008) ; la page date de septembre 2009.",
+      "urls": [
+        "https://www.l214.com/enquetes/2008/abattoir-charal-metz/",
+        "https://www.l214.com/animaux/bovins/condition-enquete-abattoir-charal/",
+        "https://www.l214.com/abattoir/charal/",
+        "https://www.l214.com/abattoir/abattoir-charal-images-2008/",
+        "https://www.l214.com/animaux/bovins/abattage-rituel-bovin-charal/",
+        "https://www.l214.com/animaux/bovins/abattage-standard-bovin-charal/",
+        "https://www.l214.com/animaux/moutons/abattage-rituel-ovins/"
+      ]
+    },
+    {
+      "id": "elevages-lapins-2008",
+      "title": "Enquête dans des élevages de lapins (images 2008)",
+      "year": 2008,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "2 élevages ; page trouvée uniquement via le sitemap (absente de la liste). Page publiée en 2010.",
+      "urls": [
+        "https://www.l214.com/animaux/lapins/elevage-lapins-2008/"
+      ]
+    },
+    {
+      "id": "foie-gras-cages-individuelles-2008",
+      "title": "Cages individuelles pour les canards : c'est ça la gastronomie…",
+      "year": 2008,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "« Images France 2008 ». La page « Cages individuelles : la plainte contre la France en images » (2009) présente une plainte illustrée par ces images ; rapprochement probable.",
+      "urls": [
+        "https://www.l214.com/animaux/canards/canards-2008/",
+        "https://www.l214.com/d/foie-gras-plainte-contre-france/"
+      ]
+    },
+    {
+      "id": "foie-gras-euralis-2008",
+      "title": "Foie gras : la cruauté made in France (élevages Euralis)",
+      "year": 2008,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "3 élevages sous contrat avec Euralis ; aucun lieu indiqué (le siège d'Euralis n'est pas un lieu d'enquête).",
+      "urls": [
+        "https://www.l214.com/stop-foie-gras/foie-gras-euralis-2008/"
+      ]
+    },
+    {
+      "id": "elevages-lapins-2009",
+      "title": "Enquête dans des élevages de lapins en France",
+      "year": 2009,
+      "month": 4,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "4 élevages, enquête réalisée courant 2009.",
+      "urls": [
+        "https://www.l214.com/animaux/lapins/elevage-lapins-2009/"
+      ]
+    },
+    {
+      "id": "poules-pondeuses-bretagne-2009",
+      "title": "Enquête dans un élevage de poules pondeuses en batterie de cages",
+      "year": 2009,
+      "month": 6,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "region",
+      "region": "53",
+      "evidence": "la violation flagrante de la loi dans un élevage de poules pondeuses situé en Bretagne.",
+      "notes": "Images de juillet 2008 et février 2009 ; la page 2008/poules-pondeuses-4 (même élevage, 5 à 7 poules par cage) donne la Bretagne.",
+      "urls": [
+        "https://www.l214.com/enquetes/2009/oeufs-poules-pondeuses-enquete-2009/",
+        "https://www.l214.com/enquetes/oeufs-poules-pondeuses-enquete-2009/",
+        "https://www.l214.com/enquetes/2008/poules-pondeuses-4/",
+        "https://www.l214.com/animaux/poulets/poules-pondeuses-2008-2009/"
+      ]
+    },
+    {
+      "id": "transport-chevreaux-lezay-2009",
+      "title": "Transport des chevreaux : marché de Lezay",
+      "year": 2009,
+      "site": "transport",
+      "siteDetail": "chargement sur un marché aux bestiaux",
+      "species": [
+        "chevres"
+      ],
+      "precision": "commune",
+      "commune": "Lezay",
+      "insee": "79148",
+      "lon": -0.0285,
+      "lat": 46.2694,
+      "departement": "79",
+      "region": "75",
+      "evidence": "mêmes conditions de transport pour ces jeunes animaux sur le marché de Lezay",
+      "notes": "Département : « les deux principaux marchés aux chevreaux français (dans les Deux-Sèvres) ». Observations aussi devant des abattoirs (Lœul et Piriot, Doux, Palmid'or à Trambly) non retenues comme sites d'enquête filmés à l'intérieur.",
+      "group": "transport-chevreaux-2009-2013",
+      "urls": [
+        "https://www.l214.com/animaux/chevres/transport-chevreaux-fin-cages-dindes/",
+        "https://www.l214.com/enquetes/transport-des-chevreaux-dans-des-caisses-dindes/",
+        "https://www.l214.com/enquetes/2009/transport-chevreaux/",
+        "https://www.l214.com/d/marche-bestiaux-2009/",
+        "https://www.l214.com/animaux/chevres/chevreaux-agneaux-2009/",
+        "https://www.l214.com/d/chevreaux-et-agneaux-transportes-dans-des-cages-a-lapins/",
+        "https://www.l214.com/transport/chevreaux-agneaux-dec-2009/",
+        "https://www.l214.com/transport/transport-chevreaux-abattoir-2011/",
+        "https://www.l214.com/transport/transport-chevreaux-abattoir-mars-2013/"
+      ]
+    },
+    {
+      "id": "transport-chevreaux-parthenay-2009",
+      "title": "Transport des chevreaux : marché de Parthenay",
+      "year": 2009,
+      "site": "transport",
+      "siteDetail": "chargement sur un marché aux bestiaux",
+      "species": [
+        "chevres",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Parthenay",
+      "insee": "79202",
+      "lon": -0.235,
+      "lat": 46.6458,
+      "departement": "79",
+      "region": "75",
+      "evidence": "sur le marché de chevreaux et d'agneaux de Parthenay, L214 a filmé des animaux entassés",
+      "notes": "Enquête suivie d'avril 2009 à mars 2013 ; la liste la date de 2009, 2011 ou mars 2013 selon les entrées. L'ancienne URL /enquetes/2009/transport-chevreaux/ renvoie une 404. Rapprochée de « Enquête sur les marchés aux bestiaux » (/d/marche-bestiaux-2009/, images 2009), que la liste associe aussi au « Transport de chevreaux et d'agneaux, 2009 ».",
+      "group": "transport-chevreaux-2009-2013",
+      "urls": [
+        "https://www.l214.com/animaux/chevres/transport-chevreaux-fin-cages-dindes/",
+        "https://www.l214.com/enquetes/transport-des-chevreaux-dans-des-caisses-dindes/",
+        "https://www.l214.com/enquetes/2009/transport-chevreaux/",
+        "https://www.l214.com/d/marche-bestiaux-2009/",
+        "https://www.l214.com/animaux/chevres/chevreaux-agneaux-2009/",
+        "https://www.l214.com/d/chevreaux-et-agneaux-transportes-dans-des-cages-a-lapins/",
+        "https://www.l214.com/transport/chevreaux-agneaux-dec-2009/",
+        "https://www.l214.com/transport/transport-chevreaux-abattoir-2011/",
+        "https://www.l214.com/transport/transport-chevreaux-abattoir-mars-2013/"
+      ]
+    },
+    {
+      "id": "chargement-poulets-2010",
+      "title": "Chargement de poulets : images inédites",
+      "year": 2010,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Rapprochement de l'ancienne page « Poulets de chair – France 2010 » (vidéo seule) et de la page migrée par année et espèce : probable mais non certain.",
+      "urls": [
+        "https://www.l214.com/enquetes/2010/chargement-poulets/",
+        "https://www.l214.com/animaux/poulets/poulets-2010/"
+      ]
+    },
+    {
+      "id": "elevage-cailles-2010",
+      "title": "Enquête dans un élevage de cailles en France",
+      "year": 2010,
+      "site": "elevage",
+      "species": [
+        "cailles"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "urls": [
+        "https://www.l214.com/d/elevage-cailles-2010/"
+      ]
+    },
+    {
+      "id": "elevage-lapins-2010",
+      "title": "La dure réalité de l'élevage de lapins",
+      "year": 2010,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Rapprochement ancienne page / page migrée par année et espèce.",
+      "urls": [
+        "https://www.l214.com/enquetes/2010/elevage-lapins-2010-2/",
+        "https://www.l214.com/animaux/lapins/elevage-lapins-2010/",
+        "https://www.l214.com/actualites/2eme-jour-elevage-de-lapins/"
+      ]
+    },
+    {
+      "id": "elevages-cochons-2007-2010",
+      "title": "Enquêtes dans des élevages de cochons",
+      "year": 2010,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Images tournées en 2007, 2008 et 2010 dans plusieurs élevages en France. L'ancienne URL « Élevage de cochons 2007-2008 » redirige désormais vers un article explicatif ; regroupée ici.",
+      "urls": [
+        "https://www.l214.com/enquetes/2010/3-elevages-de-cochons-2007-2008-2010/",
+        "https://www.l214.com/animaux/cochons/elevage-cochons-2007-2008-2010/",
+        "https://www.l214.com/animaux/cochons/elevage-cochons-2007-2008/",
+        "https://www.l214.com/animaux/cochons/elevage-cochons-2010/",
+        "https://www.l214.com/d/salon-off/",
+        "https://www.l214.com/actualites/1er-jour-elevage-de-cochons/"
+      ]
+    },
+    {
+      "id": "poules-pondeuses-2010",
+      "title": "Poules pondeuses : images inédites",
+      "year": 2010,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "urls": [
+        "https://www.l214.com/enquetes/2010/poules-pondeuses-3/",
+        "https://www.l214.com/animaux/poulets/poules-pondeuses-2010/",
+        "https://www.l214.com/animaux/poules-pondeuses/poules-pondeuses-2010/",
+        "https://www.l214.com/d/temporaire-poules-pondeuses-france/"
+      ]
+    },
+    {
+      "id": "ramassage-dindes-2010",
+      "title": "Le ramassage des dindes en élevage intensif",
+      "year": 2010,
+      "site": "elevage",
+      "species": [
+        "dindes"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "L'ancienne page indique « Images France 2010 », la page migrée dit « filmées en 2011 ». Élevage et ramassage. Fait partie de la série « 9 enquêtes » diffusée pendant le Salon de l'agriculture 2011 ; la page « Enquête dans un élevage de dindons » (images 2010) est rattachée ici.",
+      "urls": [
+        "https://www.l214.com/enquetes/2010/ramassage-dindes-2010/",
+        "https://www.l214.com/abattoir/dindes-2010/",
+        "https://www.l214.com/d/elevage-dindons-2010/",
+        "https://www.l214.com/actualites/3eme-jour-elevage-de-dindons/"
+      ]
+    },
+    {
+      "id": "abattoirs-chevaux-canada-2010-2011",
+      "title": "On achève mal les chevaux : abattoirs canadiens agréés à l'export",
+      "year": 2011,
+      "site": "abattoir",
+      "species": [
+        "chevaux"
+      ],
+      "precision": "etranger",
+      "evidence": "Plusieurs enquêtes menées dans les abattoirs du Canada certifiés pour l'export",
+      "notes": "Abattoirs Viande Richelieu (2010) et Les Viandes de la Petite-Nation (2011) au Québec ; images de la Coalition canadienne pour la défense des chevaux (CHDC), relayées par L214.",
+      "urls": [
+        "https://www.l214.com/animaux/chevaux/enquetes-au-sein-des-abattoirs-agrees-a-lexport/",
+        "https://www.l214.com/animaux/chevaux/abattoirs-chevaux/",
+        "https://www.l214.com/animaux/chevaux/videos-2010-2011/",
+        "https://www.l214.com/actualites/enquete-canada/"
+      ]
+    },
+    {
+      "id": "poules-pondeuses-8-elevages-2011",
+      "title": "Enquête dans 8 élevages de poules pondeuses",
+      "year": 2011,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "urls": [
+        "https://www.l214.com/enquetes/2011/poules-pondeuses-2/",
+        "https://www.l214.com/actualites/poules-pondeuses-enquete-2011-2/",
+        "https://www.l214.com/actualites/poules-pondeuses-enquete-2011/"
+      ]
+    },
+    {
+      "id": "foie-gras-sud-ouest-2012",
+      "title": "Foie gras du Sud-Ouest : enquête dans des salles de gavage",
+      "year": 2012,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "none",
+      "evidence": "enquête menée en octobre 2012 par L214 dans le Sud-Ouest de la France",
+      "notes": "« Sud-Ouest » n'est pas une région administrative ; plusieurs salles de gavage dont une fournissant Labeyrie (entrée distincte dans la liste, même enquête).",
+      "urls": [
+        "https://stop-foie-gras.com/foie-gras-sud-ouest/video-enquete-2012",
+        "https://stop-foie-gras.com/foie-gras-sud-ouest/labeyrie-enquete-2012",
+        "https://www.l214.com/actualites/foie-gras-du-sud-ouest-enquete-dans-des-salles-de-gavage-typique-de-la-production/"
+      ]
+    },
+    {
+      "id": "poules-pondeuses-4-elevages-2012",
+      "title": "Enquête dans 4 élevages de poules pondeuses",
+      "year": 2012,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "urls": [
+        "https://www.l214.com/enquetes/2012/poules-pondeuses/",
+        "https://www.l214.com/actualites/enquete-fevrier-2012/",
+        "https://www.l214.com/animaux/poulets/poules-pondeuses-enquete-fevrier-2012/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-seyssel",
+      "title": "Un élevage de cochons en Haute-Savoie (Seyssel)",
+      "year": 2013,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Seyssel",
+      "insee": "74269",
+      "lon": 5.8531,
+      "lat": 45.9621,
+      "departement": "74",
+      "region": "84",
+      "evidence": "Fermeture définitive d'un élevage insalubre de cochons à Seyssel, en Haute-Savoie.",
+      "notes": "Images tournées en 2012, diffusion 2013. Seyssel existe aussi dans l'Ain : la page précise Haute-Savoie.",
+      "urls": [
+        "https://www.l214.com/enquetes/2013/fermeture-elevage-cochon-seyssel/",
+        "https://www.l214.com/animaux/cochons/porcherie-cochons-seyssel-maltraitance-2012/"
+      ]
+    },
+    {
+      "id": "foie-gras-ernest-soulard-2013",
+      "title": "Foie gras : scandale dans les palaces parisiens (Ernest Soulard)",
+      "year": 2013,
+      "month": 11,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Six salles de gavage de la société Ernest Soulard, filmées en août 2013 ; aucun lieu indiqué.",
+      "urls": [
+        "https://stop-foie-gras.com/foie-gras-grands-chefs"
+      ]
+    },
+    {
+      "id": "lapins-8-elevages-2013-bretagne",
+      "title": "Enquête dans 8 élevages de lapins utilisés pour la viande",
+      "year": 2013,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "region",
+      "region": "53",
+      "evidence": "Les images ont été filmées entre novembre 2012 et janvier 2013 en Bretagne et Poitou-Charente.",
+      "notes": "8 élevages répartis entre Bretagne et Poitou-Charentes (aujourd'hui Nouvelle-Aquitaine) ; répartition non indiquée.",
+      "group": "lapins-8-elevages-2013",
+      "urls": [
+        "https://www.l214.com/enquetes/2013/elevage-viande-lapins-2012-2013/",
+        "https://www.l214.com/enquetes/2013/elevages-de-lapins/",
+        "https://www.l214.com/animaux/lapins/elevage-viande-lapins-2012-2013/"
+      ]
+    },
+    {
+      "id": "lapins-8-elevages-2013-poitou",
+      "title": "Enquête dans 8 élevages de lapins utilisés pour la viande",
+      "year": 2013,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "region",
+      "region": "75",
+      "evidence": "Les images ont été filmées entre novembre 2012 et janvier 2013 en Bretagne et Poitou-Charente.",
+      "notes": "Ancienne région Poitou-Charentes, incluse dans la Nouvelle-Aquitaine (75).",
+      "group": "lapins-8-elevages-2013",
+      "urls": [
+        "https://www.l214.com/enquetes/2013/elevage-viande-lapins-2012-2013/",
+        "https://www.l214.com/enquetes/2013/elevages-de-lapins/",
+        "https://www.l214.com/animaux/lapins/elevage-viande-lapins-2012-2013/"
+      ]
+    },
+    {
+      "id": "matines-images-censurees-branges-2013",
+      "title": "Élevages industriels Matines : images censurées (Branges)",
+      "year": 2013,
+      "month": 7,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "commune",
+      "commune": "Branges",
+      "insee": "71056",
+      "lon": 5.162,
+      "lat": 46.6516,
+      "departement": "71",
+      "region": "27",
+      "evidence": "élevage Matines exploité par la société Val Produits sur la commune de Branges en Saône-et-Loire",
+      "notes": "Images interdites de diffusion par ordonnance du 16 juillet 2013 ; page trouvée via le sitemap (absente de la liste).",
+      "group": "matines-censure-2013",
+      "urls": [
+        "https://www.l214.com/d/documents-annexes-elevages-matines-images-censurees/"
+      ]
+    },
+    {
+      "id": "matines-images-censurees-chaleins-2013",
+      "title": "Élevages industriels Matines : images censurées (Chaleins, GAEC du Perrat)",
+      "year": 2013,
+      "month": 7,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "commune",
+      "commune": "Chaleins",
+      "insee": "01075",
+      "lon": 4.7999,
+      "lat": 46.0361,
+      "departement": "01",
+      "region": "84",
+      "evidence": "élevage Matines exploité par le GAEC du Perrat sur la commune de Chaleins dans l'Ain",
+      "notes": "Même élevage que l'enquête de mai 2016 (GAEC du Perrat). Images interdites par ordonnance du 9 juillet 2013.",
+      "group": "matines-censure-2013",
+      "urls": [
+        "https://www.l214.com/d/documents-annexes-elevages-matines-images-censurees/"
+      ]
+    },
+    {
+      "id": "portes-ouvertes-cochons-bretagne-2013",
+      "title": "Opération de communication de la filière agricole",
+      "year": 2013,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "region",
+      "region": "53",
+      "evidence": "En juin 2013, en Bretagne, 6 élevages de porcs sur 7 000 ouvraient leurs portes",
+      "notes": "Images tournées lors de l'événement « Tous à la ferme » (juin 2013) ; élevage visité non nommé.",
+      "urls": [
+        "https://www.l214.com/enquetes/2013/elevage-cochons-normes-2013/",
+        "https://www.l214.com/animaux/cochons/tous-a-la-ferme/"
+      ]
+    },
+    {
+      "id": "chevaux-ameriques-2012-2014",
+      "title": "Le calvaire des chevaux en Amérique",
+      "year": 2014,
+      "site": "transport",
+      "species": [
+        "chevaux"
+      ],
+      "precision": "etranger",
+      "evidence": "une vaste enquête en 2012, 2013 et 2014 aux États-Unis, au Canada, au Mexique",
+      "notes": "Transport et abattage ; enquête menée avec TSB/AWF, Animals' Angels USA, GAIA, Eyes on Animals. États-Unis, Canada, Mexique, Uruguay, Argentine.",
+      "urls": [
+        "https://www.l214.com/animaux/chevaux/le-calvaire-des-chevaux-en-amerique/",
+        "https://www.l214.com/animaux/chevaux/le-calvaire-des-chevaux/"
+      ]
+    },
+    {
+      "id": "couvoir-poussins-bretagne-2014",
+      "title": "Poussins broyés et étouffés dans un couvoir en Bretagne",
+      "year": 2014,
+      "month": 11,
+      "site": "couvoir",
+      "species": [
+        "poussins"
+      ],
+      "precision": "region",
+      "region": "53",
+      "evidence": "Poussins broyés et étouffés dans un couvoir en Bretagne",
+      "notes": "Images filmées par un employé du couvoir (lanceur d'alerte).",
+      "urls": [
+        "https://www.l214.com/enquetes/2014/broyage-poussins/",
+        "https://www.l214.com/enquetes/broyage-poussins/"
+      ]
+    },
+    {
+      "id": "elevage-lapins-matthieu-ricard-2014",
+      "title": "Plongée dans l'enfer d'un élevage de lapins (Matthieu Ricard)",
+      "year": 2014,
+      "month": 10,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "none",
+      "evidence": "ces images inédites tournées en France en 2014",
+      "notes": "Pourrait recouper l'élevage du Morbihan publié en juin-juillet 2014, mais la page ne le dit pas.",
+      "urls": [
+        "https://www.l214.com/enquetes/2014/message-matthieu-ricard-lapins/",
+        "https://www.l214.com/enquetes/message-matthieu-ricard-lapins/"
+      ]
+    },
+    {
+      "id": "elevage-lapins-morbihan-2014",
+      "title": "Stop à l'horreur dans un élevage de lapins",
+      "year": 2014,
+      "month": 6,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "departement",
+      "departement": "56",
+      "region": "53",
+      "evidence": "Élevage dans le Morbihan",
+      "urls": [
+        "https://www.l214.com/enquetes/2014/stop-a-lhorreur-dans-un-elevage-de-lapins/",
+        "https://www.l214.com/actualites/horreur-dans-un-elevage-de-lapins/",
+        "https://www.l214.com/actualites/stop-elevage-horreur-lapins-morbihan-2014/",
+        "https://www.l214.com/actualites/consternation-action/"
+      ]
+    },
+    {
+      "id": "foie-gras-elysee-2014",
+      "title": "Foie gras de l'Élysée : torture 3 étoiles",
+      "year": 2014,
+      "month": 11,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Salle de gavage sous contrat avec le fournisseur de l'Élysée. L'URL contient « Perigord » mais la page n'indique aucun lieu.",
+      "urls": [
+        "https://www.l214.com/enquetes/2014/foie-gras-elysee-perigord/",
+        "https://www.l214.com/enquetes/foie-gras-Elysee-Perigord/"
+      ]
+    },
+    {
+      "id": "foie-gras-perigord-noir-2014",
+      "title": "Enquête chez 3 petits producteurs du Périgord noir",
+      "year": 2014,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "departement",
+      "departement": "24",
+      "region": "75",
+      "evidence": "tournées en novembre 2014 dans 3 salles de gavage situées dans le Périgord Noir",
+      "notes": "Le Périgord noir est un pays entièrement situé en Dordogne ; le département est déduit de ce nom de pays, pas écrit sur la page.",
+      "urls": [
+        "https://stop-foie-gras.com/foie-gras-perigord-lolita-lempicka",
+        "https://stop-foie-gras.com/foie-gras-perigord-lolita-lempicka?play"
+      ]
+    },
+    {
+      "id": "poules-pondeuses-marque-u-2014",
+      "title": "Œufs de la marque U : derrière les portes des élevages",
+      "year": 2014,
+      "month": 8,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "3 élevages fournissant les magasins U (selon la liste) ; aucun lieu indiqué. L'URL /stop-cruaute/super-u-maltraite-les-poules-pondeuses/ porte aujourd'hui le titre « CrUauté 2016 (GAEC du Perrat) » (campagne Super U).",
+      "urls": [
+        "https://www.l214.com/enquetes/2014/super-u-maltraite-les-poules-pondeuses-2/",
+        "https://www.l214.com/stop-cruaute/super-u-maltraite-les-poules-pondeuses/",
+        "https://www.l214.com/enquetes/super-u-maltraite-les-poules-pondeuses/"
+      ]
+    },
+    {
+      "id": "abattoir-ales-2015",
+      "title": "Abattoir d'Alès",
+      "year": 2015,
+      "month": 10,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "cochons",
+        "moutons",
+        "chevaux"
+      ],
+      "precision": "commune",
+      "commune": "Alès",
+      "insee": "30007",
+      "lon": 4.0905,
+      "lat": 44.125,
+      "departement": "30",
+      "region": "76",
+      "evidence": "L214 révèle l'agonie des animaux derrière les murs de l'abattoir d'Alès (Gard).",
+      "notes": "Les entrées de la liste par espèce (bovins, moutons, cochons, chevaux) renvoient à la même enquête ; l'URL « chevaux » redirige vers un article général sur les chevaux.",
+      "urls": [
+        "https://www.l214.com/enquetes/2015/abattoir-made-in-france-ales/",
+        "https://www.l214.com/enquetes/2015/abattoir-made-in-france/bovins-avec-etourdissement/",
+        "https://www.l214.com/enquetes/2015/abattoir-made-in-france/moutons/",
+        "https://www.l214.com/enquetes/2015/abattoir-made-in-france/chevaux/"
+      ]
+    },
+    {
+      "id": "couvoir-canetons-pays-de-la-loire-2015",
+      "title": "Broyé petit ou gavé plus tard : couvoir de canetons",
+      "year": 2015,
+      "site": "couvoir",
+      "species": [
+        "canards"
+      ],
+      "precision": "region",
+      "region": "52",
+      "evidence": "cette enquête unique tournée dans un couvoir des Pays de la Loire",
+      "notes": "Même page : second volet dans un centre d'insémination de canes « du Sud-Ouest » (non localisable).",
+      "group": "broye-petit-gave-plus-tard-2015",
+      "urls": [
+        "https://www.l214.com/enquetes/2015/broye-petit-ou-gave-plus-tard/"
+      ]
+    },
+    {
+      "id": "insemination-canes-sud-ouest-2015",
+      "title": "Broyé petit ou gavé plus tard : insémination des canes",
+      "year": 2015,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "none",
+      "evidence": "l'insémination artificielle de canes dans un élevage du Sud Ouest",
+      "notes": "Citation tirée de stop-foie-gras.com/campagnes/enquetes ; « Sud-Ouest » n'est pas une région administrative.",
+      "group": "broye-petit-gave-plus-tard-2015",
+      "urls": [
+        "https://www.l214.com/enquetes/2015/broye-petit-ou-gave-plus-tard/"
+      ]
+    },
+    {
+      "id": "abattoir-le-vigan-2016",
+      "title": "Le Vigan : derrière les murs d'un abattoir certifié bio",
+      "year": 2016,
+      "month": 2,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "cochons",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Le Vigan",
+      "insee": "30350",
+      "lon": 3.6336,
+      "lat": 43.9822,
+      "departement": "30",
+      "region": "76",
+      "evidence": "ces images tournées à l'abattoir du Vigan dans le Gard",
+      "notes": "Le Vigan existe aussi dans le Lot ; la page précise le Gard.",
+      "urls": [
+        "https://www.l214.com/enquetes/2016/le-vigan-abattoir/",
+        "https://www.l214.com/enquetes/2016/abattoir-made-in-france/le-vigan/"
+      ]
+    },
+    {
+      "id": "abattoir-limoges-2016",
+      "title": "Abattoir de Limoges : des vaches gestantes abattues",
+      "year": 2016,
+      "month": 11,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "veaux",
+        "cochons",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Limoges",
+      "insee": "87085",
+      "lon": 1.226,
+      "lat": 45.8567,
+      "departement": "87",
+      "region": "75",
+      "evidence": "Un océan de souffrance révélé à l'abattoir de Limoges",
+      "notes": "La liste a aussi des entrées vidéo YouTube « Limoges – les cochons » et « les moutons et les agneaux » pour la même enquête.",
+      "urls": [
+        "https://www.l214.com/enquetes/2016/abattoir-made-in-france-limoges/",
+        "https://www.youtube.com/watch?v=yHHrgqOjfls",
+        "https://www.youtube.com/watch?v=wHVw2BlulXQ"
+      ]
+    },
+    {
+      "id": "abattoir-mauleon-2016",
+      "title": "À l'abattoir de Mauléon : l'agonie des animaux",
+      "year": 2016,
+      "month": 3,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Mauléon-Licharre",
+      "insee": "64371",
+      "lon": -0.8842,
+      "lat": 43.214,
+      "departement": "64",
+      "region": "75",
+      "evidence": "ces images tournées à l'abattoir de Mauléon-Licharre dans les Pyrénées-Atlantiques",
+      "urls": [
+        "https://www.l214.com/enquetes/2016/mauleon-abattoir/",
+        "https://www.l214.com/enquetes/2016/abattoir-made-in-france/mauleon/"
+      ]
+    },
+    {
+      "id": "abattoir-mercantour-2016",
+      "title": "Deux abattoirs, une même horreur : Mercantour",
+      "year": 2016,
+      "month": 6,
+      "site": "abattoir",
+      "species": [
+        "veaux",
+        "moutons",
+        "bovins"
+      ],
+      "precision": "departement",
+      "departement": "06",
+      "region": "93",
+      "evidence": "Ces images proviennent des abattoirs de Pézenas (34) et du Mercantour (06).",
+      "notes": "La page nomme « l'abattoir du Mercantour » sans donner sa commune.",
+      "group": "pezenas-mercantour-2016",
+      "urls": [
+        "https://www.l214.com/enquetes/2016/abattoir-made-in-france-pezenas-mercantour/"
+      ]
+    },
+    {
+      "id": "abattoir-moutons-aid-2016",
+      "title": "Aïd el-Kébir : au cœur de l'abattage sans étourdissement",
+      "year": 2016,
+      "month": 9,
+      "site": "abattoir",
+      "species": [
+        "moutons"
+      ],
+      "precision": "region",
+      "region": "75",
+      "evidence": "Abattoir de Nouvelle-Aquitaine",
+      "urls": [
+        "https://www.l214.com/enquetes/2016/aid-el-kebir/"
+      ]
+    },
+    {
+      "id": "abattoir-pezenas-2016",
+      "title": "Deux abattoirs, une même horreur : Pézenas",
+      "year": 2016,
+      "month": 6,
+      "site": "abattoir",
+      "species": [
+        "chevaux",
+        "cochons",
+        "moutons",
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Pézenas",
+      "insee": "34199",
+      "lon": 3.418,
+      "lat": 43.4616,
+      "departement": "34",
+      "region": "76",
+      "evidence": "Ces images proviennent des abattoirs de Pézenas (34) et du Mercantour (06).",
+      "group": "pezenas-mercantour-2016",
+      "urls": [
+        "https://www.l214.com/enquetes/2016/abattoir-made-in-france-pezenas-mercantour/",
+        "https://www.youtube.com/watch?v=jy5jbvDPFwY"
+      ]
+    },
+    {
+      "id": "kapparot-marseille-2016",
+      "title": "Des poulets égorgés vifs (Kapparot)",
+      "year": 2016,
+      "month": 10,
+      "site": "autre",
+      "siteDetail": "rituel religieux dans la cour d'un centre communautaire",
+      "species": [
+        "poulets"
+      ],
+      "precision": "commune",
+      "commune": "Marseille",
+      "insee": "13055",
+      "lon": 5.3806,
+      "lat": 43.2803,
+      "departement": "13",
+      "region": "93",
+      "evidence": "dans la cour d'un centre communautaire juif à Marseille",
+      "notes": "Images reçues par L214 (filmées par un tiers), non tournées par ses enquêteurs.",
+      "urls": [
+        "https://www.l214.com/enquetes/2016/poulets-egorges-vivants/",
+        "https://www.youtube.com/watch?v=dHxTCGJY7d0"
+      ]
+    },
+    {
+      "id": "poules-cage-matines-ain-2016",
+      "title": "Matines : dans l'enfer des cages (GAEC du Perrat)",
+      "year": 2016,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "01",
+      "region": "84",
+      "evidence": "J'ai demandé au préfet de l'Ain inspection et décision dans la journée.",
+      "notes": "Le département vient de la réaction ministérielle citée et de la vidéothèque /enquetes/2017/stopcages (« Elevage de l'Ain – mai 2016 »). La page cite un collectif de riverains « Bien vivre à Fareins » sans dire que l'élevage est à Fareins : commune non retenue. La page évoque aussi de premières images du même élevage censurées en 2013. La page annexe /d/documents-annexes-elevages-matines-images-censurees/ (2013) situe le GAEC du Perrat « sur la commune de Chaleins dans l'Ain » ; cette mention ne figure pas sur la page de l'enquête 2016.",
+      "urls": [
+        "https://www.l214.com/enquetes/2016/oeufs-poules-pondeuses/",
+        "https://www.l214.com/enquetes/2016/05/oeuf-poules-pondeuses/"
+      ]
+    },
+    {
+      "id": "abattoir-doux-chantonnay-2017",
+      "title": "Abattoir Doux de Chantonnay",
+      "year": 2017,
+      "month": 9,
+      "site": "abattoir",
+      "species": [
+        "poulets"
+      ],
+      "precision": "commune",
+      "commune": "Chantonnay",
+      "insee": "85051",
+      "lon": -1.045,
+      "lat": 46.6699,
+      "departement": "85",
+      "region": "52",
+      "evidence": "Abattoir Doux de Chantonnay : 240 poulets tués à la minute !",
+      "notes": "Volet abattoir de l'enquête Doux ; la page ne donne pas le département, déterminé par géocodage (nom de commune unique).",
+      "group": "doux-2017",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/elevage-made-in-france-poulets-doux/"
+      ]
+    },
+    {
+      "id": "abattoir-houdan-2017",
+      "title": "Calvaire des cochons à l'abattoir de Houdan",
+      "year": 2017,
+      "month": 2,
+      "site": "abattoir",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Houdan",
+      "insee": "78310",
+      "lon": 1.5981,
+      "lat": 48.7968,
+      "departement": "78",
+      "region": "11",
+      "evidence": "Le calvaire des cochons à l'abattoir de Houdan dans les Yvelines",
+      "notes": "Images tournées fin 2016, publiées le 17 février 2017.",
+      "group": "houdan-2017",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/abattoir-made-in-france-houdan/",
+        "https://www.l214.com/enquetes/2017/abattoir-made-in-france-houdan-private/"
+      ]
+    },
+    {
+      "id": "abattoir-houdan-gazage-2017",
+      "title": "Cochons gazés à l'abattoir de Houdan",
+      "year": 2017,
+      "month": 6,
+      "site": "abattoir",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Houdan",
+      "insee": "78310",
+      "lon": 1.5981,
+      "lat": 48.7968,
+      "departement": "78",
+      "region": "11",
+      "evidence": "Une caméra placée à l'intérieur d'une nacelle de gazage de l'abattoir de Houdan",
+      "notes": "Second volet (gazage au CO2), relayé le 8 juin 2017 ; le département vient du titre de la page « houdan-private » de la même enquête.",
+      "group": "houdan-2017",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/abattoir-made-in-france-houdan-gaz-co2/",
+        "https://www.l214.com/enquetes/video-les-cochons-gazes-au-co2-a-labattoir-de-houdan/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-finistere-2017",
+      "title": "Vie de misère pour les cochons : élevage dans le Finistère",
+      "year": 2017,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "departement",
+      "departement": "29",
+      "region": "53",
+      "evidence": "Élevage de cochons insalubre dans le Finistère",
+      "notes": "L'URL contient « quimper » mais la page ne nomme pas de commune.",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/quimper-elevage/"
+      ]
+    },
+    {
+      "id": "elevage-poulets-doux-2017",
+      "title": "Vie de misère pour les poulets Doux : l'élevage",
+      "year": 2017,
+      "month": 9,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Élevage sous contrat avec le groupe Doux ; non localisé.",
+      "group": "doux-2017",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/elevage-made-in-france-poulets-doux/",
+        "https://www.l214.com/enquetes/2017/elevage-made-in-france/poulets-doux/",
+        "https://www.l214.com/actualites/nouvelle-enquete-une-vie-de-misere-pour-les-poulets-doux/"
+      ]
+    },
+    {
+      "id": "elevages-cochons-henaff-2017",
+      "title": "Hénaff : souffrance en boîte",
+      "year": 2017,
+      "month": 6,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "region",
+      "region": "53",
+      "evidence": "L'association L214 met en cause deux nouveaux élevages de porcs en Bretagne",
+      "notes": "Région tirée d'un titre de presse (Le Parisien) cité dans la chronologie de la page ; élevages partenaires de la marque Hénaff.",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/henaff-elevage/",
+        "https://www.l214.com/enquetes/2017/elevage-made-in-france/henaff/"
+      ]
+    },
+    {
+      "id": "export-liban-turquie-2017",
+      "title": "L'enfer des transports longs : abattoirs au Liban et en Turquie",
+      "year": 2017,
+      "site": "abattoir",
+      "species": [
+        "bovins"
+      ],
+      "precision": "etranger",
+      "evidence": "des images tournées dans deux abattoirs turcs et un abattoir libanais",
+      "notes": "Animaux nés en France exportés vivants ; abattoirs au Liban et en Turquie. Avec CIWF et la Fondation Brigitte Bardot.",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/transports-longs/",
+        "https://www.l214.com/abattoir/export-transport-abattage-liban-turquie/",
+        "https://www.youtube.com/watch?v=9QToBYojEBI"
+      ]
+    },
+    {
+      "id": "fourrure-lapins-orylag-2017",
+      "title": "Lapins Orylag : dites non à la fourrure",
+      "year": 2017,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "none",
+      "evidence": "L'enquête menée en France par L214",
+      "notes": "3 élevages et un abattoir de lapins Orylag (selon la liste) ; aucun lieu indiqué.",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/fourrure-lapin-orylag/",
+        "https://www.l214.com/enquetes/2017/fourrure/lapin-orylag/"
+      ]
+    },
+    {
+      "id": "poules-cage-cotes-armor-2017",
+      "title": "Élevage de poules en cage des Côtes-d'Armor (Stéphane Bern)",
+      "year": 2017,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "22",
+      "region": "53",
+      "evidence": "Élevage des Côtes d'Armor – décembre 2017",
+      "notes": "Lancée le 11 décembre 2017, présentée par Stéphane Bern ; élevage fournissant Matines selon la chronologie.",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/stopcages/"
+      ]
+    },
+    {
+      "id": "poules-cage-vendee-2017",
+      "title": "Élevage de poules en cage de Vendée",
+      "year": 2017,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "85",
+      "region": "52",
+      "evidence": "Élevage de Vendée – mai 2017",
+      "notes": "Seule mention : titre de vidéo sur la page stopcages ; la liste indique « Vendée, 2017 ».",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/stopcages/"
+      ]
+    },
+    {
+      "id": "abattoir-boischaut-2018",
+      "title": "L'enfer pour les animaux à l'abattoir de Boischaut",
+      "year": 2018,
+      "month": 11,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "chevres",
+        "moutons"
+      ],
+      "precision": "departement",
+      "departement": "36",
+      "region": "24",
+      "evidence": "L'enfer pour les animaux à l'abattoir de Boischaut (Indre)",
+      "notes": "La page ne nomme pas la commune de l'abattoir.",
+      "urls": [
+        "https://www.l214.com/enquetes/2018/abattoir-made-in-france-boischaut/",
+        "https://www.l214.com/enquetes/2018/abattoir-made-in-france/boischaut/"
+      ]
+    },
+    {
+      "id": "abattoir-chevaux-jura-2018",
+      "title": "Abattoir de chevaux Viande Nature Jura (Hugo Clément)",
+      "year": 2018,
+      "month": 12,
+      "site": "abattoir",
+      "species": [
+        "chevaux"
+      ],
+      "precision": "commune",
+      "commune": "Équevillon",
+      "insee": "39210",
+      "lon": 5.9416,
+      "lat": 46.7602,
+      "departement": "39",
+      "region": "27",
+      "evidence": "Cet abattoir est situé sur la commune d'Équevillon, dans le département du Jura.",
+      "urls": [
+        "https://www.l214.com/enquetes/2018/abattoir-made-in-france-chevaux-jura/",
+        "https://www.l214.com/enquetes/2018/abattoir-made-in-france/chevaux-jura/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-tarn-2018",
+      "title": "Un élevage répugnant de cochons dans le Tarn",
+      "year": 2018,
+      "month": 4,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "departement",
+      "departement": "81",
+      "region": "76",
+      "evidence": "Ces images ont été tournées dans un élevage de cochons du Tarn.",
+      "urls": [
+        "https://www.l214.com/enquetes/2018/elevage-made-in-france-tarn/",
+        "https://www.l214.com/enquetes/2018/elevage-made-in-france/tarn/"
+      ]
+    },
+    {
+      "id": "elevage-dindes-deux-sevres-2018",
+      "title": "Enquête dans un élevage intensif de dindes",
+      "year": 2018,
+      "site": "elevage",
+      "species": [
+        "dindes"
+      ],
+      "precision": "departement",
+      "departement": "79",
+      "region": "75",
+      "evidence": "dans cet élevage intensif des Deux-Sèvres des milliers de volatiles sont entassés",
+      "notes": "Année donnée par la liste (2018) ; la page actuelle a été republiée en 2026.",
+      "urls": [
+        "https://www.l214.com/enquetes/2018/souffrance-des-dindes/",
+        "https://www.facebook.com/l214.animaux/videos/1643431175963591/"
+      ]
+    },
+    {
+      "id": "elevage-poulets-maitre-coq-2018",
+      "title": "800 millions : enquête dans un élevage Maître Coq",
+      "year": 2018,
+      "month": 6,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Lancement le 12 juin 2018 ; élevage non localisé.",
+      "urls": [
+        "https://www.l214.com/enquetes/2018/poulets-800-millions/",
+        "https://www.l214.com/poulets/800-millions/"
+      ]
+    },
+    {
+      "id": "elevage-visons-vendee-2018",
+      "title": "Stop à l'élevage des visons",
+      "year": 2018,
+      "month": 2,
+      "site": "elevage",
+      "species": [
+        "visons"
+      ],
+      "precision": "departement",
+      "departement": "85",
+      "region": "52",
+      "evidence": "Ces images ont été tournées dans un élevage de Vendée.",
+      "urls": [
+        "https://www.l214.com/enquetes/2018/fourrure-visons/"
+      ]
+    },
+    {
+      "id": "pisciculture-aqualande-2018",
+      "title": "Enquête dans des piscicultures et un abattoir de truites Aqualande",
+      "year": 2018,
+      "month": 11,
+      "site": "autre",
+      "siteDetail": "piscicultures et abattoir de truites",
+      "species": [
+        "poissons"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Avec CIWF ; le siège du groupe Aqualande n'est pas un lieu d'enquête.",
+      "urls": [
+        "https://www.l214.com/enquetes/2018/poisson-truite-aqualande/",
+        "https://www.l214.com/enquetes/2018/poisson/truite-aqualande/"
+      ]
+    },
+    {
+      "id": "poules-cage-cotes-armor-2018",
+      "title": "Élevage de poules en cage des Côtes-d'Armor (Sophie Marceau)",
+      "year": 2018,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "22",
+      "region": "53",
+      "evidence": "un élevage de 180 000 poules dans les Côtes-d'Armor",
+      "notes": "Publiée le 20 mai 2018 ; distincte de celle de décembre 2017 selon la chronologie, mais la liste de vidéos n'en montre qu'une pour ce département.",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/stopcages/"
+      ]
+    },
+    {
+      "id": "poules-cage-essonne-2018",
+      "title": "Élevage de poules en cage de l'Essonne (groupe Avril)",
+      "year": 2018,
+      "month": 10,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "91",
+      "region": "11",
+      "evidence": "Nouvelle enquête en Essonne dans un élevage de 150 000 poules du groupe Avril",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/stopcages/"
+      ]
+    },
+    {
+      "id": "poules-cage-manche-2018",
+      "title": "Élevage de poules en cage de la Manche",
+      "year": 2018,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "50",
+      "region": "28",
+      "evidence": "Élevage de la Manche - mai 2018",
+      "notes": "La chronologie dit « un élevage de 280 000 poules en cage en Normandie » (17 mai 2018) ; la vidéo correspondante est titrée Manche.",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/stopcages/"
+      ]
+    },
+    {
+      "id": "poules-cage-somme-2018",
+      "title": "Élevage de poules en cage de la Somme",
+      "year": 2018,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "80",
+      "region": "32",
+      "evidence": "une nouvelle enquête dans un élevage de la Somme fournissant Matines",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/stopcages/"
+      ]
+    },
+    {
+      "id": "elevage-cailles-drome-2019",
+      "title": "L'enfer des cailles élevées pour les œufs (Drôme Cailles)",
+      "year": 2019,
+      "month": 2,
+      "site": "elevage",
+      "species": [
+        "cailles"
+      ],
+      "precision": "departement",
+      "departement": "26",
+      "region": "84",
+      "evidence": "Enquête dans un élevage de cailles Drôme, 2019",
+      "notes": "Département tiré du texte de la liste ; la page ne nomme que l'entreprise « Drôme Cailles », dont le nom pourrait être la seule source de cette mention.",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/elevage-caille/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-finistere-2019",
+      "title": "Vivre dans un élevage de cochons (Finistère)",
+      "year": 2019,
+      "month": 10,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "departement",
+      "departement": "29",
+      "region": "53",
+      "evidence": "cette nouvelle enquête menée en septembre 2019 dans un élevage intensif du Finistère",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/elevage-cochons-finistere/"
+      ]
+    },
+    {
+      "id": "elevage-lapins-nueil-2019",
+      "title": "Le calvaire des lapins en cage",
+      "year": 2019,
+      "month": 8,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "commune",
+      "commune": "Nueil-les-Aubiers",
+      "insee": "79195",
+      "lon": -0.6114,
+      "lat": 46.9391,
+      "departement": "79",
+      "region": "75",
+      "evidence": "l'enquête tournée dans un élevage de lapins de chair de Nueil-les-Aubiers",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/elevage-lapins-nueil-les-aubiers/"
+      ]
+    },
+    {
+      "id": "elevage-poulets-duc-aube-2019",
+      "title": "La vie de misère des poulets Duc : élevage de l'Aube",
+      "year": 2019,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "departement",
+      "departement": "10",
+      "region": "44",
+      "evidence": "L'un des élevages se trouve dans l'Aube, l'autre dans l'Yonne",
+      "group": "duc-2019",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/elevage-poulets-duc/"
+      ]
+    },
+    {
+      "id": "elevage-poulets-duc-yonne-2019",
+      "title": "La vie de misère des poulets Duc : élevage de l'Yonne",
+      "year": 2019,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "departement",
+      "departement": "89",
+      "region": "27",
+      "evidence": "L'un des élevages se trouve dans l'Aube, l'autre dans l'Yonne",
+      "notes": "« tout près du siège social de DUC à Chailley » : proximité seulement, commune de l'élevage non indiquée.",
+      "group": "duc-2019",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/elevage-poulets-duc/"
+      ]
+    },
+    {
+      "id": "elevage-poulets-solignat-2019",
+      "title": "Vie de misère pour les poulets en Auvergne",
+      "year": 2019,
+      "month": 4,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "commune",
+      "commune": "Solignat",
+      "insee": "63422",
+      "lon": 3.1909,
+      "lat": 45.5251,
+      "departement": "63",
+      "region": "84",
+      "evidence": "dans un élevage standard de poulets, à Solignat, dans le Puy-de-Dôme",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/elevage-poulets-auvergne/"
+      ]
+    },
+    {
+      "id": "foie-gras-peyrouse-2019",
+      "title": "Foie gras : Domaine de la Peyrouse",
+      "year": 2019,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "departement",
+      "departement": "24",
+      "region": "75",
+      "evidence": "Ces images ont été filmées au Domaine de la Peyrouse en Dordogne.",
+      "notes": "Exploitation du lycée agricole de Périgueux (couvoir, salles de gavage) ; la commune du domaine n'est pas donnée sur la page.",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/foie-gras/"
+      ]
+    },
+    {
+      "id": "poules-cage-allier-2019",
+      "title": "Élevage de poules en cage de l'Allier (Interovo)",
+      "year": 2019,
+      "month": 6,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "03",
+      "region": "84",
+      "evidence": "Nouvelle enquête dans un élevage de l'Allier fournissant le groupe multinational Interovo",
+      "notes": "Les bureaux d'Interovo dans le Pas-de-Calais ne sont pas le lieu de l'enquête.",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/stopcages/"
+      ]
+    },
+    {
+      "id": "poules-cage-morbihan-2019",
+      "title": "Élevage de poules en cage du Morbihan (groupe Avril)",
+      "year": 2019,
+      "month": 6,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "56",
+      "region": "53",
+      "evidence": "Nouvelle enquête dans le Morbihan dans un élevage de 190 000 poules",
+      "urls": [
+        "https://www.l214.com/enquetes/2017/stopcages/"
+      ]
+    },
+    {
+      "id": "transport-veaux-nourrissons-2019",
+      "title": "Stop au transport des veaux nourrissons",
+      "year": 2019,
+      "month": 4,
+      "site": "transport",
+      "species": [
+        "veaux"
+      ],
+      "precision": "none",
+      "evidence": "Arrivés au port de Cherbourg, après une traversée de plus de 18 heures",
+      "notes": "Trajets Irlande → France → Pays-Bas/Espagne/Italie avec Eyes on Animals ; images aussi au centre de transit « près de Cherbourg » (Manche), sans commune précise.",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/transport-veaux-nourrissons/"
+      ]
+    },
+    {
+      "id": "vaches-hublot-sourches-2019",
+      "title": "Stop aux vaches à hublot",
+      "year": 2019,
+      "month": 6,
+      "site": "autre",
+      "siteDetail": "station expérimentale (groupe Avril)",
+      "species": [
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Symphorien",
+      "insee": "72321",
+      "lon": -0.1376,
+      "lat": 48.0807,
+      "departement": "72",
+      "region": "52",
+      "evidence": "station expérimentale des Sourches ... située sur la commune de Saint-Symphorien, dans la Sarthe",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/elevage-vaches-hublot/"
+      ]
+    },
+    {
+      "id": "veaux-laitiers-laita-2019",
+      "title": "Le supplice des veaux laitiers (Laïta)",
+      "year": 2019,
+      "month": 9,
+      "site": "elevage",
+      "species": [
+        "veaux"
+      ],
+      "precision": "departement",
+      "departement": "29",
+      "region": "53",
+      "evidence": "un centre de tri et trois élevages de veaux du Finistère",
+      "notes": "Centre de tri et trois élevages, tous dans le Finistère, non localisés plus finement.",
+      "urls": [
+        "https://www.l214.com/enquetes/2019/elevage-veaux-laiterie-laita/"
+      ]
+    },
+    {
+      "id": "abattoir-arcadie-rodez-2020",
+      "title": "Roquefort, souffrance d'origine garantie : abattoir de Rodez",
+      "year": 2020,
+      "month": 4,
+      "site": "abattoir",
+      "species": [
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Rodez",
+      "insee": "12202",
+      "lon": 2.5699,
+      "lat": 44.3591,
+      "departement": "12",
+      "region": "76",
+      "evidence": "l'abattoir Arcadie Sud-Ouest de Rodez",
+      "notes": "Ailleurs la page dit « près de Rodez » ; la chronologie parle de « l'abattoir Arcadie Sud-Ouest de Rodez ». Commune possiblement limitrophe.",
+      "group": "roquefort-2020",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/agneau-roquefort/"
+      ]
+    },
+    {
+      "id": "abattoir-dindes-blancafort-2020",
+      "title": "Dans un abattoir de dindes Le Gaulois (Blancafort)",
+      "year": 2020,
+      "month": 12,
+      "site": "abattoir",
+      "species": [
+        "dindes"
+      ],
+      "precision": "commune",
+      "commune": "Blancafort",
+      "insee": "18030",
+      "lon": 2.5423,
+      "lat": 47.5362,
+      "departement": "18",
+      "region": "24",
+      "evidence": "L'abattoir de Blancafort abat 15 000 dindes par jour.",
+      "notes": "Le département (Cher) est donné par la liste et par la mention de la préfecture du Cher.",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/dindes-le-gaulois/",
+        "https://www.l214.com/stop-cruaute/blancafort-un-abattoir-ldc-hors-la-loi/"
+      ]
+    },
+    {
+      "id": "abattoir-veaux-sobeval-2020",
+      "title": "L'enfer des veaux à l'abattoir Sobeval",
+      "year": 2020,
+      "month": 2,
+      "site": "abattoir",
+      "species": [
+        "veaux"
+      ],
+      "precision": "commune",
+      "commune": "Boulazac Isle Manoire",
+      "insee": "24053",
+      "lon": 0.7878,
+      "lat": 45.1385,
+      "departement": "24",
+      "region": "75",
+      "evidence": "l'abattoir Sobeval situé dans la commune de Boulazac Isle Manoire (24)",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/abattoir-veaux-sobeval/"
+      ]
+    },
+    {
+      "id": "canards-reproducteurs-lichos-2020",
+      "title": "Foie gras : l'horreur pour des canards reproducteurs",
+      "year": 2020,
+      "month": 8,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "commune",
+      "commune": "Lichos",
+      "insee": "64341",
+      "lon": -0.882,
+      "lat": 43.3086,
+      "departement": "64",
+      "region": "75",
+      "evidence": "le site de reproduction des canards, situé à Lichos dans les Pyrénées-Atlantiques",
+      "notes": "Images d'un lanceur d'alerte.",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/foie-gras-canards-reproducteurs/"
+      ]
+    },
+    {
+      "id": "elevage-agneaux-roquefort-2020",
+      "title": "Roquefort, souffrance d'origine garantie : élevage",
+      "year": 2020,
+      "month": 4,
+      "site": "elevage",
+      "species": [
+        "moutons"
+      ],
+      "precision": "departement",
+      "departement": "12",
+      "region": "76",
+      "evidence": "Comme c'est le cas dans cet élevage d'Aveyron, la SARL Grimal",
+      "group": "roquefort-2020",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/agneau-roquefort/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-barrais-bussolles-2020",
+      "title": "Dans l'enfer banal d'un élevage de cochons",
+      "year": 2020,
+      "month": 10,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Barrais-Bussolles",
+      "insee": "03017",
+      "lon": 3.6954,
+      "lat": 46.2809,
+      "departement": "03",
+      "region": "84",
+      "evidence": "un élevage intensif situé à Barrais-Bussolles dans l'Allier",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/elevage-cochons-barrais-bussolles/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-herta-limoise-2020",
+      "title": "Herta : le (dé)goût des choses simples",
+      "year": 2020,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Limoise",
+      "insee": "03146",
+      "lon": 3.0541,
+      "lat": 46.6876,
+      "departement": "03",
+      "region": "84",
+      "evidence": "un élevage intensif qui se trouve sur la commune de Limoise dans l'Allier",
+      "notes": "Nouvelles images du même élevage publiées en février 2021 (entrée séparée dans la liste).",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/elevage-herta/",
+        "https://www.l214.com/enquetes/2020/elevage-herta/#nouvelles-images-2021"
+      ]
+    },
+    {
+      "id": "elevage-gibier-gibovendee-2020",
+      "title": "9 faisans sur 10 tués à la chasse proviennent d'élevages (Gibovendée)",
+      "year": 2020,
+      "month": 9,
+      "site": "elevage",
+      "siteDetail": "élevage de gibier pour la chasse",
+      "species": [
+        "faisans",
+        "autres"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Images obtenues avec Pierre Rigaux. La Peyratte (Deux-Sèvres) est citée pour « un autre élevage » de Gibovendée, pas celui filmé.",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/industrie-de-la-chasse/"
+      ]
+    },
+    {
+      "id": "elevage-lapins-morbihan-2020",
+      "title": "Enquête dans un élevage de lapins du Morbihan",
+      "year": 2020,
+      "month": 9,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "departement",
+      "departement": "56",
+      "region": "53",
+      "evidence": "Enquête dans un élevage de lapins du Morbihan",
+      "notes": "L'URL contient « augan » mais le texte de la page ne nomme pas la commune.",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/elevage-lapins-cage-augan/"
+      ]
+    },
+    {
+      "id": "poules-cage-chambly-2020",
+      "title": "Calvaire pour les poules du Domaine du Mesnil St Martin",
+      "year": 2020,
+      "month": 10,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "commune",
+      "commune": "Chambly",
+      "insee": "60139",
+      "lon": 2.2462,
+      "lat": 49.1743,
+      "departement": "60",
+      "region": "32",
+      "evidence": "un élevage intensif de 200 000 poules pondeuses situé à Chambly dans l'Oise",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/elevage-poules-domaine-mesnil-saint-martin/"
+      ]
+    },
+    {
+      "id": "poulets-dominos-2020",
+      "title": "Enquête sur des approvisionnements pour Domino's Pizza",
+      "year": 2020,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Entrée de la liste ; la page de campagne (pétition) ne décrit pas l'enquête ni de lieu. Les villes citées sont des lieux de manifestation.",
+      "urls": [
+        "https://www.l214.com/stop-cruaute/dominos/"
+      ]
+    },
+    {
+      "id": "poulets-duc-ramasseur-yonne-2020",
+      "title": "Dans la peau d'un ramasseur de poulets DUC",
+      "year": 2020,
+      "month": 11,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "departement",
+      "departement": "89",
+      "region": "27",
+      "evidence": "un élevage sous contrat avec la marque DUC, dans l'Yonne",
+      "notes": "Enquête réalisée en septembre 2020 avec un lanceur d'alerte ; page de campagne.",
+      "urls": [
+        "https://www.l214.com/stop-cruaute/duc/"
+      ]
+    },
+    {
+      "id": "transport-veaux-irlande-pays-bas-2020",
+      "title": "Longs transports des veaux : Irlande, France, Pays-Bas",
+      "year": 2020,
+      "month": 4,
+      "site": "transport",
+      "species": [
+        "veaux"
+      ],
+      "precision": "none",
+      "evidence": "Après avoir traversé la Manche, elles arrivent au port de Cherbourg en France.",
+      "notes": "Avec Eyes on Animals ; itinéraire Irlande → Cherbourg → Pays-Bas (centre de transit dans la Manche, commune non précisée).",
+      "urls": [
+        "https://www.l214.com/enquetes/2020/transport-veaux-irlande-pays-bas/"
+      ]
+    },
+    {
+      "id": "abattoir-bigard-cuiseaux-2021",
+      "title": "Horreur à l'abattoir Bigard de Cuiseaux",
+      "year": 2021,
+      "month": 10,
+      "site": "abattoir",
+      "species": [
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Cuiseaux",
+      "insee": "71157",
+      "lon": 5.3609,
+      "lat": 46.503,
+      "departement": "71",
+      "region": "27",
+      "evidence": "un abattoir du groupe Bigard (marques Charal et Socopa) à Cuiseaux en Saône-et-Loire",
+      "notes": "Enquêteur embauché dans les services vétérinaires de l'abattoir.",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/abattoir-bigard-charal-socopa-cuiseaux/"
+      ]
+    },
+    {
+      "id": "abattoir-dindes-faouet-2021",
+      "title": "Fermons l'abattoir de dindes Ronsard au Faouët",
+      "year": 2021,
+      "month": 7,
+      "site": "abattoir",
+      "species": [
+        "dindes"
+      ],
+      "precision": "commune",
+      "commune": "Le Faouët",
+      "insee": "56057",
+      "lon": -3.5111,
+      "lat": 48.0425,
+      "departement": "56",
+      "region": "53",
+      "evidence": "l'abattoir de dindes Ronsard au Faouët dans le Morbihan",
+      "notes": "Le Faouët existe aussi dans les Côtes-d'Armor ; la page précise le Morbihan.",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/abattoir-made-in-france-dindes-faouet-ronsard/"
+      ]
+    },
+    {
+      "id": "abattoir-truies-briec-2021",
+      "title": "L'enfer pour les truies à l'abattoir de Briec",
+      "year": 2021,
+      "month": 5,
+      "site": "abattoir",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Briec",
+      "insee": "29020",
+      "lon": -4.0011,
+      "lat": 48.0964,
+      "departement": "29",
+      "region": "53",
+      "evidence": "L214 révèle l'enfer vécu par les truies à l'abattoir de Briec.",
+      "notes": "Département donné par la liste (« à Briec dans le Finistère ») et par le procès au tribunal de Quimper.",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/abattoir-truies-briec/"
+      ]
+    },
+    {
+      "id": "cochons-abandonnes-cotes-armor-2021",
+      "title": "Des cochons en putréfaction dans un élevage des Côtes-d'Armor",
+      "year": 2021,
+      "month": 1,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "departement",
+      "departement": "22",
+      "region": "53",
+      "evidence": "une porcherie des Côtes-d'Armor près de Saint-Brieuc",
+      "notes": "« près de Saint-Brieuc » : commune non précisée.",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/cochons-putrefaction-saint-brieuc/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-herta-ortillon-2021",
+      "title": "Nouvelles images dans un élevage Herta (Ortillon)",
+      "year": 2021,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Ortillon",
+      "insee": "10273",
+      "lon": 4.2237,
+      "lat": 48.4938,
+      "departement": "10",
+      "region": "44",
+      "evidence": "l'élevage situé à Ortillon dans l'Aube",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/cochons-ortillon-herta/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-tremblats-2021",
+      "title": "Alerte dans un élevage de cochons dans l'Yonne (Tremblats)",
+      "year": 2021,
+      "month": 8,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "departement",
+      "departement": "89",
+      "region": "27",
+      "evidence": "un élevage situé dans l'Yonne et appartenant à la société Tremblats II",
+      "notes": "Images d'un lanceur d'alerte ; commune non indiquée.",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/alerte-cochons-tremblats-yonne/"
+      ]
+    },
+    {
+      "id": "elevage-poulets-pihem-2021",
+      "title": "Non à l'extension de l'élevage intensif de poulets à Pihem",
+      "year": 2021,
+      "month": 4,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "commune",
+      "commune": "Pihem",
+      "insee": "62656",
+      "lon": 2.2125,
+      "lat": 50.675,
+      "departement": "62",
+      "region": "32",
+      "evidence": "22 000 poulets dans l'élevage intensif de Pihem (Pas-de-Calais)",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/poulets-pihem/"
+      ]
+    },
+    {
+      "id": "poules-cage-pamproeuf-2021",
+      "title": "Poules en cage : violence inouïe dans un élevage Pampr'œuf",
+      "year": 2021,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "poules"
+      ],
+      "precision": "departement",
+      "departement": "79",
+      "region": "75",
+      "evidence": "Enquête dans un élevage de poules pondeuses en cage dans les Deux-Sèvres",
+      "notes": "La page n'indique aucun lieu ; le département vient uniquement du texte de la liste.",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/poules-cage-pamproeuf/"
+      ]
+    },
+    {
+      "id": "poules-coqs-reproducteurs-ploermel-2021",
+      "title": "Le calvaire des poules et des coqs reproducteurs à Ploërmel",
+      "year": 2021,
+      "month": 9,
+      "site": "elevage",
+      "species": [
+        "poules",
+        "poulets"
+      ],
+      "precision": "commune",
+      "commune": "Ploërmel",
+      "insee": "56165",
+      "lon": -2.3769,
+      "lat": 47.9167,
+      "departement": "56",
+      "region": "53",
+      "evidence": "Le calvaire des poules et des coqs reproducteurs à Ploërmel",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/poules-coqs-ploermel/"
+      ]
+    },
+    {
+      "id": "poulets-le-gaulois-mayenne-2021",
+      "title": "Un « canon à poulets » (Le Gaulois)",
+      "year": 2021,
+      "month": 11,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Saturnin-du-Limet",
+      "insee": "53253",
+      "lon": -1.0915,
+      "lat": 47.8135,
+      "departement": "53",
+      "region": "52",
+      "evidence": "un immense complexe d'élevage appartenant à Le Gaulois, à Saint-Saturnin-du-Limet, en Mayenne",
+      "notes": "Mois d'après la chronologie de la campagne LDC (18 novembre 2021). Page republiée en 2026 ; année d'après l'URL et la liste. Ramassage mécanique des poulets.",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/canon-poulets/"
+      ]
+    },
+    {
+      "id": "poulets-maitre-coq-2021",
+      "title": "Enquête chez Maître CoQ",
+      "year": 2021,
+      "month": 6,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "departement",
+      "departement": "49",
+      "region": "52",
+      "evidence": "un élevage de poulets intensifs dans les Pays de la Loire",
+      "notes": "La page dit « Pays de la Loire » ; le département (Maine-et-Loire) vient du texte de la liste.",
+      "urls": [
+        "https://www.l214.com/enquetes/2021/poulets-maitre-coq/",
+        "https://www.l214.com/stop-cruaute/maitrecoq/"
+      ]
+    },
+    {
+      "id": "chalutiers-manche-2022",
+      "title": "Pêche au chalut, le grand massacre",
+      "year": 2022,
+      "month": 2,
+      "site": "autre",
+      "siteDetail": "chalutiers en mer",
+      "species": [
+        "poissons"
+      ],
+      "precision": "none",
+      "evidence": "à bord de chalutiers français et britanniques pêchant dans la mer de la Manche",
+      "notes": "Images de Soko Tierschutz, en mer ; le port de départ du chalutier français est seulement situé « dans le Calvados ».",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/poissons-peche-chalut/"
+      ]
+    },
+    {
+      "id": "chevres-chevenet-2022",
+      "title": "Élevage de chèvres Chevenet (Isabelle Adjani)",
+      "year": 2022,
+      "month": 8,
+      "site": "elevage",
+      "species": [
+        "chevres"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Maurice-de-Satonnay",
+      "insee": "71460",
+      "lon": 4.7817,
+      "lat": 46.4058,
+      "departement": "71",
+      "region": "27",
+      "evidence": "l'élevage de l'entreprise Chevenet à Saint-Maurice-de-Satonnay en Saône-et-Loire",
+      "notes": "Images obtenues grâce à des salariés de l'exploitation.",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/adjani-chevres-chevenet/",
+        "https://www.l214.com/enquetes/2022/adjani-denonce/"
+      ]
+    },
+    {
+      "id": "corrida-brocas-2022",
+      "title": "Mise à mort de 6 taureaux à la corrida de Brocas",
+      "year": 2022,
+      "month": 11,
+      "site": "autre",
+      "siteDetail": "arènes (corrida)",
+      "species": [
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Brocas",
+      "insee": "40056",
+      "lon": -0.5446,
+      "lat": 44.0533,
+      "departement": "40",
+      "region": "75",
+      "evidence": "Mise à mort de 6 taureaux à la corrida de Brocas Les Landes, novembre 2022",
+      "notes": "Uniquement dans le texte de la liste (vidéo YouTube) ; aucune page dédiée sur www.l214.com.",
+      "urls": [
+        "https://www.youtube.com/watch?v=vCOpybqm-cM"
+      ]
+    },
+    {
+      "id": "couvoir-caringa-2022",
+      "title": "Couvoir Caringa : stop au broyage des poussins",
+      "year": 2022,
+      "month": 12,
+      "site": "couvoir",
+      "species": [
+        "poussins"
+      ],
+      "precision": "commune",
+      "commune": "L'Isle-Jourdain",
+      "insee": "32160",
+      "lon": 1.0826,
+      "lat": 43.6159,
+      "departement": "32",
+      "region": "76",
+      "evidence": "Au couvoir Caringa Sud-Ouest situé à L'Isle-Jourdain dans le Gers",
+      "notes": "L'Isle-Jourdain existe aussi dans la Vienne ; la page précise le Gers.",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/couvoir-caringa-broyage-poussins/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-saint-glen-2022",
+      "title": "Élevage intensif de cochons et algues vertes",
+      "year": 2022,
+      "month": 1,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Glen",
+      "insee": "22296",
+      "lon": -2.5266,
+      "lat": 48.3468,
+      "departement": "22",
+      "region": "53",
+      "evidence": "un élevage intensif situé à Saint-Glen dans les Côtes-d'Armor (Bretagne)",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/cochons-algues-vertes/"
+      ]
+    },
+    {
+      "id": "elevage-laitier-gironde-2022",
+      "title": "Urgence dans l'un des plus gros élevages laitiers de Gironde",
+      "year": 2022,
+      "month": 11,
+      "site": "elevage",
+      "species": [
+        "bovins"
+      ],
+      "precision": "departement",
+      "departement": "33",
+      "region": "75",
+      "evidence": "L214 révèle des images bouleversantes d'un des plus gros élevages laitiers de Gironde.",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/elevage-vaches-gironde/"
+      ]
+    },
+    {
+      "id": "foie-gras-gers-2022",
+      "title": "Le foie gras : un fléau pour les animaux et la santé publique",
+      "year": 2022,
+      "month": 2,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "departement",
+      "departement": "32",
+      "region": "76",
+      "evidence": "Ces images ont été filmées dans le Gers, en pleine zone IGP",
+      "notes": "Salle de gavage de 1 900 canards. Le couvoir (Deux-Sèvres) et l'élevage (Lot-et-Garonne) d'origine des canards sont cités mais pas filmés.",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/foie-gras-et-grippe-aviaire/"
+      ]
+    },
+    {
+      "id": "gavage-canes-lot-2022",
+      "title": "La barbarie derrière le foie gras : canes gavées (Lot)",
+      "year": 2022,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "departement",
+      "departement": "46",
+      "region": "76",
+      "evidence": "Les images proviennent d'une salle de gavage du Lot",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/gavage-canes-quercynoise/"
+      ]
+    },
+    {
+      "id": "grippe-aviaire-enfouissement-vendee-2022",
+      "title": "Le scandale de la grippe aviaire : enfouissement en Vendée",
+      "year": 2022,
+      "site": "autre",
+      "siteDetail": "fosse d'enfouissement de cadavres d'oiseaux (filmée au drone)",
+      "species": [
+        "poulets",
+        "autres"
+      ],
+      "precision": "departement",
+      "departement": "85",
+      "region": "52",
+      "evidence": "une fosse réquisitionnée par l'État sur un chantier d'autoroute de Vendée",
+      "notes": "Page republiée en 2026 ; année d'après l'URL et la liste.",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/enfouissement-grippe-aviaire/",
+        "https://youtu.be/ZpcewA5lI7A"
+      ]
+    },
+    {
+      "id": "grippe-aviaire-gazage-2022",
+      "title": "Grippe aviaire : les dessous du gazage des poulets",
+      "year": 2022,
+      "month": 4,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "commune",
+      "commune": "Les Landes-Genusson",
+      "insee": "85119",
+      "lon": -1.1254,
+      "lat": 46.9697,
+      "departement": "85",
+      "region": "52",
+      "evidence": "ces images inédites filmées aux Landes-Genusson en Vendée (Pays de la Loire)",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/grippe-aviaire/",
+        "https://www.l214.com/enquetes/grippe-aviaire-gazage/",
+        "https://youtu.be/kZM4VH7xAAY"
+      ]
+    },
+    {
+      "id": "lapins-antibiotiques-cotes-armor-2022",
+      "title": "Détresse des lapins et usage massif d'antibiotiques",
+      "year": 2022,
+      "month": 2,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "departement",
+      "departement": "22",
+      "region": "53",
+      "evidence": "un élevage intensif de lapins situés dans les Côtes-d'Armor en Bretagne",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/lapins-et-antibiotiques/"
+      ]
+    },
+    {
+      "id": "lapins-domalain-2022",
+      "title": "Enquête dans l'élevage du président des producteurs de lapins",
+      "year": 2022,
+      "month": 8,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "commune",
+      "commune": "Domalain",
+      "insee": "35097",
+      "lon": -1.2445,
+      "lat": 47.9975,
+      "departement": "35",
+      "region": "53",
+      "evidence": "un élevage de lapins de la commune de Domalain en Ille-et-Vilaine",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/lapins-le-gaulois/"
+      ]
+    },
+    {
+      "id": "moutons-aid-deulemont-2022",
+      "title": "Aïd 2022 : des moutons dans des coffres de voitures",
+      "year": 2022,
+      "month": 7,
+      "site": "autre",
+      "siteDetail": "bergerie vendant des moutons pour abattage clandestin",
+      "species": [
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Deûlémont",
+      "insee": "59173",
+      "lon": 2.9723,
+      "lat": 50.7275,
+      "departement": "59",
+      "region": "32",
+      "evidence": "à la bergerie de la Société ovine Flandres Artois (SOFA) de Deûlémont dans le Nord",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/moutons-aid-el-kebir-sofa/"
+      ]
+    },
+    {
+      "id": "poulets-le-gaulois-sarthe-2022",
+      "title": "Poulets Le Gaulois : un éleveur dénonce",
+      "year": 2022,
+      "month": 2,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "commune",
+      "commune": "Moncé-en-Saosnois",
+      "insee": "72201",
+      "lon": 0.384,
+      "lat": 48.2716,
+      "departement": "72",
+      "region": "52",
+      "evidence": "un élevage de poulets situé à Moncé-en-Saosnois, dans la Sarthe",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/poulets-le-gaulois/"
+      ]
+    },
+    {
+      "id": "ramassage-dindes-2022",
+      "title": "Ramassage et transport des dindes et dindons (Petit Biscuit)",
+      "year": 2022,
+      "month": 6,
+      "site": "transport",
+      "species": [
+        "dindes"
+      ],
+      "precision": "none",
+      "evidence": "aucun lieu indiqué",
+      "notes": "Élevage et ramassage non localisés ; la page évoque des actions antérieures devant l'abattoir de Blancafort, sans dire que ces images y ont été tournées.",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/ramassage-dindons/"
+      ]
+    },
+    {
+      "id": "veaux-denkavit-2022",
+      "title": "« Bien fait pour ta gueule » : violence chez Denkavit",
+      "year": 2022,
+      "month": 4,
+      "site": "autre",
+      "siteDetail": "élevage du centre de recherche et d'innovation Denkavit",
+      "species": [
+        "veaux"
+      ],
+      "precision": "commune",
+      "commune": "Montreuil-Bellay",
+      "insee": "49215",
+      "lon": -0.1246,
+      "lat": 47.1295,
+      "departement": "49",
+      "region": "52",
+      "evidence": "l'entreprise Denkavit à Montreuil-Bellay (49)",
+      "urls": [
+        "https://www.l214.com/enquetes/2022/veaux-centre-recherche-denkavit/"
+      ]
+    },
+    {
+      "id": "abattoir-bazas-2023",
+      "title": "Carnage à l'abattoir de Bazas",
+      "year": 2023,
+      "month": 7,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "cochons",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Bazas",
+      "insee": "33036",
+      "lon": -0.2177,
+      "lat": 44.4409,
+      "departement": "33",
+      "region": "75",
+      "evidence": "Ces images tournées à l'abattoir de Bazas (Gironde)",
+      "urls": [
+        "https://www.l214.com/enquetes/2023/abattoir-de-bazas/"
+      ]
+    },
+    {
+      "id": "cerfs-courbeveille-2023",
+      "title": "Ces cerfs sont tués pour Noël",
+      "year": 2023,
+      "month": 12,
+      "site": "elevage",
+      "siteDetail": "salle d'abattage d'un élevage de cerfs",
+      "species": [
+        "cerfs"
+      ],
+      "precision": "commune",
+      "commune": "Courbeveille",
+      "insee": "53082",
+      "lon": -0.8914,
+      "lat": 47.9852,
+      "departement": "53",
+      "region": "52",
+      "evidence": "un élevage situé dans la commune de Courbeveille, en Mayenne",
+      "urls": [
+        "https://www.l214.com/enquetes/2023/la-ferme-des-cerfs/"
+      ]
+    },
+    {
+      "id": "chevreaux-ldc-2023",
+      "title": "Chez LDC, il n'y a pas que les poulets qui souffrent (chevreaux)",
+      "year": 2023,
+      "month": 6,
+      "site": "elevage",
+      "species": [
+        "chevres"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Pierre-le-Vieux",
+      "insee": "71469",
+      "lon": 4.5232,
+      "lat": 46.2888,
+      "departement": "71",
+      "region": "27",
+      "evidence": "Dans cet élevage de Saint-Pierre-le-Vieux (71)",
+      "notes": "Plusieurs communes portent ce nom ; le code (71) de la page désigne la Saône-et-Loire.",
+      "urls": [
+        "https://www.l214.com/enquetes/2023/chevreaux-ldc/"
+      ]
+    },
+    {
+      "id": "cochon-de-bretagne-cotes-armor-2023",
+      "title": "Élevage intensif de cochons : le prix de la charcuterie (Le Cochon de Bretagne)",
+      "year": 2023,
+      "month": 1,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "departement",
+      "departement": "22",
+      "region": "53",
+      "evidence": "Dans cet élevage porcin des Côtes-d'Armor fournissant Le Cochon de Bretagne",
+      "notes": "Page de campagne (pétition) qui présente l'enquête ; l'adresse de la marque à Plérin n'est pas le lieu de l'élevage.",
+      "urls": [
+        "https://www.l214.com/stop-cruaute/cochon-de-bretagne/"
+      ]
+    },
+    {
+      "id": "elevage-cochons-marne-2023",
+      "title": "Castrés à vif, claqués à mort : élevage de cochons de la Marne",
+      "year": 2023,
+      "month": 9,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "departement",
+      "departement": "51",
+      "region": "44",
+      "evidence": "L214 publie une enquête sur un élevage de cochons de la Marne (51).",
+      "urls": [
+        "https://www.l214.com/enquetes/2023/elevage-de-cochons-marne/"
+      ]
+    },
+    {
+      "id": "elevage-laitier-saint-ovin-2023",
+      "title": "Élevage laitier en Normandie : animaux à l'agonie",
+      "year": 2023,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "bovins",
+        "veaux"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Ovin",
+      "insee": "50531",
+      "lon": -1.2402,
+      "lat": 48.6767,
+      "departement": "50",
+      "region": "28",
+      "evidence": "un élevage laitier à Saint-Ovin en Normandie",
+      "notes": "Département confirmé par la mention de la préfecture de la Manche.",
+      "urls": [
+        "https://www.l214.com/enquetes/elevage-laitier-normandie/"
+      ]
+    },
+    {
+      "id": "elevage-laitier-whaou-2023",
+      "title": "Ces vaches produisent du lait pour les crêpes Whaou!",
+      "year": 2023,
+      "month": 11,
+      "site": "elevage",
+      "species": [
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Plouzévédé",
+      "insee": "29213",
+      "lon": -4.0932,
+      "lat": 48.5958,
+      "departement": "29",
+      "region": "53",
+      "evidence": "cet élevage intensif situé à Plouzévédé dans le Finistère",
+      "urls": [
+        "https://www.l214.com/enquetes/2023/elevage-laitier-whaou/"
+      ]
+    },
+    {
+      "id": "equarrissage-saint-brieuc-2023",
+      "title": "Équarrissage : un lanceur d'alerte témoigne",
+      "year": 2023,
+      "month": 3,
+      "site": "autre",
+      "siteDetail": "collecte d'équarrissage dans les élevages",
+      "species": [
+        "bovins",
+        "cochons",
+        "autres"
+      ],
+      "precision": "departement",
+      "departement": "22",
+      "region": "53",
+      "evidence": "fait la tournée quotidienne des élevages autour de Saint-Brieuc",
+      "notes": "Tournée de collecte (plusieurs élevages) « autour de Saint-Brieuc » ; département aussi donné par la liste (« Côtes d'Armor, mars 2023 »). Page republiée en 2026.",
+      "urls": [
+        "https://www.l214.com/enquetes/2023/equarrissage-enquete/",
+        "https://vimeo.com/808333437/16462ede33"
+      ]
+    },
+    {
+      "id": "lapins-noordpeene-2023",
+      "title": "Lapin du Ch'ti : images glaçantes d'un élevage certifié",
+      "year": 2023,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "commune",
+      "commune": "Noordpeene",
+      "insee": "59436",
+      "lon": 2.3638,
+      "lat": 50.7931,
+      "departement": "59",
+      "region": "32",
+      "evidence": "un élevage intensif à Noordpeene (Nord)",
+      "urls": [
+        "https://www.l214.com/enquetes/lapin-du-chti/"
+      ]
+    },
+    {
+      "id": "pintades-reproductrices-ldc-2023",
+      "title": "Des pintades en cage dans un élevage du groupe LDC",
+      "year": 2023,
+      "month": 8,
+      "site": "elevage",
+      "species": [
+        "pintades"
+      ],
+      "precision": "departement",
+      "departement": "49",
+      "region": "52",
+      "evidence": "Élevage de pintades reproductrices Maine-et-Loire, août 2023",
+      "notes": "La page ne donne aucun lieu ; le département vient uniquement du texte de la liste.",
+      "urls": [
+        "https://www.l214.com/enquetes/2023/pintades-ldc/"
+      ]
+    },
+    {
+      "id": "poulets-doux-arabie-2023",
+      "title": "Des poulets bretons maltraités et exportés en Arabie Saoudite",
+      "year": 2023,
+      "month": 4,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "region",
+      "region": "53",
+      "evidence": "Les poulets de cet élevage breton sont élevés en bâtiment toute leur vie",
+      "notes": "L'abattoir France Poultry de Châteaulin est la destination des poulets, pas un lieu filmé.",
+      "urls": [
+        "https://www.l214.com/enquetes/2023/poulets-doux/"
+      ]
+    },
+    {
+      "id": "transport-veaux-couville-2023",
+      "title": "Le calvaire des veaux nourrissons",
+      "year": 2023,
+      "month": 7,
+      "site": "transport",
+      "siteDetail": "centre de transit sur l'itinéraire Irlande → Pays-Bas",
+      "species": [
+        "veaux"
+      ],
+      "precision": "commune",
+      "commune": "Couville",
+      "insee": "50149",
+      "lon": -1.6828,
+      "lat": 49.561,
+      "departement": "50",
+      "region": "28",
+      "evidence": "Les veaux sont déchargés dans un centre de transit à Couville (50)",
+      "notes": "Enquête sur un itinéraire (avec Ethical Farming Ireland et Eyes on Animals) ; la commune est celle du centre de transit filmé.",
+      "urls": [
+        "https://www.l214.com/enquetes/2023/transport-des-veaux-nourrissons/"
+      ]
+    },
+    {
+      "id": "abattoir-bigard-venarey-juillet-2024",
+      "title": "Abattoir Bigard : rien n'a changé (nouvelles images)",
+      "year": 2024,
+      "month": 7,
+      "site": "abattoir",
+      "species": [
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Venarey-les-Laumes",
+      "insee": "21663",
+      "lon": 4.447,
+      "lat": 47.5375,
+      "departement": "21",
+      "region": "27",
+      "evidence": "nouvelles images filmées à l'abattoir Bigard de Venarey-les-Laumes (Côte-d'Or)",
+      "notes": "Seconde enquête dans le même abattoir que celle de mars-avril 2024.",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/abattoir-bigard-juillet/"
+      ]
+    },
+    {
+      "id": "abattoir-bigard-venarey-mars-2024",
+      "title": "Cruauté dans un abattoir Bigard (Venarey-les-Laumes)",
+      "year": 2024,
+      "month": 4,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "veaux"
+      ],
+      "precision": "commune",
+      "commune": "Venarey-les-Laumes",
+      "insee": "21663",
+      "lon": 4.447,
+      "lat": 47.5375,
+      "departement": "21",
+      "region": "27",
+      "evidence": "L214 a enquêté à l'abattoir Bigard de Venarey-les-Laumes (Côte-d'Or) en mars 2024",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/abattoir-bigard/"
+      ]
+    },
+    {
+      "id": "abattoir-craon-2024",
+      "title": "Des animaux découpés vivants à l'abattoir de Craon",
+      "year": 2024,
+      "month": 1,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "veaux",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Craon",
+      "insee": "53084",
+      "lon": -0.9396,
+      "lat": 47.8431,
+      "departement": "53",
+      "region": "52",
+      "evidence": "l'abattoir municipal de Craon (Mayenne – Pays de la Loire)",
+      "notes": "Craon existe aussi dans la Vienne ; la page précise la Mayenne. Espèces d'après le texte de la page.",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/abattoir-de-craon/"
+      ]
+    },
+    {
+      "id": "abattoir-maurienne-2024",
+      "title": "Abattoir de Maurienne : des animaux découpés vivants",
+      "year": 2024,
+      "month": 11,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Étienne-de-Cuines",
+      "insee": "73231",
+      "lon": 6.2469,
+      "lat": 45.3471,
+      "departement": "73",
+      "region": "84",
+      "evidence": "L'abattoir de Maurienne, situé à Saint-Étienne-de-Cuines en Savoie",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/abattoir-maurienne/"
+      ]
+    },
+    {
+      "id": "canards-ldc-mayenne-2024",
+      "title": "Une salariée dénonce : faux plein air chez un éleveur de canards",
+      "year": 2024,
+      "month": 7,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "departement",
+      "departement": "53",
+      "region": "52",
+      "evidence": "un élevage de plus de 5000 canards de chair … situé en Mayenne",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/canards-ldc/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-malansac-2024",
+      "title": "L'élevage de l'horreur qui fournit E.Leclerc : site de Malansac",
+      "year": 2024,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Malansac",
+      "insee": "56123",
+      "lon": -2.3091,
+      "lat": 47.6887,
+      "departement": "56",
+      "region": "53",
+      "evidence": "deux sites d'une exploitation porcine ... situés dans les communes de Malansac et Trédion (Morbihan",
+      "group": "cochons-leclerc-morbihan-2024",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/cochons-leclerc/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-saint-carreuc-2024",
+      "title": "Cet élevage de cochons fournit la Marque Repère de E.Leclerc",
+      "year": 2024,
+      "month": 9,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Carreuc",
+      "insee": "22281",
+      "lon": -2.7471,
+      "lat": 48.4017,
+      "departement": "22",
+      "region": "53",
+      "evidence": "filmées dans l'élevage EARL La rose des vents à Saint-Carreuc (Côtes-d'Armor",
+      "notes": "L'abattoir Kermené (Le Mené) est la destination des cochons, pas un lieu filmé.",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/enquetes-cochons-leclerc-2/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-tredion-2024",
+      "title": "L'élevage de l'horreur qui fournit E.Leclerc : site de Trédion",
+      "year": 2024,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Trédion",
+      "insee": "56254",
+      "lon": -2.5857,
+      "lat": 47.7812,
+      "departement": "56",
+      "region": "53",
+      "evidence": "deux sites d'une exploitation porcine ... situés dans les communes de Malansac et Trédion (Morbihan",
+      "group": "cochons-leclerc-morbihan-2024",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/cochons-leclerc/"
+      ]
+    },
+    {
+      "id": "elevage-bovins-meillac-2024",
+      "title": "Urgence pour ces bovins (Meillac)",
+      "year": 2024,
+      "month": 1,
+      "site": "elevage",
+      "species": [
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Meillac",
+      "insee": "35172",
+      "lon": -1.8268,
+      "lat": 48.4285,
+      "departement": "35",
+      "region": "53",
+      "evidence": "L214 rend publiques des images d'un élevage de bovins (Meillac - Ille-et-Vilaine).",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/vaches-de-meillac/"
+      ]
+    },
+    {
+      "id": "elevage-bovins-praslay-2024",
+      "title": "Urgence pour les vaches de Praslay",
+      "year": 2024,
+      "month": 2,
+      "site": "elevage",
+      "species": [
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Praslay",
+      "insee": "52403",
+      "lon": 5.1094,
+      "lat": 47.7381,
+      "departement": "52",
+      "region": "44",
+      "evidence": "un élevage bovin situé dans la commune de Praslay en Haute-Marne",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/vaches-de-praslay/"
+      ]
+    },
+    {
+      "id": "elevage-moutons-biriatou-2024",
+      "title": "Urgence dans un élevage de moutons (Biriatou)",
+      "year": 2024,
+      "month": 1,
+      "site": "elevage",
+      "species": [
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Biriatou",
+      "insee": "64130",
+      "lon": -1.7322,
+      "lat": 43.3227,
+      "departement": "64",
+      "region": "75",
+      "evidence": "Cet élevage ovin est situé sur la commune de Biriatou (Pyrénées-Atlantiques).",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/elevage-biriatou/",
+        "https://youtu.be/sVnVdy-zq9Y"
+      ]
+    },
+    {
+      "id": "lapins-hauts-de-france-esquelbecq-2024",
+      "title": "3 élevages sordides de lapins des Hauts-de-France : Esquelbecq",
+      "year": 2024,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "commune",
+      "commune": "Esquelbecq",
+      "insee": "59210",
+      "lon": 2.4276,
+      "lat": 50.89,
+      "departement": "59",
+      "region": "32",
+      "evidence": "la fermeture immédiate des élevages de lapins de Pitgam (59), Esquelbecq (59) et Lespesses (62)",
+      "group": "lapins-hauts-de-france-2024",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/lapins-socla-hauts-de-france/"
+      ]
+    },
+    {
+      "id": "lapins-hauts-de-france-lespesses-2024",
+      "title": "3 élevages sordides de lapins des Hauts-de-France : Lespesses",
+      "year": 2024,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "commune",
+      "commune": "Lespesses",
+      "insee": "62500",
+      "lon": 2.422,
+      "lat": 50.5533,
+      "departement": "62",
+      "region": "32",
+      "evidence": "la fermeture immédiate des élevages de lapins de Pitgam (59), Esquelbecq (59) et Lespesses (62)",
+      "group": "lapins-hauts-de-france-2024",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/lapins-socla-hauts-de-france/"
+      ]
+    },
+    {
+      "id": "lapins-hauts-de-france-pitgam-2024",
+      "title": "3 élevages sordides de lapins des Hauts-de-France : Pitgam",
+      "year": 2024,
+      "month": 12,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "commune",
+      "commune": "Pitgam",
+      "insee": "59463",
+      "lon": 2.338,
+      "lat": 50.9304,
+      "departement": "59",
+      "region": "32",
+      "evidence": "la fermeture immédiate des élevages de lapins de Pitgam (59), Esquelbecq (59) et Lespesses (62)",
+      "group": "lapins-hauts-de-france-2024",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/lapins-socla-hauts-de-france/"
+      ]
+    },
+    {
+      "id": "poulets-ldc-orne-2024",
+      "title": "Un élevage normand hors-la-loi (LDC, Stéphane Bern)",
+      "year": 2024,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "departement",
+      "departement": "61",
+      "region": "28",
+      "evidence": "Enquête dans un élevage intensif de poulets LDC Orne, 2024",
+      "notes": "L'URL redirige vers la page de victoire LDC, dont la chronologie (23 mai 2024) dit « Un élevage normand hors-la-loi » ; le département (Orne) vient du texte de la liste.",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/poulets-ldc-orne/"
+      ]
+    },
+    {
+      "id": "poulets-le-gaulois-deux-sevres-2024",
+      "title": "Aidez Ross : poulet rescapé d'un élevage Le Gaulois",
+      "year": 2024,
+      "month": 4,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "departement",
+      "departement": "79",
+      "region": "75",
+      "evidence": "les images de poulets venant d'un élevage des Deux-Sèvres fournissant Le Gaulois",
+      "notes": "Connue seulement par la chronologie de la campagne LDC (24 avril 2024) ; absente de la liste et du sitemap /enquetes/.",
+      "urls": [
+        "https://www.l214.com/stop-cruaute/victoire/ldc-sest-engage-a-bannir-les-pires-pratiques-elevage-et-abattage-des-poules/"
+      ]
+    },
+    {
+      "id": "vaches-ermitage-2024",
+      "title": "Fromages Ermitage : élevage laitier zéro pâturage",
+      "year": 2024,
+      "month": 11,
+      "site": "elevage",
+      "species": [
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Leschères-sur-le-Blaiseron",
+      "insee": "52284",
+      "lon": 5.0286,
+      "lat": 48.3323,
+      "departement": "52",
+      "region": "44",
+      "evidence": "un élevage laitier situé à Leschères-sur-le-Blaiseron en Haute-Marne",
+      "notes": "La fromagerie Ermitage (Bulgnéville, Vosges) est le client, pas le lieu filmé.",
+      "urls": [
+        "https://www.l214.com/enquetes/2024/vaches-fromages-ermitage/"
+      ]
+    },
+    {
+      "id": "abattoir-charlieu-2025",
+      "title": "Abattoir de Charlieu : au cœur de la cruauté",
+      "year": 2025,
+      "month": 4,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "cochons",
+        "moutons",
+        "chevaux"
+      ],
+      "precision": "commune",
+      "commune": "Charlieu",
+      "insee": "42052",
+      "lon": 4.1718,
+      "lat": 46.1648,
+      "departement": "42",
+      "region": "84",
+      "evidence": "l'abattoir public de Charlieu, dans la Loire",
+      "notes": "Espèces d'après les rubriques de la liste.",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/abattoir-de-charlieu/",
+        "https://www.l214.com/enquetes/2025/abattoir-charlieu/"
+      ]
+    },
+    {
+      "id": "abattoir-cosne-2025",
+      "title": "Abattoir de Cosne-Cours-sur-Loire : le chaos absolu",
+      "year": 2025,
+      "month": 12,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "cochons",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Cosne-Cours-sur-Loire",
+      "insee": "58086",
+      "lon": 2.9419,
+      "lat": 47.414,
+      "departement": "58",
+      "region": "27",
+      "evidence": "Ces images ont été tournées à l'abattoir de Cosne-Cours-sur-Loire (Nièvre)",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/abattoir-cosne-cours-sur-loire/",
+        "https://www.l214.com/enquetes/abattoir-cosne-cours-sur-loire/"
+      ]
+    },
+    {
+      "id": "abattoir-meaux-2025",
+      "title": "Abattoir de Meaux : le chaos !",
+      "year": 2025,
+      "month": 5,
+      "site": "abattoir",
+      "species": [
+        "moutons",
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Meaux",
+      "insee": "77284",
+      "lon": 2.9035,
+      "lat": 48.9573,
+      "departement": "77",
+      "region": "11",
+      "evidence": "nos caméras ont filmé l'indicible dans l'abattoir de Meaux, en Seine-et-Marne",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/abattoir-de-meaux/"
+      ]
+    },
+    {
+      "id": "abattoir-porto-vecchio-2025",
+      "title": "Abattoir de Porto-Vecchio : pas d'exception corse pour la cruauté",
+      "year": 2025,
+      "month": 7,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "veaux",
+        "moutons",
+        "chevres"
+      ],
+      "precision": "commune",
+      "commune": "Porto-Vecchio",
+      "insee": "2A247",
+      "lon": 9.2732,
+      "lat": 41.5849,
+      "departement": "2A",
+      "region": "94",
+      "evidence": "l'abattoir public de Porto-Vecchio en Corse",
+      "notes": "Espèces d'après le texte de la page (veaux, vaches, moutons, chevreaux).",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/enquete-abattoir-porto-vecchio/"
+      ]
+    },
+    {
+      "id": "abattoir-rhone-ouest-2025",
+      "title": "Abattoir Rhône Ouest : une vraie boucherie",
+      "year": 2025,
+      "month": 1,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "cochons",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Romain-de-Popey",
+      "insee": "69234",
+      "lon": 4.5291,
+      "lat": 45.855,
+      "departement": "69",
+      "region": "84",
+      "evidence": "l'abattoir public Rhône Ouest, situé à Saint-Romain-de-Popey dans le Rhône",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/abattoir-rhone-ouest/"
+      ]
+    },
+    {
+      "id": "cochons-cooperl-rouxel-ereac-2025",
+      "title": "Black Friday Carrefour : élevages du président de la Cooperl (Éréac)",
+      "year": 2025,
+      "month": 11,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Éréac",
+      "insee": "22053",
+      "lon": -2.3426,
+      "lat": 48.2714,
+      "departement": "22",
+      "region": "53",
+      "evidence": "deux élevages intensifs de cochons situés à Plénée-Jugon et à Éréac dans les Côtes-d'Armor",
+      "group": "carrefour-cooperl-2025",
+      "urls": [
+        "https://www.l214.com/stop-cruaute/carrefour-black-friday/"
+      ]
+    },
+    {
+      "id": "cochons-cooperl-rouxel-plenee-jugon-2025",
+      "title": "Black Friday Carrefour : élevages du président de la Cooperl (Plénée-Jugon)",
+      "year": 2025,
+      "month": 11,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Plénée-Jugon",
+      "insee": "22185",
+      "lon": -2.412,
+      "lat": 48.3537,
+      "departement": "22",
+      "region": "53",
+      "evidence": "deux élevages intensifs de cochons situés à Plénée-Jugon et à Éréac dans les Côtes-d'Armor",
+      "group": "carrefour-cooperl-2025",
+      "urls": [
+        "https://www.l214.com/stop-cruaute/carrefour-black-friday/"
+      ]
+    },
+    {
+      "id": "cochons-incendie-boissiere-de-montaigu-2025",
+      "title": "Des dizaines de cochons laissés à l'agonie depuis 3 jours",
+      "year": 2025,
+      "month": 1,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "La Boissière-de-Montaigu",
+      "insee": "85025",
+      "lon": -1.1903,
+      "lat": 46.9497,
+      "departement": "85",
+      "region": "52",
+      "evidence": "un élevage intensif de cochons situé à La Boissière-de-Montaigu, en Vendée",
+      "notes": "Cochons laissés après un incendie.",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/cochons-a-l-agonie-depuis-3-jours/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-8-elevages-chatelaudren-plouagat-2025",
+      "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Châtelaudren-Plouagat)",
+      "year": 2025,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Châtelaudren-Plouagat",
+      "insee": "22206",
+      "lon": -2.9872,
+      "lat": 48.5311,
+      "departement": "22",
+      "region": "53",
+      "evidence": "Dans ces élevages situés dans les Côtes-d'Armor à Plénée-Jugon, Saint-Clet, Plouguenast-Langast…",
+      "notes": "La page liste 8 communes pour 8 élevages ; un élevage par commune est supposé.",
+      "group": "cochons-leclerc-8-elevages-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/8-elevages-leclerc/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-8-elevages-gommenech-2025",
+      "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Gommenec'h)",
+      "year": 2025,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Gommenec'h",
+      "insee": "22063",
+      "lon": -3.0481,
+      "lat": 48.6362,
+      "departement": "22",
+      "region": "53",
+      "evidence": "Dans ces élevages situés dans les Côtes-d'Armor à Plénée-Jugon, Saint-Clet, Plouguenast-Langast…",
+      "notes": "La page liste 8 communes pour 8 élevages ; un élevage par commune est supposé.",
+      "group": "cochons-leclerc-8-elevages-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/8-elevages-leclerc/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-8-elevages-lamballe-armor-2025",
+      "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Lamballe-Armor)",
+      "year": 2025,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Lamballe-Armor",
+      "insee": "22093",
+      "lon": -2.5201,
+      "lat": 48.4859,
+      "departement": "22",
+      "region": "53",
+      "evidence": "Dans ces élevages situés dans les Côtes-d'Armor à Plénée-Jugon, Saint-Clet, Plouguenast-Langast…",
+      "notes": "La page liste 8 communes pour 8 élevages ; un élevage par commune est supposé.",
+      "group": "cochons-leclerc-8-elevages-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/8-elevages-leclerc/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-8-elevages-plenee-jugon-2025",
+      "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Plénée-Jugon)",
+      "year": 2025,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Plénée-Jugon",
+      "insee": "22185",
+      "lon": -2.412,
+      "lat": 48.3537,
+      "departement": "22",
+      "region": "53",
+      "evidence": "Dans ces élevages situés dans les Côtes-d'Armor à Plénée-Jugon, Saint-Clet, Plouguenast-Langast…",
+      "notes": "La page liste 8 communes pour 8 élevages ; un élevage par commune est supposé.",
+      "group": "cochons-leclerc-8-elevages-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/8-elevages-leclerc/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-8-elevages-plestan-2025",
+      "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Plestan)",
+      "year": 2025,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Plestan",
+      "insee": "22193",
+      "lon": -2.428,
+      "lat": 48.4135,
+      "departement": "22",
+      "region": "53",
+      "evidence": "Dans ces élevages situés dans les Côtes-d'Armor à Plénée-Jugon, Saint-Clet, Plouguenast-Langast…",
+      "notes": "La page liste 8 communes pour 8 élevages ; un élevage par commune est supposé.",
+      "group": "cochons-leclerc-8-elevages-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/8-elevages-leclerc/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-8-elevages-plouguenast-langast-2025",
+      "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Plouguenast-Langast)",
+      "year": 2025,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Plouguenast-Langast",
+      "insee": "22219",
+      "lon": -2.6933,
+      "lat": 48.2802,
+      "departement": "22",
+      "region": "53",
+      "evidence": "Dans ces élevages situés dans les Côtes-d'Armor à Plénée-Jugon, Saint-Clet, Plouguenast-Langast…",
+      "notes": "La page liste 8 communes pour 8 élevages ; un élevage par commune est supposé.",
+      "group": "cochons-leclerc-8-elevages-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/8-elevages-leclerc/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-8-elevages-plouvara-2025",
+      "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Plouvara)",
+      "year": 2025,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Plouvara",
+      "insee": "22234",
+      "lon": -2.9259,
+      "lat": 48.4962,
+      "departement": "22",
+      "region": "53",
+      "evidence": "Dans ces élevages situés dans les Côtes-d'Armor à Plénée-Jugon, Saint-Clet, Plouguenast-Langast…",
+      "notes": "La page liste 8 communes pour 8 élevages ; un élevage par commune est supposé.",
+      "group": "cochons-leclerc-8-elevages-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/8-elevages-leclerc/"
+      ]
+    },
+    {
+      "id": "cochons-leclerc-8-elevages-saint-clet-2025",
+      "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Saint-Clet)",
+      "year": 2025,
+      "month": 3,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Clet",
+      "insee": "22283",
+      "lon": -3.1348,
+      "lat": 48.6694,
+      "departement": "22",
+      "region": "53",
+      "evidence": "Dans ces élevages situés dans les Côtes-d'Armor à Plénée-Jugon, Saint-Clet, Plouguenast-Langast…",
+      "notes": "La page liste 8 communes pour 8 élevages ; un élevage par commune est supposé.",
+      "group": "cochons-leclerc-8-elevages-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/8-elevages-leclerc/"
+      ]
+    },
+    {
+      "id": "cochons-lidl-finistere-2025",
+      "title": "Allô Lidl ? Élevage « Lauréat » du programme Lidl (Finistère)",
+      "year": 2025,
+      "month": 2,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "departement",
+      "departement": "29",
+      "region": "53",
+      "evidence": "des vidéos d'un autre élevage de cochons, cette fois dans le Finistère",
+      "group": "lidl-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/bien-etre-animal-lidl/"
+      ]
+    },
+    {
+      "id": "cochons-lidl-sarthe-2025",
+      "title": "Allô Lidl ? Élevage vitrine « Bien-être animal + » (Sarthe)",
+      "year": 2025,
+      "month": 2,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "departement",
+      "departement": "72",
+      "region": "52",
+      "evidence": "Cet élevage, situé dans la Sarthe, pratique des mutilations systématiques et illégales",
+      "notes": "Élevage identifié par recoupement d'informations publiques ; la page ne dit pas que des images y ont été tournées.",
+      "group": "lidl-2025",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/bien-etre-animal-lidl/"
+      ]
+    },
+    {
+      "id": "couvoir-boye-2025",
+      "title": "Stop au broyage des poussins (couvoir Boyé Accouvage)",
+      "year": 2025,
+      "month": 10,
+      "site": "couvoir",
+      "species": [
+        "poussins",
+        "pintades"
+      ],
+      "precision": "commune",
+      "commune": "La Boissière-en-Gâtine",
+      "insee": "79040",
+      "lon": -0.3808,
+      "lat": 46.5505,
+      "departement": "79",
+      "region": "75",
+      "evidence": "au couvoir Boyé Accouvage à La Boissière-en-Gâtine, dans les Deux-Sèvres",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/broyage-des-poussins/"
+      ]
+    },
+    {
+      "id": "elevage-sasso-sabres-2025",
+      "title": "Enquête dans un élevage du géant de la génétique animale (Sasso)",
+      "year": 2025,
+      "month": 6,
+      "site": "elevage",
+      "species": [
+        "poules",
+        "poulets"
+      ],
+      "precision": "commune",
+      "commune": "Sabres",
+      "insee": "40246",
+      "lon": -0.7332,
+      "lat": 44.1532,
+      "departement": "40",
+      "region": "75",
+      "evidence": "pour la reproduction sur la commune de Sabres, dans les Landes",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/elevage-sasso/"
+      ]
+    },
+    {
+      "id": "france-terre-elevages-intensifs-2025",
+      "title": "France, terre d'élevages intensifs : images et chiffres irréfutables",
+      "year": 2025,
+      "month": 11,
+      "site": "autre",
+      "siteDetail": "survols par drone de nombreux élevages et abattoirs",
+      "species": [
+        "autres"
+      ],
+      "precision": "none",
+      "evidence": "Notre enquête par drones montre l'ampleur de l'élevage intensif dans toutes les régions",
+      "notes": "Enquête nationale multi-sites (toutes régions) ; aucun site unique localisable.",
+      "urls": [
+        "https://www.l214.com/enquetes/france-terre-elevages-intensifs/"
+      ]
+    },
+    {
+      "id": "ramassage-poulets-loire-atlantique-2025",
+      "title": "FNSEA : un modèle agricole en échec (élevage de poulets)",
+      "year": 2025,
+      "month": 9,
+      "site": "elevage",
+      "species": [
+        "poulets"
+      ],
+      "precision": "departement",
+      "departement": "44",
+      "region": "52",
+      "evidence": "Dans l'élevage filmé en Loire-Atlantique, 23 500 poulets sont entassés",
+      "urls": [
+        "https://www.l214.com/enquetes/2025/ramassage-poulets-france/"
+      ]
+    },
+    {
+      "id": "abattoir-cooperl-montfort-2026",
+      "title": "Cochons gazés à l'abattoir Cooperl de Montfort-sur-Meu",
+      "year": 2026,
+      "month": 10,
+      "site": "abattoir",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Montfort-sur-Meu",
+      "insee": "35188",
+      "lon": -1.9582,
+      "lat": 48.1273,
+      "departement": "35",
+      "region": "53",
+      "evidence": "l'abattoir Cooperl de Montfort-sur-Meu, en Ille-et-Vilaine (Bretagne)",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/abattoir-cooperl-montfort/"
+      ]
+    },
+    {
+      "id": "abattoir-lamentin-2026",
+      "title": "Cumul d'infractions à l'abattoir du Lamentin (Martinique)",
+      "year": 2026,
+      "month": 3,
+      "site": "abattoir",
+      "species": [
+        "bovins",
+        "veaux"
+      ],
+      "precision": "outremer",
+      "commune": "Le Lamentin",
+      "insee": "97213",
+      "lon": -60.9923,
+      "lat": 14.6231,
+      "departement": "972",
+      "region": "02",
+      "evidence": "l'abattoir public du Lamentin, en Martinique",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/abattoir-martinique/"
+      ]
+    },
+    {
+      "id": "abattoir-perpignan-2026",
+      "title": "Cruauté et infractions à l'abattoir de Perpignan",
+      "year": 2026,
+      "month": 8,
+      "site": "abattoir",
+      "species": [
+        "cochons",
+        "bovins",
+        "moutons"
+      ],
+      "precision": "commune",
+      "commune": "Perpignan",
+      "insee": "66136",
+      "lon": 2.9045,
+      "lat": 42.699,
+      "departement": "66",
+      "region": "76",
+      "evidence": "des caméras ont filmé ce qui se passe à l'abattoir de Perpignan",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/abattoir-perpignan/"
+      ]
+    },
+    {
+      "id": "cailles-carrefour-grosbreuil-2026",
+      "title": "Élevage de cailles Filière Qualité Carrefour",
+      "year": 2026,
+      "month": 2,
+      "site": "elevage",
+      "species": [
+        "cailles"
+      ],
+      "precision": "commune",
+      "commune": "Grosbreuil",
+      "insee": "85103",
+      "lon": -1.5955,
+      "lat": 46.539,
+      "departement": "85",
+      "region": "52",
+      "evidence": "un élevage de cailles vendéen (Grosbreuil)",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/cailles-carrefour/"
+      ]
+    },
+    {
+      "id": "canards-carrefour-sevremoine-2026",
+      "title": "Ni mare, ni ciel, ni terre pour les canards de Carrefour",
+      "year": 2026,
+      "month": 9,
+      "site": "elevage",
+      "species": [
+        "canards"
+      ],
+      "precision": "commune",
+      "commune": "Sèvremoine",
+      "insee": "49301",
+      "lon": -1.0968,
+      "lat": 47.0878,
+      "departement": "49",
+      "region": "52",
+      "evidence": "un élevage de canards de Barbarie de Sèvremoine (49)",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/elevage-canards-carrefour/"
+      ]
+    },
+    {
+      "id": "charnier-eureden-henon-2026",
+      "title": "300 cochons retrouvés morts dans un élevage Eureden (Hénon)",
+      "year": 2026,
+      "month": 8,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Hénon",
+      "insee": "22079",
+      "lon": -2.6898,
+      "lat": 48.3885,
+      "departement": "22",
+      "region": "53",
+      "evidence": "un élevage porcin situé à Hénon et à Saint-Carreuc, dans les Côtes-d'Armor",
+      "notes": "Une seule exploitation dont les bâtiments sont répartis sur deux communes.",
+      "group": "charnier-eureden-2026",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/charnier-elevage-cochons-eureden/"
+      ]
+    },
+    {
+      "id": "charnier-eureden-saint-carreuc-2026",
+      "title": "300 cochons retrouvés morts dans un élevage Eureden (Saint-Carreuc)",
+      "year": 2026,
+      "month": 8,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Carreuc",
+      "insee": "22281",
+      "lon": -2.7471,
+      "lat": 48.4017,
+      "departement": "22",
+      "region": "53",
+      "evidence": "un élevage porcin situé à Hénon et à Saint-Carreuc, dans les Côtes-d'Armor",
+      "notes": "Une seule exploitation dont les bâtiments sont répartis sur deux communes.",
+      "group": "charnier-eureden-2026",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/charnier-elevage-cochons-eureden/"
+      ]
+    },
+    {
+      "id": "cochons-evelup-lannilis-2026",
+      "title": "Situation d'urgence : élevage délabré (Lannilis)",
+      "year": 2026,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Lannilis",
+      "insee": "29117",
+      "lon": -4.5244,
+      "lat": 48.5719,
+      "departement": "29",
+      "region": "53",
+      "evidence": "l'élevage porcin (EARL Omnes - Coopérative Evel'Up) situé sur la commune de Lannilis",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/elevage-cochons-evelup/"
+      ]
+    },
+    {
+      "id": "cochons-jean-floch-2026",
+      "title": "Derrière le jambon, l'enfer des cochons (Jean Floc'h)",
+      "year": 2026,
+      "month": 7,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Saint-Méen",
+      "insee": "29255",
+      "lon": -4.2586,
+      "lat": 48.5542,
+      "departement": "29",
+      "region": "53",
+      "evidence": "un élevage intensif de cochons du Finistère en Bretagne (Saint-Méen)",
+      "notes": "Ne pas confondre avec Saint-Méen-le-Grand (Ille-et-Vilaine).",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/elevage-cochons-jean-floch/"
+      ]
+    },
+    {
+      "id": "dindes-carrefour-sevremoine-2026",
+      "title": "126 jours dans leurs déjections pour Carrefour (dindes)",
+      "year": 2026,
+      "month": 5,
+      "site": "elevage",
+      "species": [
+        "dindes"
+      ],
+      "precision": "commune",
+      "commune": "Sèvremoine",
+      "insee": "49301",
+      "lon": -1.0968,
+      "lat": 47.0878,
+      "departement": "49",
+      "region": "52",
+      "evidence": "un élevage intensif de dindes à Sèvremoine, dans le Maine-et-Loire",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/elevage-ramassage-dindes/",
+        "https://www.l214.com/enquetes/elevage-ramassage-dindes/"
+      ]
+    },
+    {
+      "id": "elevage-laitier-prince-2026",
+      "title": "Une ferme laitière à la dérive en Ille-et-Vilaine",
+      "year": 2026,
+      "month": 7,
+      "site": "elevage",
+      "species": [
+        "bovins"
+      ],
+      "precision": "commune",
+      "commune": "Princé",
+      "insee": "35232",
+      "lon": -1.1028,
+      "lat": 48.2393,
+      "departement": "35",
+      "region": "53",
+      "evidence": "un élevage de 100 vaches laitières situé sur la commune de Princé, en Ille-et-Vilaine",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/elevage-laitier-prince/"
+      ]
+    },
+    {
+      "id": "lapins-carrefour-beaupreau-2026",
+      "title": "Carrefour : ne soldons plus leurs vies ! (élevage de lapins)",
+      "year": 2026,
+      "month": 1,
+      "site": "elevage",
+      "species": [
+        "lapins"
+      ],
+      "precision": "commune",
+      "commune": "Beaupréau-en-Mauges",
+      "insee": "49023",
+      "lon": -0.9844,
+      "lat": 47.2028,
+      "departement": "49",
+      "region": "52",
+      "evidence": "un élevage de lapins à Beaupréau-en-Mauges (Maine-et-Loire)",
+      "notes": "La liste indique « janvier 2025 » mais la page et la chronologie Carrefour datent la publication du 22 janvier 2026.",
+      "urls": [
+        "https://www.l214.com/stop-intensif/carrefour-soldes/"
+      ]
+    },
+    {
+      "id": "truies-maternite-kergrist-2026",
+      "title": "Mutilés à vif et laissés pour morts (maternité Eureden)",
+      "year": 2026,
+      "month": 4,
+      "site": "elevage",
+      "species": [
+        "cochons"
+      ],
+      "precision": "commune",
+      "commune": "Kergrist",
+      "insee": "56093",
+      "lon": -2.9292,
+      "lat": 48.1454,
+      "departement": "56",
+      "region": "53",
+      "evidence": "Dans cette maternité collective Eureden située à Kergrist dans le Morbihan",
+      "urls": [
+        "https://www.l214.com/enquetes/2026/truies-maternite-eureden/"
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "url": "https://www.l214.com/enquetes/2021/poules-au-sol/",
+      "reason": "Article explicatif (« 7 choses à savoir sur l'élevage des poules au sol ») et pétition, sans enquête propre."
+    },
+    {
+      "url": "https://www.l214.com/enquetes/2014/foie-gras-ce-que-ne-vous-diront-pas-les-producteurs/",
+      "reason": "Page de campagne explicative sur le gavage, sans enquête identifiable."
+    },
+    {
+      "url": "https://www.l214.com/enquetes/2022/derogation-broyage-poussins/",
+      "reason": "Pétition contre les dérogations au broyage des poussins ; renvoie à des enquêtes déjà recensées."
+    },
+    {
+      "url": "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/",
+      "reason": "Page portail de la campagne présidentielle 2022 regroupant plusieurs enquêtes recensées séparément."
+    },
+    {
+      "url": "https://www.l214.com/enquetes/les-rapports-de-l214/",
+      "reason": "Index des rapports d'enquête (aucune enquête propre)."
+    },
+    {
+      "url": "https://www.l214.com/enquetes/videos/",
+      "reason": "Index vidéo des enquêtes (même contenu que la liste) ; les URL /enquetes/<année>/ redirigent ici."
+    },
+    {
+      "url": "https://www.l214.com/enquetes/",
+      "reason": "Page liste des enquêtes (source)."
+    },
+    {
+      "url": "https://stop-foie-gras.com/foie-gras-satirique-hollande-trierweiler",
+      "reason": "Vidéo satirique (campagne), pas une enquête."
+    },
+    {
+      "url": "https://stop-foie-gras.com/foie-gras-idees-recues-denis-vincenti",
+      "reason": "Clip de campagne tourné au Salon du foie gras de Samatan ; réutilise les images de l'enquête Sud-Ouest 2012."
+    },
+    {
+      "url": "https://www.l214.com/actualites/enquete-quebec/",
+      "reason": "Enquête d'une association québécoise (Réseau Action Globale), relayée par L214."
+    },
+    {
+      "url": "https://www.l214.com/actualites/une-nouvelle-enquete-montre-horreur-un-abattoir-espagnol/",
+      "reason": "Enquête de l'association espagnole Equalia, relayée par L214."
+    },
+    {
+      "url": "https://www.l214.com/actualites/anne-sophie-pic/",
+      "reason": "Pétition ; images diffusées par la presse anglaise, pas une enquête de L214."
+    },
+    {
+      "url": "https://www.l214.com/actualites/des-chiens-eleves-pour-les-laboratoires/",
+      "reason": "Renvoie à un article du blog L214 (blog.l214.com) sur un élevage de beagles en Auvergne ; enquête non attribuable à L214 ni localisable depuis www.l214.com."
+    },
+    {
+      "url": "https://www.l214.com/abattoir/elevage-abattage-animaux-ferme/",
+      "reason": "Galerie de photos 2004, 2007 et 2008 sans enquête identifiable."
+    },
+    {
+      "url": "https://www.l214.com/d/20110103-action-lapins-strasbourg-old/",
+      "reason": "Action de sensibilisation d'Animalsace et L214 après des enquêtes non décrites."
+    },
+    {
+      "url": "https://www.l214.com/actualites/images-l214-elevage-intensif-sur-fr3/",
+      "reason": "Annonce d'une diffusion télévisée d'images L214 déjà existantes."
+    },
+    {
+      "url": "https://www.l214.com/d/une-video-par-jour-notre-ministre-de-lagriculture-sera-t-il-aussi-fier/",
+      "reason": "Page de présentation de la série « 9 enquêtes » du Salon de l'agriculture 2011 ; les enquêtes de la série sont recensées séparément."
+    },
+    {
+      "url": "https://www.l214.com/stop-cruaute/legaulois-2022/",
+      "reason": "Page de campagne LDC/Le Gaulois récapitulant des enquêtes recensées séparément."
+    },
+    {
+      "url": "https://www.l214.com/stop-cruaute/leclerc-elevages-illegaux/",
+      "reason": "Page de campagne E.Leclerc récapitulant des enquêtes recensées séparément."
+    },
+    {
+      "url": "https://www.l214.com/stop-cruaute/mel-president/",
+      "reason": "Page de campagne E.Leclerc (2026) récapitulant des enquêtes recensées séparément."
+    },
+    {
+      "url": "https://www.l214.com/stop-cruaute/carrefour-noel/",
+      "reason": "Page de campagne Carrefour ; enquête Plénée-Jugon/Éréac recensée séparément."
+    },
+    {
+      "url": "https://www.l214.com/stop-intensif/carrefour-portrait/",
+      "reason": "Page de campagne Carrefour récapitulant des enquêtes recensées séparément."
+    },
+    {
+      "url": "https://www.l214.com/stop-intensif/carrefour-brade-la-vie-des-animaux/",
+      "reason": "Page de campagne Carrefour récapitulant des enquêtes recensées séparément."
+    },
+    {
+      "url": "https://www.l214.com/stop-intensif/la-rentree-de-carrefour/",
+      "reason": "Page de campagne Carrefour récapitulant des enquêtes recensées séparément."
+    }
+  ]
+}

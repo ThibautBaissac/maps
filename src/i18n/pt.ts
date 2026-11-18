@@ -106,6 +106,23 @@ export const pt: Messages = {
       legendBlock: 'Torre de um só bloco',
       legendOther: 'Outros edifícios',
     },
+    investigations: {
+      sites: { abattoir: 'Matadouro', elevage: 'Exploração', couvoir: 'Incubadora', transport: 'Transporte', autre: 'Outro local' },
+      count: { one: '{count} investigação', other: '{count} investigações' },
+      concentration: (region, share) => `${region}: ${share} % das investigações situadas no mapa.`,
+      empty: 'Nenhuma investigação do registo está situada na França metropolitana.',
+      distribution: 'Investigações situadas, por região',
+      distributionHelp: 'Uma investigação situada apenas no seu departamento ou região conta na sua região. As investigações sem local não entram nesta contagem.',
+      unlocated: 'Investigações sem local no mapa',
+      unlocatedHelp: 'A sua página não situa nenhum local na França metropolitana: transportes, pesca no mar, locais sem nome, ultramar ou estrangeiro.',
+      source: (date) => `Registo das investigações publicadas em l214.com/enquetes, à data de ${date}, com cada local retirado da página da investigação. Fundo: departamentos IGN Admin Express (Licence Ouverte), rios Natural Earth (domínio público).`,
+      dataFile: 'Consultar o registo das investigações (JSON)',
+      legendDepartement: 'Só se conhece o departamento',
+      legendRegion: 'Só se conhece a região',
+      legendReferences: 'Departamentos com mais investigações',
+      legendContext: 'Departamentos, rios principais',
+      margin: 'SEM LOCAL NO MAPA',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -132,6 +149,12 @@ export const pt: Messages = {
       method: 'Uma torre é um edifício do OSM com pelo menos 80 m, partes incluídas, cujo centro fica no quadrado. Altura: etiqueta height, senão building:levels × 3,2 m. Cada parte de edifício (building:part) é atribuída ao contorno que contém o seu centro. Uma torre sobe em degraus quando as suas partes formam pelo menos três patamares (alturas arredondadas a 6 m) e o patamar superior cobre menos de 60 % da sua implantação. O período segue a data de início da obra (start_date): antes de 1916, de 1916 a 1960 ao abrigo do regulamento de zonamento de 1916, a partir de 1961 ao abrigo do de 1961.',
       limits: 'A deteção é automática: uma flecha cartografada como parte conta como patamar, e um recuo desenhado numa só peça pode passar despercebido. As torres sem partes no OSM ou sem data não são classificadas. O regulamento de 1916 fixava um envelope, não uma forma: um degrau também pode ser escolha do arquiteto, e uma torre autorizada antes de 1961 pode ter sido iniciada depois. O relevo é esquemático: vista oblíqua sem perspetiva, sombras simbólicas.',
     },
+    investigations: {
+      metric: 'investigações situadas no mapa, no total do registo',
+      legend: 'Quadrado vermelho: matadouro. Disco vermelho: exploração. Triângulo vermelho: incubadora, transporte ou outro local. Cada marca assinala o município da investigação. Tracejado vermelho denso: departamento de uma investigação cuja página não indica o município; tracejado espaçado: região, quando só se conhece a região. Círculos numerados: departamentos com mais investigações. Traços cinzentos: limites dos departamentos e grandes rios.',
+      method: 'Cada investigação listada em l214.com/enquetes foi aberta e situada a partir da sua própria página: o município do local quando é indicado; caso contrário, o departamento ou a região. Os municípios são colocados no seu centro segundo geo.api.gouv.fr. Uma investigação feita em vários locais situados separadamente conta uma vez por local. As páginas duplicadas (investigação comentada, novas imagens) são agrupadas. O ano é o da publicação. Os locais sem localização de uma mesma investigação são citados uma só vez. Só se mantêm as investigações publicadas desde 2008, ano de criação da L214; as imagens recebidas de terceiros são excluídas.',
+      limits: 'O registo só contém as investigações listadas no site; a L214 anuncia mais. A distribuição reflete o acesso aos locais e aos denunciantes, não a frequência dos maus-tratos. Uma marca situa um município, não a morada do local. Os títulos são os publicados pela L214, em francês. A projeção, simples e centrada em França, deforma um pouco as margens. A França ultramarina não está representada.',
+    },
   },
   maps: {
     'amsterdam-riso': {
@@ -150,9 +173,14 @@ export const pt: Messages = {
       question: 'Porque é que as torres de Midtown construídas entre 1916 e 1961 sobem em degraus?',
       intro: 'Olhe para a maqueta de cima: as torres dessa época recuam em degraus à medida que sobem. O regulamento de 1916 exigia-o, para que a luz continuasse a chegar à rua. Em 1961, outra lei abandona a regra, e nos anos 1970 a maioria das torres ergue-se num só bloco.',
     },
+    'france-dossier': {
+      question: 'Onde investigou a L214 desde 2008?',
+      intro: 'Cada marca situa uma investigação publicada: um matadouro, uma exploração, uma incubadora. Quando só se conhece o departamento ou a região, a zona inteira fica tracejada em vez de receber um ponto inventado. As investigações sem local são citadas à parte.',
+    },
   },
   places: {
     'amsterdam-centre': { name: 'Amesterdão', district: 'Centro histórico' },
+    france: { name: 'França', district: 'França metropolitana' },
     'lisbonne-alfama': { name: 'Lisboa', district: 'Alfama' },
     'londres-soho': { name: 'Londres', district: 'Soho' },
     'new-york-midtown': { name: 'Nova Iorque', district: 'Midtown' },
@@ -163,8 +191,13 @@ export const pt: Messages = {
     history: 'História',
     health: 'Saúde',
     architecture: 'Arquitetura',
+    animals: 'Animais',
   },
   styles: {
+    dossier: {
+      label: 'Mapa de processo',
+      legend: ['País: contorno a tinta, departamentos e grandes rios a cinzento.', 'Marcas vermelhas: a forma indica o tipo de local (quadrado, disco, triângulo).', 'Tracejado vermelho: denso para um departamento, espaçado para uma região, quando não se conhece o município.', 'Ficha agrafada: legenda e lista das investigações sem local.'],
+    },
     'art-deco': {
       label: 'Cartaz art déco em relevo',
       legend: ['Edifícios: volumes em relevo à altura do OSM.', 'Ruas: faixas claras entre os volumes.', 'Água: cor lisa azul-noite.', 'Parques e jardins: cor lisa verde.'],

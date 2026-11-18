@@ -57,7 +57,7 @@ test('a shared map link shows its question, its description and its landscape pi
 
 test('a gallery is titled and described by the places it holds', () => {
   const html = galleryHtml('fr', '/atlas/', SITE);
-  assert.match(html, /<title>Cartes illustrées — Amsterdam, Lisbonne, Londres et New York<\/title>/);
+  assert.match(html, /<title>Cartes illustrées — Amsterdam, Lisbonne, Londres, New York et France<\/title>/);
   const description = contentOf(html, 'name', 'description') ?? '';
   assert.match(description, /Centre historique \(Amsterdam\), Alfama \(Lisbonne\), Soho \(Londres\)/);
   assert.ok(description.length <= 160);

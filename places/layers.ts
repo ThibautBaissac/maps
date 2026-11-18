@@ -13,7 +13,62 @@ const SNOW_CREDIT = {
   de: 'John Snow, 1855 (gemeinfrei), für diese Website digitalisiert',
 };
 
+// Credit of the investigations register, compiled for this site from L214's public pages.
+const L214_CREDIT = {
+  fr: 'Enquêtes : relevé pour ce site d’après l214.com/enquetes',
+  en: 'Investigations: compiled for this site from l214.com/enquetes',
+  es: 'Investigaciones: recopiladas para este sitio a partir de l214.com/enquetes',
+  pt: 'Investigações: compiladas para este site a partir de l214.com/enquetes',
+  de: 'Recherchen: für diese Website zusammengestellt nach l214.com/enquetes',
+};
+
 export const LAYERS: { readonly [P in PlaceId]?: Readonly<Record<string, LayerSource>> } = {
+  france: {
+    // Départements of metropolitan France and their region code: simplified IGN Admin Express
+    // COG 2018 outlines from https://github.com/gregoiredavid/france-geojson (Licence Ouverte),
+    // region codes from https://geo.api.gouv.fr/departements, downloaded 2026-11-18.
+    departements: {
+      title: { fr: 'Départements', en: 'Départements', es: 'Departamentos', pt: 'Departamentos', de: 'Départements' },
+      file: 'layers/france/departements.geojson',
+      kind: 'areas',
+      role: 'base',
+      attribution: { fr: 'IGN, Admin Express (Licence Ouverte)', en: 'IGN, Admin Express (Licence Ouverte)', es: 'IGN, Admin Express (Licence Ouverte)', pt: 'IGN, Admin Express (Licence Ouverte)', de: 'IGN, Admin Express (Licence Ouverte)' },
+      nameField: 'nom',
+      categoryField: 'code',
+    },
+    // Main rivers: Natural Earth 1:10m rivers and lake centerlines (public domain),
+    // https://github.com/nvkelso/natural-earth-vector, downloaded 2026-11-18, names in French.
+    fleuves: {
+      title: { fr: 'Grands cours d’eau', en: 'Main rivers', es: 'Ríos principales', pt: 'Rios principais', de: 'Große Flüsse' },
+      file: 'layers/france/fleuves.geojson',
+      kind: 'lines',
+      role: 'base',
+      attribution: { fr: 'Natural Earth (domaine public)', en: 'Natural Earth (public domain)', es: 'Natural Earth (dominio público)', pt: 'Natural Earth (domínio público)', de: 'Natural Earth (gemeinfrei)' },
+      nameField: 'name',
+    },
+    // Capitals of the 13 metropolitan regions, for orientation: commune centres from
+    // https://geo.api.gouv.fr (Licence Ouverte), downloaded 2026-11-18.
+    villes: {
+      title: { fr: 'Chefs-lieux de région', en: 'Regional capitals', es: 'Capitales regionales', pt: 'Capitais regionais', de: 'Regionshauptstädte' },
+      file: 'layers/france/villes.geojson',
+      kind: 'points',
+      role: 'base',
+      attribution: { fr: 'geo.api.gouv.fr (Licence Ouverte)', en: 'geo.api.gouv.fr (Licence Ouverte)', es: 'geo.api.gouv.fr (Licence Ouverte)', pt: 'geo.api.gouv.fr (Licence Ouverte)', de: 'geo.api.gouv.fr (Licence Ouverte)' },
+      nameField: 'nom',
+    },
+    // Investigations published on https://www.l214.com/enquetes/, located from their own pages
+    // and geocoded with https://geo.api.gouv.fr (Licence Ouverte), 2026-11-18. Method in
+    // layers/france/README.md.
+    enquetes: {
+      title: { fr: 'Enquêtes de L214', en: 'L214 investigations', es: 'Investigaciones de L214', pt: 'Investigações da L214', de: 'Recherchen von L214' },
+      file: 'layers/france/enquetes.geojson',
+      kind: 'points',
+      role: 'overlay',
+      attribution: L214_CREDIT,
+      nameField: 'title',
+      categoryField: 'site',
+    },
+  },
   'lisbonne-alfama': {
     // Elementos de Água, Município de Lisboa (CC0), TIPOLOGIA = Chafariz inside the square:
     // https://dados.gov.pt/datasets/elementos-de-agua, downloaded 2026-11-16.

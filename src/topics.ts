@@ -4,15 +4,17 @@ import { featuresOf, isBridge, isTunnel, type Feature, type Layer, type Line, ty
 import type { Point, Rect } from './toolkit/geometry.ts';
 import { analyseCholera, type CholeraEvidence } from './cholera.ts';
 import { analyseSetbacks, type SetbackEvidence, type Tower } from './setbacks.ts';
+import { analyseInvestigations, type InvestigationEvidence } from './investigations.ts';
+import { UNLOCATED_INVESTIGATIONS } from '../places/investigations.ts';
 
-export const TOPIC_IDS = ['canal-crossings', 'steps', 'cholera-pump', 'setbacks'] as const;
+export const TOPIC_IDS = ['canal-crossings', 'steps', 'cholera-pump', 'setbacks', 'investigations'] as const;
 export type TopicId = (typeof TOPIC_IDS)[number];
 /** Subjects measured as lengths of selected street geometry. */
-export type LinearTopicId = Exclude<TopicId, 'cholera-pump' | 'setbacks'>;
+export type LinearTopicId = Exclude<TopicId, 'cholera-pump' | 'setbacks' | 'investigations'>;
 export const isTopicId = (value: string): value is TopicId => (TOPIC_IDS as readonly string[]).includes(value);
 
 /** Themes the gallery filters by; their labels are under themes.<id> in the dictionaries. */
-export const THEME_IDS = ['water', 'relief', 'history', 'health', 'architecture'] as const;
+export const THEME_IDS = ['water', 'relief', 'history', 'health', 'architecture', 'animals'] as const;
 export type ThemeId = (typeof THEME_IDS)[number];
 /** The themes of each subject, most specific first: every map of the subject shares them. */
 export const TOPIC_THEMES: Record<TopicId, readonly ThemeId[]> = {
@@ -20,6 +22,7 @@ export const TOPIC_THEMES: Record<TopicId, readonly ThemeId[]> = {
   steps: ['relief'],
   'cholera-pump': ['history', 'health', 'water'],
   setbacks: ['architecture', 'history'],
+  investigations: ['animals'],
 };
 
 /** A numbered reference on the map and in the panel. */
@@ -56,7 +59,13 @@ export interface SetbackTopic extends SetbackEvidence {
   places: (TopicMark & { tower: Tower })[];
 }
 
-export type TopicAnalysis = LinearTopic | CholeraTopic | SetbackTopic;
+export interface InvestigationTopic extends InvestigationEvidence {
+  id: 'investigations';
+  /** The three départements with the most investigations placed on the map, apart. */
+  places: (TopicMark & { code: string; count: number })[];
+}
+
+export type TopicAnalysis = LinearTopic | CholeraTopic | SetbackTopic | InvestigationTopic;
 
 const EPS = 1e-8;
 const lengthOf = (p: Line): number => {
@@ -136,8 +145,10 @@ function crosses(a: Line, b: Line): boolean {
 export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: LinearTopicId): LinearTopic;
 export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: 'cholera-pump'): CholeraTopic;
 export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: 'setbacks'): SetbackTopic;
+export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: 'investigations'): InvestigationTopic;
 export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: TopicId): TopicAnalysis;
 export function analyseTopic(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: TopicId): TopicAnalysis {
+  if (id === 'investigations') return investigationTopic(analyseInvestigations(layers, UNLOCATED_INVESTIGATIONS), survey.half);
   if (id === 'cholera-pump') {
     const evidence = analyseCholera(layers);
     const broad = evidence.pumps.find((p) => p.broad);
@@ -204,4 +215,19 @@ function setbackTopic(evidence: SetbackEvidence, half: number): SetbackTopic {
   const block = named.find((t) => t.period === 'zoning-1961' && t.form === 'block');
   if (block) chosen.push(block);
   return { id: 'setbacks', ...evidence, places: chosen.map((tower) => ({ name: tower.name!, point: tower.point, tower })) };
+}
+
+/** Numbered references: the départements with the most investigations, at least a tenth of the square apart. */
+function investigationTopic(evidence: InvestigationEvidence, half: number): InvestigationTopic {
+  const ranked = evidence.departements.map((d) => ({ d, count: evidence.byDepartement.get(d.code) ?? 0 }))
+    .filter(({ count }) => count > 0)
+    .sort((a, b) => b.count - a.count || a.d.code.localeCompare(b.d.code));
+  const places: InvestigationTopic['places'] = [];
+  for (const { d, count } of ranked) {
+    if (places.every((p) => Math.hypot(p.point[0] - d.centre[0], p.point[1] - d.centre[1]) > half * 0.1)) {
+      places.push({ name: d.name, point: d.centre, code: d.code, count });
+    }
+    if (places.length === 3) break;
+  }
+  return { id: 'investigations', ...evidence, places };
 }

@@ -73,6 +73,8 @@ Hauteurs des bâtiments et des parties, en mètres : `h` le sommet (tag `height`
 
 Les couches extérieures ont le rôle `overlay` et se dessinent par-dessus la carte (`drawLayers()`).
 
+Un lieu trop grand pour un extrait OpenStreetMap (un pays) porte `basemap: { date }` dans `places/index.ts`. Il n'a pas de fichier `osm.json` : son fond est fait de couches extérieures de rôle `base`, déclarées dans `places/layers.ts` et attachées à la carte comme les autres. `drawLayers()` les ignore ; le style les lit avec `featuresOf(layers, 'base', kind)`. `meta.osmDate` vaut alors la date du fond, et la page n'affiche pas le crédit OSM. `dossier/` dessine un tel lieu.
+
 Pour lire les couches, ne pas chercher une couche par son `id` : `featuresOf(layers, role, kind)` renvoie les objets de toutes les couches d'un rôle et d'un genre, dans l'ordre des couches. `isBridge(f)` et `isTunnel(f)` lisent les propriétés `p.bridge` et `p.tunnel` d'une route ou d'un cours d'eau. `RoadKind` (valeurs `highway` retenues) et `isRoadKind()` sont dans le même module.
 
 ## Boîte à outils

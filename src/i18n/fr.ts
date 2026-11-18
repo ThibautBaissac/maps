@@ -105,6 +105,23 @@ export const fr: Messages = {
       legendBlock: 'Tour d’un seul bloc',
       legendOther: 'Autres bâtiments',
     },
+    investigations: {
+      sites: { abattoir: 'Abattoir', elevage: 'Élevage', couvoir: 'Couvoir', transport: 'Transport', autre: 'Autre site' },
+      count: { one: '{count} enquête', other: '{count} enquêtes' },
+      concentration: (region, share) => `Région ${region} : ${share} % des enquêtes situées sur la carte.`,
+      empty: 'Aucune enquête du relevé n’est située en France métropolitaine.',
+      distribution: 'Enquêtes situées, par région',
+      distributionHelp: 'Une enquête située seulement au département ou à la région compte dans sa région. Les enquêtes sans lieu ne figurent pas dans ce décompte.',
+      unlocated: 'Enquêtes sans lieu sur la carte',
+      unlocatedHelp: 'Leur page ne situe aucun site en France métropolitaine : transports, pêche en mer, sites non nommés, outre-mer ou étranger.',
+      source: (date) => `Relevé des enquêtes publiées sur l214.com/enquetes, arrêté au ${date}, chaque lieu tiré de la page de l’enquête. Fond : départements IGN Admin Express (Licence Ouverte), cours d’eau Natural Earth (domaine public).`,
+      dataFile: 'Consulter le relevé des enquêtes (JSON)',
+      legendDepartement: 'Seul le département est connu',
+      legendRegion: 'Seule la région est connue',
+      legendReferences: 'Départements aux plus d’enquêtes',
+      legendContext: 'Départements, grands cours d’eau',
+      margin: 'SANS LIEU SUR LA CARTE',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -131,6 +148,12 @@ export const fr: Messages = {
       method: 'Une tour est un bâtiment OSM d’au moins 80 m, parties comprises, dont le centre se trouve dans le carré. Hauteur : tag height, sinon building:levels × 3,2 m. Chaque partie de bâtiment (building:part) est rattachée au contour qui contient son centre. Une tour monte en gradins quand ses parties forment au moins trois paliers (hauteurs arrondies à 6 m) et que son palier supérieur couvre moins de 60 % de son emprise. La période suit la date de début des travaux (start_date) : avant 1916, de 1916 à 1960 sous le règlement de zonage de 1916, à partir de 1961 sous celui de 1961.',
       limits: 'La détection est automatique : une flèche cartographiée comme partie compte comme un palier, et un retrait dessiné d’un seul tenant peut passer inaperçu. Les tours sans parties dans OSM ou sans date ne sont pas classées. Le règlement de 1916 fixait une enveloppe, pas une forme : un gradin peut aussi être un choix d’architecte, et une tour autorisée avant 1961 a pu être commencée après. Le relief est schématique : vue oblique sans perspective, ombres symboliques.',
     },
+    investigations: {
+      metric: 'enquêtes situées sur la carte, sur l’ensemble du relevé',
+      legend: 'Carré rouge : abattoir. Disque rouge : élevage. Triangle rouge : couvoir, transport ou autre site. Chaque marque désigne la commune de l’enquête. Hachures rouges serrées : département d’une enquête dont la page ne nomme pas la commune ; hachures espacées : région, quand seule la région est connue. Cercles numérotés : départements qui comptent le plus d’enquêtes. Traits gris : limites des départements et grands cours d’eau.',
+      method: 'Chaque enquête listée sur l214.com/enquetes a été ouverte et située d’après sa propre page : commune du site quand elle est nommée, sinon département ou région. Les communes sont placées à leur centre selon geo.api.gouv.fr. Une enquête menée sur plusieurs sites situés séparément compte une fois par site. Les pages en double (enquête commentée, nouvelles images) sont regroupées. L’année est celle de la publication. Les sites sans lieu d’une même enquête sont cités une seule fois. Seules les enquêtes publiées depuis 2008, année de création de L214, sont retenues ; les images reçues de tiers sont écartées.',
+      limits: 'Le relevé ne contient que les enquêtes listées sur le site ; L214 en annonce davantage. La répartition reflète l’accès aux lieux et les lanceurs d’alerte, pas la fréquence des mauvais traitements. Une marque situe une commune, pas l’adresse du site. Les titres restent ceux publiés par L214, en français. La projection, simple et centrée sur la France, déforme un peu les bords. L’outre-mer n’est pas représenté.',
+    },
   },
   maps: {
     'amsterdam-riso': {
@@ -149,9 +172,14 @@ export const fr: Messages = {
       question: 'Pourquoi les tours de Midtown construites entre 1916 et 1961 montent-elles en gradins ?',
       intro: 'Regardez la maquette d’en haut : les tours de cette époque reculent par marches à mesure qu’elles montent. Le règlement de 1916 l’exigeait, pour que la lumière descende encore jusqu’à la rue. En 1961, une autre loi l’abandonne, et dans les années 1970 la plupart des tours se dressent d’un seul bloc.',
     },
+    'france-dossier': {
+      question: 'Où L214 a-t-elle enquêté depuis 2008 ?',
+      intro: 'Chaque marque situe une enquête publiée : un abattoir, un élevage, un couvoir. Quand seul le département ou la région est connu, la zone entière est hachurée plutôt qu’un point inventé. Les enquêtes sans lieu sont citées à part.',
+    },
   },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Centre historique' },
+    france: { name: 'France', district: 'Métropole' },
     'lisbonne-alfama': { name: 'Lisbonne', district: 'Alfama' },
     'londres-soho': { name: 'Londres', district: 'Soho' },
     'new-york-midtown': { name: 'New York', district: 'Midtown' },
@@ -162,8 +190,13 @@ export const fr: Messages = {
     history: 'Histoire',
     health: 'Santé',
     architecture: 'Architecture',
+    animals: 'Animaux',
   },
   styles: {
+    dossier: {
+      label: 'Carte de dossier d’enquête',
+      legend: ['Pays : contour à l’encre, départements et grands cours d’eau en gris.', 'Repères rouges : la forme indique le type de lieu (carré, disque, triangle).', 'Hachures rouges : serrées pour un département, espacées pour une région, quand la commune n’est pas connue.', 'Fiche agrafée : légende et liste des enquêtes sans lieu.'],
+    },
     'art-deco': {
       label: 'Affiche art déco en relief',
       legend: ['Bâtiments : volumes en relief à la hauteur OSM.', 'Rues : bandes claires entre les volumes.', 'Eau : aplat bleu nuit.', 'Parcs et jardins : aplat vert.'],

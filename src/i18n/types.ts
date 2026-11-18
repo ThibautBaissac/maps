@@ -3,6 +3,7 @@ import type { MapId } from '../registry.ts';
 import type { StyleKey } from '../styles/index.ts';
 import type { ThemeId, TopicId } from '../topics.ts';
 import type { PeriodId } from '../setbacks.ts';
+import type { SiteKind } from '../investigations.ts';
 
 export const LOCALES = ['fr', 'en', 'es', 'pt', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -138,6 +139,31 @@ export interface Messages {
       legendStepped: string;
       legendBlock: string;
       legendOther: string;
+    };
+    /** Strings of the L214 investigations subject (topic investigations). */
+    investigations: {
+      /** Kinds of site, as row and legend labels. */
+      sites: Record<SiteKind, string>;
+      /** A number of investigations. */
+      count: PluralMessage;
+      concentration: (region: string, share: string) => string;
+      empty: string;
+      distribution: string;
+      distributionHelp: string;
+      unlocated: string;
+      unlocatedHelp: string;
+      source: (date: string) => string;
+      dataFile: string;
+      /** Short legend labels drawn on the map. */
+      /** Hatching: only the département, or only the region, is known. */
+      legendDepartement: string;
+      legendRegion: string;
+      /** The numbered circles: départements with the most investigations. */
+      legendReferences: string;
+      /** The grey context of the base map. */
+      legendContext: string;
+      /** Heading of the margin list drawn on the map. */
+      margin: string;
     };
   };
   /** The facts and method of a subject, in the plain house style, shared by every map of it. */

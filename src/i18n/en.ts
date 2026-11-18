@@ -105,6 +105,23 @@ export const en: Messages = {
       legendBlock: 'Single-block tower',
       legendOther: 'Other buildings',
     },
+    investigations: {
+      sites: { abattoir: 'Slaughterhouse', elevage: 'Farm', couvoir: 'Hatchery', transport: 'Transport', autre: 'Other site' },
+      count: { one: '{count} investigation', other: '{count} investigations' },
+      concentration: (region, share) => `${region}: ${share}% of the investigations placed on the map.`,
+      empty: 'No investigation of the register is located in metropolitan France.',
+      distribution: 'Investigations placed on the map, by region',
+      distributionHelp: 'An investigation located only to its department or region counts in its region. Investigations without a place are not counted here.',
+      unlocated: 'Investigations without a place on the map',
+      unlocatedHelp: 'Their page locates no site in metropolitan France: transport, fishing at sea, unnamed sites, overseas France or abroad.',
+      source: (date) => `Register of the investigations published on l214.com/enquetes, as of ${date}, each place taken from the investigation’s own page. Base map: IGN Admin Express departments (Licence Ouverte), Natural Earth rivers (public domain).`,
+      dataFile: 'View the investigations register (JSON)',
+      legendDepartement: 'Only the department is known',
+      legendRegion: 'Only the region is known',
+      legendReferences: 'Departments with most investigations',
+      legendContext: 'Departments, main rivers',
+      margin: 'NO PLACE ON THE MAP',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -131,6 +148,12 @@ export const en: Messages = {
       method: 'A tower is an OSM building at least 80 m tall, parts included, whose centre lies in the square. Height: the height tag, otherwise building:levels × 3.2 m. Each building part (building:part) belongs to the outline that holds its centre. A tower rises in steps when its parts form at least three levels (heights rounded to 6 m) and its top level covers less than 60% of its footprint. The period follows the start of works (start_date): before 1916, 1916 to 1960 under the 1916 zoning resolution, from 1961 under the 1961 one.',
       limits: 'Detection is automatic: a spire mapped as a part counts as a level, and a setback drawn as one piece can go unnoticed. Towers without parts in OSM or without a date are not classified. The 1916 rules set an envelope, not a shape: a step can also be an architect’s choice, and a tower approved before 1961 may have been begun later. The relief is schematic: oblique view without perspective, symbolic shadows.',
     },
+    investigations: {
+      metric: 'investigations placed on the map, out of the whole register',
+      legend: 'Red square: slaughterhouse. Red disc: farm. Red triangle: hatchery, transport or other site. Each mark stands for the town of the investigation. Dense red hatching: department of an investigation whose page does not name the town; sparse hatching: region, when only the region is known. Numbered circles: departments with the most investigations. Grey lines: department boundaries and main rivers.',
+      method: 'Each investigation listed on l214.com/enquetes was opened and located from its own page: the town of the site when it is named, otherwise the department or region. Towns are placed at their centre according to geo.api.gouv.fr. An investigation carried out at several separately located sites counts once per site. Duplicate pages (commented investigation, new footage) are merged. The year is the year of publication. Unlocated sites of one investigation are cited once. Only investigations published since 2008, the year L214 was founded, are kept; footage received from third parties is left out.',
+      limits: 'The register only holds the investigations listed on the site; L214 reports more. The distribution reflects access to sites and whistleblowers, not how often animals are mistreated. A mark locates a town, not the address of the site. Titles are those published by L214, in French. The simple projection, centred on France, slightly distorts the edges. Overseas France is not shown.',
+    },
   },
   maps: {
     'amsterdam-riso': {
@@ -149,9 +172,14 @@ export const en: Messages = {
       question: 'Why do the Midtown towers built between 1916 and 1961 rise in steps?',
       intro: 'Look down on the model: the towers of that era step back as they climb. The 1916 rules required it, so that light could still reach the street. In 1961 a new law dropped the requirement, and most towers of the 1970s went up in a single block.',
     },
+    'france-dossier': {
+      question: 'Where has L214 investigated since 2008?',
+      intro: 'Each mark locates a published investigation: a slaughterhouse, a farm, a hatchery. Where only the department or region is known, the whole area is hatched rather than given an invented point. Investigations without a place are listed apart.',
+    },
   },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Historic centre' },
+    france: { name: 'France', district: 'Metropolitan France' },
     'lisbonne-alfama': { name: 'Lisbon', district: 'Alfama' },
     'londres-soho': { name: 'London', district: 'Soho' },
     'new-york-midtown': { name: 'New York', district: 'Midtown' },
@@ -162,8 +190,13 @@ export const en: Messages = {
     history: 'History',
     health: 'Health',
     architecture: 'Architecture',
+    animals: 'Animals',
   },
   styles: {
+    dossier: {
+      label: 'Case-file map',
+      legend: ['Country: outline in ink, departments and main rivers in grey.', 'Red marks: the shape tells the kind of site (square, disc, triangle).', 'Red hatching: dense for a department, sparse for a region, when the town is not known.', 'Stapled sheet: legend and list of the investigations without a place.'],
+    },
     'art-deco': {
       label: 'Art deco poster in relief',
       legend: ['Buildings: volumes raised to their OSM height.', 'Streets: light bands between the volumes.', 'Water: flat midnight blue.', 'Parks and gardens: flat green.'],

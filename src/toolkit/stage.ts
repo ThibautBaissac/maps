@@ -54,6 +54,8 @@ export interface CrispFrame<K extends string> {
 export interface CanvasStyle<E extends CanvasEnv, K extends string> {
   /** CSS font-family of the map names. */
   font: string;
+  /** Largest scale, CSS px per metre (the viewport's default otherwise): lower for a country. */
+  maxScale?: number;
   /** The stage canvas is sized: build the size-dependent state and the layout. */
   resize(size: StageSize, ctx: CanvasRenderingContext2D): { env: E; layout: CanvasLayout };
   /** Which names, how big and in which kind, at this view. */
@@ -109,6 +111,7 @@ export function mountCanvasMap<E extends CanvasEnv, K extends string>(
   const viewport = createViewport({
     element: canvas,
     half,
+    ...(style.maxScale === undefined ? {} : { maxScale: style.maxScale }),
     onResize(size) {
       sizeCanvas(canvas, size.w, size.h, size.dpr);
       const W = canvas.width, H = canvas.height;

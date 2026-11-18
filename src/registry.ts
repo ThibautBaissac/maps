@@ -31,6 +31,7 @@ export const MAPS = [
   { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', topic: 'steps', layers: ['chafarizes'], options: { layerRadius: 6, layerWidth: 2 } },
   { id: 'londres-gravure-sepia', place: 'londres-soho', style: 'gravure-sepia', topic: 'cholera-pump', layers: ['pompes', 'deces', 'reperes'] },
   { id: 'new-york-art-deco', place: 'new-york-midtown', style: 'art-deco', topic: 'setbacks' },
+  { id: 'france-dossier', place: 'france', style: 'dossier', topic: 'investigations', layers: ['departements', 'fleuves', 'villes', 'enquetes'] },
 ] as const satisfies readonly MapEntry[];
 
 /** Id of a registered map: the dictionaries hold its question and intro under this key. */

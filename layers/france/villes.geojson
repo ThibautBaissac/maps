@@ -1,0 +1,200 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Paris",
+    "code": "75056",
+    "region": "11"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.347,
+     48.8589
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Orléans",
+    "code": "45234",
+    "region": "24"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     1.9122,
+     47.8734
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Dijon",
+    "code": "21231",
+    "region": "27"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.0322,
+     47.3319
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Rouen",
+    "code": "76540",
+    "region": "28"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     1.0912,
+     49.4412
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Lille",
+    "code": "59350",
+    "region": "32"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.0468,
+     50.6311
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Strasbourg",
+    "code": "67482",
+    "region": "44"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     7.7621,
+     48.5691
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Nantes",
+    "code": "44109",
+    "region": "52"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.5603,
+     47.2382
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Rennes",
+    "code": "35238",
+    "region": "53"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.6884,
+     48.1159
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Bordeaux",
+    "code": "33063",
+    "region": "75"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.5848,
+     44.8624
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Toulouse",
+    "code": "31555",
+    "region": "76"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     1.4328,
+     43.6007
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Lyon",
+    "code": "69123",
+    "region": "84"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.8351,
+     45.758
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Marseille",
+    "code": "13055",
+    "region": "93"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.3806,
+     43.2803
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nom": "Ajaccio",
+    "code": "2A004",
+    "region": "94"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.7058,
+     41.9228
+    ]
+   }
+  }
+ ]
+}

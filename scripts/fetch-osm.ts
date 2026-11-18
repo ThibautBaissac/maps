@@ -4,7 +4,7 @@
 // --offline converts that cached answer again, without network, keeping its server and date.
 // Usage: npm run fetch-data -- <place-id> [--offline]     (e.g. amsterdam-centre)
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dataPath, isPlaceId, PLACES } from '../places/index.ts';
+import { basemapOf, dataPath, isPlaceId, PLACES } from '../places/index.ts';
 import { featureCounts, featuresOf } from '../src/layers.ts';
 import { fail, message } from './cli.ts';
 import { osmLayerFile, overpassQuery, parseCachedAnswer, parseOverpassAnswer, QUERY_TIMEOUT_S, type CachedAnswer, type OverpassAnswer } from './osm.ts';
@@ -15,6 +15,7 @@ const PLACE = args.find((a) => !a.startsWith('--')) ?? '';
 const unknown = args.filter((a) => a.startsWith('--') && a !== '--offline');
 if (!PLACE || unknown.length) fail('Usage: npm run fetch-data -- <place-id> [--offline]   (a key of places/index.ts)');
 if (!isPlaceId(PLACE)) fail(`No such place: ${PLACE}. Known: ${Object.keys(PLACES).join(', ')}`);
+if (basemapOf(PLACE)) fail(`${PLACE} has no OpenStreetMap data (basemap in places/index.ts): build its layers with npm run layers -- ${PLACE}`);
 const CITY = PLACES[PLACE];
 
 const SERVERS = [

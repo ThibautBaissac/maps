@@ -11,6 +11,11 @@ export interface Place {
   lon: number;
   /** Side of the downloaded square, km. */
   sizeKm: number;
+  /**
+   * A place too large for OpenStreetMap extracts: no OSM file, the base map is its external
+   * layers of role "base" (places/layers.ts), whose sources are dated `date` (ISO).
+   */
+  basemap?: { date: string };
 }
 
 export const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;

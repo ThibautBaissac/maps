@@ -53,7 +53,13 @@ export function mountTopicPanel(container: HTMLElement, survey: Survey, topic: T
     status.textContent = copy.overview;
   });
   const method = el('details', undefined, 'topic-method');
-  const link = el('a', copy.dataFile); link.href = dataUrl;
+  const link = el('a', content.dataFile ?? copy.dataFile); link.href = dataUrl;
+  const notes = el('section');
+  if (content.notes?.items.length) {
+    const items = el('ul', undefined, 'topic-notes');
+    for (const text of content.notes.items) items.append(el('li', text));
+    notes.append(el('h2', content.notes.title), el('p', content.notes.help, 'topic-small'), items);
+  }
   method.append(el('summary', copy.methodology), el('p', content.source), el('p', subject.method), el('p', subject.limits), link);
-  container.replaceChildren(el('p', story.intro, 'topic-intro'), metric, legend, distribution, references, overview, method, status);
+  container.replaceChildren(el('p', story.intro, 'topic-intro'), metric, ...(content.panelLegend === false ? [] : [legend]), distribution, references, ...(notes.childElementCount ? [notes] : []), overview, method, status);
 }

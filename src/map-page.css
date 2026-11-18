@@ -152,6 +152,8 @@ body.has-topic {
 .sector-grid li { min-width: 0; padding: 9px 5px; border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); text-align: center; font-size: 11px; }
 .sector-grid strong { display: block; margin-top: 3px; font-size: 14px; }
 .sector-grid .strongest { border: 2px solid; padding: 8px 4px; background: color-mix(in srgb, var(--accent) 10%, var(--bg)); }
+.topic-notes { margin: 0 0 10px; padding-left: 18px; font-size: 12px; line-height: 1.5; }
+.topic-notes li { margin-bottom: 4px; }
 .topic-rows { margin: 0 0 10px; padding: 0; list-style: none; }
 .topic-rows li { display: flex; justify-content: space-between; gap: 8px; padding: 6px 8px; border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); font-size: 12px; }
 .topic-rows strong { white-space: nowrap; }

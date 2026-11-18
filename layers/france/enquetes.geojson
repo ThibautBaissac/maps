@@ -1,0 +1,3043 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Pratiques de mises à mort à l'abattoir Charal – Metz",
+    "site": "abattoir",
+    "year": 2008,
+    "precision": "commune",
+    "region": "44",
+    "commune": "Metz",
+    "departement": "57",
+    "species": "bovins,veaux,moutons,cochons",
+    "url": "https://www.l214.com/enquetes/2008/abattoir-charal-metz/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1962,
+     49.1048
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Enquête dans un élevage de poules pondeuses en batterie de cages",
+    "site": "elevage",
+    "year": 2009,
+    "precision": "region",
+    "region": "53",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2009/oeufs-poules-pondeuses-enquete-2009/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.8534,
+     48.1709
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Transport des chevreaux : marché de Lezay",
+    "site": "transport",
+    "year": 2009,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Lezay",
+    "departement": "79",
+    "species": "chevres",
+    "url": "https://www.l214.com/animaux/chevres/transport-chevreaux-fin-cages-dindes/",
+    "group": "transport-chevreaux-2009-2013"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.0285,
+     46.2694
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Transport des chevreaux : marché de Parthenay",
+    "site": "transport",
+    "year": 2009,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Parthenay",
+    "departement": "79",
+    "species": "chevres,moutons",
+    "url": "https://www.l214.com/animaux/chevres/transport-chevreaux-fin-cages-dindes/",
+    "group": "transport-chevreaux-2009-2013"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.235,
+     46.6458
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Enquête dans 8 élevages de lapins utilisés pour la viande",
+    "site": "elevage",
+    "year": 2013,
+    "precision": "region",
+    "region": "53",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2013/elevage-viande-lapins-2012-2013/",
+    "group": "lapins-8-elevages-2013"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.8534,
+     48.1709
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Enquête dans 8 élevages de lapins utilisés pour la viande",
+    "site": "elevage",
+    "year": 2013,
+    "precision": "region",
+    "region": "75",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2013/elevage-viande-lapins-2012-2013/",
+    "group": "lapins-8-elevages-2013"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     0.3419,
+     45.288
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Opération de communication de la filière agricole",
+    "site": "elevage",
+    "year": 2013,
+    "precision": "region",
+    "region": "53",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2013/elevage-cochons-normes-2013/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.8534,
+     48.1709
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Un élevage de cochons en Haute-Savoie (Seyssel)",
+    "site": "elevage",
+    "year": 2013,
+    "precision": "commune",
+    "region": "84",
+    "commune": "Seyssel",
+    "departement": "74",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2013/fermeture-elevage-cochon-seyssel/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.8531,
+     45.9621
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevages industriels Matines : images censurées (Branges)",
+    "site": "elevage",
+    "year": 2013,
+    "precision": "commune",
+    "region": "27",
+    "commune": "Branges",
+    "departement": "71",
+    "species": "poules",
+    "url": "https://www.l214.com/d/documents-annexes-elevages-matines-images-censurees/",
+    "group": "matines-censure-2013"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.162,
+     46.6516
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevages industriels Matines : images censurées (Chaleins, GAEC du Perrat)",
+    "site": "elevage",
+    "year": 2013,
+    "precision": "commune",
+    "region": "84",
+    "commune": "Chaleins",
+    "departement": "01",
+    "species": "poules",
+    "url": "https://www.l214.com/d/documents-annexes-elevages-matines-images-censurees/",
+    "group": "matines-censure-2013"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.7999,
+     46.0361
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Enquête chez 3 petits producteurs du Périgord noir",
+    "site": "elevage",
+    "year": 2014,
+    "precision": "departement",
+    "region": "75",
+    "departement": "24",
+    "species": "canards",
+    "url": "https://stop-foie-gras.com/foie-gras-perigord-lolita-lempicka"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     0.704,
+     45.1459
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Poussins broyés et étouffés dans un couvoir en Bretagne",
+    "site": "couvoir",
+    "year": 2014,
+    "precision": "region",
+    "region": "53",
+    "species": "poussins",
+    "url": "https://www.l214.com/enquetes/2014/broyage-poussins/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.8534,
+     48.1709
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Stop à l'horreur dans un élevage de lapins",
+    "site": "elevage",
+    "year": 2014,
+    "precision": "departement",
+    "region": "53",
+    "departement": "56",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2014/stop-a-lhorreur-dans-un-elevage-de-lapins/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.8849,
+     47.8232
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir d'Alès",
+    "site": "abattoir",
+    "year": 2015,
+    "precision": "commune",
+    "region": "76",
+    "commune": "Alès",
+    "departement": "30",
+    "species": "bovins,cochons,moutons,chevaux",
+    "url": "https://www.l214.com/enquetes/2015/abattoir-made-in-france-ales/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.0905,
+     44.125
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Broyé petit ou gavé plus tard : couvoir de canetons",
+    "site": "couvoir",
+    "year": 2015,
+    "precision": "region",
+    "region": "52",
+    "species": "canards",
+    "url": "https://www.l214.com/enquetes/2015/broye-petit-ou-gave-plus-tard/",
+    "group": "broye-petit-gave-plus-tard-2015"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.8136,
+     47.5177
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir de Limoges : des vaches gestantes abattues",
+    "site": "abattoir",
+    "year": 2016,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Limoges",
+    "departement": "87",
+    "species": "bovins,veaux,cochons,moutons",
+    "url": "https://www.l214.com/enquetes/2016/abattoir-made-in-france-limoges/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     1.226,
+     45.8567
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Aïd el-Kébir : au cœur de l'abattage sans étourdissement",
+    "site": "abattoir",
+    "year": 2016,
+    "precision": "region",
+    "region": "75",
+    "species": "moutons",
+    "url": "https://www.l214.com/enquetes/2016/aid-el-kebir/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     0.3419,
+     45.288
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Deux abattoirs, une même horreur : Mercantour",
+    "site": "abattoir",
+    "year": 2016,
+    "precision": "departement",
+    "region": "93",
+    "departement": "06",
+    "species": "veaux,moutons,bovins",
+    "url": "https://www.l214.com/enquetes/2016/abattoir-made-in-france-pezenas-mercantour/",
+    "group": "pezenas-mercantour-2016"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     7.1761,
+     43.9205
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Deux abattoirs, une même horreur : Pézenas",
+    "site": "abattoir",
+    "year": 2016,
+    "precision": "commune",
+    "region": "76",
+    "commune": "Pézenas",
+    "departement": "34",
+    "species": "chevaux,cochons,moutons,bovins",
+    "url": "https://www.l214.com/enquetes/2016/abattoir-made-in-france-pezenas-mercantour/",
+    "group": "pezenas-mercantour-2016"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.418,
+     43.4616
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Le Vigan : derrière les murs d'un abattoir certifié bio",
+    "site": "abattoir",
+    "year": 2016,
+    "precision": "commune",
+    "region": "76",
+    "commune": "Le Vigan",
+    "departement": "30",
+    "species": "bovins,cochons,moutons",
+    "url": "https://www.l214.com/enquetes/2016/le-vigan-abattoir/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.6336,
+     43.9822
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Matines : dans l'enfer des cages (GAEC du Perrat)",
+    "site": "elevage",
+    "year": 2016,
+    "precision": "departement",
+    "region": "84",
+    "departement": "01",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2016/oeufs-poules-pondeuses/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.4494,
+     46.0637
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "À l'abattoir de Mauléon : l'agonie des animaux",
+    "site": "abattoir",
+    "year": 2016,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Mauléon-Licharre",
+    "departement": "64",
+    "species": "bovins,moutons",
+    "url": "https://www.l214.com/enquetes/2016/mauleon-abattoir/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.8842,
+     43.214
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir Doux de Chantonnay",
+    "site": "abattoir",
+    "year": 2017,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Chantonnay",
+    "departement": "85",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2017/elevage-made-in-france-poulets-doux/",
+    "group": "doux-2017"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.045,
+     46.6699
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Calvaire des cochons à l'abattoir de Houdan",
+    "site": "abattoir",
+    "year": 2017,
+    "precision": "commune",
+    "region": "11",
+    "commune": "Houdan",
+    "departement": "78",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2017/abattoir-made-in-france-houdan/",
+    "group": "houdan-2017"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     1.5981,
+     48.7968
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Cochons gazés à l'abattoir de Houdan",
+    "site": "abattoir",
+    "year": 2017,
+    "precision": "commune",
+    "region": "11",
+    "commune": "Houdan",
+    "departement": "78",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2017/abattoir-made-in-france-houdan-gaz-co2/",
+    "group": "houdan-2017"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     1.5981,
+     48.7968
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Hénaff : souffrance en boîte",
+    "site": "elevage",
+    "year": 2017,
+    "precision": "region",
+    "region": "53",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2017/henaff-elevage/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.8534,
+     48.1709
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Vie de misère pour les cochons : élevage dans le Finistère",
+    "site": "elevage",
+    "year": 2017,
+    "precision": "departement",
+    "region": "53",
+    "departement": "29",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2017/quimper-elevage/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -4.091,
+     48.2445
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de poules en cage de Vendée",
+    "site": "elevage",
+    "year": 2017,
+    "precision": "departement",
+    "region": "52",
+    "departement": "85",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2017/stopcages/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.3464,
+     46.6756
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de poules en cage des Côtes-d'Armor (Stéphane Bern)",
+    "site": "elevage",
+    "year": 2017,
+    "precision": "departement",
+    "region": "53",
+    "departement": "22",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2017/stopcages/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.7851,
+     48.4507
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir de chevaux Viande Nature Jura (Hugo Clément)",
+    "site": "abattoir",
+    "year": 2018,
+    "precision": "commune",
+    "region": "27",
+    "commune": "Équevillon",
+    "departement": "39",
+    "species": "chevaux",
+    "url": "https://www.l214.com/enquetes/2018/abattoir-made-in-france-chevaux-jura/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.9416,
+     46.7602
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Enquête dans un élevage intensif de dindes",
+    "site": "elevage",
+    "year": 2018,
+    "precision": "departement",
+    "region": "75",
+    "departement": "79",
+    "species": "dindes",
+    "url": "https://www.l214.com/enquetes/2018/souffrance-des-dindes/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.3358,
+     46.539
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "L'enfer pour les animaux à l'abattoir de Boischaut",
+    "site": "abattoir",
+    "year": 2018,
+    "precision": "departement",
+    "region": "24",
+    "departement": "36",
+    "species": "bovins,chevres,moutons",
+    "url": "https://www.l214.com/enquetes/2018/abattoir-made-in-france-boischaut/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     1.536,
+     46.812
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Stop à l'élevage des visons",
+    "site": "elevage",
+    "year": 2018,
+    "precision": "departement",
+    "region": "52",
+    "departement": "85",
+    "species": "visons",
+    "url": "https://www.l214.com/enquetes/2018/fourrure-visons/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.3464,
+     46.6756
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Un élevage répugnant de cochons dans le Tarn",
+    "site": "elevage",
+    "year": 2018,
+    "precision": "departement",
+    "region": "76",
+    "departement": "81",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2018/elevage-made-in-france-tarn/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.2374,
+     43.7919
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de poules en cage de l'Essonne (groupe Avril)",
+    "site": "elevage",
+    "year": 2018,
+    "precision": "departement",
+    "region": "11",
+    "departement": "91",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2017/stopcages/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.2502,
+     48.5312
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de poules en cage de la Manche",
+    "site": "elevage",
+    "year": 2018,
+    "precision": "departement",
+    "region": "28",
+    "departement": "50",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2017/stopcages/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.3414,
+     49.0912
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de poules en cage de la Somme",
+    "site": "elevage",
+    "year": 2018,
+    "precision": "departement",
+    "region": "32",
+    "departement": "80",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2017/stopcages/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.2792,
+     49.9669
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de poules en cage des Côtes-d'Armor (Sophie Marceau)",
+    "site": "elevage",
+    "year": 2018,
+    "precision": "departement",
+    "region": "53",
+    "departement": "22",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2017/stopcages/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.7851,
+     48.4507
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Foie gras : Domaine de la Peyrouse",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "departement",
+    "region": "75",
+    "departement": "24",
+    "species": "canards",
+    "url": "https://www.l214.com/enquetes/2019/foie-gras/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     0.704,
+     45.1459
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "L'enfer des cailles élevées pour les œufs (Drôme Cailles)",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "departement",
+    "region": "84",
+    "departement": "26",
+    "species": "cailles",
+    "url": "https://www.l214.com/enquetes/2019/elevage-caille/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.238,
+     44.7298
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "La vie de misère des poulets Duc : élevage de l'Aube",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "departement",
+    "region": "44",
+    "departement": "10",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2019/elevage-poulets-duc/",
+    "group": "duc-2019"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.1252,
+     48.3183
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "La vie de misère des poulets Duc : élevage de l'Yonne",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "departement",
+    "region": "27",
+    "departement": "89",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2019/elevage-poulets-duc/",
+    "group": "duc-2019"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.5945,
+     47.8563
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Le calvaire des lapins en cage",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Nueil-les-Aubiers",
+    "departement": "79",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2019/elevage-lapins-nueil-les-aubiers/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.6114,
+     46.9391
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Le supplice des veaux laitiers (Laïta)",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "departement",
+    "region": "53",
+    "departement": "29",
+    "species": "veaux",
+    "url": "https://www.l214.com/enquetes/2019/elevage-veaux-laiterie-laita/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -4.091,
+     48.2445
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Stop aux vaches à hublot",
+    "site": "autre",
+    "year": 2019,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Saint-Symphorien",
+    "departement": "72",
+    "species": "bovins",
+    "url": "https://www.l214.com/enquetes/2019/elevage-vaches-hublot/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1376,
+     48.0807
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Vie de misère pour les poulets en Auvergne",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "commune",
+    "region": "84",
+    "commune": "Solignat",
+    "departement": "63",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2019/elevage-poulets-auvergne/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.1909,
+     45.5251
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Vivre dans un élevage de cochons (Finistère)",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "departement",
+    "region": "53",
+    "departement": "29",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2019/elevage-cochons-finistere/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -4.091,
+     48.2445
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de poules en cage de l'Allier (Interovo)",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "departement",
+    "region": "84",
+    "departement": "03",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2017/stopcages/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.1395,
+     46.3673
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de poules en cage du Morbihan (groupe Avril)",
+    "site": "elevage",
+    "year": 2019,
+    "precision": "departement",
+    "region": "53",
+    "departement": "56",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2017/stopcages/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.8849,
+     47.8232
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Calvaire pour les poules du Domaine du Mesnil St Martin",
+    "site": "elevage",
+    "year": 2020,
+    "precision": "commune",
+    "region": "32",
+    "commune": "Chambly",
+    "departement": "60",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2020/elevage-poules-domaine-mesnil-saint-martin/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.2462,
+     49.1743
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Dans l'enfer banal d'un élevage de cochons",
+    "site": "elevage",
+    "year": 2020,
+    "precision": "commune",
+    "region": "84",
+    "commune": "Barrais-Bussolles",
+    "departement": "03",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2020/elevage-cochons-barrais-bussolles/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.6954,
+     46.2809
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Dans la peau d'un ramasseur de poulets DUC",
+    "site": "elevage",
+    "year": 2020,
+    "precision": "departement",
+    "region": "27",
+    "departement": "89",
+    "species": "poulets",
+    "url": "https://www.l214.com/stop-cruaute/duc/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.5945,
+     47.8563
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Dans un abattoir de dindes Le Gaulois (Blancafort)",
+    "site": "abattoir",
+    "year": 2020,
+    "precision": "commune",
+    "region": "24",
+    "commune": "Blancafort",
+    "departement": "18",
+    "species": "dindes",
+    "url": "https://www.l214.com/enquetes/2020/dindes-le-gaulois/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.5423,
+     47.5362
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Enquête dans un élevage de lapins du Morbihan",
+    "site": "elevage",
+    "year": 2020,
+    "precision": "departement",
+    "region": "53",
+    "departement": "56",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2020/elevage-lapins-cage-augan/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.8849,
+     47.8232
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Foie gras : l'horreur pour des canards reproducteurs",
+    "site": "elevage",
+    "year": 2020,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Lichos",
+    "departement": "64",
+    "species": "canards",
+    "url": "https://www.l214.com/enquetes/2020/foie-gras-canards-reproducteurs/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.882,
+     43.3086
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Herta : le (dé)goût des choses simples",
+    "site": "elevage",
+    "year": 2020,
+    "precision": "commune",
+    "region": "84",
+    "commune": "Limoise",
+    "departement": "03",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2020/elevage-herta/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.0541,
+     46.6876
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "L'enfer des veaux à l'abattoir Sobeval",
+    "site": "abattoir",
+    "year": 2020,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Boulazac Isle Manoire",
+    "departement": "24",
+    "species": "veaux",
+    "url": "https://www.l214.com/enquetes/2020/abattoir-veaux-sobeval/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     0.7878,
+     45.1385
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Roquefort, souffrance d'origine garantie : abattoir de Rodez",
+    "site": "abattoir",
+    "year": 2020,
+    "precision": "commune",
+    "region": "76",
+    "commune": "Rodez",
+    "departement": "12",
+    "species": "moutons",
+    "url": "https://www.l214.com/enquetes/2020/agneau-roquefort/",
+    "group": "roquefort-2020"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.5699,
+     44.3591
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Roquefort, souffrance d'origine garantie : élevage",
+    "site": "elevage",
+    "year": 2020,
+    "precision": "departement",
+    "region": "76",
+    "departement": "12",
+    "species": "moutons",
+    "url": "https://www.l214.com/enquetes/2020/agneau-roquefort/",
+    "group": "roquefort-2020"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.6448,
+     44.3144
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Alerte dans un élevage de cochons dans l'Yonne (Tremblats)",
+    "site": "elevage",
+    "year": 2021,
+    "precision": "departement",
+    "region": "27",
+    "departement": "89",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2021/alerte-cochons-tremblats-yonne/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     3.5945,
+     47.8563
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Des cochons en putréfaction dans un élevage des Côtes-d'Armor",
+    "site": "elevage",
+    "year": 2021,
+    "precision": "departement",
+    "region": "53",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2021/cochons-putrefaction-saint-brieuc/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.7851,
+     48.4507
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Enquête chez Maître CoQ",
+    "site": "elevage",
+    "year": 2021,
+    "precision": "departement",
+    "region": "52",
+    "departement": "49",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2021/poulets-maitre-coq/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.555,
+     47.3929
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Fermons l'abattoir de dindes Ronsard au Faouët",
+    "site": "abattoir",
+    "year": 2021,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Le Faouët",
+    "departement": "56",
+    "species": "dindes",
+    "url": "https://www.l214.com/enquetes/2021/abattoir-made-in-france-dindes-faouet-ronsard/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -3.5111,
+     48.0425
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Horreur à l'abattoir Bigard de Cuiseaux",
+    "site": "abattoir",
+    "year": 2021,
+    "precision": "commune",
+    "region": "27",
+    "commune": "Cuiseaux",
+    "departement": "71",
+    "species": "bovins",
+    "url": "https://www.l214.com/enquetes/2021/abattoir-bigard-charal-socopa-cuiseaux/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.3609,
+     46.503
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "L'enfer pour les truies à l'abattoir de Briec",
+    "site": "abattoir",
+    "year": 2021,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Briec",
+    "departement": "29",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2021/abattoir-truies-briec/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -4.0011,
+     48.0964
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Le calvaire des poules et des coqs reproducteurs à Ploërmel",
+    "site": "elevage",
+    "year": 2021,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Ploërmel",
+    "departement": "56",
+    "species": "poules,poulets",
+    "url": "https://www.l214.com/enquetes/2021/poules-coqs-ploermel/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.3769,
+     47.9167
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Non à l'extension de l'élevage intensif de poulets à Pihem",
+    "site": "elevage",
+    "year": 2021,
+    "precision": "commune",
+    "region": "32",
+    "commune": "Pihem",
+    "departement": "62",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2021/poulets-pihem/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.2125,
+     50.675
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Nouvelles images dans un élevage Herta (Ortillon)",
+    "site": "elevage",
+    "year": 2021,
+    "precision": "commune",
+    "region": "44",
+    "commune": "Ortillon",
+    "departement": "10",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2021/cochons-ortillon-herta/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.2237,
+     48.4938
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Poules en cage : violence inouïe dans un élevage Pampr'œuf",
+    "site": "elevage",
+    "year": 2021,
+    "precision": "departement",
+    "region": "75",
+    "departement": "79",
+    "species": "poules",
+    "url": "https://www.l214.com/enquetes/2021/poules-cage-pamproeuf/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.3358,
+     46.539
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Un « canon à poulets » (Le Gaulois)",
+    "site": "elevage",
+    "year": 2021,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Saint-Saturnin-du-Limet",
+    "departement": "53",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2021/canon-poulets/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.0915,
+     47.8135
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Aïd 2022 : des moutons dans des coffres de voitures",
+    "site": "autre",
+    "year": 2022,
+    "precision": "commune",
+    "region": "32",
+    "commune": "Deûlémont",
+    "departement": "59",
+    "species": "moutons",
+    "url": "https://www.l214.com/enquetes/2022/moutons-aid-el-kebir-sofa/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.9723,
+     50.7275
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Couvoir Caringa : stop au broyage des poussins",
+    "site": "couvoir",
+    "year": 2022,
+    "precision": "commune",
+    "region": "76",
+    "commune": "L'Isle-Jourdain",
+    "departement": "32",
+    "species": "poussins",
+    "url": "https://www.l214.com/enquetes/2022/couvoir-caringa-broyage-poussins/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     1.0826,
+     43.6159
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Détresse des lapins et usage massif d'antibiotiques",
+    "site": "elevage",
+    "year": 2022,
+    "precision": "departement",
+    "region": "53",
+    "departement": "22",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/lapins-et-antibiotiques/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.7851,
+     48.4507
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Enquête dans l'élevage du président des producteurs de lapins",
+    "site": "elevage",
+    "year": 2022,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Domalain",
+    "departement": "35",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2022/lapins-le-gaulois/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.2445,
+     47.9975
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Grippe aviaire : les dessous du gazage des poulets",
+    "site": "elevage",
+    "year": 2022,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Les Landes-Genusson",
+    "departement": "85",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/grippe-aviaire/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.1254,
+     46.9697
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "La barbarie derrière le foie gras : canes gavées (Lot)",
+    "site": "elevage",
+    "year": 2022,
+    "precision": "departement",
+    "region": "76",
+    "departement": "46",
+    "species": "canards",
+    "url": "https://www.l214.com/enquetes/2022/gavage-canes-quercynoise/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     1.595,
+     44.625
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Le foie gras : un fléau pour les animaux et la santé publique",
+    "site": "elevage",
+    "year": 2022,
+    "precision": "departement",
+    "region": "76",
+    "departement": "32",
+    "species": "canards",
+    "url": "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/foie-gras-et-grippe-aviaire/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     0.4596,
+     43.693
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Le scandale de la grippe aviaire : enfouissement en Vendée",
+    "site": "autre",
+    "year": 2022,
+    "precision": "departement",
+    "region": "52",
+    "departement": "85",
+    "species": "poulets,autres",
+    "url": "https://www.l214.com/enquetes/2022/enfouissement-grippe-aviaire/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.3464,
+     46.6756
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Mise à mort de 6 taureaux à la corrida de Brocas",
+    "site": "autre",
+    "year": 2022,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Brocas",
+    "departement": "40",
+    "species": "bovins",
+    "url": "https://www.youtube.com/watch?v=vCOpybqm-cM"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.5446,
+     44.0533
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Poulets Le Gaulois : un éleveur dénonce",
+    "site": "elevage",
+    "year": 2022,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Moncé-en-Saosnois",
+    "departement": "72",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/poulets-le-gaulois/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     0.384,
+     48.2716
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Urgence dans l'un des plus gros élevages laitiers de Gironde",
+    "site": "elevage",
+    "year": 2022,
+    "precision": "departement",
+    "region": "75",
+    "departement": "33",
+    "species": "bovins",
+    "url": "https://www.l214.com/enquetes/2022/elevage-vaches-gironde/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.4735,
+     44.8781
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "« Bien fait pour ta gueule » : violence chez Denkavit",
+    "site": "autre",
+    "year": 2022,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Montreuil-Bellay",
+    "departement": "49",
+    "species": "veaux",
+    "url": "https://www.l214.com/enquetes/2022/veaux-centre-recherche-denkavit/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.1246,
+     47.1295
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de chèvres Chevenet (Isabelle Adjani)",
+    "site": "elevage",
+    "year": 2022,
+    "precision": "commune",
+    "region": "27",
+    "commune": "Saint-Maurice-de-Satonnay",
+    "departement": "71",
+    "species": "chevres",
+    "url": "https://www.l214.com/enquetes/2022/adjani-chevres-chevenet/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.7817,
+     46.4058
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage intensif de cochons et algues vertes",
+    "site": "elevage",
+    "year": 2022,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Saint-Glen",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2022/animaux-et-presidentielle/cochons-algues-vertes/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.5266,
+     48.3468
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Carnage à l'abattoir de Bazas",
+    "site": "abattoir",
+    "year": 2023,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Bazas",
+    "departement": "33",
+    "species": "bovins,cochons,moutons",
+    "url": "https://www.l214.com/enquetes/2023/abattoir-de-bazas/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.2177,
+     44.4409
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Castrés à vif, claqués à mort : élevage de cochons de la Marne",
+    "site": "elevage",
+    "year": 2023,
+    "precision": "departement",
+    "region": "44",
+    "departement": "51",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2023/elevage-de-cochons-marne/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.2168,
+     48.9618
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Ces cerfs sont tués pour Noël",
+    "site": "elevage",
+    "year": 2023,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Courbeveille",
+    "departement": "53",
+    "species": "cerfs",
+    "url": "https://www.l214.com/enquetes/2023/la-ferme-des-cerfs/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.8914,
+     47.9852
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Ces vaches produisent du lait pour les crêpes Whaou!",
+    "site": "elevage",
+    "year": 2023,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Plouzévédé",
+    "departement": "29",
+    "species": "bovins",
+    "url": "https://www.l214.com/enquetes/2023/elevage-laitier-whaou/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -4.0932,
+     48.5958
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Chez LDC, il n'y a pas que les poulets qui souffrent (chevreaux)",
+    "site": "elevage",
+    "year": 2023,
+    "precision": "commune",
+    "region": "27",
+    "commune": "Saint-Pierre-le-Vieux",
+    "departement": "71",
+    "species": "chevres",
+    "url": "https://www.l214.com/enquetes/2023/chevreaux-ldc/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.5232,
+     46.2888
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Des pintades en cage dans un élevage du groupe LDC",
+    "site": "elevage",
+    "year": 2023,
+    "precision": "departement",
+    "region": "52",
+    "departement": "49",
+    "species": "pintades",
+    "url": "https://www.l214.com/enquetes/2023/pintades-ldc/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.555,
+     47.3929
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Des poulets bretons maltraités et exportés en Arabie Saoudite",
+    "site": "elevage",
+    "year": 2023,
+    "precision": "region",
+    "region": "53",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2023/poulets-doux/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.8534,
+     48.1709
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Lapin du Ch'ti : images glaçantes d'un élevage certifié",
+    "site": "elevage",
+    "year": 2023,
+    "precision": "commune",
+    "region": "32",
+    "commune": "Noordpeene",
+    "departement": "59",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/lapin-du-chti/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.3638,
+     50.7931
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Le calvaire des veaux nourrissons",
+    "site": "transport",
+    "year": 2023,
+    "precision": "commune",
+    "region": "28",
+    "commune": "Couville",
+    "departement": "50",
+    "species": "veaux",
+    "url": "https://www.l214.com/enquetes/2023/transport-des-veaux-nourrissons/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.6828,
+     49.561
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage intensif de cochons : le prix de la charcuterie (Le Cochon de Bretagne)",
+    "site": "elevage",
+    "year": 2023,
+    "precision": "departement",
+    "region": "53",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/stop-cruaute/cochon-de-bretagne/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.7851,
+     48.4507
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage laitier en Normandie : animaux à l'agonie",
+    "site": "elevage",
+    "year": 2023,
+    "precision": "commune",
+    "region": "28",
+    "commune": "Saint-Ovin",
+    "departement": "50",
+    "species": "bovins,veaux",
+    "url": "https://www.l214.com/enquetes/elevage-laitier-normandie/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.2402,
+     48.6767
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Équarrissage : un lanceur d'alerte témoigne",
+    "site": "autre",
+    "year": 2023,
+    "precision": "departement",
+    "region": "53",
+    "departement": "22",
+    "species": "bovins,cochons,autres",
+    "url": "https://www.l214.com/enquetes/2023/equarrissage-enquete/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.7851,
+     48.4507
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "3 élevages sordides de lapins des Hauts-de-France : Esquelbecq",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "32",
+    "commune": "Esquelbecq",
+    "departement": "59",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2024/lapins-socla-hauts-de-france/",
+    "group": "lapins-hauts-de-france-2024"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.4276,
+     50.89
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "3 élevages sordides de lapins des Hauts-de-France : Lespesses",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "32",
+    "commune": "Lespesses",
+    "departement": "62",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2024/lapins-socla-hauts-de-france/",
+    "group": "lapins-hauts-de-france-2024"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.422,
+     50.5533
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "3 élevages sordides de lapins des Hauts-de-France : Pitgam",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "32",
+    "commune": "Pitgam",
+    "departement": "59",
+    "species": "lapins",
+    "url": "https://www.l214.com/enquetes/2024/lapins-socla-hauts-de-france/",
+    "group": "lapins-hauts-de-france-2024"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.338,
+     50.9304
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir Bigard : rien n'a changé (nouvelles images)",
+    "site": "abattoir",
+    "year": 2024,
+    "precision": "commune",
+    "region": "27",
+    "commune": "Venarey-les-Laumes",
+    "departement": "21",
+    "species": "bovins",
+    "url": "https://www.l214.com/enquetes/2024/abattoir-bigard-juillet/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.447,
+     47.5375
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir de Maurienne : des animaux découpés vivants",
+    "site": "abattoir",
+    "year": 2024,
+    "precision": "commune",
+    "region": "84",
+    "commune": "Saint-Étienne-de-Cuines",
+    "departement": "73",
+    "species": "bovins,moutons",
+    "url": "https://www.l214.com/enquetes/2024/abattoir-maurienne/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.2469,
+     45.3471
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Aidez Ross : poulet rescapé d'un élevage Le Gaulois",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "departement",
+    "region": "75",
+    "departement": "79",
+    "species": "poulets",
+    "url": "https://www.l214.com/stop-cruaute/victoire/ldc-sest-engage-a-bannir-les-pires-pratiques-elevage-et-abattage-des-poules/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.3358,
+     46.539
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Cet élevage de cochons fournit la Marque Repère de E.Leclerc",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Saint-Carreuc",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2024/enquetes-cochons-leclerc-2/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.7471,
+     48.4017
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Cruauté dans un abattoir Bigard (Venarey-les-Laumes)",
+    "site": "abattoir",
+    "year": 2024,
+    "precision": "commune",
+    "region": "27",
+    "commune": "Venarey-les-Laumes",
+    "departement": "21",
+    "species": "bovins,veaux",
+    "url": "https://www.l214.com/enquetes/2024/abattoir-bigard/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.447,
+     47.5375
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Des animaux découpés vivants à l'abattoir de Craon",
+    "site": "abattoir",
+    "year": 2024,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Craon",
+    "departement": "53",
+    "species": "bovins,veaux,moutons",
+    "url": "https://www.l214.com/enquetes/2024/abattoir-de-craon/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.9396,
+     47.8431
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Fromages Ermitage : élevage laitier zéro pâturage",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "44",
+    "commune": "Leschères-sur-le-Blaiseron",
+    "departement": "52",
+    "species": "bovins",
+    "url": "https://www.l214.com/enquetes/2024/vaches-fromages-ermitage/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.0286,
+     48.3323
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "L'élevage de l'horreur qui fournit E.Leclerc : site de Malansac",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Malansac",
+    "departement": "56",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2024/cochons-leclerc/",
+    "group": "cochons-leclerc-morbihan-2024"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.3091,
+     47.6887
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "L'élevage de l'horreur qui fournit E.Leclerc : site de Trédion",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Trédion",
+    "departement": "56",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2024/cochons-leclerc/",
+    "group": "cochons-leclerc-morbihan-2024"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.5857,
+     47.7812
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Un élevage normand hors-la-loi (LDC, Stéphane Bern)",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "departement",
+    "region": "28",
+    "departement": "61",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2024/poulets-ldc-orne/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     0.0531,
+     48.5771
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Une salariée dénonce : faux plein air chez un éleveur de canards",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "departement",
+    "region": "52",
+    "departement": "53",
+    "species": "canards",
+    "url": "https://www.l214.com/enquetes/2024/canards-ldc/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.6451,
+     48.1482
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Urgence dans un élevage de moutons (Biriatou)",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Biriatou",
+    "departement": "64",
+    "species": "moutons",
+    "url": "https://www.l214.com/enquetes/2024/elevage-biriatou/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.7322,
+     43.3227
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Urgence pour ces bovins (Meillac)",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Meillac",
+    "departement": "35",
+    "species": "bovins",
+    "url": "https://www.l214.com/enquetes/2024/vaches-de-meillac/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.8268,
+     48.4285
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Urgence pour les vaches de Praslay",
+    "site": "elevage",
+    "year": 2024,
+    "precision": "commune",
+    "region": "44",
+    "commune": "Praslay",
+    "departement": "52",
+    "species": "bovins",
+    "url": "https://www.l214.com/enquetes/2024/vaches-de-praslay/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.1094,
+     47.7381
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Châtelaudren-Plouagat)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Châtelaudren-Plouagat",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/8-elevages-leclerc/",
+    "group": "cochons-leclerc-8-elevages-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.9872,
+     48.5311
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Gommenec'h)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Gommenec'h",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/8-elevages-leclerc/",
+    "group": "cochons-leclerc-8-elevages-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -3.0481,
+     48.6362
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Lamballe-Armor)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Lamballe-Armor",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/8-elevages-leclerc/",
+    "group": "cochons-leclerc-8-elevages-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.5201,
+     48.4859
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Plestan)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Plestan",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/8-elevages-leclerc/",
+    "group": "cochons-leclerc-8-elevages-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.428,
+     48.4135
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Plouguenast-Langast)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Plouguenast-Langast",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/8-elevages-leclerc/",
+    "group": "cochons-leclerc-8-elevages-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.6933,
+     48.2802
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Plouvara)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Plouvara",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/8-elevages-leclerc/",
+    "group": "cochons-leclerc-8-elevages-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.9259,
+     48.4962
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Plénée-Jugon)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Plénée-Jugon",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/8-elevages-leclerc/",
+    "group": "cochons-leclerc-8-elevages-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.412,
+     48.3537
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "8 élevages, 8 scandales : la cruauté à prix E.Leclerc (Saint-Clet)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Saint-Clet",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/8-elevages-leclerc/",
+    "group": "cochons-leclerc-8-elevages-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -3.1348,
+     48.6694
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir Rhône Ouest : une vraie boucherie",
+    "site": "abattoir",
+    "year": 2025,
+    "precision": "commune",
+    "region": "84",
+    "commune": "Saint-Romain-de-Popey",
+    "departement": "69",
+    "species": "bovins,cochons,moutons",
+    "url": "https://www.l214.com/enquetes/2025/abattoir-rhone-ouest/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.5291,
+     45.855
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir de Charlieu : au cœur de la cruauté",
+    "site": "abattoir",
+    "year": 2025,
+    "precision": "commune",
+    "region": "84",
+    "commune": "Charlieu",
+    "departement": "42",
+    "species": "bovins,cochons,moutons,chevaux",
+    "url": "https://www.l214.com/enquetes/2025/abattoir-de-charlieu/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.1718,
+     46.1648
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir de Cosne-Cours-sur-Loire : le chaos absolu",
+    "site": "abattoir",
+    "year": 2025,
+    "precision": "commune",
+    "region": "27",
+    "commune": "Cosne-Cours-sur-Loire",
+    "departement": "58",
+    "species": "bovins,cochons,moutons",
+    "url": "https://www.l214.com/enquetes/2025/abattoir-cosne-cours-sur-loire/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.9419,
+     47.414
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir de Meaux : le chaos !",
+    "site": "abattoir",
+    "year": 2025,
+    "precision": "commune",
+    "region": "11",
+    "commune": "Meaux",
+    "departement": "77",
+    "species": "moutons,bovins",
+    "url": "https://www.l214.com/enquetes/2025/abattoir-de-meaux/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.9035,
+     48.9573
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Abattoir de Porto-Vecchio : pas d'exception corse pour la cruauté",
+    "site": "abattoir",
+    "year": 2025,
+    "precision": "commune",
+    "region": "94",
+    "commune": "Porto-Vecchio",
+    "departement": "2A",
+    "species": "bovins,veaux,moutons,chevres",
+    "url": "https://www.l214.com/enquetes/2025/enquete-abattoir-porto-vecchio/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     9.2732,
+     41.5849
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Allô Lidl ? Élevage vitrine « Bien-être animal + » (Sarthe)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "departement",
+    "region": "52",
+    "departement": "72",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/bien-etre-animal-lidl/",
+    "group": "lidl-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     0.2329,
+     48.0246
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Allô Lidl ? Élevage « Lauréat » du programme Lidl (Finistère)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "departement",
+    "region": "53",
+    "departement": "29",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/bien-etre-animal-lidl/",
+    "group": "lidl-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -4.091,
+     48.2445
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Black Friday Carrefour : élevages du président de la Cooperl (Plénée-Jugon)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Plénée-Jugon",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/stop-cruaute/carrefour-black-friday/",
+    "group": "carrefour-cooperl-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.412,
+     48.3537
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Black Friday Carrefour : élevages du président de la Cooperl (Éréac)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Éréac",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/stop-cruaute/carrefour-black-friday/",
+    "group": "carrefour-cooperl-2025"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.3426,
+     48.2714
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Des dizaines de cochons laissés à l'agonie depuis 3 jours",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "52",
+    "commune": "La Boissière-de-Montaigu",
+    "departement": "85",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2025/cochons-a-l-agonie-depuis-3-jours/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.1903,
+     46.9497
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Enquête dans un élevage du géant de la génétique animale (Sasso)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "commune",
+    "region": "75",
+    "commune": "Sabres",
+    "departement": "40",
+    "species": "poules,poulets",
+    "url": "https://www.l214.com/enquetes/2025/elevage-sasso/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.7332,
+     44.1532
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "FNSEA : un modèle agricole en échec (élevage de poulets)",
+    "site": "elevage",
+    "year": 2025,
+    "precision": "departement",
+    "region": "52",
+    "departement": "44",
+    "species": "poulets",
+    "url": "https://www.l214.com/enquetes/2025/ramassage-poulets-france/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.7545,
+     47.3474
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Stop au broyage des poussins (couvoir Boyé Accouvage)",
+    "site": "couvoir",
+    "year": 2025,
+    "precision": "commune",
+    "region": "75",
+    "commune": "La Boissière-en-Gâtine",
+    "departement": "79",
+    "species": "poussins,pintades",
+    "url": "https://www.l214.com/enquetes/2025/broyage-des-poussins/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.3808,
+     46.5505
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "126 jours dans leurs déjections pour Carrefour (dindes)",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Sèvremoine",
+    "departement": "49",
+    "species": "dindes",
+    "url": "https://www.l214.com/enquetes/2026/elevage-ramassage-dindes/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.0968,
+     47.0878
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "300 cochons retrouvés morts dans un élevage Eureden (Hénon)",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Hénon",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2026/charnier-elevage-cochons-eureden/",
+    "group": "charnier-eureden-2026"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.6898,
+     48.3885
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "300 cochons retrouvés morts dans un élevage Eureden (Saint-Carreuc)",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Saint-Carreuc",
+    "departement": "22",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2026/charnier-elevage-cochons-eureden/",
+    "group": "charnier-eureden-2026"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.7471,
+     48.4017
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Carrefour : ne soldons plus leurs vies ! (élevage de lapins)",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Beaupréau-en-Mauges",
+    "departement": "49",
+    "species": "lapins",
+    "url": "https://www.l214.com/stop-intensif/carrefour-soldes/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -0.9844,
+     47.2028
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Cochons gazés à l'abattoir Cooperl de Montfort-sur-Meu",
+    "site": "abattoir",
+    "year": 2026,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Montfort-sur-Meu",
+    "departement": "35",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2026/abattoir-cooperl-montfort/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.9582,
+     48.1273
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Cruauté et infractions à l'abattoir de Perpignan",
+    "site": "abattoir",
+    "year": 2026,
+    "precision": "commune",
+    "region": "76",
+    "commune": "Perpignan",
+    "departement": "66",
+    "species": "cochons,bovins,moutons",
+    "url": "https://www.l214.com/enquetes/2026/abattoir-perpignan/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     2.9045,
+     42.699
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Derrière le jambon, l'enfer des cochons (Jean Floc'h)",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Saint-Méen",
+    "departement": "29",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2026/elevage-cochons-jean-floch/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -4.2586,
+     48.5542
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Mutilés à vif et laissés pour morts (maternité Eureden)",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Kergrist",
+    "departement": "56",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2026/truies-maternite-eureden/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.9292,
+     48.1454
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Ni mare, ni ciel, ni terre pour les canards de Carrefour",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Sèvremoine",
+    "departement": "49",
+    "species": "canards",
+    "url": "https://www.l214.com/enquetes/2026/elevage-canards-carrefour/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.0968,
+     47.0878
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Situation d'urgence : élevage délabré (Lannilis)",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Lannilis",
+    "departement": "29",
+    "species": "cochons",
+    "url": "https://www.l214.com/enquetes/2026/elevage-cochons-evelup/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -4.5244,
+     48.5719
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Une ferme laitière à la dérive en Ille-et-Vilaine",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "53",
+    "commune": "Princé",
+    "departement": "35",
+    "species": "bovins",
+    "url": "https://www.l214.com/enquetes/2026/elevage-laitier-prince/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.1028,
+     48.2393
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "title": "Élevage de cailles Filière Qualité Carrefour",
+    "site": "elevage",
+    "year": 2026,
+    "precision": "commune",
+    "region": "52",
+    "commune": "Grosbreuil",
+    "departement": "85",
+    "species": "cailles",
+    "url": "https://www.l214.com/enquetes/2026/cailles-carrefour/"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -1.5955,
+     46.539
+    ]
+   }
+  }
+ ]
+}

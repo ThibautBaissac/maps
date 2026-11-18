@@ -209,7 +209,7 @@ test('an invalid layer file is a problem prefixed by its path', () => {
 test('a valid layer file is no problem, and the catalogue lists the layer and its attribution', () => {
   assert.deepEqual(problemsOf([layered()], withLayer(layerFile()), LAYER_REGISTRY), []);
   const [m] = catalogueOf([layered(), ], 'fr', LAYER_REGISTRY);
-  assert.deepEqual(m?.layers, [{ id: 'ponts', title: 'Ponts', path: 'data/amsterdam-centre/ponts.json' }]);
+  assert.deepEqual(m?.layers, [{ id: 'ponts', title: 'Ponts', path: 'data/amsterdam-centre/ponts.json', role: 'overlay' }]);
   assert.deepEqual(m?.attributions, ['© Ville d’Amsterdam']);
   assert.equal(catalogueOf([layered()], 'en', LAYER_REGISTRY)[0]?.layers[0]?.title, 'Bridges');
 });
@@ -227,4 +227,33 @@ test('a map without layers has none and no extra attribution', () => {
   const [m] = catalogueOf([entry('plain')]);
   assert.deepEqual(m?.layers, []);
   assert.deepEqual(m?.attributions, []);
+});
+
+// A place drawn from its own base layers (Place.basemap): france, with a base and an overlay layer.
+const BASEMAP_REGISTRY = {
+  france: {
+    fond: { title: 'Fond', file: 'layers/france/fond.geojson', kind: 'areas', role: 'base', attribution: '© IGN' },
+    points: { title: 'Points', file: 'layers/france/points.geojson', kind: 'points', role: 'overlay', attribution: '© Relevé' },
+  },
+} as const;
+const basemapFile = (id: string, kind: string, role: string, attribution: string) => ({
+  square: { lat: PLACES.france.lat, lon: PLACES.france.lon, sizeKm: PLACES.france.sizeKm },
+  layers: [{ id, kind, role, attribution, source: `layers/france/${id}.geojson`, features: [] }],
+});
+const basemapData = (path: string): unknown => ({
+  'data/france/fond.json': basemapFile('fond', 'areas', 'base', '© IGN'),
+  'data/france/points.json': basemapFile('points', 'points', 'overlay', '© Relevé'),
+} as Record<string, unknown>)[path];
+
+test('a place drawn from its base layers has no OpenStreetMap file and needs none', () => {
+  const map = entry('france-test', { place: 'france', layers: ['fond', 'points'] });
+  const [m] = catalogueOf([map], 'fr', BASEMAP_REGISTRY);
+  assert.equal(m?.paths.data, null);
+  assert.deepEqual(m?.attributions, ['© IGN', '© Relevé']);
+  assert.deepEqual(problemsOf([map], basemapData, BASEMAP_REGISTRY), []);
+});
+
+test('a place drawn from its base layers needs at least one of them on the map', () => {
+  const problems = problemsOf([entry('france-test', { place: 'france', layers: ['points'] })], basemapData, BASEMAP_REGISTRY);
+  assert.match(problems[0]?.message ?? '', /no OpenStreetMap data: the map needs at least one of its base layers/);
 });

@@ -8,6 +8,7 @@ import { DEFAULTS as RISO, type RisoOptions } from './riso/defaults.ts';
 import { DEFAULTS as CYANOTYPE, type CyanotypeOptions } from './cyanotype/defaults.ts';
 import { DEFAULTS as GRAVURE_SEPIA, type GravureSepiaOptions } from './gravure-sepia/defaults.ts';
 import { DEFAULTS as ART_DECO, type ArtDecoOptions } from './art-deco/defaults.ts';
+import { DEFAULTS as DOSSIER, type DossierOptions } from './dossier/defaults.ts';
 
 /** Options of each style, by key: adding a style starts here. */
 export interface StyleOptions {
@@ -15,6 +16,7 @@ export interface StyleOptions {
   cyanotype: CyanotypeOptions;
   'gravure-sepia': GravureSepiaOptions;
   'art-deco': ArtDecoOptions;
+  dossier: DossierOptions;
 }
 export type StyleKey = keyof StyleOptions;
 
@@ -49,6 +51,14 @@ export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
     card: (o = {}) => {
       const v = { ...ART_DECO, ...o };
       return { bg: v.cream, fg: v.navy, accent: v.red };
+    },
+  },
+  dossier: {
+    ...messages('fr').styles.dossier,
+    load: () => import('./dossier/index.ts'),
+    card: (o = {}) => {
+      const v = { ...DOSSIER, ...o };
+      return { bg: v.paper, fg: v.ink, accent: v.red };
     },
   },
 };

@@ -105,6 +105,23 @@ export const de: Messages = {
       legendBlock: 'Turm aus einem Block',
       legendOther: 'Andere Gebäude',
     },
+    investigations: {
+      sites: { abattoir: 'Schlachthof', elevage: 'Tierhaltung', couvoir: 'Brüterei', transport: 'Transport', autre: 'Anderer Ort' },
+      count: { one: '{count} Recherche', other: '{count} Recherchen' },
+      concentration: (region, share) => `${region}: ${share} % der auf der Karte verorteten Recherchen.`,
+      empty: 'Keine Recherche des Verzeichnisses liegt im europäischen Frankreich.',
+      distribution: 'Verortete Recherchen nach Region',
+      distributionHelp: 'Eine nur auf Département oder Region genau verortete Recherche zählt in ihrer Region. Recherchen ohne Ort sind hier nicht mitgezählt.',
+      unlocated: 'Recherchen ohne Ort auf der Karte',
+      unlocatedHelp: 'Ihre Seite nennt keinen Ort im europäischen Frankreich: Transporte, Fischerei auf See, ungenannte Betriebe, Überseegebiete oder Ausland.',
+      source: (date) => `Verzeichnis der auf l214.com/enquetes veröffentlichten Recherchen, Stand ${date}, jeder Ort der Seite der Recherche entnommen. Grundkarte: Départements IGN Admin Express (Licence Ouverte), Flüsse Natural Earth (gemeinfrei).`,
+      dataFile: 'Verzeichnis der Recherchen ansehen (JSON)',
+      legendDepartement: 'Nur das Département ist bekannt',
+      legendRegion: 'Nur die Region ist bekannt',
+      legendReferences: 'Départements mit den meisten Recherchen',
+      legendContext: 'Départements, große Flüsse',
+      margin: 'OHNE ORT AUF DER KARTE',
+    },
   },
   topics: {
     'canal-crossings': {
@@ -131,6 +148,12 @@ export const de: Messages = {
       method: 'Ein Turm ist ein OSM-Gebäude von mindestens 80 m Höhe, Gebäudeteile eingeschlossen, dessen Mitte im Quadrat liegt. Höhe: Tag height, sonst building:levels × 3,2 m. Jeder Gebäudeteil (building:part) gehört zu dem Umriss, der seine Mitte enthält. Ein Turm steigt in Stufen an, wenn seine Teile mindestens drei Höhenstufen bilden (Höhen auf 6 m gerundet) und seine oberste Stufe weniger als 60 % seiner Grundfläche bedeckt. Die Bauzeit folgt dem Baubeginn (start_date): vor 1916, 1916 bis 1960 unter der Bauordnung von 1916, ab 1961 unter der von 1961.',
       limits: 'Die Erkennung ist automatisch: Eine als Gebäudeteil kartierte Turmspitze zählt als Stufe, und ein in einem Stück gezeichneter Rücksprung kann unbemerkt bleiben. Türme ohne Gebäudeteile in OSM oder ohne Datum werden nicht eingeordnet. Die Bauordnung von 1916 legte eine Hüllform fest, keine Gestalt: Eine Stufe kann auch eine Entscheidung des Architekten sein, und ein vor 1961 genehmigter Turm kann später begonnen worden sein. Das Relief ist schematisch: Schrägansicht ohne Perspektive, symbolische Schatten.',
     },
+    investigations: {
+      metric: 'Recherchen auf der Karte verortet, vom gesamten Verzeichnis',
+      legend: 'Rotes Quadrat: Schlachthof. Rote Scheibe: Tierhaltung. Rotes Dreieck: Brüterei, Transport oder anderer Ort. Jede Markierung steht für die Gemeinde der Recherche. Dichte rote Schraffur: Département einer Recherche, deren Seite die Gemeinde nicht nennt; weite Schraffur: Region, wenn nur die Region bekannt ist. Nummerierte Kreise: Départements mit den meisten Recherchen. Graue Linien: Grenzen der Départements und große Flüsse.',
+      method: 'Jede auf l214.com/enquetes gelistete Recherche wurde geöffnet und nach ihrer eigenen Seite verortet: die Gemeinde des Ortes, wenn sie genannt ist, sonst Département oder Region. Gemeinden liegen auf ihrem Mittelpunkt nach geo.api.gouv.fr. Eine Recherche an mehreren getrennt verorteten Orten zählt einmal je Ort. Doppelte Seiten (kommentierte Recherche, neue Aufnahmen) sind zusammengefasst. Das Jahr ist das der Veröffentlichung. Nicht verortete Orte derselben Recherche werden einmal genannt. Berücksichtigt sind nur Recherchen seit 2008, dem Gründungsjahr von L214; von Dritten erhaltene Aufnahmen sind ausgeschlossen.',
+      limits: 'Das Verzeichnis enthält nur die auf der Website gelisteten Recherchen; L214 nennt mehr. Die Verteilung spiegelt den Zugang zu den Orten und die Hinweisgeber, nicht die Häufigkeit von Misshandlungen. Eine Markierung verortet eine Gemeinde, nicht die Adresse des Betriebs. Die Titel sind die von L214 veröffentlichten, auf Französisch. Die einfache, auf Frankreich zentrierte Projektion verzerrt die Ränder leicht. Die Überseegebiete sind nicht dargestellt.',
+    },
   },
   maps: {
     'amsterdam-riso': {
@@ -149,9 +172,14 @@ export const de: Messages = {
       question: 'Warum steigen die zwischen 1916 und 1961 gebauten Türme von Midtown in Stufen an?',
       intro: 'Schauen Sie von oben auf das Modell: Die Türme dieser Zeit treten nach oben hin stufenweise zurück. Die Bauordnung von 1916 verlangte es, damit das Licht noch bis auf die Straße fiel. 1961 gab ein neues Gesetz diese Regel auf, und die meisten Türme der 1970er-Jahre wachsen als ein einziger Block.',
     },
+    'france-dossier': {
+      question: 'Wo hat L214 seit 2008 recherchiert?',
+      intro: 'Jede Markierung verortet eine veröffentlichte Recherche: einen Schlachthof, einen Betrieb, eine Brüterei. Ist nur das Département oder die Region bekannt, wird die ganze Fläche schraffiert statt eines erfundenen Punkts. Recherchen ohne Ort sind gesondert aufgeführt.',
+    },
   },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Historisches Zentrum' },
+    france: { name: 'Frankreich', district: 'Europäisches Frankreich' },
     'lisbonne-alfama': { name: 'Lissabon', district: 'Alfama' },
     'londres-soho': { name: 'London', district: 'Soho' },
     'new-york-midtown': { name: 'New York', district: 'Midtown' },
@@ -162,8 +190,13 @@ export const de: Messages = {
     history: 'Geschichte',
     health: 'Gesundheit',
     architecture: 'Architektur',
+    animals: 'Tiere',
   },
   styles: {
+    dossier: {
+      label: 'Aktenkarte',
+      legend: ['Land: Umriss in Tinte, Départements und große Flüsse in Grau.', 'Rote Markierungen: Die Form zeigt die Art des Ortes (Quadrat, Scheibe, Dreieck).', 'Rote Schraffur: dicht für ein Département, weit für eine Region, wenn die Gemeinde nicht bekannt ist.', 'Angeheftetes Blatt: Legende und Liste der Recherchen ohne Ort.'],
+    },
     'art-deco': {
       label: 'Art-déco-Plakat im Relief',
       legend: ['Gebäude: Baukörper in ihrer OSM-Höhe.', 'Straßen: helle Bänder zwischen den Baukörpern.', 'Wasser: flaches Nachtblau.', 'Parks und Gärten: flaches Grün.'],

@@ -98,19 +98,22 @@ test('a map without its question and intro in the dictionaries fails page genera
   assert.throws(() => pageHtml(map, 'fr', '/maps/'), /No question and intro for map "sans-texte" in fr/);
 });
 
-test('the static gallery tags each strip and offers its filters hidden until the script runs', () => {
+test('the static gallery names each strip by its map and keeps the search hidden until the script runs', () => {
   const html = galleryHtml('en', '/maps/');
-  assert.match(html, /<li class="strip[^"]*" data-id="londres-gravure-sepia" data-tags="place:londres-soho style:gravure-sepia theme:history theme:health theme:water"/);
+  assert.match(html, /<li class="strip[^"]*" data-id="londres-gravure-sepia" style=/);
   assert.match(html, /<div class="tools" hidden>/);
-  assert.match(html, /<div class="filters" role="group" aria-label="Filter the maps">/);
-  assert.match(html, /<button type="button" data-tag="" aria-pressed="true">All<\/button>/);
-  assert.match(html, /<button type="button" data-tag="theme:water" aria-pressed="false">Water<\/button>/);
-  assert.match(html, /<p class="filter-count" role="status" data-forms="\{&quot;one&quot;:&quot;\{count\} map shown&quot;,&quot;other&quot;:&quot;\{count\} maps shown&quot;\}"><\/p>/);
+  assert.match(html, /<p class="result-count" role="status" data-forms="\{&quot;one&quot;:&quot;\{count\} map shown&quot;,&quot;other&quot;:&quot;\{count\} maps shown&quot;\}"><\/p>/);
+});
+
+test('the gallery offers no tag filters: the search covers places, styles and themes', () => {
+  const html = galleryHtml('en', '/maps/');
+  assert.doesNotMatch(html, /data-tags?=|class="filters"|aria-pressed/);
 });
 
 test('the static gallery offers a labelled search field and embeds its index in the page language', () => {
   const html = galleryHtml('de', '/maps/');
-  assert.match(html, /<search class="search">\s*<label for="map-search">Suchen<\/label>/);
+  assert.match(html, /<search class="search">\s*<label for="map-search" class="visually-hidden">Suchen<\/label>/);
+  assert.match(html, /placeholder="Suchen: Stadt, Stil, Thema…"/);
   assert.match(html, /<input id="map-search" type="search" name="q"[^>]* aria-keyshortcuts="\/"/);
   assert.match(html, /<p class="no-match" hidden>Keine Karte passt\. <button type="button" class="reset">/);
   const index = /<script type="application\/json" id="search-index">([^<]*)<\/script>/.exec(html)?.[1] ?? '';

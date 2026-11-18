@@ -35,20 +35,15 @@ export interface Messages {
     description: (places: string) => string;
     maps: string;
     open: string;
-    /** Name of the group of filter buttons. */
-    filters: string;
-    /** The button that shows every map again. */
-    all: string;
-    facets: Record<'place' | 'style' | 'theme', string>;
-    /** Announced after a filter changes. */
+    /** Announced after the search changes. */
     shown: PluralMessage;
-    /** Visible label of the search field. */
+    /** Label of the search field, read by screen readers only. */
     search: string;
-    /** Example of what the search field takes, shown while it is empty. */
+    /** What the search field takes, shown in it while it is empty. */
     searchHint: string;
-    /** Shown when the search and filter keep no map. */
+    /** Shown when the search keeps no map. */
     noMatch: string;
-    /** The button that clears the search and the filter. */
+    /** The button that clears the search. */
     reset: string;
   };
   map: {
@@ -197,7 +192,7 @@ export interface Messages {
   }>;
   /** The texts of a map written in its own voice: see voices/<map-id>.md. */
   maps: Record<MapId, MapStory>;
-  /** Gallery filter labels of the subjects' themes (src/topics.ts). */
+  /** Labels of the subjects' themes (src/topics.ts), found by the gallery search. */
   themes: Record<ThemeId, string>;
   styles: Record<StyleKey, { label: string; legend: Four<string> }>;
 }

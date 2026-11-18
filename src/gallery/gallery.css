@@ -52,15 +52,62 @@ h1 {
 }
 h1 span { display: block; color: var(--muted); }
 
-/* One filter at a time: the pressed one is filled. */
+/* The search field, then the filters: one at a time, the pressed one is filled. */
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 28px;
+  padding: 0 var(--gutter) 20px;
+}
+.tools[hidden] { display: none; }
+.search { display: flex; align-items: center; gap: 12px; }
+.search label {
+  font: 12px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(340px, 100%);
+  color: var(--muted);
+}
+.search-field svg { position: absolute; left: 14px; pointer-events: none; }
+.search-field kbd {
+  position: absolute;
+  right: 12px;
+  padding: 1px 7px;
+  border: 1px solid #6B7180;
+  border-radius: 4px;
+  font: 12px/1.4 var(--mono);
+  pointer-events: none;
+}
+.search-field input:focus ~ kbd, .search-field input:not(:placeholder-shown) ~ kbd { display: none; }
+.search input {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 40px 8px 42px;
+  border: 1px solid #6B7180;
+  border-radius: 999px;
+  background: rgba(237, 232, 221, 0.04);
+  color: var(--text);
+  font: 14px/1.2 var(--mono);
+  letter-spacing: 0.02em;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.search input::placeholder { color: var(--muted); opacity: 1; }
+.search input:hover { border-color: var(--text); }
+.search input:focus-visible { outline: 3px solid var(--text); outline-offset: 2px; border-color: var(--text); background: rgba(237, 232, 221, 0.08); }
+.search input::-webkit-search-cancel-button { cursor: pointer; filter: invert(1); }
 .filters {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px 20px;
-  padding: 0 var(--gutter) 20px;
 }
-.filters[hidden] { display: none; }
 .facet { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .facet-label {
   font: 12px/1 var(--mono);
@@ -83,6 +130,26 @@ h1 span { display: block; color: var(--muted); }
 .filters button:hover { border-color: var(--text); }
 .filters button:focus-visible { outline: 3px solid var(--text); outline-offset: 2px; }
 .filters button[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--night); }
+.no-match {
+  margin: 0;
+  padding: 48px var(--gutter);
+  font: 16px/1.5 var(--mono);
+  color: var(--muted);
+}
+.no-match[hidden] { display: none; }
+.no-match button {
+  margin-left: 8px;
+  padding: 6px 14px;
+  border: 1px solid var(--text);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.no-match button:hover { background: var(--text); color: var(--night); }
+.no-match button:focus-visible { outline: 3px solid var(--text); outline-offset: 2px; }
 .filter-count {
   position: absolute;
   width: 1px;
@@ -196,10 +263,14 @@ footer {
   .strips { flex-direction: column; height: auto; }
   .strip { flex: none; height: 440px; max-width: none; }
   /* One row that scrolls sideways: the chip cut at the edge shows there is more. */
+  .tools { flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 12px; margin-bottom: 16px; padding-bottom: 0; }
+  .search { min-width: 0; }
+  .search-field { flex: 1 1 0; width: auto; min-width: 0; }
+  .search-field kbd { display: none; }
   .filters {
     flex-wrap: nowrap;
     gap: 8px 14px;
-    margin-bottom: 16px;
+    margin: 0 calc(-1 * var(--gutter));
     padding: 2px var(--gutter) 6px;
     overflow-x: auto;
     scrollbar-width: none;
@@ -211,6 +282,6 @@ footer {
   .facet-label { font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .strip, .strip img, .info, .go, .filters button { transition: none; }
+  .strip, .strip img, .info, .go, .filters button, .search input { transition: none; }
   .strip:hover img { transform: none; }
 }

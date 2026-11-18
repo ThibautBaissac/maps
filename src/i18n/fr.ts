@@ -15,6 +15,10 @@ export const fr: Messages = {
     all: 'Toutes',
     facets: { place: 'Ville', style: 'Style', theme: 'Thème' },
     shown: { one: '{count} carte affichée', other: '{count} cartes affichées' },
+    search: 'Rechercher',
+    searchHint: 'Ville, style, sujet…',
+    noMatch: 'Aucune carte ne correspond.',
+    reset: 'Tout afficher',
   },
   map: {
     description: (title, district, style) => `Plan illustré de ${title} (${district}), style ${style}.`,

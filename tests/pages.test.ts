@@ -100,11 +100,26 @@ test('a map without its question and intro in the dictionaries fails page genera
 
 test('the static gallery tags each strip and offers its filters hidden until the script runs', () => {
   const html = galleryHtml('en', '/maps/');
-  assert.match(html, /<li class="strip[^"]*" data-tags="place:londres-soho style:gravure-sepia theme:history theme:health theme:water"/);
-  assert.match(html, /<div class="filters" role="group" aria-label="Filter the maps" hidden>/);
+  assert.match(html, /<li class="strip[^"]*" data-id="londres-gravure-sepia" data-tags="place:londres-soho style:gravure-sepia theme:history theme:health theme:water"/);
+  assert.match(html, /<div class="tools" hidden>/);
+  assert.match(html, /<div class="filters" role="group" aria-label="Filter the maps">/);
   assert.match(html, /<button type="button" data-tag="" aria-pressed="true">All<\/button>/);
   assert.match(html, /<button type="button" data-tag="theme:water" aria-pressed="false">Water<\/button>/);
   assert.match(html, /<p class="filter-count" role="status" data-forms="\{&quot;one&quot;:&quot;\{count\} map shown&quot;,&quot;other&quot;:&quot;\{count\} maps shown&quot;\}"><\/p>/);
+});
+
+test('the static gallery offers a labelled search field and embeds its index in the page language', () => {
+  const html = galleryHtml('de', '/maps/');
+  assert.match(html, /<search class="search">\s*<label for="map-search">Suchen<\/label>/);
+  assert.match(html, /<input id="map-search" type="search" name="q"[^>]* aria-keyshortcuts="\/"/);
+  assert.match(html, /<p class="no-match" hidden>Keine Karte passt\. <button type="button" class="reset">/);
+  const index = /<script type="application\/json" id="search-index">([^<]*)<\/script>/.exec(html)?.[1] ?? '';
+  const docs = JSON.parse(index) as { id: string; place: string }[];
+  assert.equal(docs.find((d) => d.id === 'lisbonne-cyanotype')?.place, 'Lissabon');
+});
+
+test('the embedded search index cannot close its script element', () => {
+  assert.doesNotMatch(/id="search-index">([\s\S]*?)<\/script>/.exec(galleryHtml('fr', '/maps/'))?.[1] ?? '', /</);
 });
 
 test('the language menu is a disclosure that names the current language and links every other one', () => {

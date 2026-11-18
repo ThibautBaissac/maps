@@ -1,6 +1,7 @@
 // Static HTML shared by development and production builds.
 import { mapsForLocale, PAGES_DIR, type CatalogueMap } from '../src/catalogue.ts';
 import { galleryFilters, mapTags } from '../src/gallery/filters.ts';
+import { searchDocuments } from '../src/gallery/search-index.ts';
 import { DEFAULT_LOCALE, formatCoordinate, formatList, LOCALES, mapStory, messages, ogLocale, type Locale, type MapStory } from '../src/i18n/index.ts';
 
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
@@ -159,7 +160,7 @@ function strip(map: CatalogueMap, locale: Locale, base: string): string {
   const colors = styleDef.card(options);
   const coords = `${formatCoordinate(locale, place.lat, 'lat', 2)} ${formatCoordinate(locale, place.lon, 'lon', 2)}`;
   // Vite prefixes public asset URLs in both dev and build; page links use base directly.
-  return `<li class="strip${colors.dark ? ' dark' : ''}" data-tags="${esc(mapTags(map).join(' '))}" style="--bg:${esc(colors.bg)};--fg:${esc(colors.fg)};--accent:${esc(colors.accent)};--len:${title.length}">
+  return `<li class="strip${colors.dark ? ' dark' : ''}" data-id="${esc(map.id)}" data-tags="${esc(mapTags(map).join(' '))}" style="--bg:${esc(colors.bg)};--fg:${esc(colors.fg)};--accent:${esc(colors.accent)};--len:${title.length}">
         <a href="${esc(base + map.paths.page)}">
           <img src="/${esc(map.paths.vignette)}" alt="" decoding="async" />
           <span class="shade" aria-hidden="true"></span>
@@ -169,19 +170,31 @@ function strip(map: CatalogueMap, locale: Locale, base: string): string {
       </li>`;
 }
 
-/** The filter buttons, revealed by src/gallery/main.ts: without JavaScript every map stays shown. */
-function filtersHtml(locale: Locale): string {
+const SEARCH_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>';
+
+/** The search field and filter buttons, revealed by src/gallery/main.ts: without JavaScript every map stays shown. */
+function toolsHtml(locale: Locale): string {
   const facets = galleryFilters(mapsForLocale(locale), locale);
-  if (!facets.length) return '';
   const copy = messages(locale).gallery;
   const button = (tag: string, label: string, pressed: boolean): string =>
     `<button type="button" data-tag="${esc(tag)}" aria-pressed="${pressed}">${esc(label)}</button>`;
-  return `<div class="filters" role="group" aria-label="${esc(copy.filters)}" hidden>
-      ${button('', copy.all, true)}
-      ${facets.map((f) => `<span class="facet" role="group" aria-label="${esc(f.label)}"><span class="facet-label" aria-hidden="true">${esc(f.label)}</span>${f.filters.map((filter) => button(filter.tag, filter.label, false)).join('')}</span>`).join('\n      ')}
+  const filters = facets.length ? `<div class="filters" role="group" aria-label="${esc(copy.filters)}">
+        ${button('', copy.all, true)}
+        ${facets.map((f) => `<span class="facet" role="group" aria-label="${esc(f.label)}"><span class="facet-label" aria-hidden="true">${esc(f.label)}</span>${f.filters.map((filter) => button(filter.tag, filter.label, false)).join('')}</span>`).join('\n        ')}
+      </div>` : '';
+  return `<div class="tools" hidden>
+      <search class="search">
+        <label for="map-search">${esc(copy.search)}</label>
+        <span class="search-field">${SEARCH_ICON}<input id="map-search" type="search" name="q" autocomplete="off" spellcheck="false" placeholder="${esc(copy.searchHint)}" aria-keyshortcuts="/" /><kbd aria-hidden="true">/</kbd></span>
+      </search>
+      ${filters}
       <p class="filter-count" role="status" data-forms="${esc(JSON.stringify(copy.shown))}"></p>
     </div>`;
 }
+
+/** The search documents as JSON safe inside a script element: no `<` can end it. */
+const searchIndexJson = (locale: Locale): string =>
+  JSON.stringify(searchDocuments(mapsForLocale(locale), locale)).replaceAll('<', '\\u003c');
 
 export function galleryHtml(locale: Locale, base: string, siteUrl?: string): string {
   const text = messages(locale), copy = text.gallery;
@@ -209,10 +222,12 @@ export function galleryHtml(locale: Locale, base: string, siteUrl?: string): str
         ${languageNav(locale, base)}
       </div>
     </header>
-    ${filtersHtml(locale)}
+    ${toolsHtml(locale)}
     <main><ul class="strips" aria-label="${esc(copy.maps)}">
       ${mapsForLocale(locale).map((map) => strip(map, locale, base)).join('\n      ')}
-    </ul></main>
+    </ul>
+    <p class="no-match" hidden>${esc(copy.noMatch)} <button type="button" class="reset">${esc(copy.reset)}</button></p></main>
+    <script type="application/json" id="search-index">${searchIndexJson(locale)}</script>
     <footer>${esc(text.data)} <a href="https://www.openstreetmap.org/copyright">${esc(text.attribution)}</a> (ODbL)</footer>
     <script type="module" src="/src/gallery/main.ts"></script>
   </body>

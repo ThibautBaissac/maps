@@ -42,6 +42,14 @@ export interface Messages {
     facets: Record<'place' | 'style' | 'theme', string>;
     /** Announced after a filter changes. */
     shown: PluralMessage;
+    /** Visible label of the search field. */
+    search: string;
+    /** Example of what the search field takes, shown while it is empty. */
+    searchHint: string;
+    /** Shown when the search and filter keep no map. */
+    noMatch: string;
+    /** The button that clears the search and the filter. */
+    reset: string;
   };
   map: {
     description: (title: string, district: string, style: string) => string;

@@ -15,6 +15,10 @@ export const de: Messages = {
     all: 'Alle',
     facets: { place: 'Stadt', style: 'Stil', theme: 'Thema' },
     shown: { one: '{count} Karte angezeigt', other: '{count} Karten angezeigt' },
+    search: 'Suchen',
+    searchHint: 'Stadt, Stil, Thema…',
+    noMatch: 'Keine Karte passt.',
+    reset: 'Alle anzeigen',
   },
   map: {
     description: (title, district, style) => `Illustrierter Plan von ${title} (${district}), Stil ${style}.`,

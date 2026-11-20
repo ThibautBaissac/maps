@@ -1,7 +1,8 @@
 // The documents of the gallery search, worked out at build time from the catalogue and
 // embedded in each gallery page. Runs in Node and the browser.
 import type { CatalogueMap } from '../catalogue.ts';
-import { mapStory, messages, type Locale } from '../i18n/index.ts';
+import { messages, type Locale } from '../i18n/index.ts';
+import { mapStory } from '../i18n/stories.ts';
 import { themesOf } from '../topics/index.ts';
 import type { SearchDocument } from './search.ts';
 

@@ -23,6 +23,8 @@ public/vignettes/<langue>/<id>.jpg   image 1200×630 d'un lien partagé (Open Gr
 src/registry.ts           la liste des cartes : un lieu × un style (+ options)
 src/catalogue.ts          chaque carte résolue par langue : titre, lieu, style, chemins
 src/i18n/                 dictionnaires typés, formats et contrôle des traductions
+src/i18n/maps/<id>.ts     question et intro d'une carte, dans sa voix, en cinq langues
+src/entries/<langue>.ts   entrée des pages de carte : le dictionnaire de la langue, puis la page
 src/topics/<sujet>/       analyse, texte du panneau et traductions de chaque sujet
 src/styles/<style>/       un style : il dessine toute la page ; src/styles/index.ts les déclare
 src/toolkit/              boîte à outils facultative : navigation, projection, noms, mise en page type…
@@ -61,7 +63,7 @@ Les dictionnaires de [`src/i18n/`](src/i18n/) fournissent les textes du HTML, de
 
 Le champ `title` du registre accepte un nom commun aux langues ou un objet `{ fr: '…', en: '…', es: '…', pt: '…', de: '…' }`. Les pages d’une même carte partagent son identifiant. Changer de langue ouvre la même carte et réinitialise sa vue.
 
-Pour ajouter une langue, compléter [`src/i18n/types.ts`](src/i18n/types.ts) et enregistrer son dictionnaire dans [`src/i18n/index.ts`](src/i18n/index.ts), y compris son format régional. Ajouter son dossier HTML généré à `.gitignore`, puis générer ses vignettes. Ajouter aussi la langue au `messages.ts` de chaque sujet de [`src/topics/`](src/topics/). Le contrôle TypeScript exige les messages, lieux, styles et sujets ; le contrôle de construction refuse aussi les textes vides. Les écritures de droite à gauche nécessitent une adaptation du placement des noms dans le Canvas.
+Pour ajouter une langue, compléter [`src/i18n/types.ts`](src/i18n/types.ts), écrire son dictionnaire `src/i18n/<langue>.ts` (qui s’enregistre avec `addMessages`), l’importer dans [`src/i18n/all.ts`](src/i18n/all.ts), créer l’entrée de ses pages de carte `src/entries/<langue>.ts`, et ajouter son format régional dans [`src/i18n/index.ts`](src/i18n/index.ts). Une page de carte ne charge que le dictionnaire de sa langue. Ajouter la langue à chaque histoire de [`src/i18n/maps/`](src/i18n/maps/). Ajouter son dossier HTML généré à `.gitignore`, puis générer ses vignettes. Ajouter aussi la langue au `messages.ts` de chaque sujet de [`src/topics/`](src/topics/). Le contrôle TypeScript exige les messages, lieux, styles et sujets ; le contrôle de construction refuse aussi les textes vides. Les écritures de droite à gauche nécessitent une adaptation du placement des noms dans le Canvas.
 
 ## Publier sur GitHub Pages
 

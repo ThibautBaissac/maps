@@ -1,3 +1,4 @@
+import { addMessages } from './index.ts';
 import type { Messages } from './types.ts';
 
 export const fr: Messages = {
@@ -75,28 +76,6 @@ export const fr: Messages = {
     source: (date, size) => `Données OpenStreetMap à jour au ${date}. Carré de ${size} km de côté, centré sur le lieu ; il dépasse parfois les limites du quartier.`,
     dataFile: 'Consulter les données OpenStreetMap (JSON)',
   },
-  maps: {
-    'amsterdam-riso': {
-      question: 'Où passer d’une rive à l’autre dans le centre d’Amsterdam ?',
-      intro: 'Ici, les canaux tracent la ville en anneaux. Pour traverser, il te faut un pont : la carte les fait ressortir, le reste s’efface.',
-    },
-    'lisbonne-cyanotype': {
-      question: 'Où les rues de l’Alfama deviennent-elles des escaliers ?',
-      intro: 'Relevé des passages en escalier, quartier et abords. Chaque trait à barreaux marque un tronçon cartographié ; sa longueur se lit en plan, pas en hauteur.',
-    },
-    'londres-gravure-sepia': {
-      question: 'Pourquoi les morts du choléra de 1854, à Soho, entourent-elles une seule pompe ?',
-      intro: 'En dix jours, à la fin de l’été 1854, plus de cinq cents personnes meurent du choléra autour de Broad Street. Le médecin John Snow porte les décès sur un plan de rue : ils se serrent autour de la pompe du quartier.',
-    },
-    'new-york-art-deco': {
-      question: 'Pourquoi les tours de Midtown construites entre 1916 et 1961 montent-elles en gradins ?',
-      intro: 'Regardez la maquette d’en haut : les tours de cette époque reculent par marches à mesure qu’elles montent. Le règlement de 1916 l’exigeait, pour que la lumière descende encore jusqu’à la rue. En 1961, une autre loi l’abandonne, et dans les années 1970 la plupart des tours se dressent d’un seul bloc.',
-    },
-    'france-dossier': {
-      question: 'Où L214 a-t-elle enquêté depuis 2008 ?',
-      intro: 'Chaque marque situe une enquête publiée : un abattoir, un élevage, un couvoir. Quand seul le département ou la région est connu, la zone entière est hachurée plutôt qu’un point inventé. Les enquêtes sans lieu sont citées à part.',
-    },
-  },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Centre historique' },
     france: { name: 'France', district: 'Métropole' },
@@ -135,3 +114,5 @@ export const fr: Messages = {
     },
   },
 };
+
+addMessages('fr', fr);

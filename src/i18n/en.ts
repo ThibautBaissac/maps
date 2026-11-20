@@ -1,3 +1,4 @@
+import { addMessages } from './index.ts';
 import type { Messages } from './types.ts';
 
 export const en: Messages = {
@@ -75,28 +76,6 @@ export const en: Messages = {
     source: (date, size) => `OpenStreetMap data as of ${date}. A square with sides of ${size} km centred on the place; it may extend beyond the neighbourhood boundary.`,
     dataFile: 'View the OpenStreetMap data (JSON)',
   },
-  maps: {
-    'amsterdam-riso': {
-      question: 'Where can you get from one bank to the other in central Amsterdam?',
-      intro: 'Here the canals draw the city in rings. To cross, you need a bridge: the map brings them out and lets the rest fade.',
-    },
-    'lisbonne-cyanotype': {
-      question: 'Where do the streets of Alfama turn into stairs?',
-      intro: 'Survey of stepped passages, in the neighbourhood and around it. Each barred line marks one mapped stretch of stairs; its length is read on the plan, not in height.',
-    },
-    'londres-gravure-sepia': {
-      question: 'Why do the 1854 cholera deaths in Soho gather around a single pump?',
-      intro: 'In ten days at the end of the summer of 1854, more than five hundred people died of cholera around Broad Street. The physician John Snow marked the deaths on a street plan: they crowd around the neighbourhood pump.',
-    },
-    'new-york-art-deco': {
-      question: 'Why do the Midtown towers built between 1916 and 1961 rise in steps?',
-      intro: 'Look down on the model: the towers of that era step back as they climb. The 1916 rules required it, so that light could still reach the street. In 1961 a new law dropped the requirement, and most towers of the 1970s went up in a single block.',
-    },
-    'france-dossier': {
-      question: 'Where has L214 investigated since 2008?',
-      intro: 'Each mark locates a published investigation: a slaughterhouse, a farm, a hatchery. Where only the department or region is known, the whole area is hatched rather than given an invented point. Investigations without a place are listed apart.',
-    },
-  },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Historic centre' },
     france: { name: 'France', district: 'Metropolitan France' },
@@ -135,3 +114,5 @@ export const en: Messages = {
     },
   },
 };
+
+addMessages('en', en);

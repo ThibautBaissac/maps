@@ -1,23 +1,22 @@
-import { fr } from './fr.ts';
-import { en } from './en.ts';
-import { es } from './es.ts';
-import { pt } from './pt.ts';
-import { de } from './de.ts';
-import { LOCALES, type Locale, type LocalizedText, type MapStory, type Messages, type PluralMessage } from './types.ts';
-import type { MapId } from '../registry.ts';
+import { LOCALES, type Locale, type LocalizedText, type Messages, type PluralMessage } from './types.ts';
 import { isRecord } from '../place.ts';
 
-export { DEFAULT_LOCALE, LOCALES, type Locale, type LocalizedText, type MapStory } from './types.ts';
+export { DEFAULT_LOCALE, LOCALES, type Locale, type LocalizedText, type MapStories, type MapStory } from './types.ts';
 
-/** Each language's dictionary. A subject's texts are in its folder, src/topics/<id>/messages.ts. */
-const MESSAGES: Record<Locale, Messages> = { fr, en, es, pt, de };
+// The dictionaries loaded so far. A map page loads only its own language's (src/entries/);
+// Node loads them all (./all.ts). A subject's texts are in its folder, src/topics/<id>/
+// messages.ts; a map's question and intro in src/i18n/maps/<map-id>.ts.
+const MESSAGES: Partial<Record<Locale, Messages>> = {};
 
-export const messages = (locale: Locale): Messages => MESSAGES[locale];
+/** Makes a language's dictionary available: each src/i18n/<locale>.ts adds itself when imported. */
+export function addMessages(locale: Locale, dictionary: Messages): void {
+  MESSAGES[locale] = dictionary;
+}
 
-/** The question and intro of a registered map; undefined for an id the dictionaries do not know. */
-export function mapStory(locale: Locale, id: string): MapStory | undefined {
-  const maps = messages(locale).maps;
-  return Object.hasOwn(maps, id) ? maps[id as MapId] : undefined;
+export function messages(locale: Locale): Messages {
+  const dictionary = MESSAGES[locale];
+  if (!dictionary) throw new Error(`No ${locale} dictionary loaded: import src/i18n/${locale}.ts first (src/i18n/all.ts in Node)`);
+  return dictionary;
 }
 
 /** A text given once for every language, or per language. */
@@ -59,7 +58,7 @@ export function featureCount(locale: Locale, feature: 0 | 1 | 2 | 3, count: numb
 
 /** Also checked at build time: Node strips types, and empty strings still type-check. */
 export function translationProblems(catalogues: unknown = MESSAGES): string[] {
-  return compareTranslations(MESSAGES.fr, catalogues);
+  return compareTranslations(messages('fr'), catalogues);
 }
 
 /** Every text of `reference` (French) missing or empty in each language of `catalogues`, as "<path>.<key>: …", the path of a language given by `pathOf`. */

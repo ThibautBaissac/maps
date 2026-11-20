@@ -29,7 +29,7 @@ export async function mount({ container, meta, locale, options, shell, layers }:
 
 `defaults.ts` exporte l'interface des options du style (`NomOptions`, chaque champ documenté) et `DEFAULTS`, ses valeurs par défaut.
 
-Le style se déclare ensuite dans `src/styles/index.ts` : son interface d'options dans `StyleOptions` (la clé devient un nom de style valide dans le registre, et les `options` de ses cartes sont vérifiées contre cette interface), puis dans `STYLES` ses textes français issus de `messages('fr').styles`, un `load()` paresseux et un `card(options)` qui renvoie `{ bg, fg, accent }` pour la galerie (avec `dark: true` si le style trace en clair sur un fond sombre : la galerie inverse alors son mélange de couleurs). Chaque dictionnaire fournit son libellé et sa légende textuelle ; le catalogue choisit ceux de la page.
+Le style se déclare ensuite dans `src/styles/index.ts` : son interface d'options dans `StyleOptions` (la clé devient un nom de style valide dans le registre, et les `options` de ses cartes sont vérifiées contre cette interface), puis dans `STYLES` un `load()` paresseux et un `card(options)` qui renvoie `{ bg, fg, accent }` pour la galerie (avec `dark: true` si le style trace en clair sur un fond sombre : la galerie inverse alors son mélange de couleurs). Chaque dictionnaire fournit son libellé et sa légende textuelle ; le catalogue choisit ceux de la page.
 
 `mount` ne se termine qu'une fois la carte dessinée : la capture de vignette lit le canvas de `#stage` dès que la promesse est résolue (`mountCanvasMap()` le garantit si la scène a une taille).
 

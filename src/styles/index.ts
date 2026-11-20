@@ -2,8 +2,7 @@
 // the style code only on the pages that use it; `card` gives the gallery and the page
 // overlays their colours from the map's options ({ bg, fg, accent }, plus dark: true for
 // a light-on-dark style).
-import type { StyleDef } from './contract.ts';
-import { messages } from '../i18n/index.ts';
+import type { StyleEntry } from './contract.ts';
 import { DEFAULTS as RISO, type RisoOptions } from './riso/defaults.ts';
 import { DEFAULTS as CYANOTYPE, type CyanotypeOptions } from './cyanotype/defaults.ts';
 import { DEFAULTS as GRAVURE_SEPIA, type GravureSepiaOptions } from './gravure-sepia/defaults.ts';
@@ -20,9 +19,8 @@ export interface StyleOptions {
 }
 export type StyleKey = keyof StyleOptions;
 
-export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
+export const STYLES: { [K in StyleKey]: StyleEntry<StyleOptions[K]> } = {
   riso: {
-    ...messages('fr').styles.riso,
     load: () => import('./riso/index.ts'),
     card: (o = {}) => {
       const v = { ...RISO, ...o };
@@ -30,7 +28,6 @@ export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
     },
   },
   cyanotype: {
-    ...messages('fr').styles.cyanotype,
     load: () => import('./cyanotype/index.ts'),
     card: (o = {}) => {
       const v = { ...CYANOTYPE, ...o };
@@ -38,7 +35,6 @@ export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
     },
   },
   'gravure-sepia': {
-    ...messages('fr').styles['gravure-sepia'],
     load: () => import('./gravure-sepia/index.ts'),
     card: (o = {}) => {
       const v = { ...GRAVURE_SEPIA, ...o };
@@ -46,7 +42,6 @@ export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
     },
   },
   'art-deco': {
-    ...messages('fr').styles['art-deco'],
     load: () => import('./art-deco/index.ts'),
     card: (o = {}) => {
       const v = { ...ART_DECO, ...o };
@@ -54,7 +49,6 @@ export const STYLES: { [K in StyleKey]: StyleDef<StyleOptions[K]> } = {
     },
   },
   dossier: {
-    ...messages('fr').styles.dossier,
     load: () => import('./dossier/index.ts'),
     card: (o = {}) => {
       const v = { ...DOSSIER, ...o };

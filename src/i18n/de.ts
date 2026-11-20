@@ -1,3 +1,4 @@
+import { addMessages } from './index.ts';
 import type { Messages } from './types.ts';
 
 export const de: Messages = {
@@ -75,28 +76,6 @@ export const de: Messages = {
     source: (date, size) => `OpenStreetMap-Daten mit Stand vom ${date}. Quadrat mit ${size} km Seitenlänge um den Ort; es kann über die Grenzen des Viertels hinausreichen.`,
     dataFile: 'OpenStreetMap-Daten ansehen (JSON)',
   },
-  maps: {
-    'amsterdam-riso': {
-      question: 'Wo kommst du im Zentrum von Amsterdam von einem Ufer ans andere?',
-      intro: 'Hier zeichnen die Grachten die Stadt in Ringen. Zum Überqueren brauchst du eine Brücke: Die Karte hebt sie hervor und lässt den Rest verblassen.',
-    },
-    'lisbonne-cyanotype': {
-      question: 'Wo werden die Straßen der Alfama zu Treppen?',
-      intro: 'Aufnahme der Treppenwege, im Viertel und seiner Umgebung. Jede Linie mit Querstrichen markiert einen kartierten Abschnitt; ihre Länge gilt im Grundriss, nicht in der Höhe.',
-    },
-    'londres-gravure-sepia': {
-      question: 'Warum sammeln sich die Cholera-Toten von 1854 in Soho um eine einzige Pumpe?',
-      intro: 'In zehn Tagen, am Ende des Sommers 1854, starben rund um die Broad Street mehr als fünfhundert Menschen an Cholera. Der Arzt John Snow trug die Todesfälle in einen Straßenplan ein: Sie drängen sich um die Pumpe des Viertels.',
-    },
-    'new-york-art-deco': {
-      question: 'Warum steigen die zwischen 1916 und 1961 gebauten Türme von Midtown in Stufen an?',
-      intro: 'Schauen Sie von oben auf das Modell: Die Türme dieser Zeit treten nach oben hin stufenweise zurück. Die Bauordnung von 1916 verlangte es, damit das Licht noch bis auf die Straße fiel. 1961 gab ein neues Gesetz diese Regel auf, und die meisten Türme der 1970er-Jahre wachsen als ein einziger Block.',
-    },
-    'france-dossier': {
-      question: 'Wo hat L214 seit 2008 recherchiert?',
-      intro: 'Jede Markierung verortet eine veröffentlichte Recherche: einen Schlachthof, einen Betrieb, eine Brüterei. Ist nur das Département oder die Region bekannt, wird die ganze Fläche schraffiert statt eines erfundenen Punkts. Recherchen ohne Ort sind gesondert aufgeführt.',
-    },
-  },
   places: {
     'amsterdam-centre': { name: 'Amsterdam', district: 'Historisches Zentrum' },
     france: { name: 'Frankreich', district: 'Europäisches Frankreich' },
@@ -135,3 +114,5 @@ export const de: Messages = {
     },
   },
 };
+
+addMessages('de', de);

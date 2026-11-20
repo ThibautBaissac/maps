@@ -70,9 +70,13 @@ export function catalogueOf(maps: readonly MapEntry[], locale: Locale = DEFAULT_
   return maps.filter(resolvable).map((m) => resolve(m, locale, layers) as CatalogueMap);
 }
 
-const catalogues = new Map(LOCALES.map((locale) => [locale, catalogueOf(MAPS, locale)]));
-export const mapsForLocale = (locale: Locale): readonly CatalogueMap[] => catalogues.get(locale)!;
-export const CATALOGUE = mapsForLocale(DEFAULT_LOCALE);
+// Resolved on first use, one language at a time: a map page has only its own dictionary.
+const catalogues = new Map<Locale, readonly CatalogueMap[]>();
+export function mapsForLocale(locale: Locale): readonly CatalogueMap[] {
+  const maps = catalogues.get(locale) ?? catalogueOf(MAPS, locale);
+  catalogues.set(locale, maps);
+  return maps;
+}
 
 export function findMap(id: string, locale: Locale = DEFAULT_LOCALE): CatalogueMap | undefined {
   return mapsForLocale(locale).find((m) => m.id === id);

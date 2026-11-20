@@ -1,8 +1,10 @@
 import { defineConfig, type Plugin } from 'vite';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { CATALOGUE, catalogueProblems, mapsForLocale, missingPictures, PAGES_DIR } from './src/catalogue.ts';
+import './src/i18n/all.ts';
+import { catalogueProblems, mapsForLocale, missingPictures, PAGES_DIR } from './src/catalogue.ts';
 import { DEFAULT_LOCALE, LOCALES, translationProblems } from './src/i18n/index.ts';
+import { storyProblems } from './src/i18n/stories.ts';
 import { topicTranslationProblems } from './src/topics/all.ts';
 
 import { galleryHtml, pageHtml, sitemapXml } from './scripts/pages.ts';
@@ -29,7 +31,7 @@ function writePage(path: string, html: string): string {
 let published: string[] = [];
 
 function generatePages(strict: boolean): Record<string, string> {
-  const problems = [...translationProblems(), ...topicTranslationProblems()];
+  const problems = [...translationProblems(), ...storyProblems(), ...topicTranslationProblems()];
   if (problems.length) throw new Error(`translations:\n${problems.join('\n')}`);
   rmSync(new URL(PAGES_DIR, pathToFileURL(root)), { recursive: true, force: true }); // generated, git-ignored
   const input: Record<string, string> = { index: `${root}index.html` };
@@ -55,9 +57,10 @@ function generatePages(strict: boolean): Record<string, string> {
       input[`${locale}-${m.id}`] = writePage(m.paths.page, pageHtml(m, locale, base, siteUrl));
     }
   }
-  published = CATALOGUE.map((m) => m.id).filter((id) => !skipped.has(id));
+  const catalogue = mapsForLocale(DEFAULT_LOCALE);
+  published = catalogue.map((m) => m.id).filter((id) => !skipped.has(id));
   // Keep existing French URLs usable; their canonical URLs point to /fr/.
-  for (const m of CATALOGUE) {
+  for (const m of catalogue) {
     if (!skipped.has(m.id)) input[m.id] = writePage(`${PAGES_DIR}/${m.id}/`, pageHtml(m, DEFAULT_LOCALE, base, siteUrl));
   }
   return input;

@@ -1,3 +1,4 @@
+import { addMessages } from './index.ts';
 import type { Messages } from './types.ts';
 
 // European Portuguese (pt-PT): the register of the Lisbon map's own city.
@@ -76,28 +77,6 @@ export const pt: Messages = {
     source: (date, size) => `Dados do OpenStreetMap atualizados a ${date}. Quadrado com ${size} km de lado centrado no lugar; pode ultrapassar os limites do bairro.`,
     dataFile: 'Consultar os dados do OpenStreetMap (JSON)',
   },
-  maps: {
-    'amsterdam-riso': {
-      question: 'Por onde passar de uma margem à outra no centro de Amesterdão?',
-      intro: 'Aqui, os canais desenham a cidade em anéis. Para atravessar, precisas de uma ponte: o mapa fá-las sobressair e deixa o resto apagar-se.',
-    },
-    'lisbonne-cyanotype': {
-      question: 'Onde é que as ruas de Alfama se tornam escadas?',
-      intro: 'Levantamento das passagens em escada, no bairro e arredores. Cada traço com travessas marca um troço cartografado; o comprimento lê-se em planta, não em altura.',
-    },
-    'londres-gravure-sepia': {
-      question: 'Porque é que as mortes de cólera de 1854, no Soho, rodeiam uma única bomba?',
-      intro: 'Em dez dias, no fim do verão de 1854, mais de quinhentas pessoas morreram de cólera em torno de Broad Street. O médico John Snow marcou as mortes numa planta das ruas: concentram-se à volta da bomba do bairro.',
-    },
-    'new-york-art-deco': {
-      question: 'Porque é que as torres de Midtown construídas entre 1916 e 1961 sobem em degraus?',
-      intro: 'Olhe para a maqueta de cima: as torres dessa época recuam em degraus à medida que sobem. O regulamento de 1916 exigia-o, para que a luz continuasse a chegar à rua. Em 1961, outra lei abandona a regra, e nos anos 1970 a maioria das torres ergue-se num só bloco.',
-    },
-    'france-dossier': {
-      question: 'Onde investigou a L214 desde 2008?',
-      intro: 'Cada marca situa uma investigação publicada: um matadouro, uma exploração, uma incubadora. Quando só se conhece o departamento ou a região, a zona inteira fica tracejada em vez de receber um ponto inventado. As investigações sem local são citadas à parte.',
-    },
-  },
   places: {
     'amsterdam-centre': { name: 'Amesterdão', district: 'Centro histórico' },
     france: { name: 'França', district: 'França metropolitana' },
@@ -136,3 +115,5 @@ export const pt: Messages = {
     },
   },
 };
+
+addMessages('pt', pt);

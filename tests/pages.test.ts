@@ -135,3 +135,11 @@ test('the language menu is a disclosure that names the current language and link
   }
   assert.ok(nav.includes('<a href="/atlas/pt/" lang="pt" hreflang="pt" aria-current="page">Português</a>'));
 });
+
+test('a map page carries its own question and intro and loads its language only', () => {
+  const html = pageHtml(findMap('amsterdam-riso', 'en')!, 'en', '/maps/');
+  assert.match(html, /data-question="Where can you get from one bank to the other in central Amsterdam\?"/);
+  assert.match(html, /data-intro="Here the canals draw the city in rings\./);
+  assert.match(html, /<script type="module" src="\/src\/entries\/en\.ts"><\/script>/);
+  assert.doesNotMatch(html, /Où passer d’une rive/);
+});

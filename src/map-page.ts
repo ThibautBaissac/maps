@@ -1,5 +1,6 @@
-// Entry of every generated map page: <body data-map="<id>">. Loads the map's data and
-// style, then hands the stage over to the style's mount().
+// Every generated map page: <body data-map="<id>">, opened by src/entries/<locale>.ts once
+// its language's dictionary is loaded. Loads the map's data, style and subject, then hands
+// the stage over to the style's mount().
 import { bodyData, element } from './dom.ts';
 import { describeMap } from './map-description.ts';
 import { findMap, type CatalogueMapOf } from './catalogue.ts';
@@ -9,16 +10,10 @@ import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
 import { ZOOM_STEP } from './toolkit/viewport.ts';
-import { DEFAULT_LOCALE, isLocale, mapStory, messages } from './i18n/index.ts';
+import { DEFAULT_LOCALE, isLocale, messages, type Locale, type MapStory } from './i18n/index.ts';
 import { contentOf, loadTopic } from './topics/index.ts';
 import { mountTopicPanel } from './topic-panel.ts';
 import { enhanceLanguageMenu } from './languages.ts';
-
-enhanceLanguageMenu();
-
-const lang = document.documentElement.lang;
-const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
-const copy = messages(locale).map;
 
 declare global {
   interface Window {
@@ -27,7 +22,7 @@ declare global {
   }
 }
 
-async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHandle> {
+async function open<K extends StyleKey>(map: CatalogueMapOf<K>, locale: Locale): Promise<MapHandle> {
   const { styleDef: style, options } = map;
 
   const shell = createShell({
@@ -58,8 +53,8 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   const subjectData = url ?? `${import.meta.env.BASE_URL}${firstOverlay?.path ?? map.layers[0]?.path ?? ''}`;
 
   const { survey, meta } = mountMetaOf(map, osm);
-  const story = mapStory(locale, map.id);
-  if (!story) throw new Error(`No question and intro for map "${map.id}" (maps in src/i18n)`);
+  // The page carries its own question and intro (scripts/pages.ts): no other map's is loaded.
+  const story: MapStory = { question: bodyData('question'), intro: bodyData('intro') };
   const topic = subject?.analyse(survey, layers);
   const content = subject && topic ? contentOf(subject, survey, topic, story, locale) : undefined;
   describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), survey, layers, { ...meta, osm: osm !== null }, style.legend, locale, content, overlays);
@@ -97,25 +92,32 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   return handle;
 }
 
-const id = bodyData('map');
-const map = findMap(id, locale);
-try {
-  if (!map) throw new Error(`Unknown map "${id}" (src/registry.ts)`);
-  const handle = await open(map);
-  if (import.meta.env.DEV) window.__map = handle;
-  if (window.location.hash === '#vignette') {
-    const { captureVignette } = await import('./vignette.ts');
-    captureVignette(element('#stage', HTMLElement));
+/** Opens the page's map. Runs only once called: its entry loads the dictionary first. */
+export async function openMapPage(): Promise<void> {
+  enhanceLanguageMenu();
+  const lang = document.documentElement.lang;
+  const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
+  const copy = messages(locale).map;
+  const id = bodyData('map');
+  const map = findMap(id, locale);
+  try {
+    if (!map) throw new Error(`Unknown map "${id}" (src/registry.ts)`);
+    const handle = await open(map, locale);
+    if (import.meta.env.DEV) window.__map = handle;
+    if (window.location.hash === '#vignette') {
+      const { captureVignette } = await import('./vignette.ts');
+      captureVignette(element('#stage', HTMLElement));
+    }
+  } catch (err) {
+    console.error('Map loading failed:', err);
+    element('#stage', HTMLElement).replaceChildren();
+    const status = element('.loading', HTMLElement);
+    status.setAttribute('role', 'alert');
+    status.textContent = copy.error;
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.textContent = copy.retry;
+    retry.addEventListener('click', () => window.location.reload());
+    status.append(document.createElement('br'), retry);
   }
-} catch (err) {
-  console.error('Map loading failed:', err);
-  element('#stage', HTMLElement).replaceChildren();
-  const status = element('.loading', HTMLElement);
-  status.setAttribute('role', 'alert');
-  status.textContent = copy.error;
-  const retry = document.createElement('button');
-  retry.type = 'button';
-  retry.textContent = copy.retry;
-  retry.addEventListener('click', () => window.location.reload());
-  status.append(document.createElement('br'), retry);
 }

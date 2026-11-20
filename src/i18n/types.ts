@@ -1,5 +1,4 @@
 import type { PlaceId } from '../../places/index.ts';
-import type { MapId } from '../registry.ts';
 import type { StyleKey } from '../styles/index.ts';
 import type { ThemeId } from '../topics/types.ts';
 
@@ -19,6 +18,9 @@ export interface MapStory {
   /** Two or three sentences that set the scene before the measurements. */
   intro: string;
 }
+
+/** A map's question and intro in every language: src/i18n/maps/<map-id>.ts. */
+export type MapStories = Record<Locale, MapStory>;
 
 /** Every supported language supplies the same messages, including accessible text. */
 export interface Messages {
@@ -103,8 +105,6 @@ export interface Messages {
     source: (date: string, size: string) => string;
     dataFile: string;
   };
-  /** The texts of a map written in its own voice: see voices/<map-id>.md. */
-  maps: Record<MapId, MapStory>;
   /** Labels of the subjects' themes (src/topics/types.ts), found by the gallery search. */
   themes: Record<ThemeId, string>;
   styles: Record<StyleKey, { label: string; legend: Four<string> }>;

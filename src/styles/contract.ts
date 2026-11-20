@@ -56,11 +56,16 @@ export interface CardColors {
 }
 
 /** A style as declared in src/styles/index.ts. */
-export interface StyleDef<O> {
-  label: string;
-  /** Text equivalent of the visual symbols, used by the map description. */
-  legend: readonly string[];
+/** A style as registered in STYLES (src/styles/index.ts): its texts are in the dictionaries, styles.<key>. */
+export interface StyleEntry<O> {
   /** Imports the style code, only on the pages that use it. */
   load(): Promise<StyleModule<O>>;
   card(options?: Partial<O>): CardColors;
+}
+
+/** A style with its texts in one language, as the catalogue resolves it. */
+export interface StyleDef<O> extends StyleEntry<O> {
+  label: string;
+  /** Text equivalent of the visual symbols, used by the map description. */
+  legend: readonly string[];
 }

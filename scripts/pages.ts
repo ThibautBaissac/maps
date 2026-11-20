@@ -1,8 +1,10 @@
 // Static HTML shared by development and production builds.
+import '../src/i18n/all.ts';
 import { mapsForLocale, PAGES_DIR, type CatalogueMap } from '../src/catalogue.ts';
 import { searchDocuments } from '../src/gallery/search-index.ts';
 import { topicText } from '../src/topics/all.ts';
-import { DEFAULT_LOCALE, formatCoordinate, formatList, LOCALES, mapStory, messages, ogLocale, pluralText, type Locale, type MapStory } from '../src/i18n/index.ts';
+import { mapStory } from '../src/i18n/stories.ts';
+import { DEFAULT_LOCALE, formatCoordinate, formatList, LOCALES, messages, ogLocale, pluralText, type Locale, type MapStory } from '../src/i18n/index.ts';
 
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ESCAPES[c] ?? c);
@@ -99,10 +101,10 @@ ${entries.join('\n')}
 `;
 }
 
-/** Every registered map has its question and intro: the dictionaries are typed by registry id. */
+/** Every registered map has its question and intro: src/i18n/stories.ts is typed by registry id. */
 function storyOf(map: CatalogueMap, locale: Locale): MapStory {
   const story = mapStory(locale, map.id);
-  if (!story) throw new Error(`No question and intro for map "${map.id}" in ${locale} (maps in src/i18n)`);
+  if (!story) throw new Error(`No question and intro for map "${map.id}" in ${locale} (src/i18n/maps/${map.id}.ts)`);
   return story;
 }
 
@@ -125,7 +127,7 @@ export function pageHtml(map: CatalogueMap, locale: Locale, base: string, siteUr
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/src/map-page.css" />
   </head>
-  <body${topic ? ' class="has-topic"' : ''} data-map="${esc(map.id)}" data-label="${esc([topic?.question, copy.label(title, place.district)].filter(Boolean).join(' '))}">
+  <body${topic ? ' class="has-topic"' : ''} data-map="${esc(map.id)}"${topic ? ` data-question="${esc(topic.question)}" data-intro="${esc(topic.intro)}"` : ''} data-label="${esc([topic?.question, copy.label(title, place.district)].filter(Boolean).join(' '))}">
     <header class="topic-heading">
       <div class="page-navigation">
         <a class="back" href="${esc(base + pathFor(locale))}">← ${esc(copy.back)}</a>
@@ -158,7 +160,7 @@ export function pageHtml(map: CatalogueMap, locale: Locale, base: string, siteUr
     ].join(' · ')}</small>
     </main>
     ${topic ? `<aside id="topic-panel" class="topic-panel" aria-label="${esc(topic.question)}"><p>${esc(topic.intro)}</p><p>${esc(topic.legend)}</p></aside>` : ''}
-    <script type="module" src="/src/map-page.ts"></script>
+    <script type="module" src="/src/entries/${locale}.ts"></script>
   </body>
 </html>
 `;

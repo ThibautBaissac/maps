@@ -7,7 +7,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "test": "node --test",
+    "test": "node --test --import ./tests/setup.ts",
     "dev": "vite",
     "typecheck": "tsc -b",
     "build": "tsc -b && vite build",

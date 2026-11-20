@@ -1,3 +1,4 @@
+import { addMessages } from './index.ts';
 import type { Messages } from './types.ts';
 
 export const es: Messages = {
@@ -75,28 +76,6 @@ export const es: Messages = {
     source: (date, size) => `Datos de OpenStreetMap actualizados a ${date}. Cuadrado de ${size} km de lado centrado en el lugar; puede superar los límites del barrio.`,
     dataFile: 'Consultar los datos de OpenStreetMap (JSON)',
   },
-  maps: {
-    'amsterdam-riso': {
-      question: '¿Por dónde pasar de una orilla a otra en el centro de Ámsterdam?',
-      intro: 'Aquí los canales dibujan la ciudad en anillos. Para cruzar necesitas un puente: el mapa los resalta y deja que el resto se desvanezca.',
-    },
-    'lisbonne-cyanotype': {
-      question: '¿Dónde se vuelven escaleras las calles de Alfama?',
-      intro: 'Levantamiento de los pasos con escaleras, en el barrio y sus alrededores. Cada trazo con travesaños marca un tramo cartografiado; su longitud se lee en planta, no en altura.',
-    },
-    'londres-gravure-sepia': {
-      question: '¿Por qué las muertes del cólera de 1854, en el Soho, rodean una sola bomba?',
-      intro: 'En diez días, a finales del verano de 1854, más de quinientas personas murieron de cólera en torno a Broad Street. El médico John Snow marcó las muertes en un plano de calles: se agolpan alrededor de la bomba del barrio.',
-    },
-    'new-york-art-deco': {
-      question: '¿Por qué las torres de Midtown construidas entre 1916 y 1961 suben en escalones?',
-      intro: 'Mire la maqueta desde arriba: las torres de esa época retroceden en escalones a medida que suben. El reglamento de 1916 lo exigía, para que la luz siguiera bajando hasta la calle. En 1961 otra ley lo abandona, y en los años setenta la mayoría de las torres se alzan de un solo bloque.',
-    },
-    'france-dossier': {
-      question: '¿Dónde ha investigado L214 desde 2008?',
-      intro: 'Cada marca sitúa una investigación publicada: un matadero, una granja, una incubadora. Cuando solo se conoce el departamento o la región, se raya toda la zona en lugar de inventar un punto. Las investigaciones sin lugar se citan aparte.',
-    },
-  },
   places: {
     'amsterdam-centre': { name: 'Ámsterdam', district: 'Centro histórico' },
     france: { name: 'Francia', district: 'Francia metropolitana' },
@@ -135,3 +114,5 @@ export const es: Messages = {
     },
   },
 };
+
+addMessages('es', es);

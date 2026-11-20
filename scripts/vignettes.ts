@@ -12,9 +12,10 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { availableParallelism, tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
-import { CATALOGUE, findMap, missingPictures, type CatalogueMap } from '../src/catalogue.ts';
+import '../src/i18n/all.ts';
+import { findMap, mapsForLocale, missingPictures, type CatalogueMap } from '../src/catalogue.ts';
 import { fail, message } from './cli.ts';
-import { LOCALES, isLocale, type Locale } from '../src/i18n/index.ts';
+import { DEFAULT_LOCALE, LOCALES, isLocale, type Locale } from '../src/i18n/index.ts';
 
 const args = process.argv.slice(2);
 const missingAt = args.indexOf('--missing');
@@ -32,7 +33,7 @@ if (localeAt >= 0 && (!selected || !isLocale(selected))) fail(`--locale needs on
 const locales: readonly Locale[] = selected && isLocale(selected) ? [selected] : LOCALES;
 const maps: CatalogueMap[] = args.length
   ? args.map((id) => findMap(id) ?? fail(`Unknown map "${id}" (src/registry.ts)`))
-  : [...CATALOGUE];
+  : [...mapsForLocale(DEFAULT_LOCALE)];
 
 function findChrome(): string {
   const env = process.env['CHROME'];

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import * as i18n from '../src/i18n/index.ts';
+import { mapStory, storyProblems } from '../src/i18n/stories.ts';
 
 test('numbers and coordinates follow the selected language', () => {
   assert.equal(typeof i18n.formatNumber, 'function');
@@ -37,4 +38,17 @@ test('translation validation names missing and empty messages instead of hiding 
 test('numbered references follow the punctuation of each language in the text description', () => {
   assert.equal(i18n.messages('en').topic.referenceLine('1', 'Broad Street pump', '3 deaths'), '1. Broad Street pump: 3 deaths');
   assert.equal(i18n.messages('fr').topic.referenceLine('1', 'Pompe de Broad Street', '3 décès'), '1. Pompe de Broad Street : 3 décès');
+});
+
+test('story validation names a map whose question or intro is missing in a language', () => {
+  const stories = Object.fromEntries(['amsterdam-riso', 'lisbonne-cyanotype', 'londres-gravure-sepia', 'new-york-art-deco', 'france-dossier']
+    .map((id) => [id, Object.fromEntries(i18n.LOCALES.map((l) => [l, mapStory(l, id)]))]));
+  assert.deepEqual(storyProblems(), []);
+  const amsterdam = stories['amsterdam-riso']!;
+  assert.deepEqual(storyProblems({ ...stories, 'amsterdam-riso': { ...amsterdam, de: { question: 'Wo?', intro: ' ' } } }), ['de.maps.amsterdam-riso.intro: empty translation']);
+});
+
+test('a dictionary not loaded is named rather than read as missing texts', async () => {
+  const { messages } = await import(`../src/i18n/index.ts?isolated=${Date.now()}`) as typeof i18n;
+  assert.throws(() => messages('pt'), /No pt dictionary loaded: import src\/i18n\/pt\.ts first/);
 });

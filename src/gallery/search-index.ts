@@ -2,7 +2,7 @@
 // embedded in each gallery page. Runs in Node and the browser.
 import type { CatalogueMap } from '../catalogue.ts';
 import { mapStory, messages, type Locale } from '../i18n/index.ts';
-import { TOPIC_THEMES } from '../topics.ts';
+import { themesOf } from '../topics/index.ts';
 import type { SearchDocument } from './search.ts';
 
 export function searchDocuments(maps: readonly CatalogueMap[], locale: Locale): SearchDocument[] {
@@ -14,6 +14,6 @@ export function searchDocuments(maps: readonly CatalogueMap[], locale: Locale): 
     district: map.place.district,
     style: map.styleDef.label,
     question: mapStory(locale, map.id)?.question ?? '',
-    themes: TOPIC_THEMES[map.topic].map((theme) => text.themes[theme]).join(' '),
+    themes: themesOf(map.topic).map((theme) => text.themes[theme]).join(' '),
   }));
 }

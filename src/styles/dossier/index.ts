@@ -10,7 +10,7 @@ import type { Projector } from '../../toolkit/projection.ts';
 import { mountCanvasMap, type CanvasLayout } from '../../toolkit/stage.ts';
 import { drawTopicMarkers } from '../../toolkit/topic.ts';
 import type { View } from '../../toolkit/viewport.ts';
-import { departementsOf, type Investigation, type SiteKind } from '../../investigations.ts';
+import { departementsOf, type Investigation, type SiteKind } from '../../topics/investigations/evidence.ts';
 import { featuresOf, type Ring } from '../../layers.ts';
 import { formatNumber, messages, pluralText } from '../../i18n/index.ts';
 import type { MapHandle, MountArgs } from '../contract.ts';

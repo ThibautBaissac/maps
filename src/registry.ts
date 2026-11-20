@@ -4,7 +4,7 @@
 import type { PlaceId } from '../places/index.ts';
 import type { StyleKey, StyleOptions } from './styles/index.ts';
 import type { LocalizedText } from './i18n/index.ts';
-import type { TopicId } from './topics.ts';
+import type { TopicId } from './topics/index.ts';
 
 export interface MapEntryOf<K extends StyleKey> {
   /** URL slug, unique, [a-z0-9-]. */

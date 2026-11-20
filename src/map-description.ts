@@ -1,7 +1,6 @@
 import { featureCount, formatDate, formatNumber, messages, pluralText, type Locale, type MapStory } from './i18n/index.ts';
 import { featuresOf, isTunnel, type Feature as LayerFeature, type Layer, type Line, type Survey } from './layers.ts';
-import type { TopicAnalysis } from './topics.ts';
-import { topicContent } from './topic-content.ts';
+import { topicContent, type TopicAnalysis } from './topics/index.ts';
 
 type Feature = readonly [name: string | undefined, paths: readonly Line[]];
 interface Bounds { left: number; right: number; bottom: number; top: number }

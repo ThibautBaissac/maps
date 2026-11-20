@@ -1,9 +1,9 @@
 // Subject "setbacks": which towers of the square rise in steps, by building period.
 // A tower is a building at least TOWER_M tall; its form is read from its OSM building
 // parts. Local metres; runs in the browser and in Node: no DOM, no Node API.
-import { featuresOf, hasParts, heightOf, yearOf, type Feature, type Layer, type Ring } from './layers.ts';
-import { owners, ringArea, ringCentroid } from './rings.ts';
-import type { Point } from './toolkit/geometry.ts';
+import { featuresOf, hasParts, heightOf, yearOf, type Feature, type Layer, type Ring } from '../../layers.ts';
+import { owners, ringArea, ringCentroid } from '../../rings.ts';
+import type { Point } from '../../toolkit/geometry.ts';
 
 /** Height from which a building counts as a tower, m. */
 export const TOWER_M = 80;

@@ -1,8 +1,7 @@
 import type { Survey } from './layers.ts';
 import type { MapHandle } from './styles/contract.ts';
 import type { Locale, MapStory } from './i18n/index.ts';
-import type { TopicAnalysis } from './topics.ts';
-import { topicContent } from './topic-content.ts';
+import { topicContent, type TopicAnalysis } from './topics/index.ts';
 
 export function mountTopicPanel(container: HTMLElement, survey: Survey, topic: TopicAnalysis, story: MapStory, locale: Locale, handle: MapHandle, dataUrl: string): void {
   const content = topicContent(survey, topic, story, locale);

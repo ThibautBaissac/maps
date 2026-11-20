@@ -1,8 +1,8 @@
 // The L214 investigations subject (topic investigations): where the published investigations
 // took place, from the overlay points of the france place and its base départements.
 // Pure: runs in the browser and in Node.
-import { featuresOf, type Feature, type Layer, type Ring } from './layers.ts';
-import type { Point } from './toolkit/geometry.ts';
+import { featuresOf, type Feature, type Layer, type Ring } from '../../layers.ts';
+import type { Point } from '../../toolkit/geometry.ts';
 
 /** What was filmed: the kind of site. */
 export const SITE_KINDS = ['abattoir', 'elevage', 'couvoir', 'transport', 'autre'] as const;

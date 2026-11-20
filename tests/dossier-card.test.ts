@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import type { Departement, Investigation } from '../src/investigations.ts';
+import type { Departement, Investigation } from '../src/topics/investigations/evidence.ts';
 import type { Ring } from '../src/layers.ts';
 import { areaInvestigations, departementAt, markAt, placeText } from '../src/styles/dossier/card.ts';
 

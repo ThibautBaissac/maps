@@ -4,7 +4,7 @@
 import { baseOf, featuresOf, hasParts, heightOf, isTunnel, type Feature, type Layer, type Line, type Ring } from '../../layers.ts';
 import type { Rect } from '../../toolkit/geometry.ts';
 import { bboxOf, type Projector } from '../../toolkit/projection.ts';
-import type { TopicAnalysis } from '../../topics.ts';
+import type { TopicAnalysis } from '../../topics/index.ts';
 import type { ArtDecoOptions } from './defaults.ts';
 
 // Flat coordinate arrays hold [x, y] pairs: an index bounded by the length (stepping by 2)

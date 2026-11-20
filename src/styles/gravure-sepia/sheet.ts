@@ -6,7 +6,7 @@ import type { Rect } from '../../toolkit/geometry.ts';
 import { clamp, scaleBar, type Layout } from '../../toolkit/layout.ts';
 import { mulberry32, pixelCanvas } from '../../toolkit/noise.ts';
 import type { View } from '../../toolkit/viewport.ts';
-import type { TopicAnalysis } from '../../topics.ts';
+import type { TopicAnalysis } from '../../topics/index.ts';
 import type { MountMeta } from '../contract.ts';
 import type { GravureSepiaOptions } from './defaults.ts';
 import type { PlanPatterns } from './map.ts';

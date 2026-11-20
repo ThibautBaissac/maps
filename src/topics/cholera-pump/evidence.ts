@@ -2,8 +2,8 @@
 // foot. Deaths, pumps and landmarks come from external point layers, recognised by their
 // properties (p.deaths, k = pump | broad-street, k = workhouse | brewery); walking distances
 // follow the OpenStreetMap streets of today. Pure: runs in the browser and in Node.
-import { featuresOf, isTunnel, type Layer } from './layers.ts';
-import type { Point } from './toolkit/geometry.ts';
+import { featuresOf, isTunnel, type Layer } from '../../layers.ts';
+import type { Point } from '../../toolkit/geometry.ts';
 
 export interface CholeraPump {
   name: string;

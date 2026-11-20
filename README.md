@@ -52,7 +52,7 @@ Avant de réaliser la carte, l’agent examine les données, recommande un sujet
 
 Les options possibles d'un style sont dans son fichier `defaults.ts` ; le type-checking refuse une option inconnue ou un style inexistant. Pour créer un style, voir [`src/styles/README.md`](src/styles/README.md) : contrat, format des données, boîte à outils.
 
-Le [module d’analyse des sujets](src/topics.ts) sélectionne les géométries, les découpe au carré du relevé et calcule leurs longueurs et leur répartition. Le dessin et le texte partagent ce résultat ; ils ne recalculent pas les mesures selon le zoom. Les longueurs décrivent les tronçons OSM et peuvent inclure des voies parallèles. Elles ne donnent ni un nombre de ponts physiques, ni un nombre de marches, ni un dénivelé. Les secteurs divisent le carré du relevé ; ils ne désignent pas des quartiers administratifs.
+Chaque sujet vit dans `src/topics/<id>/` et s’enregistre dans [le registre des sujets](src/topics/index.ts). L’[analyse des sujets linéaires](src/topics/linear/index.ts) sélectionne les géométries, les découpe au carré du relevé et calcule leurs longueurs et leur répartition. Le dessin et le texte partagent ce résultat ; ils ne recalculent pas les mesures selon le zoom. Les longueurs décrivent les tronçons OSM et peuvent inclure des voies parallèles. Elles ne donnent ni un nombre de ponts physiques, ni un nombre de marches, ni un dénivelé. Les secteurs divisent le carré du relevé ; ils ne désignent pas des quartiers administratifs.
 
 ## Traductions
 

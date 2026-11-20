@@ -2,7 +2,7 @@
 // sites not named, several sites at once): the investigations subject cites them beside the
 // map. The located ones are the enquetes layer of the france place (places/layers.ts).
 // Compiled from https://www.l214.com/enquetes/ on 2026-11-18; method in layers/france/README.md.
-import type { UnlocatedInvestigation } from '../src/investigations.ts';
+import type { UnlocatedInvestigation } from '../src/topics/investigations/evidence.ts';
 
 export const UNLOCATED_INVESTIGATIONS: readonly UnlocatedInvestigation[] = [
   { year: 2008, site: 'elevage', name: 'Élevage de canards - Foie gras - Euralis', url: '' },

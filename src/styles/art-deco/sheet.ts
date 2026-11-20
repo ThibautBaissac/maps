@@ -6,7 +6,7 @@ import type { Rect } from '../../toolkit/geometry.ts';
 import { clamp, scaleBar } from '../../toolkit/layout.ts';
 import type { CanvasLayout } from '../../toolkit/stage.ts';
 import type { View } from '../../toolkit/viewport.ts';
-import type { TopicAnalysis } from '../../topics.ts';
+import type { TopicAnalysis } from '../../topics/index.ts';
 import type { MountMeta } from '../contract.ts';
 import type { ArtDecoOptions } from './defaults.ts';
 import type { Inks, Palette } from './relief.ts';

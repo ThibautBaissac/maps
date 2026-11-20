@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { analyseInvestigations, departementsOf, type UnlocatedInvestigation } from '../src/investigations.ts';
+import { analyseInvestigations, departementsOf, type UnlocatedInvestigation } from '../src/topics/investigations/evidence.ts';
 import type { Feature, Layer, Ring } from '../src/layers.ts';
 import type { Point } from '../src/toolkit/geometry.ts';
-import { analyseTopic } from '../src/topics.ts';
-import { topicContent } from '../src/topic-content.ts';
+import { analyseTopic, topicContent } from '../src/topics/index.ts';
 
 const square = (x: number, y: number, s: number): Ring => [x, y, x + s, y, x + s, y + s, x, y + s, x, y];
 // Three départements: two in Bretagne (53), one in Pays de la Loire (52), 100 km wide.

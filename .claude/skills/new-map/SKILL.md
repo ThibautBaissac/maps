@@ -91,7 +91,7 @@ Ajoute l'entrée dans `src/registry.ts` :
 { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', topic: 'steps', options: { /* si variante */ } },
 ```
 
-Réutilise un sujet de `src/topics.ts` seulement s’il correspond à la question validée. Sinon, ajoute sa sélection et ses mesures dans ce module, ses thèmes dans `TOPIC_THEMES` (trouvés par la recherche de la galerie ; un nouveau thème va dans `THEME_IDS` et dans `themes.<thème>` des dictionnaires), ses traductions dans les dictionnaires et ses vérifications. Le build refuse une carte sans sujet ou avec un sujet inconnu.
+Réutilise un sujet de `TOPICS` (`src/topics/index.ts`) seulement s’il correspond à la question validée. Sinon, crée `src/topics/<id>/` : `evidence.ts` pour la sélection et les mesures pures, `index.ts` qui exporte un `TopicDef` (`src/topics/types.ts`) avec ses thèmes (trouvés par la recherche de la galerie ; un nouveau thème va dans `THEME_IDS` et dans `themes.<thème>` des dictionnaires), `analyse()` qui ajoute les repères numérotés et `content()` pour le texte du panneau. Enregistre-le dans `TOPICS`, puis ajoute ses traductions dans les dictionnaires et ses vérifications. Un sujet mesuré en longueur de tronçons réutilise `linearTopic()` de `src/topics/linear/`. Le build refuse une carte sans sujet ou avec un sujet inconnu.
 
 Les dictionnaires (`src/i18n/fr.ts`, `en.ts`, `es.ts`, `pt.ts`, `de.ts`) séparent deux sortes de textes :
 - `topics.<sujet>` : `metric`, `legend`, `method`, `limits`, les faits et la méthode du sujet, au ton neutre, partagés par toutes les cartes de ce sujet ;

@@ -1,7 +1,7 @@
 // The detail card of the dossier style: what a click on a mark or a hatched area tells.
 // The hit tests are pure; the card itself is a small HTML element over the stage.
-import type { Departement, Investigation } from '../../investigations.ts';
-import { REGIONS } from '../../investigations.ts';
+import type { Departement, Investigation } from '../../topics/investigations/evidence.ts';
+import { REGIONS } from '../../topics/investigations/evidence.ts';
 import type { Ring } from '../../layers.ts';
 import type { Point } from '../../toolkit/geometry.ts';
 import { messages, type Locale } from '../../i18n/index.ts';

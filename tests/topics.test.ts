@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Feature, Layer, Line } from '../src/layers.ts';
-import * as topics from '../src/topics.ts';
+import * as topics from '../src/topics/index.ts';
 import { osmLayersOf } from './osm-file.ts';
 
 const survey = { half: 10 };
@@ -55,4 +55,11 @@ test('empty thematic data produces zero measurements and no invented references'
   assert.equal(result.length, 0);
   assert.deepEqual(result.places, []);
   assert.ok(result.sectors.every((s) => s.length === 0));
+});
+
+test('every registered subject analyses to the id it is registered under, so its text is found again', () => {
+  for (const id of topics.TOPIC_IDS) {
+    assert.equal(topics.analyseTopic(survey, map([]), id).id, id);
+    assert.ok(topics.themesOf(id).length > 0, `${id} has no gallery theme`);
+  }
 });

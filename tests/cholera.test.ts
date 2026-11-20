@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { analyseCholera } from '../src/cholera.ts';
+import { analyseCholera } from '../src/topics/cholera-pump/evidence.ts';
 import type { Feature, Layer, Line } from '../src/layers.ts';
-import { topicContent } from '../src/topic-content.ts';
-import { analyseTopic } from '../src/topics.ts';
+import { analyseTopic, topicContent } from '../src/topics/index.ts';
 import type { Point } from '../src/toolkit/geometry.ts';
 import { osmLayersOf } from './osm-file.ts';
 

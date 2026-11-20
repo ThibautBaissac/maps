@@ -10,7 +10,7 @@ import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
 import { ZOOM_STEP } from './toolkit/viewport.ts';
 import { DEFAULT_LOCALE, isLocale, mapStory, messages } from './i18n/index.ts';
-import { analyseTopic } from './topics.ts';
+import { analyseTopic } from './topics/index.ts';
 import { mountTopicPanel } from './topic-panel.ts';
 import { enhanceLanguageMenu } from './languages.ts';
 

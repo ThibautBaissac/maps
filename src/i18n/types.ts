@@ -1,9 +1,9 @@
 import type { PlaceId } from '../../places/index.ts';
 import type { MapId } from '../registry.ts';
 import type { StyleKey } from '../styles/index.ts';
-import type { ThemeId, TopicId } from '../topics.ts';
-import type { PeriodId } from '../setbacks.ts';
-import type { SiteKind, Species } from '../investigations.ts';
+import type { ThemeId, TopicId } from '../topics/index.ts';
+import type { PeriodId } from '../topics/setbacks/evidence.ts';
+import type { SiteKind, Species } from '../topics/investigations/evidence.ts';
 
 export const LOCALES = ['fr', 'en', 'es', 'pt', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -126,7 +126,7 @@ export interface Messages {
     };
     /** Strings of the stepped towers subject (topic setbacks). */
     setbacks: {
-      /** Building periods (src/setbacks.ts). */
+      /** Building periods (src/topics/setbacks/evidence.ts). */
       periods: Record<PeriodId, string>;
       /** Row value: stepped towers among the detailed ones. */
       count: (stepped: string, detailed: string) => string;
@@ -192,7 +192,7 @@ export interface Messages {
   }>;
   /** The texts of a map written in its own voice: see voices/<map-id>.md. */
   maps: Record<MapId, MapStory>;
-  /** Labels of the subjects' themes (src/topics.ts), found by the gallery search. */
+  /** Labels of the subjects' themes (src/topics/types.ts), found by the gallery search. */
   themes: Record<ThemeId, string>;
   styles: Record<StyleKey, { label: string; legend: Four<string> }>;
 }

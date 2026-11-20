@@ -1,4 +1,6 @@
-import type { CholeraTopic, LinearTopic, TopicAnalysis } from '../topics.ts';
+import type { TopicAnalysis } from '../topics/index.ts';
+import type { CholeraTopic } from '../topics/cholera-pump/index.ts';
+import type { LinearTopic } from '../topics/linear/index.ts';
 import { addLine, type Projector } from './projection.ts';
 import { scaleRect } from './geometry.ts';
 import type { CanvasLayout } from './stage.ts';

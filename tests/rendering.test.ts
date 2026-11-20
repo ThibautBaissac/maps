@@ -10,7 +10,7 @@ import { osmLayersOf, readOsm } from './osm-file.ts';
 import type { Layer } from '../src/layers.ts';
 import { drawLayers } from '../src/toolkit/layers.ts';
 import * as thematic from '../src/toolkit/topic.ts';
-import { analyseTopic } from '../src/topics.ts';
+import { analyseTopic } from '../src/topics/index.ts';
 
 const osm = readOsm('amsterdam-centre');
 

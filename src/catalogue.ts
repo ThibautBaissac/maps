@@ -9,7 +9,7 @@ import type { StyleDef } from './styles/contract.ts';
 import { isStyleKey, STYLES, type StyleKey, type StyleOptions } from './styles/index.ts';
 import { DEFAULT_LOCALE, LOCALES, localized, messages, type Locale } from './i18n/index.ts';
 import { OSM_ROLES, parseLayerFile, type LayerFile, type Square } from './layers.ts';
-import { isTopicId, type TopicId } from './topics.ts';
+import { isTopicId, type TopicId } from './topics/index.ts';
 
 export interface CatalogueMapOf<K extends StyleKey> {
   id: string;

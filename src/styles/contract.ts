@@ -3,7 +3,7 @@ import type { Shell } from '../shell.ts';
 import type { Viewport } from '../toolkit/viewport.ts';
 import type { Locale } from '../i18n/index.ts';
 import type { BBox, Layer, Survey } from '../layers.ts';
-import type { TopicAnalysis } from '../topics.ts';
+import type { TopicAnalysis } from '../topics/index.ts';
 
 /** What a style prints about its map. */
 export interface MountMeta extends Survey {

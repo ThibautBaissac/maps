@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Feature, Ring } from '../src/layers.ts';
-import { analyseSetbacks, formOf, periodOf } from '../src/setbacks.ts';
-import { analyseTopic } from '../src/topics.ts';
+import { analyseSetbacks, formOf, periodOf } from '../src/topics/setbacks/evidence.ts';
+import { analyseTopic } from '../src/topics/index.ts';
 import { osmLayersOf } from './osm-file.ts';
 
 /** A closed square ring of side s at (x, y). */

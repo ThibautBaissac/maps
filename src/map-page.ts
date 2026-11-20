@@ -10,7 +10,7 @@ import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
 import { ZOOM_STEP } from './toolkit/viewport.ts';
 import { DEFAULT_LOCALE, isLocale, mapStory, messages } from './i18n/index.ts';
-import { analyseTopic } from './topics/index.ts';
+import { contentOf, loadTopic } from './topics/index.ts';
 import { mountTopicPanel } from './topic-panel.ts';
 import { enhanceLanguageMenu } from './languages.ts';
 
@@ -37,8 +37,9 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
 
   const dataPath = map.paths.data;
   const url = dataPath === null ? null : `${import.meta.env.BASE_URL}${dataPath}`;
-  const [styleModule, osm, layerSets] = await Promise.all([
+  const [styleModule, subject, osm, layerSets] = await Promise.all([
     style.load(),
+    map.topic ? loadTopic(map.topic) : undefined,
     url === null ? null : fetch(url).then(async (r) => {
       if (!r.ok) throw new Error(`Missing data for ${map.placeId}: HTTP ${r.status}`);
       return parseLayerFile(await r.json(), url);
@@ -59,8 +60,9 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
   const { survey, meta } = mountMetaOf(map, osm);
   const story = mapStory(locale, map.id);
   if (!story) throw new Error(`No question and intro for map "${map.id}" (maps in src/i18n)`);
-  const topic = map.topic ? analyseTopic(survey, layers, map.topic) : undefined;
-  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), survey, layers, { ...meta, osm: osm !== null }, style.legend, locale, topic && { analysis: topic, story }, overlays);
+  const topic = subject?.analyse(survey, layers);
+  const content = subject && topic ? contentOf(subject, survey, topic, story, locale) : undefined;
+  describeMap(element('#description-content', HTMLElement), element('#map-summary', HTMLElement), survey, layers, { ...meta, osm: osm !== null }, style.legend, locale, content, overlays);
   const dialog = element('#map-description', HTMLDialogElement);
   const description = element('.description-button', HTMLButtonElement);
   description.disabled = false;
@@ -80,7 +82,7 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>): Promise<MapHand
     layers,
     ...(topic ? { topic } : {}),
   });
-  if (topic) mountTopicPanel(element('#topic-panel', HTMLElement), survey, topic, story, locale, handle, subjectData);
+  if (content) mountTopicPanel(element('#topic-panel', HTMLElement), content, handle, subjectData);
   if (handle.viewport) {
     const viewport = handle.viewport;
     for (const [selector, factor] of [['.zoom-in', ZOOM_STEP], ['.zoom-out', 1 / ZOOM_STEP]] as const) {

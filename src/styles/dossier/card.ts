@@ -4,7 +4,8 @@ import type { Departement, Investigation } from '../../topics/investigations/evi
 import { REGIONS } from '../../topics/investigations/evidence.ts';
 import type { Ring } from '../../layers.ts';
 import type { Point } from '../../toolkit/geometry.ts';
-import { messages, type Locale } from '../../i18n/index.ts';
+import type { Locale } from '../../i18n/index.ts';
+import { MESSAGES as INVESTIGATIONS } from '../../topics/investigations/messages.ts';
 
 /** A mark as drawn: its investigation and its screen position, device px. */
 export interface PlacedMark { item: Investigation; x: number; y: number }
@@ -44,7 +45,7 @@ export function areaInvestigations(investigations: readonly Investigation[], d: 
 
 /** Where an investigation took place, as precisely as its page says. */
 export function placeText(i: Investigation, departementName: (code: string) => string, locale: Locale): string {
-  const c = messages(locale).topics.investigations.card;
+  const c = INVESTIGATIONS[locale].card;
   const region = REGIONS[i.region] ?? i.region;
   if (i.precision === 'commune' && i.commune) return c.commune(i.commune, i.departement ? departementName(i.departement) : region);
   if (i.precision !== 'region' && i.departement) return c.departement(departementName(i.departement));
@@ -60,7 +61,7 @@ export interface Card {
 }
 
 export function createCard(container: HTMLElement, locale: Locale, departementName: (code: string) => string): Card {
-  const text = messages(locale).topics.investigations;
+  const text = INVESTIGATIONS[locale];
   const el = document.createElement('div');
   el.className = 'map-card';
   el.setAttribute('role', 'dialog');

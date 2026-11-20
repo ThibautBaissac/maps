@@ -7,6 +7,7 @@ import { clamp, scaleBar } from '../../toolkit/layout.ts';
 import type { CanvasLayout } from '../../toolkit/stage.ts';
 import type { View } from '../../toolkit/viewport.ts';
 import type { TopicAnalysis } from '../../topics/index.ts';
+import { MESSAGES as SETBACKS } from '../../topics/setbacks/messages.ts';
 import type { MountMeta } from '../contract.ts';
 import type { ArtDecoOptions } from './defaults.ts';
 import type { Inks, Palette } from './relief.ts';
@@ -125,7 +126,7 @@ export function legendRows(topic: TopicAnalysis | undefined, locale: Locale): { 
   const text = messages(locale);
   const items = text.canvas.items.map((t) => t.charAt(0) + t.slice(1).toLocaleLowerCase(locale));
   if (topic?.id === 'setbacks') {
-    const c = text.topics.setbacks;
+    const c = SETBACKS[locale];
     return [{ label: c.legendStepped, tone: 'stepped' }, { label: c.legendBlock, tone: 'block' }, { label: c.legendOther, tone: 'plain' }, { label: items[3]!, tone: 'park' }];
   }
   return [{ label: items[0]!, tone: 'inkA' }, { label: items[3]!, tone: 'park' }, { label: items[2]!, tone: 'water' }];

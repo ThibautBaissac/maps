@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { CATALOGUE, catalogueProblems, mapsForLocale, missingPictures, PAGES_DIR } from './src/catalogue.ts';
 import { DEFAULT_LOCALE, LOCALES, translationProblems } from './src/i18n/index.ts';
+import { topicTranslationProblems } from './src/topics/all.ts';
 
 import { galleryHtml, pageHtml, sitemapXml } from './scripts/pages.ts';
 
@@ -28,7 +29,7 @@ function writePage(path: string, html: string): string {
 let published: string[] = [];
 
 function generatePages(strict: boolean): Record<string, string> {
-  const problems = translationProblems();
+  const problems = [...translationProblems(), ...topicTranslationProblems()];
   if (problems.length) throw new Error(`translations:\n${problems.join('\n')}`);
   rmSync(new URL(PAGES_DIR, pathToFileURL(root)), { recursive: true, force: true }); // generated, git-ignored
   const input: Record<string, string> = { index: `${root}index.html` };

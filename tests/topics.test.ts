@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Feature, Layer, Line } from '../src/layers.ts';
-import * as topics from '../src/topics/index.ts';
+import { LOCALES } from '../src/i18n/index.ts';
+import * as topics from '../src/topics/all.ts';
 import { osmLayersOf } from './osm-file.ts';
 
 const survey = { half: 10 };
@@ -61,5 +62,20 @@ test('every registered subject analyses to the id it is registered under, so its
   for (const id of topics.TOPIC_IDS) {
     assert.equal(topics.analyseTopic(survey, map([]), id).id, id);
     assert.ok(topics.themesOf(id).length > 0, `${id} has no gallery theme`);
+  }
+});
+
+test('translation validation names a missing text of a subject, in its folder', () => {
+  const { metric: _, ...steps } = topics.topicText('en', 'steps');
+  const texts: Record<string, Record<string, unknown>> = Object.fromEntries(topics.TOPIC_IDS.map((id) => [id, Object.fromEntries(LOCALES.map((l) => [l, topics.topicText(l, id)]))]));
+  texts['steps'] = { ...texts['steps'], en: steps };
+  assert.deepEqual(topics.topicTranslationProblems(), []);
+  assert.deepEqual(topics.topicTranslationProblems(texts as Record<topics.TopicId, unknown>), ['en.topics.steps.metric: missing or invalid translation']);
+});
+
+test('a map page loads its subject on demand, with the same code as Node', async () => {
+  for (const id of topics.TOPIC_IDS) {
+    const def = await topics.loadTopic(id);
+    assert.equal(def.analyse(survey, map([])).id, id);
   }
 });

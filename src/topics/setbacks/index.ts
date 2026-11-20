@@ -1,6 +1,7 @@
 // Subject setbacks: which towers of the square rise in steps, by building period.
 import { formatDate, formatNumber, messages } from '../../i18n/index.ts';
 import type { TopicDef, TopicMark } from '../types.ts';
+import { MESSAGES } from './messages.ts';
 import { analyseSetbacks, type SetbackEvidence, type Tower } from './evidence.ts';
 
 export interface SetbackTopic extends SetbackEvidence {
@@ -9,8 +10,9 @@ export interface SetbackTopic extends SetbackEvidence {
   places: (TopicMark & { tower: Tower })[];
 }
 
-export const setbacks: TopicDef<SetbackTopic> = {
-  themes: ['architecture', 'history'],
+export { MESSAGES as messages };
+
+export const topic: TopicDef<SetbackTopic> = {
   /** Numbered references: the two tallest named stepped towers of 1916–1960, apart, then the tallest named block tower of 1961 or later. */
   analyse({ half }, layers) {
     const evidence = analyseSetbacks(layers, half);
@@ -26,7 +28,7 @@ export const setbacks: TopicDef<SetbackTopic> = {
     return { id: 'setbacks', ...evidence, places: chosen.map((tower) => ({ name: tower.name!, point: tower.point, tower })) };
   },
   content(survey, topic, locale) {
-    const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = subject;
+    const copy = messages(locale).topic, subject = MESSAGES[locale], c = subject;
     const n = (v: number): string => formatNumber(locale, v);
     const period = (id: SetbackTopic['periods'][number]['id']) => topic.periods.find((p) => p.id === id)!;
     const share = (p: SetbackTopic['periods'][number]): number => p.detailed ? Math.round(p.stepped / p.detailed * 100) : 0;

@@ -1,7 +1,7 @@
-import type { Dictionary } from './types.ts';
+import type { Messages } from './types.ts';
 
 // European Portuguese (pt-PT): the register of the Lisbon map's own city.
-export const pt: Dictionary = {
+export const pt: Messages = {
   languageName: 'Português',
   languageNav: 'Idioma',
   attribution: '© colaboradores do OpenStreetMap',

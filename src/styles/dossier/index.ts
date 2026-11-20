@@ -12,7 +12,8 @@ import { drawTopicMarkers } from '../../toolkit/topic.ts';
 import type { View } from '../../toolkit/viewport.ts';
 import { departementsOf, type Investigation, type SiteKind } from '../../topics/investigations/evidence.ts';
 import { featuresOf, type Ring } from '../../layers.ts';
-import { formatNumber, messages, pluralText } from '../../i18n/index.ts';
+import { formatNumber, pluralText } from '../../i18n/index.ts';
+import { MESSAGES as INVESTIGATIONS } from '../../topics/investigations/messages.ts';
 import type { MapHandle, MountArgs } from '../contract.ts';
 import { DEFAULTS, type DossierOptions } from './defaults.ts';
 import { areaInvestigations, createCard, departementAt, markAt, type PlacedMark } from './card.ts';
@@ -175,7 +176,7 @@ export async function mount({ container, meta, locale, options, shell, layers, t
     loadFont('Courier Prime', 'courierprime/CourierPrime-Bold.ttf', { weight: '700' }),
   ]);
   shell.theme({ bg: o.paper, accent: o.ink, font: FONT });
-  const text = messages(locale), c = text.topics.investigations;
+  const c = INVESTIGATIONS[locale];
   const n = (v: number): string => formatNumber(locale, v);
 
   // Base map, prepared once in metres.
@@ -242,7 +243,7 @@ export async function mount({ container, meta, locale, options, shell, layers, t
       line(`${n(located)} / ${n(total)}`, 26, o.red, 700, 1.1);
       x.font = `400 12px ${FONT}`;
       // A short sheet keeps the figures; the panel and the description spell them out.
-      if (!layout.compact) for (const s of wrap(x, text.topics.investigations.metric, width).slice(0, 2)) line(s, 12, o.ink);
+      if (!layout.compact) for (const s of wrap(x, c.metric, width).slice(0, 2)) line(s, 12, o.ink);
     }
     rule();
 

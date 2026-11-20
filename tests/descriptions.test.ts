@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Layer } from '../src/layers.ts';
 import { describeMap } from '../src/map-description.ts';
+import { analyseTopic, topicContent } from '../src/topics/all.ts';
 import { osmLayersOf, readOsm } from './osm-file.ts';
 
 // Only the external DOM API is substituted; all description logic runs unchanged.
@@ -55,15 +56,16 @@ test('an overlay layer without names gives its feature count instead of claiming
   assert.match(content.textContent, /Cholera deaths \(2\) 2 unnamed features, shown on the map\./);
 });
 
-test('cholera landmarks are listed under their translated names', (t) => {
+test('cholera landmarks are listed under the names the cholera subject gives them', (t) => {
   const saved = Object.getOwnPropertyDescriptor(globalThis, 'document');
   Object.defineProperty(globalThis, 'document', { configurable: true, value: { createElement: () => new TextElement() } });
   t.after(() => { if (saved) Object.defineProperty(globalThis, 'document', saved); else Reflect.deleteProperty(globalThis, 'document'); });
   const osm = readOsm('amsterdam-centre');
   const layer: Layer = { id: 'reperes', kind: 'points', role: 'overlay', attribution: '© test', source: 'layers/x.geojson', features: [{ g: [0, 0], n: 'Workhouse, Poland Street', k: 'workhouse' }, { g: [0, 0], n: 'Broad Street', k: 'broad-street' }] };
   const content = new TextElement(), summary = new TextElement();
+  const cholera = topicContent(osm.survey, analyseTopic(osm.survey, [layer], 'cholera-pump'), { question: 'Q', intro: 'I' }, 'fr');
   describeMap(content as unknown as HTMLElement, summary as unknown as HTMLElement, osm.survey, osm.layers,
-    { title: 'Londres', district: 'Soho' }, [], 'fr', undefined, [{ title: 'Lieux', layer }]);
+    { title: 'Londres', district: 'Soho' }, [], 'fr', cholera, [{ title: 'Lieux', layer }]);
   assert.match(content.textContent, /Workhouse de Poland Street — au centre\./);
   assert.match(content.textContent, /Pompe de Broad Street — au centre\./);
   assert.doesNotMatch(content.textContent, /Workhouse, Poland Street/);

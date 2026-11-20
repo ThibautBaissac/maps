@@ -7,6 +7,7 @@ import { clamp, scaleBar, type Layout } from '../../toolkit/layout.ts';
 import { mulberry32, pixelCanvas } from '../../toolkit/noise.ts';
 import type { View } from '../../toolkit/viewport.ts';
 import type { TopicAnalysis } from '../../topics/index.ts';
+import { MESSAGES as CHOLERA } from '../../topics/cholera-pump/messages.ts';
 import type { MountMeta } from '../contract.ts';
 import type { GravureSepiaOptions } from './defaults.ts';
 import type { PlanPatterns } from './map.ts';
@@ -212,7 +213,7 @@ function legend(ctx: Ctx, box: Rect, o: GravureSepiaOptions, pat: PlanPatterns, 
     ctx.restore();
   };
   if (topic?.id === 'cholera-pump') {
-    const c = text.topics['cholera-pump'];
+    const c = CHOLERA[locale];
     rows.push({ label: c.legendDeaths, draw: disc(o.ink, 0.55) });
     rows.push({ label: c.legendBroad, draw: disc(o.accent, 0.85) });
     rows.push({ label: c.legendPump, draw: (x, y, w, h) => {

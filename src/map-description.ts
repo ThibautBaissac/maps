@@ -1,6 +1,6 @@
-import { featureCount, formatDate, formatNumber, messages, pluralText, type Locale, type MapStory } from './i18n/index.ts';
+import { featureCount, formatDate, formatNumber, messages, pluralText, type Locale } from './i18n/index.ts';
 import { featuresOf, isTunnel, type Feature as LayerFeature, type Layer, type Line, type Survey } from './layers.ts';
-import { topicContent, type TopicAnalysis } from './topics/index.ts';
+import type { TopicContent } from './topics/index.ts';
 
 type Feature = readonly [name: string | undefined, paths: readonly Line[]];
 interface Bounds { left: number; right: number; bottom: number; top: number }
@@ -29,16 +29,11 @@ function namedFeatures(features: readonly Feature[], half: number, locale: Local
   return list;
 }
 
-/** The name of an overlay object, translated for the places of the cholera subject. */
-function overlayName(f: LayerFeature<unknown>, locale: Locale): string | undefined {
-  const c = messages(locale).topics['cholera-pump'];
-  if (f.k === 'workhouse' || f.k === 'brewery') return c[f.k];
-  if (f.k === 'broad-street') return c.broadPump;
-  return f.n;
-}
+/** The name of an overlay object: the subject's name for it, else its own. */
+const overlayName = (f: LayerFeature<unknown>, topic: TopicContent | undefined): string | undefined => topic?.featureName?.(f) ?? f.n;
 
 /** Whole-survey description, independent of the visual zoom and the drawing technique. */
-export function describeMap(container: HTMLElement, summary: HTMLElement, survey: Survey, layers: readonly Layer[], display: { title: string; district: string; osm?: boolean }, legend: readonly string[], locale: Locale, topic?: { analysis: TopicAnalysis; story: MapStory }, overlays: readonly { title: string; layer: Layer }[] = []): void {
+export function describeMap(container: HTMLElement, summary: HTMLElement, survey: Survey, layers: readonly Layer[], display: { title: string; district: string; osm?: boolean }, legend: readonly string[], locale: Locale, topic?: TopicContent, overlays: readonly { title: string; layer: Layer }[] = []): void {
   const copy = messages(locale).description;
   const fmt = (n: number): string => formatNumber(locale, n);
   const overview = copy.overview(display.title, display.district, fmt(survey.sizeKm));
@@ -51,7 +46,7 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, survey
   };
   paragraph(overview);
   if (topic) {
-    const content = topicContent(survey, topic.analysis, topic.story, locale);
+    const content = topic;
     summary.textContent = `${content.story.question} ${content.value} ${content.subject.metric}. ${content.concentration} ${overview} ${copy.help}`;
     for (const text of [content.story.question, content.story.intro, `${content.value} ${content.subject.metric}.`, content.concentration,
       ...content.references.map((ref) => content.copy.referenceLine(String(ref.number), ref.name, ref.detail)),
@@ -93,7 +88,7 @@ export function describeMap(container: HTMLElement, summary: HTMLElement, survey
   // Overlays whose objects carry no names are counted rather than reported as empty.
   const unnamed = new Map<string, number>();
   for (const { title, layer } of overlays) {
-    sections.push([title, layer.features.map((f): Feature => [overlayName(f, locale), layer.kind === 'areas' ? f.g as Line[] : [f.g as Line]])]);
+    sections.push([title, layer.features.map((f): Feature => [overlayName(f, topic), layer.kind === 'areas' ? f.g as Line[] : [f.g as Line]])]);
     if (layer.features.length && layer.features.every((f) => !f.n)) unnamed.set(title, layer.features.length);
   }
   for (const [title, features] of sections) {

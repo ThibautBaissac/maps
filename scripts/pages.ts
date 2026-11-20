@@ -1,6 +1,7 @@
 // Static HTML shared by development and production builds.
 import { mapsForLocale, PAGES_DIR, type CatalogueMap } from '../src/catalogue.ts';
 import { searchDocuments } from '../src/gallery/search-index.ts';
+import { topicText } from '../src/topics/all.ts';
 import { DEFAULT_LOCALE, formatCoordinate, formatList, LOCALES, mapStory, messages, ogLocale, pluralText, type Locale, type MapStory } from '../src/i18n/index.ts';
 
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
@@ -108,7 +109,7 @@ function storyOf(map: CatalogueMap, locale: Locale): MapStory {
 export function pageHtml(map: CatalogueMap, locale: Locale, base: string, siteUrl?: string): string {
   const { title, place, styleDef: { label: styleLabel } } = map;
   const text = messages(locale), copy = text.map;
-  const topic = map.topic ? { ...text.topics[map.topic], ...storyOf(map, locale) } : undefined;
+  const topic = map.topic ? { ...topicText(locale, map.topic), ...storyOf(map, locale) } : undefined;
   const pageTitle = `${topic ? topic.question : styleLabel} — ${title}, ${place.district}`;
   const description = metaDescription(topic ? topic.intro : copy.description(title, place.district, styleLabel));
   const seo: Seo = { title: pageTitle, description, type: 'article', image: map.paths.share, imageAlt: topic?.question ?? copy.label(title, place.district) };

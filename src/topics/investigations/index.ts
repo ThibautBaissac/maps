@@ -2,6 +2,7 @@
 import { formatDate, formatNumber, messages, pluralText } from '../../i18n/index.ts';
 import { UNLOCATED_INVESTIGATIONS } from '../../../places/investigations.ts';
 import type { TopicDef, TopicMark } from '../types.ts';
+import { MESSAGES } from './messages.ts';
 import { analyseInvestigations, type InvestigationEvidence } from './evidence.ts';
 
 export interface InvestigationTopic extends InvestigationEvidence {
@@ -10,8 +11,9 @@ export interface InvestigationTopic extends InvestigationEvidence {
   places: (TopicMark & { code: string; count: number })[];
 }
 
-export const investigations: TopicDef<InvestigationTopic> = {
-  themes: ['animals'],
+export { MESSAGES as messages };
+
+export const topic: TopicDef<InvestigationTopic> = {
   /** Numbered references: the départements with the most investigations, at least a tenth of the square apart. */
   analyse({ half }, layers) {
     const evidence = analyseInvestigations(layers, UNLOCATED_INVESTIGATIONS);
@@ -28,7 +30,7 @@ export const investigations: TopicDef<InvestigationTopic> = {
     return { id: 'investigations', ...evidence, places };
   },
   content(survey, topic, locale) {
-    const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = subject;
+    const copy = messages(locale).topic, subject = MESSAGES[locale], c = subject;
     const n = (v: number): string => formatNumber(locale, v);
     const located = topic.investigations.length, total = located + topic.unlocated.length;
     const top = topic.regions[0];

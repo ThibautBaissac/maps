@@ -2,7 +2,6 @@ import type { PlaceId } from '../../places/index.ts';
 import type { MapId } from '../registry.ts';
 import type { StyleKey } from '../styles/index.ts';
 import type { ThemeId } from '../topics/types.ts';
-import type { TopicMessages } from '../topics/messages.ts';
 
 export const LOCALES = ['fr', 'en', 'es', 'pt', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -104,14 +103,9 @@ export interface Messages {
     source: (date: string, size: string) => string;
     dataFile: string;
   };
-  /** The texts of each subject, from src/topics/<id>/messages.ts (src/topics/messages.ts). */
-  topics: TopicMessages;
   /** The texts of a map written in its own voice: see voices/<map-id>.md. */
   maps: Record<MapId, MapStory>;
   /** Labels of the subjects' themes (src/topics/types.ts), found by the gallery search. */
   themes: Record<ThemeId, string>;
   styles: Record<StyleKey, { label: string; legend: Four<string> }>;
 }
-
-/** A language's own file (src/i18n/<locale>.ts): every message but the subjects', which src/topics supplies. */
-export type Dictionary = Omit<Messages, 'topics'>;

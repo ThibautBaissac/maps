@@ -1,6 +1,6 @@
-import type { Dictionary } from './types.ts';
+import type { Messages } from './types.ts';
 
-export const en: Dictionary = {
+export const en: Messages = {
   languageName: 'English',
   languageNav: 'Language',
   attribution: '© OpenStreetMap contributors',

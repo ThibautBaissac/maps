@@ -3,16 +3,14 @@ import { en } from './en.ts';
 import { es } from './es.ts';
 import { pt } from './pt.ts';
 import { de } from './de.ts';
-import { LOCALES, type Dictionary, type Locale, type LocalizedText, type MapStory, type Messages, type PluralMessage } from './types.ts';
+import { LOCALES, type Locale, type LocalizedText, type MapStory, type Messages, type PluralMessage } from './types.ts';
 import type { MapId } from '../registry.ts';
 import { isRecord } from '../place.ts';
-import { topicMessages } from '../topics/messages.ts';
 
 export { DEFAULT_LOCALE, LOCALES, type Locale, type LocalizedText, type MapStory } from './types.ts';
 
-const DICTIONARIES: Record<Locale, Dictionary> = { fr, en, es, pt, de };
-/** Each language's dictionary, completed with the subjects' texts. */
-const MESSAGES = Object.fromEntries(LOCALES.map((locale) => [locale, { ...DICTIONARIES[locale], topics: topicMessages(locale) }])) as Record<Locale, Messages>;
+/** Each language's dictionary. A subject's texts are in its folder, src/topics/<id>/messages.ts. */
+const MESSAGES: Record<Locale, Messages> = { fr, en, es, pt, de };
 
 export const messages = (locale: Locale): Messages => MESSAGES[locale];
 
@@ -61,6 +59,11 @@ export function featureCount(locale: Locale, feature: 0 | 1 | 2 | 3, count: numb
 
 /** Also checked at build time: Node strips types, and empty strings still type-check. */
 export function translationProblems(catalogues: unknown = MESSAGES): string[] {
+  return compareTranslations(MESSAGES.fr, catalogues);
+}
+
+/** Every text of `reference` (French) missing or empty in each language of `catalogues`, as "<path>.<key>: …", the path of a language given by `pathOf`. */
+export function compareTranslations(reference: unknown, catalogues: unknown, pathOf: (locale: Locale) => string = (locale) => locale): string[] {
   const problems: string[] = [];
   const check = (reference: unknown, value: unknown, path: string): void => {
     if (typeof reference === 'string') {
@@ -83,6 +86,6 @@ export function translationProblems(catalogues: unknown = MESSAGES): string[] {
       }
     }
   };
-  for (const locale of LOCALES) check(MESSAGES.fr, isRecord(catalogues) ? catalogues[locale] : undefined, locale);
+  for (const locale of LOCALES) check(reference, isRecord(catalogues) ? catalogues[locale] : undefined, pathOf(locale));
   return problems;
 }

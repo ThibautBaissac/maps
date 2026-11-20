@@ -10,7 +10,7 @@ import { installPage, nameGlyphs, type FakeCanvas } from './dom.ts';
 import type { Locale } from '../src/i18n/index.ts';
 import { osmLayersOf, readOsm } from './osm-file.ts';
 import { prepareLabels } from '../src/toolkit/labels.ts';
-import { analyseTopic } from '../src/topics/index.ts';
+import { analyseTopic } from '../src/topics/all.ts';
 
 const osm = readOsm('amsterdam-centre');
 const SIZE = { width: 800, height: 600 };

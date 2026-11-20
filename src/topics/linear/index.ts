@@ -4,7 +4,8 @@
 import { formatDate, formatNumber, messages, type Locale } from '../../i18n/index.ts';
 import { featuresOf, isBridge, isTunnel, type Feature, type Layer, type Line, type Survey } from '../../layers.ts';
 import type { Point, Rect } from '../../toolkit/geometry.ts';
-import type { ThemeId, TopicContent, TopicDef, TopicMark } from '../types.ts';
+import type { TopicContent, TopicDef, TopicMark } from '../types.ts';
+import type { LinearMessages } from './messages.ts';
 
 export type LinearTopicId = 'canal-crossings' | 'steps';
 
@@ -141,8 +142,8 @@ function analyseLinear<Id extends LinearTopicId>(survey: Pick<Survey, 'half'>, l
   return { id, segments: selected, length, sectors, places, canals: [...canalNames].sort() };
 }
 
-function linearContent(survey: Survey, topic: LinearTopic, locale: Locale): Omit<TopicContent, 'story'> {
-  const text = messages(locale), copy = text.topic, subject = text.topics[topic.id];
+function linearContent(survey: Survey, topic: LinearTopic, locale: Locale, subject: LinearMessages): Omit<TopicContent, 'story'> {
+  const text = messages(locale), copy = text.topic;
   const positions = text.description.positions.flat();
   const metres = (n: number): string => formatNumber(locale, Math.round(n), { maximumFractionDigits: 0 });
   const strongest = topic.sectors.reduce((best, sector, i, all) => sector.length > all[best]!.length ? i : best, 0);
@@ -167,8 +168,7 @@ function linearContent(survey: Survey, topic: LinearTopic, locale: Locale): Omit
 }
 
 /** A subject measured as the length of the street sections it selects. */
-export const linearTopic = <Id extends LinearTopicId>(id: Id, themes: readonly ThemeId[]): TopicDef<LinearTopic<Id>> => ({
-  themes,
+export const linearTopic = <Id extends LinearTopicId>(id: Id, texts: Record<Locale, LinearMessages>): TopicDef<LinearTopic<Id>> => ({
   analyse: (survey, layers) => analyseLinear(survey, layers, id),
-  content: linearContent,
+  content: (survey, topic, locale) => linearContent(survey, topic, locale, texts[locale]),
 });

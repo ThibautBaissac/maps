@@ -1,6 +1,7 @@
 // Subject cholera-pump: the 1854 Broad Street outbreak, deaths by nearest pump on foot.
 import { formatDate, formatNumber, messages } from '../../i18n/index.ts';
 import type { TopicDef, TopicMark } from '../types.ts';
+import { MESSAGES } from './messages.ts';
 import { analyseCholera, type CholeraEvidence } from './evidence.ts';
 
 export interface CholeraTopic extends CholeraEvidence {
@@ -9,8 +10,9 @@ export interface CholeraTopic extends CholeraEvidence {
   places: (TopicMark & { kind: 'pump' | 'workhouse' | 'brewery' })[];
 }
 
-export const choleraPump: TopicDef<CholeraTopic> = {
-  themes: ['history', 'health', 'water'],
+export { MESSAGES as messages };
+
+export const topic: TopicDef<CholeraTopic> = {
   analyse(_survey, layers) {
     const evidence = analyseCholera(layers);
     const broad = evidence.pumps.find((p) => p.broad);
@@ -23,7 +25,7 @@ export const choleraPump: TopicDef<CholeraTopic> = {
     };
   },
   content(survey, topic, locale) {
-    const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = subject;
+    const copy = messages(locale).topic, subject = MESSAGES[locale], c = subject;
     const n = (v: number): string => formatNumber(locale, v);
     const share = topic.total ? Math.round(topic.broad / topic.total * 100) : 0;
     const rows = topic.pumps.map((p) => ({ name: p.broad ? c.broadPump : p.name, value: c.deaths(p.deaths), strongest: p.broad, deaths: p.deaths }))
@@ -41,6 +43,8 @@ export const choleraPump: TopicDef<CholeraTopic> = {
         detail: p.kind === 'pump' ? c.pumpDetail(n(topic.broad), n(topic.within100)) : c[`${p.kind}Detail`],
       })),
       distribution: { title: c.distribution, help: c.distributionHelp, layout: 'list', rows },
+      // Snow's landmarks in the overlay layer, named in the language.
+      featureName: (f) => f.k === 'workhouse' || f.k === 'brewery' ? c[f.k] : f.k === 'broad-street' ? c.broadPump : undefined,
     };
   },
 };

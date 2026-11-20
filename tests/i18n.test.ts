@@ -38,10 +38,3 @@ test('numbered references follow the punctuation of each language in the text de
   assert.equal(i18n.messages('en').topic.referenceLine('1', 'Broad Street pump', '3 deaths'), '1. Broad Street pump: 3 deaths');
   assert.equal(i18n.messages('fr').topic.referenceLine('1', 'Pompe de Broad Street', '3 décès'), '1. Pompe de Broad Street : 3 décès');
 });
-
-test('translation validation also names a missing text of a subject, which src/topics supplies', () => {
-  const en = i18n.messages('en');
-  const { metric: _, ...steps } = en.topics.steps;
-  const catalogues = { ...Object.fromEntries(i18n.LOCALES.map((l) => [l, i18n.messages(l)])), en: { ...en, topics: { ...en.topics, steps } } };
-  assert.ok(i18n.translationProblems(catalogues).includes('en.topics.steps.metric: missing or invalid translation'));
-});

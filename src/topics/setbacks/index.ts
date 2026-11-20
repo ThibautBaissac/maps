@@ -26,7 +26,7 @@ export const setbacks: TopicDef<SetbackTopic> = {
     return { id: 'setbacks', ...evidence, places: chosen.map((tower) => ({ name: tower.name!, point: tower.point, tower })) };
   },
   content(survey, topic, locale) {
-    const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = copy.setbacks;
+    const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = subject;
     const n = (v: number): string => formatNumber(locale, v);
     const period = (id: SetbackTopic['periods'][number]['id']) => topic.periods.find((p) => p.id === id)!;
     const share = (p: SetbackTopic['periods'][number]): number => p.detailed ? Math.round(p.stepped / p.detailed * 100) : 0;

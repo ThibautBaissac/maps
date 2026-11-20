@@ -23,7 +23,7 @@ export const choleraPump: TopicDef<CholeraTopic> = {
     };
   },
   content(survey, topic, locale) {
-    const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = copy.cholera;
+    const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = subject;
     const n = (v: number): string => formatNumber(locale, v);
     const share = topic.total ? Math.round(topic.broad / topic.total * 100) : 0;
     const rows = topic.pumps.map((p) => ({ name: p.broad ? c.broadPump : p.name, value: c.deaths(p.deaths), strongest: p.broad, deaths: p.deaths }))

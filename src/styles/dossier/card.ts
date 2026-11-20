@@ -44,7 +44,7 @@ export function areaInvestigations(investigations: readonly Investigation[], d: 
 
 /** Where an investigation took place, as precisely as its page says. */
 export function placeText(i: Investigation, departementName: (code: string) => string, locale: Locale): string {
-  const c = messages(locale).topic.investigations.card;
+  const c = messages(locale).topics.investigations.card;
   const region = REGIONS[i.region] ?? i.region;
   if (i.precision === 'commune' && i.commune) return c.commune(i.commune, i.departement ? departementName(i.departement) : region);
   if (i.precision !== 'region' && i.departement) return c.departement(departementName(i.departement));
@@ -60,7 +60,7 @@ export interface Card {
 }
 
 export function createCard(container: HTMLElement, locale: Locale, departementName: (code: string) => string): Card {
-  const text = messages(locale).topic.investigations;
+  const text = messages(locale).topics.investigations;
   const el = document.createElement('div');
   el.className = 'map-card';
   el.setAttribute('role', 'dialog');

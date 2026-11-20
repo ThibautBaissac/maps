@@ -150,14 +150,14 @@ function linearContent(survey: Survey, topic: LinearTopic, locale: Locale): Omit
   return {
     copy, subject,
     value: `≈ ${metres(topic.length >= 100 ? Math.round(topic.length / 10) * 10 : topic.length)} m`,
-    concentration: topic.length ? copy.concentration(positions[strongest]!, String(share)) : copy.empty,
+    concentration: topic.length ? subject.concentration(positions[strongest]!, String(share)) : copy.empty,
     source: copy.source(formatDate(locale, survey.osmDate), formatNumber(locale, survey.sizeKm)),
     references: topic.places.map((p, index) => ({
       number: index + 1, name: p.name, point: p.point,
-      detail: `${positions[p.sector]} · ≈ ${metres(p.length)} m${p.waters.length ? `. ${copy.waterCrossed(p.waters.join(', '))}` : ''}`,
+      detail: `${positions[p.sector]} · ≈ ${metres(p.length)} m${p.waters.length ? `. ${subject.waterCrossed(p.waters.join(', '))}` : ''}`,
     })),
     distribution: {
-      title: copy.distribution, help: copy.distributionHelp, layout: 'grid',
+      title: subject.distribution, help: subject.distributionHelp, layout: 'grid',
       rows: [6, 7, 8, 3, 4, 5, 0, 1, 2].map((i) => ({
         name: positions[i]!, value: `${metres(topic.sectors[i]!.length)} m`,
         strongest: topic.length > 0 && i === strongest,

@@ -175,7 +175,7 @@ export async function mount({ container, meta, locale, options, shell, layers, t
     loadFont('Courier Prime', 'courierprime/CourierPrime-Bold.ttf', { weight: '700' }),
   ]);
   shell.theme({ bg: o.paper, accent: o.ink, font: FONT });
-  const text = messages(locale), c = text.topic.investigations;
+  const text = messages(locale), c = text.topics.investigations;
   const n = (v: number): string => formatNumber(locale, v);
 
   // Base map, prepared once in metres.

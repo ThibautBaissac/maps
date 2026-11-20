@@ -28,7 +28,7 @@ export const investigations: TopicDef<InvestigationTopic> = {
     return { id: 'investigations', ...evidence, places };
   },
   content(survey, topic, locale) {
-    const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = copy.investigations;
+    const text = messages(locale), copy = text.topic, subject = text.topics[topic.id], c = subject;
     const n = (v: number): string => formatNumber(locale, v);
     const located = topic.investigations.length, total = located + topic.unlocated.length;
     const top = topic.regions[0];

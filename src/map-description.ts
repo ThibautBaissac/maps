@@ -31,7 +31,7 @@ function namedFeatures(features: readonly Feature[], half: number, locale: Local
 
 /** The name of an overlay object, translated for the places of the cholera subject. */
 function overlayName(f: LayerFeature<unknown>, locale: Locale): string | undefined {
-  const c = messages(locale).topic.cholera;
+  const c = messages(locale).topics['cholera-pump'];
   if (f.k === 'workhouse' || f.k === 'brewery') return c[f.k];
   if (f.k === 'broad-street') return c.broadPump;
   return f.n;

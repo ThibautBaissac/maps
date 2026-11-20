@@ -91,11 +91,11 @@ Ajoute l'entrée dans `src/registry.ts` :
 { id: 'lisbonne-cyanotype', place: 'lisbonne-alfama', style: 'cyanotype', topic: 'steps', options: { /* si variante */ } },
 ```
 
-Réutilise un sujet de `TOPICS` (`src/topics/index.ts`) seulement s’il correspond à la question validée. Sinon, crée `src/topics/<id>/` : `evidence.ts` pour la sélection et les mesures pures, `index.ts` qui exporte un `TopicDef` (`src/topics/types.ts`) avec ses thèmes (trouvés par la recherche de la galerie ; un nouveau thème va dans `THEME_IDS` et dans `themes.<thème>` des dictionnaires), `analyse()` qui ajoute les repères numérotés et `content()` pour le texte du panneau. Enregistre-le dans `TOPICS`, puis ajoute ses traductions dans les dictionnaires et ses vérifications. Un sujet mesuré en longueur de tronçons réutilise `linearTopic()` de `src/topics/linear/`. Le build refuse une carte sans sujet ou avec un sujet inconnu.
+Réutilise un sujet de `TOPICS` (`src/topics/index.ts`) seulement s’il correspond à la question validée. Sinon, crée `src/topics/<id>/` : `evidence.ts` pour la sélection et les mesures pures, `index.ts` qui exporte un `TopicDef` (`src/topics/types.ts`) avec ses thèmes (trouvés par la recherche de la galerie ; un nouveau thème va dans `THEME_IDS` et dans `themes.<thème>` des dictionnaires), `analyse()` qui ajoute les repères numérotés et `content()` pour le texte du panneau, et `messages.ts` pour ses textes dans les cinq langues. Enregistre-le dans `TOPICS` (`src/topics/index.ts`) et ses textes dans `src/topics/messages.ts`, puis ajoute ses vérifications. Un sujet mesuré en longueur de tronçons réutilise `linearTopic()` de `src/topics/linear/`. Le build refuse une carte sans sujet ou avec un sujet inconnu.
 
-Les dictionnaires (`src/i18n/fr.ts`, `en.ts`, `es.ts`, `pt.ts`, `de.ts`) séparent deux sortes de textes :
-- `topics.<sujet>` : `metric`, `legend`, `method`, `limits`, les faits et la méthode du sujet, au ton neutre, partagés par toutes les cartes de ce sujet ;
-- `maps.<id>` : `question` et `intro`, écrites dans la voix de la carte selon `voices/<id>.md`. Chaque carte du registre doit avoir les siennes dans les cinq langues : `tsc -b` refuse une entrée manquante ou en trop.
+Les textes d'une carte sont de deux sortes :
+- `topics.<sujet>`, dans `src/topics/<sujet>/messages.ts` (les cinq langues dans un seul fichier) : `metric`, `legend`, `method`, `limits`, les faits et la méthode du sujet, au ton neutre, partagés par toutes les cartes de ce sujet, puis les textes propres au sujet (panneau, légende dessinée, description) ;
+- `maps.<id>`, dans les dictionnaires (`src/i18n/fr.ts`, `en.ts`, `es.ts`, `pt.ts`, `de.ts`) : `question` et `intro`, écrites dans la voix de la carte selon `voices/<id>.md`. Chaque carte du registre doit avoir les siennes dans les cinq langues : `tsc -b` refuse une entrée manquante ou en trop.
 
 L'`id` donne l'URL de la page (`/cartes/<id>/`) : court et lisible. Par défaut `<ville>-<style>`. Si la ville a déjà une carte dans ce style, prends `<ville>-<quartier>-<style>`, et pour une variante ajoute un mot qui la distingue (`amsterdam-riso-vert`). Une demande explicite de l'utilisateur l'emporte.
 

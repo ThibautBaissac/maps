@@ -9,6 +9,14 @@ import type { Point } from '../toolkit/geometry.ts';
 export const THEME_IDS = ['water', 'relief', 'history', 'health', 'architecture', 'animals'] as const;
 export type ThemeId = (typeof THEME_IDS)[number];
 
+/** A subject's facts and method in the plain house style, shared by every map of it. */
+export interface TopicFacts {
+  metric: string;
+  legend: string;
+  method: string;
+  limits: string;
+}
+
 /** A numbered reference on the map and in the panel. */
 export interface TopicMark {
   name: string;

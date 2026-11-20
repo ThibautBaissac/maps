@@ -212,7 +212,7 @@ function legend(ctx: Ctx, box: Rect, o: GravureSepiaOptions, pat: PlanPatterns, 
     ctx.restore();
   };
   if (topic?.id === 'cholera-pump') {
-    const c = text.topic.cholera;
+    const c = text.topics['cholera-pump'];
     rows.push({ label: c.legendDeaths, draw: disc(o.ink, 0.55) });
     rows.push({ label: c.legendBroad, draw: disc(o.accent, 0.85) });
     rows.push({ label: c.legendPump, draw: (x, y, w, h) => {

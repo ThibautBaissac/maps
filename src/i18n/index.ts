@@ -3,12 +3,16 @@ import { en } from './en.ts';
 import { es } from './es.ts';
 import { pt } from './pt.ts';
 import { de } from './de.ts';
-import { LOCALES, type Locale, type LocalizedText, type MapStory, type Messages, type PluralMessage } from './types.ts';
+import { LOCALES, type Dictionary, type Locale, type LocalizedText, type MapStory, type Messages, type PluralMessage } from './types.ts';
 import type { MapId } from '../registry.ts';
 import { isRecord } from '../place.ts';
+import { topicMessages } from '../topics/messages.ts';
 
 export { DEFAULT_LOCALE, LOCALES, type Locale, type LocalizedText, type MapStory } from './types.ts';
-const MESSAGES: Record<Locale, Messages> = { fr, en, es, pt, de };
+
+const DICTIONARIES: Record<Locale, Dictionary> = { fr, en, es, pt, de };
+/** Each language's dictionary, completed with the subjects' texts. */
+const MESSAGES = Object.fromEntries(LOCALES.map((locale) => [locale, { ...DICTIONARIES[locale], topics: topicMessages(locale) }])) as Record<Locale, Messages>;
 
 export const messages = (locale: Locale): Messages => MESSAGES[locale];
 
@@ -79,6 +83,6 @@ export function translationProblems(catalogues: unknown = MESSAGES): string[] {
       }
     }
   };
-  for (const locale of LOCALES) check(fr, isRecord(catalogues) ? catalogues[locale] : undefined, locale);
+  for (const locale of LOCALES) check(MESSAGES.fr, isRecord(catalogues) ? catalogues[locale] : undefined, locale);
   return problems;
 }

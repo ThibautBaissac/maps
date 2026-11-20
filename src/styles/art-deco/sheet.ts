@@ -125,7 +125,7 @@ export function legendRows(topic: TopicAnalysis | undefined, locale: Locale): { 
   const text = messages(locale);
   const items = text.canvas.items.map((t) => t.charAt(0) + t.slice(1).toLocaleLowerCase(locale));
   if (topic?.id === 'setbacks') {
-    const c = text.topic.setbacks;
+    const c = text.topics.setbacks;
     return [{ label: c.legendStepped, tone: 'stepped' }, { label: c.legendBlock, tone: 'block' }, { label: c.legendOther, tone: 'plain' }, { label: items[3]!, tone: 'park' }];
   }
   return [{ label: items[0]!, tone: 'inkA' }, { label: items[3]!, tone: 'park' }, { label: items[2]!, tone: 'water' }];

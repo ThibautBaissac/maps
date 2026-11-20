@@ -6,8 +6,8 @@ Une voix est un narrateur : quelqu'un de précis qui raconte le sujet, pas un ad
 
 | Dans la voix | Au ton neutre du site |
 |---|---|
-| `maps.<id>.question` : le titre de la page et de la carte dans la galerie | `topics.<sujet>.metric`, `legend`, `method`, `limits` |
-| `maps.<id>.intro` : deux ou trois phrases avant les mesures | phrases de concentration, détails des repères, textes d'interface |
+| `question` (`src/i18n/maps/<id>.ts`) : le titre de la page et de la carte dans la galerie | `metric`, `legend`, `method`, `limits` du sujet (`src/topics/<sujet>/messages.ts`) |
+| `intro` (`src/i18n/maps/<id>.ts`) : deux ou trois phrases avant les mesures | phrases de concentration, détails des repères, textes d'interface |
 
 La méthode et les limites restent sobres : c'est ce qui rend le récit crédible.
 

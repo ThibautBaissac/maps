@@ -95,7 +95,7 @@ Réutilise un sujet de `TOPICS` (`src/topics/index.ts`) seulement s’il corresp
 
 Les textes d'une carte sont de deux sortes :
 - les textes du sujet, dans `src/topics/<sujet>/messages.ts` (les cinq langues dans un seul fichier) : `metric`, `legend`, `method`, `limits`, les faits et la méthode du sujet, au ton neutre, partagés par toutes les cartes de ce sujet, puis les textes propres au sujet (panneau, légende dessinée, description) ;
-- `maps.<id>`, dans `src/i18n/maps/<id>.ts` (les cinq langues dans un seul fichier, à enregistrer dans `STORIES` de `src/i18n/stories.ts`) : `question` et `intro`, écrites dans la voix de la carte selon `voices/<id>.md`. Chaque carte du registre doit avoir les siennes : `tsc -b` refuse une entrée manquante ou en trop. Le build les écrit dans la page de la carte, qui ne charge rien d’autre.
+- l'histoire de la carte, dans `src/i18n/maps/<id>.ts` (les cinq langues dans un seul fichier, à enregistrer dans `STORIES` de `src/i18n/stories.ts`) : `question` et `intro`, écrites dans la voix de la carte selon `voices/<id>.md`. Chaque carte du registre doit avoir les siennes : `tsc -b` refuse une entrée manquante ou en trop. Le build les écrit dans la page de la carte, qui ne charge rien d’autre.
 
 L'`id` donne l'URL de la page (`/cartes/<id>/`) : court et lisible. Par défaut `<ville>-<style>`. Si la ville a déjà une carte dans ce style, prends `<ville>-<quartier>-<style>`, et pour une variante ajoute un mot qui la distingue (`amsterdam-riso-vert`). Une demande explicite de l'utilisateur l'emporte.
 
@@ -105,7 +105,7 @@ L'`id` donne l'URL de la page (`/cartes/<id>/`) : court et lisible. Par défaut 
 
 Lis d'abord `references/new-style.md` (dans ce skill) : méthode, pièges déjà rencontrés, budgets de performance. En résumé :
 - dossier `src/styles/<clé>/` avec `index.ts` (`mount`, typé par `src/styles/contract.ts`), `defaults.ts` (interface des options et valeurs par défaut : couleurs, épaisseurs, polices) et `SPEC.md` (copie du preset, pour que la spécification vive avec le code) ;
-- déclaration dans `src/styles/index.ts` : interface d'options dans `StyleOptions`, puis libellé, `load`, `card` dans `STYLES` ;
+- déclaration dans `src/styles/index.ts` : interface d'options dans `StyleOptions`, puis `load` et `card` dans `STYLES` ; son libellé et sa légende textuelle vont dans `styles.<clé>` de chaque dictionnaire (`src/i18n/<langue>.ts`) ;
 - le projet est en TypeScript strict (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`…) : `npm run typecheck` doit passer, sans `any` ni `@ts-ignore` ;
 - polices OFL téléchargées dans `public/fonts/<famille>/` avec leur `OFL.txt`, chargées avec `loadFont()`.
 
@@ -130,8 +130,8 @@ Le style se juge à l'œil. Une carte qui compile mais qu'on n'a pas regardée n
    - chaque ligne du preset respectée, ou l'écart justifié ;
    - rendu net assez rapide : voir les budgets et la façon de mesurer dans `references/new-style.md`. Un chronomètre autour du seul appel de rendu ne mesure pas le dessin réel.
 6. Corrige, puis reprends des captures. Recommence jusqu'à un résultat dont tu serais fier en affiche.
-7. Prends l'image de la galerie : `npm run vignettes -- <id>` (le serveur de développement doit tourner ; ajoute `--base http://localhost:<port>/maps/` s'il n'est pas sur 5173). Ouvre `public/vignettes/<langue>/<id>.webp` et `<id>.jpg` (l'aperçu d'un lien partagé) : les deux cadrages doivent montrer le cœur du quartier. Refais-la après toute retouche du style.
-8. `npm run build` (types compris) doit passer, sans avertissement d'image manquante. Vérifie aussi la bande de la carte dans la galerie (`/maps/`), au survol et en largeur téléphone.
+7. Prends l'image de la galerie : `npm run vignettes -- <id>` (le serveur de développement doit tourner ; ajoute `--base http://localhost:<port>/maps/` s'il n'est pas sur 5173 ; `npm run vignettes -- --missing` prend toutes les images manquantes). Ouvre `public/vignettes/<langue>/<id>.webp` et `<id>.jpg` (l'aperçu d'un lien partagé) : les deux cadrages doivent montrer le cœur du quartier. Refais-la après toute retouche du style.
+8. `npm test` doit passer : `tests/maps.test.ts` monte d'office chaque carte du registre sur ses données, sur ordinateur et téléphone, et vérifie les textes du sujet dans les cinq langues. Puis `npm run build` (types compris), qui refuse une carte sans ses images dans chaque langue. Vérifie aussi la bande de la carte dans la galerie (`/maps/`), au survol et en largeur téléphone.
 
 À la fin, rends au viewport sa taille normale (`resize_window` avec le preset `desktop`).
 

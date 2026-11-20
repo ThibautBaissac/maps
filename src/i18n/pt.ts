@@ -11,6 +11,8 @@ export const pt: Dictionary = {
     heading: ['Escolhe um bairro.', 'Perde-te nele.'],
     description: (places) => `Plantas de bairros desenhadas com código, cada uma no seu estilo gráfico: ${places}.`,
     maps: 'Mapas',
+    /** The places left out of a list cut short, as its last item. */
+    more: { one: 'mais {count}', other: 'mais {count}' },
     open: 'Abrir o mapa',
     shown: { one: '{count} mapa apresentado', other: '{count} mapas apresentados' },
     search: 'Pesquisar',

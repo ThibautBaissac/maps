@@ -10,6 +10,8 @@ export const fr: Dictionary = {
     heading: ['Choisissez un quartier.', 'Perdez-vous dedans.'],
     description: (places) => `Plans de quartiers dessinés avec du code, chacun dans son style graphique : ${places}.`,
     maps: 'Cartes',
+    /** The places left out of a list cut short, as its last item. */
+    more: { one: '{count} autre', other: '{count} autres' },
     open: 'Ouvrir la carte',
     shown: { one: '{count} carte affichée', other: '{count} cartes affichées' },
     search: 'Rechercher',

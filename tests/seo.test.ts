@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { findMap } from '../src/catalogue.ts';
 import { LOCALES } from '../src/i18n/index.ts';
-import { galleryHtml, metaDescription, pageHtml, sitemapXml } from '../scripts/pages.ts';
+import { boundedList, galleryHtml, metaDescription, pageHtml, sitemapXml } from '../scripts/pages.ts';
 
 const SITE = 'https://example.test/atlas/';
 const contentOf = (html: string, attr: string, name: string): string | undefined =>
@@ -63,6 +63,16 @@ test('a gallery is titled and described by the places it holds', () => {
   assert.ok(description.length <= 160);
   assert.equal(contentOf(html, 'property', 'og:type'), 'website');
   assert.equal(contentOf(html, 'property', 'og:image'), `${SITE}vignettes/fr/amsterdam-riso.jpg`);
+});
+
+test('a list of places too long for a title keeps its first places and counts the rest in each language', () => {
+  const cities = ['Amsterdam', 'Lisbonne', 'Londres', 'New York', 'Kyoto', 'Lima', 'Oslo'];
+  const within = (max: number) => (list: string): boolean => list.length <= max;
+  assert.equal(boundedList('fr', cities, within(200)), 'Amsterdam, Lisbonne, Londres, New York, Kyoto, Lima et Oslo');
+  assert.equal(boundedList('fr', cities, within(40)), 'Amsterdam, Lisbonne, Londres et 4 autres');
+  assert.equal(boundedList('fr', cities.slice(0, 3), within(10)), 'Amsterdam et 2 autres');
+  assert.equal(boundedList('en', cities, within(40)), 'Amsterdam, Lisbonne, Londres and 4 more');
+  assert.equal(boundedList('de', cities, within(42)), 'Amsterdam, Lisbonne, Londres und 4 weitere');
 });
 
 test('without a public site URL no absolute link is written', () => {

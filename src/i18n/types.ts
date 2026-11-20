@@ -33,6 +33,8 @@ export interface Messages {
     /** The gallery's meta description; `places` lists its districts and cities. */
     description: (places: string) => string;
     maps: string;
+    /** The places left out of a list cut short, as its last item: « Lisbonne et 12 autres ». */
+    more: PluralMessage;
     open: string;
     /** Announced after the search changes. */
     shown: PluralMessage;

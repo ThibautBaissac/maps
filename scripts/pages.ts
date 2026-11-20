@@ -1,7 +1,7 @@
 // Static HTML shared by development and production builds.
 import { mapsForLocale, PAGES_DIR, type CatalogueMap } from '../src/catalogue.ts';
 import { searchDocuments } from '../src/gallery/search-index.ts';
-import { DEFAULT_LOCALE, formatCoordinate, formatList, LOCALES, mapStory, messages, ogLocale, type Locale, type MapStory } from '../src/i18n/index.ts';
+import { DEFAULT_LOCALE, formatCoordinate, formatList, LOCALES, mapStory, messages, ogLocale, pluralText, type Locale, type MapStory } from '../src/i18n/index.ts';
 
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
 const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ESCAPES[c] ?? c);
@@ -18,6 +18,17 @@ function languageNav(locale: Locale, base: string, map?: CatalogueMap): string {
 
 /** Longest meta description search engines show in full. */
 const DESCRIPTION_MAX = 160;
+/** Longest gallery title kept whole: search engines cut longer ones. */
+const TITLE_MAX = 70;
+
+/** `items` as a sentence list when `fits` accepts it; otherwise its longest start that does, ending with the count of the rest (« Amsterdam, Lisbonne et 12 autres »). */
+export function boundedList(locale: Locale, items: readonly string[], fits: (list: string) => boolean): string {
+  const all = formatList(locale, items);
+  if (fits(all) || items.length < 2) return all;
+  const cut = (k: number): string => formatList(locale, [...items.slice(0, k), pluralText(locale, messages(locale).gallery.more, items.length - k)]);
+  for (let k = items.length - 1; k > 1; k--) if (fits(cut(k))) return cut(k);
+  return cut(1);
+}
 
 /** Whole sentences within `max` characters; a first sentence too long is cut at a word, with an ellipsis. */
 export function metaDescription(text: string, max = DESCRIPTION_MAX): string {
@@ -161,7 +172,7 @@ function strip(map: CatalogueMap, locale: Locale, base: string): string {
   // Vite prefixes public asset URLs in both dev and build; page links use base directly.
   return `<li class="strip${colors.dark ? ' dark' : ''}" data-id="${esc(map.id)}" style="--bg:${esc(colors.bg)};--fg:${esc(colors.fg)};--accent:${esc(colors.accent)};--len:${title.length}">
         <a href="${esc(base + map.paths.page)}">
-          <img src="/${esc(map.paths.vignette)}" alt="" decoding="async" />
+          <img src="/${esc(map.paths.vignette)}" alt="" loading="lazy" decoding="async" />
           <span class="shade" aria-hidden="true"></span>
           <span class="name">${esc(title)}</span>
           <span class="info"><span class="district">${esc(place.district)}</span>${map.topic ? `<span class="subject">${esc(storyOf(map, locale).question)}</span>` : ''}<span class="meta">${esc(styleDef.label)} · ${esc(coords)}</span><span class="go">${esc(messages(locale).gallery.open)}${ARROW}</span></span>
@@ -190,8 +201,9 @@ const searchIndexJson = (locale: Locale): string =>
 export function galleryHtml(locale: Locale, base: string, siteUrl?: string): string {
   const text = messages(locale), copy = text.gallery;
   const maps = mapsForLocale(locale);
-  const pageTitle = `${copy.title} — ${formatList(locale, [...new Set(maps.map((m) => m.title))])}`;
-  const description = metaDescription(copy.description(formatList(locale, maps.map((m) => `${m.place.district} (${m.title})`))));
+  const pageTitle = `${copy.title} — ${boundedList(locale, [...new Set(maps.map((m) => m.title))], (list) => `${copy.title} — ${list}`.length <= TITLE_MAX)}`;
+  const places = boundedList(locale, maps.map((m) => `${m.place.district} (${m.title})`), (list) => copy.description(list).length <= DESCRIPTION_MAX);
+  const description = metaDescription(copy.description(places));
   const first = maps[0];
   const seo: Seo = { title: pageTitle, description, type: 'website', image: first?.paths.share ?? '', imageAlt: first ? storyOf(first, locale).question : copy.title };
   return `<!doctype html>

@@ -10,6 +10,8 @@ export const de: Dictionary = {
     heading: ['Wähl ein Viertel.', 'Verlier dich darin.'],
     description: (places) => `Stadtviertelpläne, mit Code gezeichnet, jeder in seinem eigenen grafischen Stil: ${places}.`,
     maps: 'Karten',
+    /** The places left out of a list cut short, as its last item. */
+    more: { one: '{count} weitere', other: '{count} weitere' },
     open: 'Karte öffnen',
     shown: { one: '{count} Karte angezeigt', other: '{count} Karten angezeigt' },
     search: 'Suchen',

@@ -6,6 +6,7 @@ import { featuresOf, isBridge, isTunnel, type Feature, type Layer, type Line, ty
 import type { Point, Rect } from '../../toolkit/geometry.ts';
 import type { TopicContent, TopicDef, TopicMark } from '../types.ts';
 import type { LinearMessages } from './messages.ts';
+import { drawLinear } from './draw.ts';
 
 export type LinearTopicId = 'canal-crossings' | 'steps';
 
@@ -171,4 +172,7 @@ function linearContent(survey: Survey, topic: LinearTopic, locale: Locale, subje
 export const linearTopic = <Id extends LinearTopicId>(id: Id, texts: Record<Locale, LinearMessages>): TopicDef<LinearTopic<Id>> => ({
   analyse: (survey, layers) => analyseLinear(survey, layers, id),
   content: (survey, topic, locale) => linearContent(survey, topic, locale, texts[locale]),
+  draw: drawLinear,
+  // A badge may sit on a line: the line stays visible on both sides.
+  badges: 'on',
 });

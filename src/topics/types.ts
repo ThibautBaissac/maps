@@ -4,6 +4,7 @@ import type { Locale, MapStory } from '../i18n/index.ts';
 import type { Messages } from '../i18n/types.ts';
 import type { Feature, Layer, Survey } from '../layers.ts';
 import type { Point } from '../toolkit/geometry.ts';
+import type { Projector } from '../toolkit/projection.ts';
 
 /** Themes the gallery search finds maps by; their labels are under themes.<id> in the dictionaries. */
 export const THEME_IDS = ['water', 'relief', 'history', 'health', 'architecture', 'animals'] as const;
@@ -59,6 +60,20 @@ export interface TopicDef<A extends TopicEvidence> {
   analyse(survey: Pick<Survey, 'half'>, layers: readonly Layer[]): A;
   /** The panel and description text, in the plain house style. */
   content(survey: Survey, topic: A, locale: Locale): Omit<TopicContent, 'story'>;
+  /** Draws the evidence over a Canvas style's dimmed base map; without it, the styles that show the subject draw it. */
+  draw?(ctx: CanvasRenderingContext2D, topic: A, P: Projector, ink: TopicInk): void;
+  /** Where a numbered badge starts: on its reference (lines), or beside it to keep a point symbol visible (default). */
+  badges?: 'on' | 'beside';
+}
+
+/** The colours a style gives a subject's drawing. */
+export interface TopicInk {
+  /** The subject. */
+  color: string;
+  /** Detaches the subject from the base map. */
+  background: string;
+  /** What the subject singles out. */
+  accent: string;
 }
 
 /** What src/topics/<id>/index.ts exports: its code and its texts in every language. */

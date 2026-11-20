@@ -2,6 +2,7 @@
 import { formatDate, formatNumber, messages } from '../../i18n/index.ts';
 import type { TopicDef, TopicMark } from '../types.ts';
 import { MESSAGES } from './messages.ts';
+import { drawCholera } from './draw.ts';
 import { analyseCholera, type CholeraEvidence } from './evidence.ts';
 
 export interface CholeraTopic extends CholeraEvidence {
@@ -47,4 +48,5 @@ export const topic: TopicDef<CholeraTopic> = {
       featureName: (f) => f.k === 'workhouse' || f.k === 'brewery' ? c[f.k] : f.k === 'broad-street' ? c.broadPump : undefined,
     };
   },
+  draw: drawCholera,
 };

@@ -2,7 +2,7 @@
 // and the tests. A map page never imports this file: it loads its own subject (./index.ts).
 import { compareTranslations, type Locale, type MapStory } from '../i18n/index.ts';
 import type { Layer, Survey } from '../layers.ts';
-import { contentOf, defOf, TOPIC_IDS, type TopicAnalysis, type TopicAnalysisOf, type TopicId, type TopicModuleOf, type TopicTextOf } from './index.ts';
+import { addTopic, contentOf, defOf, TOPIC_IDS, type TopicAnalysis, type TopicAnalysisOf, type TopicId, type TopicModuleOf, type TopicTextOf } from './index.ts';
 import type { TopicContent } from './types.ts';
 import * as canalCrossings from './canal-crossings/index.ts';
 import * as steps from './steps/index.ts';
@@ -19,6 +19,7 @@ const MODULES: { [K in TopicId]: TopicModuleOf<K> } = {
   setbacks,
   investigations,
 };
+for (const id of TOPIC_IDS) addTopic(id, MODULES[id]);
 
 /** Analyse only geometry inside the surveyed square, independently of the current zoom. */
 export function analyseTopic<K extends TopicId>(survey: Pick<Survey, 'half'>, layers: readonly Layer[], id: K): TopicAnalysisOf<K> {

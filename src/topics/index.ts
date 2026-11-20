@@ -6,7 +6,7 @@ import type { Locale, MapStory } from '../i18n/index.ts';
 import type { Survey } from '../layers.ts';
 import type { ThemeId, TopicContent, TopicDef, TopicModule } from './types.ts';
 
-export { THEME_IDS, type ThemeId, type TopicContent, type TopicFacts, type TopicMark, type TopicModule, type TopicRow } from './types.ts';
+export { THEME_IDS, type ThemeId, type TopicContent, type TopicFacts, type TopicInk, type TopicMark, type TopicModule, type TopicRow } from './types.ts';
 
 interface TopicEntry {
   /** Gallery search themes, most specific first: every map of the subject shares them. */
@@ -44,9 +44,26 @@ export type TopicDefOf<K extends TopicId> = TopicDef<TopicAnalysisOf<K>>;
 // the registry. Each analysis carries the id it is registered under (tests/topics.test.ts).
 export const defOf = <K extends TopicId>(module: TopicModule): TopicDefOf<K> => module.topic as unknown as TopicDefOf<K>;
 
+// The subjects loaded so far: the toolkit draws a subject from its analysis alone.
+const loaded = new Map<TopicId, TopicModule>();
+
+/** Makes a subject's module available to loadedTopic(): loadTopic does it, ./all.ts for every subject. */
+export function addTopic(id: TopicId, module: TopicModule): void {
+  loaded.set(id, module);
+}
+
 /** Fetches a subject's code and texts. */
 export async function loadTopic<K extends TopicId>(id: K): Promise<TopicDefOf<K>> {
-  return defOf<K>(await TOPICS[id].load());
+  const module = await TOPICS[id].load();
+  addTopic(id, module);
+  return defOf<K>(module);
+}
+
+/** The code of a subject already loaded, as a map page has its own once mounted. */
+export function loadedTopic<K extends TopicId>(id: K): TopicDefOf<K> {
+  const module = loaded.get(id);
+  if (!module) throw new Error(`Subject "${id}" is not loaded: await loadTopic('${id}') first (src/topics/all.ts in Node)`);
+  return defOf<K>(module);
 }
 
 /** One interpretation of the measurements for the sidebar and the text equivalent. */

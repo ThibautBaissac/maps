@@ -204,3 +204,26 @@ test('cyanotype map drawn from layers keeps its recorded canvas calls', (t) => {
   assert.ok(calls.length > 100, 'the recorded sequence is not empty');
   assert.equal(digest(calls), 'e5bea847c7733e1de8d2905c21627703fdd1f356');
 });
+
+test('the toolkit draws a subject with its own drawing, and nothing for a subject the styles draw', () => {
+  const P = makeProjector({ x: 0, y: 0, s: 1 }, 200, 200, 1);
+  const steps = analyseTopic({ half: 100 }, osmLayersOf({ roads: [{ g: [-30, 20, -10, 20], k: 'steps', n: 'Steps' }] }), 'steps');
+  const drawn = canvas();
+  thematic.drawTopic(drawn.ctx, steps, P, '#123456', '#ffffff');
+  assert.ok(drawn.calls.some((c) => c.method === 'stroke'), 'The steps subject must stroke its sections');
+  const setbacks = analyseTopic({ half: 100 }, osmLayersOf({}), 'setbacks');
+  const empty = canvas();
+  thematic.drawTopic(empty.ctx, setbacks, P, '#123456', '#ffffff');
+  assert.deepEqual(empty.calls, []);
+});
+
+test('a point subject keeps its badge beside the reference, a line subject may set it on the line', () => {
+  const P = makeProjector({ x: 0, y: 0, s: 1 }, 200, 200, 1);
+  const layout = () => ({ map: [0, 0, 200, 200] as [number, number, number, number], nav: [0, 0, 0, 0] as [number, number, number, number], attr: [200, 200, 200, 200] as [number, number, number, number], furniture: [] });
+  const steps = analyseTopic({ half: 100 }, osmLayersOf({ roads: [{ g: [-30, 20, -10, 20], k: 'steps', n: 'Steps' }] }), 'steps');
+  const [onLine] = thematic.placeTopicMarkers(steps, P, layout());
+  assert.deepEqual([onLine?.x, onLine?.y], onLine?.anchor);
+  const cholera = { ...analyseTopic({ half: 100 }, osmLayersOf({}), 'cholera-pump'), places: [{ name: 'Pump', point: [0, 0] as [number, number], kind: 'pump' as const }] };
+  const [beside] = thematic.placeTopicMarkers(cholera, P, layout());
+  assert.ok(beside && Math.hypot(beside.x - beside.anchor[0], beside.y - beside.anchor[1]) >= 24);
+});

@@ -79,3 +79,8 @@ test('a map page loads its subject on demand, with the same code as Node', async
     assert.equal(def.analyse(survey, map([])).id, id);
   }
 });
+
+test('a subject not loaded yet is named rather than drawn as nothing', async () => {
+  const { loadedTopic } = await import(`../src/topics/index.ts?isolated=${Date.now()}`) as typeof topics;
+  assert.throws(() => loadedTopic('steps'), /Subject "steps" is not loaded: await loadTopic\('steps'\) first/);
+});

@@ -35,7 +35,7 @@ Le style se déclare ensuite dans `src/styles/index.ts` : son interface d'option
 
 La page branche ses boutons de zoom sur le champ facultatif `viewport` de `MapHandle`. Un style qui utilise le viewport de la boîte à outils le renvoie pour activer ces boutons ; sinon il fournit ses propres commandes. En développement, la valeur renvoyée par `mount` est exposée dans `window.__map`, avec `full()` pour les vérifications de rendu.
 
-Les styles Canvas existants utilisent `drawTopic()` pour les tronçons et `drawTopicMarkers()` pour les repères numérotés après le fondu. Ils transmettent aussi `topic` à `mountCanvasMap()` pour que les noms évitent les numéros. Les commandes des repères utilisent `viewport.goTo()` ; une échelle de zéro restaure la vue générale en respectant la taille actuelle du plan.
+Les styles Canvas existants utilisent `drawTopic()` pour dessiner le sujet avec ses propres couleurs (`color`, `background`, `accent`) et `drawTopicMarkers()` pour les repères numérotés après le fondu. `drawTopic()` appelle le dessin du sujet, `draw()` de son `TopicDef` dans `src/topics/<id>/` ; un sujet sans dessin (gradins, enquêtes) est dessiné par le style qui le montre. Ils transmettent aussi `topic` à `mountCanvasMap()` pour que les noms évitent les numéros. Les commandes des repères utilisent `viewport.goTo()` ; une échelle de zéro restaure la vue générale en respectant la taille actuelle du plan.
 
 ### Ce que tout style doit respecter
 

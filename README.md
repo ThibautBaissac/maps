@@ -49,7 +49,7 @@ Avant de réaliser la carte, l’agent examine les données, recommande un sujet
    { id: 'lisbonne-riso', place: 'lisbonne-alfama', style: 'riso', topic: 'steps', options: { inkA: '#00A95C' } },
    ```
 
-4. Prendre ses images pour la galerie, serveur de développement lancé : `npm run vignettes -- <id>`. Le script ouvre chaque version dans Chrome headless (variable `CHROME` si Chrome n'est pas trouvé) et écrit `public/vignettes/<langue>/<id>.webp` (galerie) et `<id>.jpg` (aperçu d'un lien partagé), à commiter. `--locale es` limite la capture à une langue. Sans image, la bande de la galerie garde le papier du style ; le build le signale. À refaire quand le style, ses textes ou les données changent.
+4. Prendre ses images pour la galerie, serveur de développement lancé : `npm run vignettes -- <id>`. Le script ouvre chaque version dans Chrome headless (variable `CHROME` si Chrome n'est pas trouvé) et écrit `public/vignettes/<langue>/<id>.webp` (galerie) et `<id>.jpg` (aperçu d'un lien partagé), à commiter. `--locale es` limite la capture à une langue, `--missing` aux versions sans images, `--jobs 2` le nombre de Chrome lancés à la fois (4 au plus par défaut). Le build refuse une carte publiée sans ses deux images, dans chaque langue. À refaire quand le style, ses textes ou les données changent.
 
 Les options possibles d'un style sont dans son fichier `defaults.ts` ; le type-checking refuse une option inconnue ou un style inexistant. Pour créer un style, voir [`src/styles/README.md`](src/styles/README.md) : contrat, format des données, boîte à outils.
 

@@ -1,7 +1,7 @@
 import { defineConfig, type Plugin } from 'vite';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { CATALOGUE, catalogueProblems, mapsForLocale, PAGES_DIR } from './src/catalogue.ts';
+import { CATALOGUE, catalogueProblems, mapsForLocale, missingPictures, PAGES_DIR } from './src/catalogue.ts';
 import { DEFAULT_LOCALE, LOCALES, translationProblems } from './src/i18n/index.ts';
 
 import { galleryHtml, pageHtml, sitemapXml } from './scripts/pages.ts';
@@ -38,14 +38,19 @@ function generatePages(strict: boolean): Record<string, string> {
     console.warn(`\x1b[33m[registry] skipped: ${message}\x1b[0m`);
     skipped.add(id);
   }
+  // A published map without its pictures shows a blank gallery strip and link preview.
+  const missing = missingPictures((path) => existsSync(`${root}public/${path}`)).filter((p) => !skipped.has(p.id));
+  if (missing.length) {
+    const list = missing.map((p) => `${p.id} (${p.locale})`).join(', ');
+    const fix = 'run npm run vignettes -- --missing with the dev server up, then commit public/vignettes/';
+    if (strict) throw new Error(`vignettes: no gallery or share picture for ${list}; ${fix}`);
+    console.warn(`\x1b[33m[vignettes] no gallery or share picture for ${list}; ${fix}\x1b[0m`);
+  }
   for (const locale of LOCALES) {
     rmSync(new URL(`${locale}/${PAGES_DIR}`, pathToFileURL(root)), { recursive: true, force: true });
     input[locale] = writePage(`${locale}/`, galleryHtml(locale, base, siteUrl));
     for (const m of mapsForLocale(locale)) {
       if (skipped.has(m.id)) continue;
-      if (!existsSync(`${root}public/${m.paths.vignette}`) || !existsSync(`${root}public/${m.paths.share}`)) {
-        console.warn(`\x1b[33m[registry] ${m.id} (${locale}): no gallery or share picture; run npm run vignettes -- ${m.id} with the dev server up\x1b[0m`);
-      }
       input[`${locale}-${m.id}`] = writePage(m.paths.page, pageHtml(m, locale, base, siteUrl));
     }
   }

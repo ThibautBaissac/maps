@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { catalogueOf, catalogueProblems, findMap, problemsOf } from '../src/catalogue.ts';
+import { catalogueOf, catalogueProblems, findMap, missingPictures, missingPicturesOf, problemsOf } from '../src/catalogue.ts';
 import { PLACES } from '../places/index.ts';
 import { OSM_ROLES } from '../src/layers.ts';
 import type { MapEntry } from '../src/registry.ts';
@@ -256,4 +256,16 @@ test('a place drawn from its base layers has no OpenStreetMap file and needs non
 test('a place drawn from its base layers needs at least one of them on the map', () => {
   const problems = problemsOf([entry('france-test', { place: 'france', layers: ['points'] })], basemapData, BASEMAP_REGISTRY);
   assert.match(problems[0]?.message ?? '', /no OpenStreetMap data: the map needs at least one of its base layers/);
+});
+
+test('a map version lacking its gallery or its share picture is reported, by locale', () => {
+  const maps = catalogueOf([entry('complete'), entry('no-share'), entry('bare')]);
+  const present = new Set(['vignettes/fr/complete.webp', 'vignettes/fr/complete.jpg', 'vignettes/fr/no-share.webp']);
+  const missing = missingPicturesOf((locale) => locale === 'fr' ? maps : [], (path) => present.has(path));
+  assert.deepEqual(missing, [{ id: 'no-share', locale: 'fr' }, { id: 'bare', locale: 'fr' }]);
+});
+
+test('every registered map has its pictures in every locale', () => {
+  const missing = missingPictures((path) => existsSync(new URL(`../public/${path}`, import.meta.url)));
+  assert.deepEqual(missing, [], 'run npm run vignettes -- --missing with the dev server up');
 });

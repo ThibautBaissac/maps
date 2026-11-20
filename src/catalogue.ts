@@ -166,3 +166,16 @@ export function problemsOf(maps: readonly MapEntry[], readData: (path: string) =
 export function catalogueProblems(readData: (path: string) => unknown): CatalogueProblem[] {
   return problemsOf(MAPS, readData);
 }
+
+/** A map version without its gallery or share picture: run npm run vignettes for it. */
+export interface MissingPicture { id: string; locale: Locale }
+
+/** For tests: the versions of `maps` whose gallery or share picture `exists(path)` does not find, by locale then map. */
+export function missingPicturesOf(maps: (locale: Locale) => readonly CatalogueMap[], exists: (path: string) => boolean): MissingPicture[] {
+  return LOCALES.flatMap((locale) => maps(locale)
+    .filter((m) => !exists(m.paths.vignette) || !exists(m.paths.share))
+    .map((m) => ({ id: m.id, locale })));
+}
+
+/** The registry's map versions without both pictures; `exists` looks a path up under public/. */
+export const missingPictures = (exists: (path: string) => boolean): MissingPicture[] => missingPicturesOf(mapsForLocale, exists);

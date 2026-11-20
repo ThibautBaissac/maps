@@ -23,7 +23,7 @@ Use two-space indentation, single quotes, semicolons, and ESM imports with expli
 
 ## Testing Guidelines
 
-Use `node:test` with `node:assert/strict`. Name files `<subject>.test.ts` and describe observable behavior in each test title. Add regression tests for bug fixes and unit tests for pure conversion, catalogue, translation, layout, or rendering logic. The repository has no numeric coverage threshold. Run `npm test` and `npm run build` before submitting changes.
+Use `node:test` with `node:assert/strict`. `tests/maps.test.ts` mounts every registered map on its committed data, at desktop and phone sizes: a new map is covered without a new test. `tests/setup.ts` loads every dictionary before each file. Name files `<subject>.test.ts` and describe observable behavior in each test title. Add regression tests for bug fixes and unit tests for pure conversion, catalogue, translation, layout, or rendering logic. The repository has no numeric coverage threshold. Run `npm test` and `npm run build` before submitting changes.
 
 ## Commit & Pull Request Guidelines
 

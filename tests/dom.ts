@@ -64,6 +64,21 @@ function fakeCanvas(w: number, h: number): FakeCanvas & Record<string, unknown> 
   return canvas;
 }
 
+/** An HTML element a style adds over its canvas (the dossier's detail card): it keeps its children and attributes, and measures nothing. */
+function fakeElement(tag: string): Record<string, unknown> {
+  const children: unknown[] = [];
+  const attributes: Record<string, string> = {};
+  return {
+    tagName: tag.toUpperCase(), className: '', hidden: false, textContent: '', style: {}, offsetWidth: 0, offsetHeight: 0,
+    children, attributes,
+    setAttribute(name: string, value: string) { attributes[name] = value; },
+    append(...nodes: unknown[]) { children.push(...nodes); },
+    replaceChildren(...nodes: unknown[]) { children.splice(0, children.length, ...nodes); },
+    addEventListener() {},
+    remove() {},
+  };
+}
+
 /** Installs a page whose stage measures `width` × `height` CSS px, at pixel density `dpr` (default 1). */
 export function installPage(t: TestContext, { width, height, dpr = 1 }: { width: number; height: number; dpr?: number }): FakePage {
   const canvases: FakeCanvas[] = [];
@@ -75,12 +90,13 @@ export function installPage(t: TestContext, { width, height, dpr = 1 }: { width:
   const globals: Record<string, unknown> = {
     document: {
       createElement(tag: string) {
-        if (tag !== 'canvas') throw new Error(`Fake page: no <${tag}>`);
+        if (tag !== 'canvas') return fakeElement(tag);
         const c = fakeCanvas(width, height);
         canvases.push(c);
         return c;
       },
       fonts: { add() {} },
+      addEventListener() {},
     },
     window: { devicePixelRatio: dpr, setTimeout, clearTimeout },
     ResizeObserver: class { observe() {} disconnect() {} },
@@ -100,7 +116,12 @@ export function installPage(t: TestContext, { width, height, dpr = 1 }: { width:
     }
   });
 
-  const container = { append: (c: FakeCanvas) => { children.push(c); } } as unknown as HTMLElement;
+  const container = {
+    clientWidth: width, clientHeight: height,
+    append: (c: FakeCanvas) => { children.push(c); },
+    // The stage's own canvas, as the dossier looks it up to listen for clicks.
+    querySelector: (selector: string) => selector === 'canvas' ? children.find((c) => 'getContext' in c) ?? null : null,
+  } as unknown as HTMLElement;
   const shell: Shell = {
     label: 'Plan de test',
     place(p = {}) { placed.push(p); },

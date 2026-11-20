@@ -4,8 +4,7 @@
 import { bodyData, element } from './dom.ts';
 import { describeMap } from './map-description.ts';
 import { findMap, type CatalogueMapOf } from './catalogue.ts';
-import { parseLayerFile, type Layer } from './layers.ts';
-import { mountMetaOf } from './map-meta.ts';
+import { loadMapData } from './map-meta.ts';
 import { createShell } from './shell.ts';
 import type { MapHandle } from './styles/contract.ts';
 import type { StyleKey } from './styles/index.ts';
@@ -30,29 +29,20 @@ async function open<K extends StyleKey>(map: CatalogueMapOf<K>, locale: Locale):
     colors: style.card(options),
   });
 
-  const dataPath = map.paths.data;
-  const url = dataPath === null ? null : `${import.meta.env.BASE_URL}${dataPath}`;
-  const [styleModule, subject, osm, layerSets] = await Promise.all([
+  const read = async (path: string): Promise<unknown> => {
+    const r = await fetch(`${import.meta.env.BASE_URL}${path}`);
+    if (!r.ok) throw new Error(`Missing ${path} for ${map.placeId}: HTTP ${r.status}`);
+    return r.json();
+  };
+  const [styleModule, subject, { osm, layers, overlays, survey, meta }] = await Promise.all([
     style.load(),
     map.topic ? loadTopic(map.topic) : undefined,
-    url === null ? null : fetch(url).then(async (r) => {
-      if (!r.ok) throw new Error(`Missing data for ${map.placeId}: HTTP ${r.status}`);
-      return parseLayerFile(await r.json(), url);
-    }),
-    Promise.all(map.layers.map(async ({ id, path }) => {
-      const layerUrl = `${import.meta.env.BASE_URL}${path}`;
-      const r = await fetch(layerUrl);
-      if (!r.ok) throw new Error(`Missing layer ${id} for ${map.placeId}: HTTP ${r.status}`);
-      return { id, layers: parseLayerFile(await r.json(), layerUrl).layers };
-    })),
+    loadMapData(map, read),
   ]);
-  const layers: Layer[] = [...osm?.layers ?? [], ...layerSets.flatMap((set) => set.layers)];
-  const overlays = layerSets.flatMap((set, i) => set.layers.map((layer) => ({ title: map.layers[i]?.title ?? set.id, layer })));
   // The panel links to the data the subject is measured on: the OSM file, else the first overlay.
   const firstOverlay = map.layers.find((l) => l.role === 'overlay');
-  const subjectData = url ?? `${import.meta.env.BASE_URL}${firstOverlay?.path ?? map.layers[0]?.path ?? ''}`;
+  const subjectData = `${import.meta.env.BASE_URL}${map.paths.data ?? firstOverlay?.path ?? map.layers[0]?.path ?? ''}`;
 
-  const { survey, meta } = mountMetaOf(map, osm);
   // The page carries its own question and intro (scripts/pages.ts): no other map's is loaded.
   const story: MapStory = { question: bodyData('question'), intro: bodyData('intro') };
   const topic = subject?.analyse(survey, layers);

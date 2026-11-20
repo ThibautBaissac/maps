@@ -8,8 +8,9 @@ import { context2d, makeCanvas } from './toolkit/canvas.ts';
 const RATIO = 4 / 5;
 /** Share of the canvas height kept: leaves out most of the style's frame. */
 const HEIGHT_SHARE = 0.88;
-const MAX_WIDTH = 1200;
-const QUALITY = 0.82;
+/** 960 × 1200: sharp on a gallery strip 600 CSS px high at 2× density (a laptop), slightly soft on the tallest 820 px strip. Every pixel more is committed for each map and locale. */
+const MAX_WIDTH = 960;
+const QUALITY = 0.75;
 /** Open Graph's recommended size. */
 const SHARE = { width: 1200, height: 630 };
 const SHARE_QUALITY = 0.85;
